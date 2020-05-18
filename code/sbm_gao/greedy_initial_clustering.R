@@ -37,7 +37,7 @@ greedy_initial_clustering = function(A,k,trim = TRUE, tau = Inf,mu){
   for (i in 1:k) {
     
     index_norm_mat = norm_mat0 < r
-    if(dim(index_norm_mat)[1] == 1) {rsum = norm_mat0
+    if(class(index_norm_mat) == "numeric") {rsum = norm_mat0
     } else {rsum = colSums(index_norm_mat)}
     ti = which(rsum == max(rsum))[1]
     Ci = which((index_norm_mat[,ti]) == TRUE)
