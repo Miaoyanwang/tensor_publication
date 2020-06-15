@@ -1,0 +1,248 @@
+
+% Created by Bonita Graham
+% Last update: December 2019 By Kestutis Bendinskas
+
+% Authors: 
+% Please do not make changes to the preamble until after the solid line of %s.
+
+\documentclass[11pt]{article}
+\usepackage[explicit]{titlesec}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\usepackage{hyphenat}
+\usepackage{ragged2e}
+\RaggedRight
+
+% These commands change the font. If you do not have Garamond on your computer, you will need to install it.
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+
+% This adjusts the underline to be in keeping with word processors.
+\usepackage{soul}
+\setul{.6pt}{.4pt}
+
+
+% The following sets margins to 1 in. on top and bottom and .75 in on left and right, and remove page numbers.
+\usepackage{geometry}
+\geometry{vmargin={1in,1in}, hmargin={.85in, .85in}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{gobble}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% These Commands create the label style for tables, figures and equations.
+\usepackage[labelfont={footnotesize,bf} , textfont=footnotesize]{caption}
+\captionsetup{labelformat=simple, labelsep=period}
+\newcommand\num{\addtocounter{equation}{1}\tag{\theequation}}
+\renewcommand{\theequation}{\arabic{equation}}
+\makeatletter
+%\renewcommand\tagform@[1]{\maketag@@@ {\ignorespaces {\footnotesize{\textbf{Equation}}} #1.\unskip \@@italiccorr }}
+\makeatother
+\setlength{\intextsep}{10pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{-10pt}
+
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\floatpagefraction}{0.90}
+
+% These commands set the paragraph and line spacing
+\titleformat{\section}
+  {\normalfont}{\thesection}{1em}{\MakeUppercase{\textbf{#1}}}
+\titlespacing\section{0pt}{0pt}{-10pt}
+\titleformat{\subsection}
+  {\normalfont}{\thesubsection}{1em}{\textbf{\textit{#1}}}
+\titlespacing\subsection{0pt}{0pt}{-8pt}
+\renewcommand{\baselinestretch}{1.15}
+
+\titleformat{\subsubsection}
+  {\normalfont}{\thesubsubsection}{0.5em}{\textbf{#1}}
+\titlespacing\subsubsection{0pt}{0pt}{-8pt}
+
+% This designs the title display style for the maketitle command
+\makeatletter
+\newcommand\sixteen{\@setfontsize\sixteen{17pt}{6}}
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
+\begin{flushleft}
+\sixteen\bfseries \@title
+\medskip
+\end{flushleft}
+\textit{\@author}
+\egroup}
+\makeatother
+
+% This styles the bibliography and citations.
+%\usepackage[biblabel]{cite}
+\usepackage[sort&compress]{natbib}
+\setlength\bibindent{2em}
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}\hfill}
+\makeatother
+\renewcommand{\citenumfont}[1]{\textbf{#1}}
+\bibpunct{}{}{,~}{s}{,}{,}
+\setlength{\bibsep}{0pt plus 0.3ex}
+
+%math
+\newtheorem{theorem}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{defn}{Definition}
+\usepackage{amsfonts}
+\usepackage{MnSymbol}%
+\usepackage{wasysym}%
+\usepackage{stmaryrd} 
+\usepackage{multirow}
+
+\input macros.tex
+
+
+%%% track the change 
+ %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%%
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\DIFaddtex{#1}}} %DIF PREAMBLE
+%\texorpdfstring
+\providecommand{\DIFdel}[1]{{\DIFdeltex{#1}}} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: Add additional packages and new commands here.  
+% Limit your use of new commands and special formatting.
+
+% Place your title below. Use Title Capitalization.
+
+\title{
+\centering 
+Principle of Proof Writing}
+
+% Add author information below. Communicating author is indicated by an asterisk, the affiliation is shown by superscripted lower case letter if several affiliations need to be noted.
+
+\author{ \centering
+Jiaxin Hu\\ \medskip 06/14/2020 \\ 
+}
+
+\pagestyle{empty}
+\begin{document}
+
+% Makes the title and author information appear.
+\vspace*{.01 in}
+\maketitle
+\vspace{.12 in}
+
+% Abstracts are required.
+\section{Math, Notation}
+\begin{enumerate}
+    \item[1.] Specify the variables/functions. Every time you use a variable/function, you should explain it, including its domain and meaning. Use $: =$ or $\overset{\Delta}{=} $ for definition or assignment. The operator $=$ means a equal comparison.
+    \begin{itemize}
+        \item Let $\tA=(\tC, \{\mM_k\})$ denote the decision variables.  \\$ \rightarrow$ Let $\tA=(\tC, \{\mM_k\}) \in \mathbb{R}^d$ denote the decision variables, where $d = \prod_k r_k + \sum_k r_k d_k$ is the number of parameters.
+        \item Let $S$ denote the update mapping.\\
+        $\rightarrow$ Let $S : \mathbb{R}^d \mapsto  \mathbb{R}^d$ denote the update mapping.
+        \item The objective function is a function of tensor coefficient $\tB = \tC\times_1\mM_1\times_2\cdots \times_K\mM_K$ \\
+        $\rightarrow$ The objective function is a function of tensor coefficient $\tB := \tC\times_1\mM_1\times_2\cdots \times_K\mM_K$
+        \item $\Fnorm{\tB(\tA^{(t)}) - \tB(\tA^{*})} \leq c \Fnorm{\tA^{(t)} - \tA^*}  \quad \rightarrow \Fnorm{\tB(\tA^{(t)}) - \tB(\tA^{*})} \leq c \Fnorm{\tA^{(t)} - \tA^*},\ \forall t \in \mathbb{N}_{+}. $
+    \end{itemize}
+    
+    \item[2.] Make the notation consistent. You should not change the variable/function you defined previously without any explanation. You also should not use the same notation for two different things.
+    \begin{itemize}
+        \item \textit{ The notation $\tL$ a shorthand of $\tL_{\tY}(\cdot)$. You should make it clear before you use it.}\\Suppose $\tA^*$ is a stationary point of $\tL(\cdot)$.\\ 
+        $\rightarrow$ For notational convenience, we drop the subscript $\tY$ from the objective $\tL_{\tY}(\cdot)$. The objective function can be viewed either as a function of decision variables $\tA$ or a function of coefficient tensor $\tB$. With slight abuse of notation, we write both function as $\tL(\cdot)$ ... Suppose  $\tA^*$ is a stationary point of $\tL(\cdot)$.
+        \item \textit{If you use $\nabla f$ to refer the derivative or gradient of a function, you should not use $df$ or $f'$ in the rest of the proof.}
+        \begin{align*}
+        \nabla^2 \tL\left(\tA^* \right) =\left(\begin{array}{cccc} d_{CC}^{2} \tL &d_{CM_1}^{2} \tL  & \cdots & d_{CM_K}^{2} \tL \\ d_{M_1C}^{2} \tL  &d_{M_1 M_1}^{2} \tL & \cdots &  d_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\d_{M_KC}^{2} \tL& d_{M_K M_1}^{2} \tL & \cdots & d_{M_K M_K}^{2} \tL \end{array}\right) \rightarrow
+    \left(\begin{array}{cccc} \DIFadd{\nabla}_{CC}^{2} \tL &\DIFadd{\nabla}_{CM_1}^{2} \tL  & \cdots & \DIFadd{\nabla}_{CM_K}^{2} \tL \\ \DIFadd{\nabla}_{M_1C}^{2} \tL  &\DIFadd{\nabla}_{M_1 M_1}^{2} \tL & \cdots &  \DIFadd{\nabla}_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\\DIFadd{\nabla}_{M_KC}^{2} \tL& \DIFadd{\nabla}_{M_K M_1}^{2} \tL & \cdots & \DIFadd{\nabla}_{M_K M_K}^{2} \tL \end{array}\right)
+\end{align*}
+\item \textit{You should not use $\rho$ for spectral radius and contraction parameter at the same time.}\\
+Let $\rho$ be the spectral radius of $\nabla S$... Let $\rho = \rho + \epsilon$ be the contraction parameter.\\
+$\rightarrow$ Let $\rho$ be the spectral radius of $\nabla S$... Let $\rho_0 = \rho + \epsilon$ be the contraction parameter.
+\item \textit{Use bold for matrices.}\\
+$(\tC, M_1, \dots,M_K) \quad \rightarrow (\tC, \mM_1,\dots,\mM_K)$. 
+    \end{itemize}
+    \item[3.] Avoid unnecessary notation. 
+    \begin{itemize} 
+        \item \textit{You have already explained the domain of $\tA$. The new notation $\Omega$ is unnecessary.}\\
+        Let $\Omega$ denote the domain of $\tA$ and $\Omega_O$ denote the equivalent class of $\tA^*$ ... For $\tA \in \Omega_O$, $\dots$, For $\tA \in \Omega/\Omega_O \dots$ \\
+        $\rightarrow$ Let $\Omega_O$ denote the equivalent class of $\tA^*$ ... For $\tA \in \Omega_O$, $\dots$, For $\tA \in \mathbb{R}^d/\Omega_O$ $\dots$
+    \end{itemize}
+\end{enumerate}
+
+\section{Language}
+\begin{enumerate}
+    \item[1.] \textbf{Grammar! Grammar! Grammar!} 
+    \begin{itemize}
+        \item some notations $\quad \rightarrow$ some notation
+        \item There exists a sub-sequences of iterate $\tA$ ...  $\quad \rightarrow$ There exist a sub-sequence of iterate $\tA$
+        \item Combine the equation 7 and 8, we have ... $\quad \rightarrow$ Combining the equation 7 and 8, we have...
+    \end{itemize}
+    \item[2.] Use sentences. The math notation or equation should be a noun or short clause in a sentence.
+    \item[3.] Be short and concise. Proof is also a part of academic writing.
+    \begin{itemize}
+        \item The set $\tE$ only contains a finite number of different equivalent classes. \\$ \rightarrow$  The set $\tE$ contains only a finite number of equivalent classes. 
+        \item The set $\tE$ satisfies below two properties. \\
+        $ \rightarrow$ The set $\tE$ satisfies two properties below.
+        \item \textit{The statement to derive $(1)$ is trivial whereas $(2)$ needs explanation.}\\
+        The set $\tE_{S}$ satisfies two properties below: $(1)$ is ... $(2)$ is... $(1)$ comes from ... $(2)$ comes from...\\
+        $\rightarrow$ The set $\tE_{S}$ satisfies two properties below: $(1)$ is ... $(2)$ is... ,which is comes from...
+    \end{itemize}
+    \item[4.] Use formal expressions. 
+    \begin{itemize}
+        \item Trivially,... $\quad \rightarrow $ Therefore,...
+        \item In other words,...  $\quad \rightarrow $ We conclude that,...
+    \end{itemize}
+    \item[5.] Avoid "can". 
+    \begin{itemize}
+        \item We can conclude that,...  $\quad \rightarrow $ We conclude that,...
+    \end{itemize}
+\end{enumerate}
+
+\section{Logic}
+\begin{enumerate}
+    \item Use a clear proof structure. You can prove step by step from assumptions to the goal or you can use contradiction. Never mix these two structures in a single proof. 
+    \begin{itemize}
+        \item \textit{Consider the proof of Uniqueness of tensor tucker decomposition.}
+    \end{itemize}
+    \item Avoid big leaps. Make every step concrete.
+    \begin{itemize}
+        \item \textit{Consider the first version of local convergence. I took the statement that $\nabla S$ is invariant to orthogonal transformation for granted. Then the whole proof went to a wrong direction.}
+    \end{itemize}
+    \item Reorganize. Check whether your proof logic is a "chain".
+    \begin{itemize}
+        \item \textit{The order of proof writing is not the same as the way you think. So, make it readable for reader.}
+    \end{itemize}
+    \item Summarize the cited or too detailed steps. Also be short and concise logically.
+    \begin{itemize}
+        \item \textit{ I used implicit function theorem to show that each micro-step in update mapping $S$ is continuously differentiable. However, it is unnecessary to put such detailed thing in the proof.}
+        \item \textit{The way I showed $\nabla S = -(L+D)^{-1} L^T$ was exactly the same as reference. Just cite the reference. }
+    \end{itemize}
+\end{enumerate}
+
+
+
+\end{document}
