@@ -160,7 +160,7 @@ Jiaxin Hu\\ \medskip 06/15/2020 \\
 
 \begin{proof}
 	First, the spectral norm of $A \in \mathbb{R}^{m \times r}$ is defined as:
-	\[ \norm{A} = \max_{x \in \mathbb{R}^r \norm{x} \leq 1} \norm{Ax}.  \]
+	\[ \norm{A} = \max_{x \in \mathbb{R}^r, \norm{x} \leq 1} \norm{Ax}.  \]
 	Therefore, we have $\norm{Ax} \leq \norm{A} \norm{x}$ for $\forall x \in \mathbb{R}^r $. Let $B = [b_1,\dots, b_n] \in \mathbb{R}^{r \times n}$, where $b_j \in \mathbb{R}^{r}, j \in [n]$ are the columns of $B$. Then we have
 	\[ \Fnorm{AB} = \sum_{j = 1}^n \norm{Ab_j} \leq  \norm{A}\sum_{j = 1}^n \norm{b_j} = \norm{A} \Fnorm{B} . \]
 \end{proof}
