@@ -49,7 +49,7 @@ K2=length(unique(cluster2_index))
 K3=length(unique(cluster3_index))
 
 group_mean=array(runif(K1*K2*K3,-3,3),dim=c(K1,K2,K3)) ## generate group-specific mean
-signal=group_mean[cluster1_index,cluster2_index,cluster3_index] ## generate a tensor following the groups-spedific mean
+signal=group_mean[cluster1_index,cluster2_index,cluster3_index] ## generate a tensor following the group-spedific mean
 
 
 plot_tensor(signal) ## plot data tensor
