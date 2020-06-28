@@ -1,0 +1,346 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\mathtoolsset{showonlyrefs=true}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{\textbf{Linear Algebra}\\A summary for MIT 18.06SC}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+
+% Abstracts are required.
+\section{Matrices \& Spaces}
+\subsection{Basic concepts}
+\begin{itemize}
+    \item Given vectors $v_1 ,...,v_n$ and scalars $c_1, ..., c_n$, the sum $c_1 v_1 + \dots + c_n v_n$ is called the \textit{linear combination} of $v_1,...,v_n$.
+    \item The vectors  $v_1 ,...,v_n$  are \textit{linearly independent}(or just \textit{indepedent}) if $c_1 v_1 + \dots + c_n v_n = 0$ holds only when all  $c_1,...,c_n = 0$. If the vectors  $v_1 ,...,v_n$  are \textit{dependent}, there exist scalars $c_1, ..., c_n$ which are not all equal to 0 and satisfy $c_1 v_1 + \dots + c_n v_n = 0$.
+	\item Given a matrix $\mA \in \bbR^{m \times n}$ and a vector $x \in \bbR^{n}$,  the multiplication $\mA x$ is a linear combination of the columns of $\mA$ and $x^T \mA$ is a linear combination of the rows of $\mA$.
+	\item Matrix multiplication is not communicative, i.e. $\mA \mB \neq \mB \mA.$ 
+	\item Suppose $\mA$ is a square matrix. The matrix $\mA$ is \textit{invertible} or \textit{non-singular} if there exists a $\mA^{-1}$ such that $\mA^{-1} \mA = \mA \mA^{-1} = I$. Otherwise, the matrix $\mA$ is singular, i.e. its determinant is 0 and does not have inverse matrix. 
+	\item The inverse of a matrix product $\mA\mB$ is $(\mA \mB)^{-1} = \mB^{-1} \mA^{-1}$. The product of invertible matrices is still invertible.
+	\item The transpose of a matrix product  $\mA\mB$ is $(\mA \mB)^{T} = \mB^{T} \mA^{T}$. For any invertible matrix $\mA$, $(\mA^T)^{-1} = (\mA^{-1})^T$.
+	\item A matrix $\mQ$ is orthogonal if $\mQ^T = \mQ^{-1}$. A matrix $\mQ$ is unitary if $\mQ^* = \mQ^{-1}$, where $\mQ^*$ is the conjugate transpose of $\mQ$.
+\end{itemize}
+
+\subsection{Permutation of matrices}
+For any matrix $\mA$, we can swap its rows by multiplying a \textit{permutation matrix } $\mP$ on the left of $\mA$. For example,
+\begin{align}
+	\mP \mA = \begin{bmatrix}
+		0 &0&1\\1 & 0 & 0\\ 0 & 1 & 0 
+	\end{bmatrix}  \begin{bmatrix}
+		a_1\\a_2\\ a_3
+	\end{bmatrix}  = \begin{bmatrix}
+		a_3\\a_1\\ a_2
+	\end{bmatrix}
+\end{align}
+where $a_k$ refers to the $k$-th row of $\mA$. The inverse of permutation matrix $\mP$ is $\mP^{-1} = \mP^T$, which implies the orthogonality of permutation matrix. For an $n \times m$ matrix, there are $n!$ different row permutation matrix and these permutation matrices form a \textit{multiplicative group}.
+
+\vspace{.2cm}
+Similarly, we can also swap the columns of the matrix $\mA$ by multiplying a permutation matrix on the right of $\mA$.
+
+\subsection{Elimination of matrices}
+Elimination is an important technique in linear algebra. We eliminate the matrix by multiplications and subtractions. Take a 3-by-3 matrix $\mA$ as example.
+\begin{align}
+	\mA = \begin{bmatrix}
+		1 &2&1\\3 & 8 & 1\\ 0 & 4 & 1 
+	\end{bmatrix}
+	\xrightarrow{\text{step 1}} \begin{bmatrix}
+		1 &2&1\\0 & 2 & -2\\ 0 & 4 & 1 
+	\end{bmatrix}
+	\xrightarrow{\text{step 2}} \mU =  \begin{bmatrix}
+		1 &2&1\\0 & 2 & -2\\ 0 & 0 & 5
+	\end{bmatrix}
+\end{align}
+In step 1, we choose the number 1 in row 1 column 1 as a \textit{pivot}, then we recopy the first row and multiply an appropriate number(in this case, 3) and subtract those values from the numbers in the second row. We have thus eliminated 3 in row 2 column 1. Similarly, in step 2, we choose 2 in row 2 column 2 as a pivot and eliminate the number 4 in row 3 column 2.  The number 5 in row 3 column 3 is also a pivot. The matrix $\mU$ is an upper traingular matrix.
+
+\vspace{.2cm}
+The \textit{elimination matrix} used to eliminate the entry in row $m$ column $n$ is denoted $\mE_{mn}$. In previous example, 
+\begin{align}
+\mE_{21} \mA = 
+\begin{bmatrix}
+		1 &0&0\\-3 & 1 & 0\\ 0 & 0 & 1 
+	\end{bmatrix}
+	\begin{bmatrix}
+		1 &2&1\\3 & 8 & 1\\ 0 & 4 & 1 
+	\end{bmatrix} = \begin{bmatrix}
+		1 &2&1\\0 & 2 & -2\\ 0 & 4 & 1 
+	\end{bmatrix};\quad \mE_{32} (\mE_{21} \mA) = \mU.
+\end{align}
+
+Pivots can not be 0. If there is a 0 in the pivot position, we must exchange the row with one below to get a non-zero value in pivot position. If there is not non-zero value below the 0 pivot, then we skip this column and find a pivot in next column. 
+
+\vspace{.2cm}
+Since matrix multiplication is associative, we can write $\mE_{32} (\mE_{21} \mA) = (\mE_{32} \mE_{21} ) \mA = \mU$. Let $\mE$ denote the product of all elimination matrices. If we need to permute the rows during the process, we  have $\mE \mP \mA = \mU$, where $\mP$ is the product of all the needed permutation matrices.
+
+\vspace{.2cm}
+We also prove the invertibility of the elimination matrix.
+\begin{lem}[Invertiblity of elimination matrix]\label{lem:elim}
+ Suppose there is an elimination matrix $\mE_{ij} \in \bbR^{n \times n}$ that means multiplying a scalar $-c$ to the  $j$-th row and subtracting the row from $i$-th row, where $i \neq j$. Then, $\mE_{ij}$ is invertible.
+\end{lem}
+\begin{proof}
+	The elimination matrix can be written as:
+	\[ \mE_{ij} = \mI_n + c e_i e_{j}^T, \]
+	where $e_i \in \bbR^n$ is identity vector with value 1 on the $i$-th entry and value 0 on the other entries. Note that $e^T_i e_{j} = 0$ because $i \neq j$. Therefore, we have 
+	\[ (\mI_n + c e_i e_{j}^T)(\mI_n - c e_i e_{j}^T)  = \mI_n - c^2 e_i e_{j}^T e_i e_{j}^T = \mI_n; \quad (\mI_n - c e_i e_{j}^T)(\mI_n + c e_i e_{j}^T)= \mI_n \]
+	Thus, $\mI_n - c e_i e_{j}^T$ is the inverse of $\mE_{ij}$ and $\mE_{ij}$  is invertible.
+\end{proof}
+
+\subsection{Gauss-Jordan Elimination}
+Consider an invertible matrix $\mA \in \bbR^{n \times n}$, one of the effective ways to find the inverse of $\mA$ uses elimination. 
+
+\vspace{0.2cm}
+ The inverse of $\mA$, $\mA^{-1}$ , satisfies $\mA \mA^{-1} = \mI_n$. Suppose there is an elimination $\mE$ such that $\mE \mA = \mI_n$. Multiplying $\mE$ on the both side of the equation, we have $\mE  \mA \mA^{-1}= \mA^{-1} = \mE$. To obtain an such $\mE$, we do elimination to the \textit{augmented matrix} $[\mA|\mI_n]$ until $\mA$ becomes $\mI_n$. 
+ 
+ \vspace{0.2cm}
+ We call the elimination process of finding $\mE$ as \textit{Gauss-Jordan Elimination}.
+
+
+
+\subsection{Factorization of matrices}
+By elimination, for any square matrix $\mA$, we have $\mE \mP \mA = \mU$ where $\mU$ is an upper triangular matrix. By "canceling" the elimination matrix $\mE$, we get $\mP \mA = \mE^{-1} \mU$. Because $\mE$ is invertible, the inverse $\mE^{-1}$ exists. Note that $\mE$ is lower triangular matrix, the inverse of $\mE$ is also a lower triangular matrix. We use $\mL$ to denote $\mE^{-1}$. Therefore, we can decompose an arbitrary square matrix $\mA$ as:
+\[ \mP \mA = \mL \mU, \]
+where $\mU$ is an upper triangular matrix with pivots on the diagonal, $\mL$ is lower triangular matrix with ones on the diagonal, and $\mP$ is a permutation matrix. Note that, there may exist other ways to decompose $\mP\mA$ into $\mL \mU$, where $\mU$ and $\mL$ have different settings.
+
+\subsection{Time complexity of elimination}
+For an $n$-by-$n$ matrix, multiplying one row and then subtracting it from another row require $2n$ operations. There are $n$ rows in the matrix, so the total number of operations used in elimination the first column is $2n^2$. The second row and column are shorter, which may cost $2(n-1)^2$ operations  and so on. Therefore, the time complexity to factorize $\mA$ into $\mL \mU$ is about $\tO(n^3)$: \[ 1^2 + 2^2 + \cdots +(n-1)^2 + n^2 = \sum_{i}^n i^2 \approx \int_{0}^n x^2 dx = \frac{1}{3} n^3.\]
+
+\subsection{Reduced row echelon form of matrices}
+By continuing to use the method of elimination, we can convert $\mU$ to a matrix $\mR$ in reduced row echelon form, with pivots equal to 1 and zeros above and below the pivots. The matrix $\mR$ is called the \textit{reduced row echelon form of matrices}(RREF) of $\mA$. In previous example,
+\begin{align}
+	\mU = \begin{bmatrix}
+		1 &2&1\\0 & 2 & -2\\ 0 & 0 & 5
+	\end{bmatrix} \xrightarrow{\text{make pivots = 1}} \begin{bmatrix}
+		1 &2&1\\0 & 1 & -1\\ 0 & 0 & 1
+	\end{bmatrix} 
+	\xrightarrow{\text{0 above and below pivots}} \mR =  \begin{bmatrix}
+		1 &0&0\\0 & 1 & 0\\ 0 & 0 & 1
+	\end{bmatrix} .
+\end{align}
+
+For an another example,
+\begin{align}
+	\mU = \begin{bmatrix}
+		1 &2&2&2\\0 &0 & 2 & 4\\ 0 & 0 & 0&0
+	\end{bmatrix} \xrightarrow{\text{make pivots = 1}} \begin{bmatrix}
+		1 &2&2&2\\0 &0 & 1 & 2\\ 0 & 0 & 0&0
+	\end{bmatrix} 
+	\xrightarrow{\text{0 above and below pivots}} \mR =  \begin{bmatrix}
+		1 &2&0&-2\\0 &0 & 1 & 2\\ 0 & 0 & 0&0
+	\end{bmatrix} .
+\end{align}
+
+With proper permutation, the matrix $\mR$ can be written in form $[\mI \quad \mF]$, $\begin{bmatrix} \mI&\mF\\0 &0	\end{bmatrix}$, $\begin{bmatrix} \mI \\0	\end{bmatrix}$ , or just $\mI$, where $\mF$ can be arbitrary matrix in proper dimension. The columns in $\mA$ which correspond to the identity matrix $\mI$ are called \textit{pivot columns} and the other columns are \textit{free columns}.
+
+\subsection{Vector space, Subspace and Column space}
+\begin{itemize}
+	\item \textit{Vector space} is a collection of vectors that are closed under linear combination(addition and multiplication by any real number); i.e. for any vectors in the collection, all the combinations of these vectors are still in the collection.
+	\item \textit{Subspaces of the vector space} is a vector space that is contained inside of another vector space.
+\end{itemize}
+
+Note that any vector space or subspace must include an origin. For a vector space $\tA$, the subspace of $\tA$ can be $\tA$ itself or can only contain a zero vector. 
+
+\begin{itemize}
+	\item Vectors $v_1 ,...,v_n$ \textit{span} a space that consists all the combination of those vectors. 
+	\item \textit{Column space} of matrix $\mA$ is the space spanned by the columns of $\mA$. Let $C(\mA)$ denote the column space of $\mA$.
+\end{itemize}
+
+Note that if  $v_1 ,...,v_n$ span a space $\tS$, then $\tS$ is the smallest space that contain those vectors.
+
+\begin{itemize}
+	\item \textit{Basis} of a vector space is a sequence of vectors $v_1 ,...,v_n$ satisfies: (1) $v_1 ,...,v_n$ are independent; (2) $v_1 ,...,v_n$ span the space.
+	\item \textit{Dimension} of the space is the number of vectors in a basis of the space.
+\end{itemize}
+
+\subsection{Matrix rank}
+The \textit{rank} of a matrix $\mA$ is defined as the dimension of the columns space of $\mA$. Rank is also equal to the number of pivot columns of $\mA$. That means:
+\[ \text{rank}(\mA) = \# \text{ of pivot columns of }\mA = \text{dimension of } C(\mA).\]
+We use $r$ to denote the rank of $\mA$. If $\mA\in \bbR^{m \times n}$, then we have $r \leq m, r \leq n$. We say the matrix is \textit{full rank} if $r = n$ or $r = m$.
+
+\vspace{.2cm}
+The rank of a square matrix is closely related to its invertibility. 
+\begin{lem}[Full rankness and invertibility]\label{lem:fullrank} A square matrix $\mA \in \bbR^{n \times n}$ is full rank, if and only if $\mA$ is an invertible matrix.
+\end{lem}
+
+\begin{proof}
+	First, assume $\mA$ is full rank, we prove that $\mA$ has an inverse.
+	We can get find a RREF($\mA$) by eliminations and permutations. There are $\mE$ and $\mP$ such that
+	\[ \mE \mP \mA =  \mR. \]
+	Since $\mA$ is full rank, $\mA$ have $n$ pivots columns and that implies $\mR = \mI_n$. By lemma \ref{lem:elim}, $\mE$ is invertible. The permutation matrix $\mP$ is also invertible. Therefore, $\mE \mP$ is invertible and $\mA \mE \mP= \mI_n$. This implies $\mA$ is invertible.
+	
+	Second, assume $\mA$ has an inverse, we prove that $\mA$ is full rank. 
+	We show this by contradiction. Assume $\mA$ has an inverse $\mA^{-1}$ and $\mA$ is not full rank. Because the rank of $\mA$ is equal to the dimension of $C(\mA)$, the columns of $\mA$ are linearly dependent without full rankness. So, there exist a non-zero vector $v$ such that \[ \mA v = 0.\] Multiplying $\mA^{-1}$ on the both sides of the equation, we have \[ v = \mA^{-1} 0 = 0.\] However, it contradicts to  non-zeroness of $v$. Therefore, $\mA$ must be full rank.
+\end{proof}
+
+The rank of $\mA$ also effects the number of solutions to the system $\mA x = b$. We will discuss it in next section.
+
+\section{Solving $Ax = b$}
+
+Here we discuss the solution situation of the linear system $Ax = b$. Without specific explanation, the matrix $\mA \in \bbR^{m \times n}$ and the vector $x \in \bbR^n$, $b \in \bbR^m$.
+
+\subsection{Solving $Ax = 0$: Nullspace}
+The \textit{nullspace} of matrix $\mA$ is the collection of all solutions $x$ to the system $\mA x = 0$. Let $N(\mA)$ denote the nullspace of $\mA$.
+
+\vspace{.2cm}
+
+\begin{lem}[Nullspace] 
+The \textit{nullspace} of matrix $\mA$ is a vector space. 
+\end{lem}
+
+\begin{proof}
+To show the $N(\mA)$ is a vector space, we need to show $N(\mA)$ is close to linear combination. For any integer $k$, take arbitrary vectors $v_1 ,...,v_k \in N(\mA)$ and arbitrary scalars $c_1, ..., c_k$. We have,
+\[ \mA(c_1 v_1 + \cdots + c_k v_k) = c_1 \mA v_1 + \cdots + c_k \mA v_k = 0. \]
+Therefore, the linear combination $(c_1 v_1 + \cdots + c_k v_k) \in N(\mA)$. Then $N(\mA)$ is a vector space.
+\end{proof}
+
+\begin{lem}[The rank of nullspace]\label{lem:ranknull}
+Suppose the rank of $\mA$ is $r$, then the rank of $N(\mA)$ is $n - r$.
+\end{lem}
+
+\begin{proof} Let $\mR$ denote the RREF($\mA$). The matrix $\mR$ can be written in form $\mR = \begin{bmatrix} \mI_r & \mF \\ 0 & 0	\end{bmatrix}$ where $\mF \in \bbR^{r \times (n-r)}$ and $0$ are zero matrices with proper dimensions.
+Let $\mX = \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix}$. Then we have 
+\begin{align}
+	\mR \mX = \begin{bmatrix} \mI_r & \mF \\ 0 & 0	\end{bmatrix} \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix} = 0
+\end{align}
+Therefore, each column $\mX$ is a special solution to the system $\mA x = 0$. Next, we want to show other solutions to $\mA x = 0$ are linear combinations of those special solutions.
+
+Suppose there is a $x = (x_1, x_2) \in N(\mA)$. Then 
+\begin{align}
+	\mR x = \begin{bmatrix} \mI_r & \mF \\ 0 & 0	\end{bmatrix} \begin{bmatrix} x_1 \\ x_2	\end{bmatrix} = \begin{bmatrix} x_1 + \mF x_2 \\  0 &\end{bmatrix} = 0.
+\end{align}
+That implies $x_1  = -\mF x_2$ and $x = \begin{bmatrix} x_1 \\ x_2	\end{bmatrix} = \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix} x_2 = \mX x_2$. Therefore, arbitrary $x \in N(\mA)$ is a linear combination of special solutions, i.e. $C(\mX) = N(\mA)$. 
+
+Since $\mX$ contains an identity matrix, the special solutions are independent and the rank of $C(\mX)$ is $n -r$. Therefore, the rank of $N(\mA)$ is $n-r$. 
+\end{proof}
+
+Recall that the columns in $\mA$ correspond to the $\mI_r$ in $\mR$ are called pivot columns and other columns are free columns. In $\mA x = b$, the variables in $x$ that correspond to pivot columns are called \textit{pivot variables} and others are \textit{free variables}. As the proof shows, the way to find special solutions of $\mA x = 0$ is to let one of the free variables is 1 while other free variables are 0 and then solve the equation $\mA x = 0$. There are total $n-r$ special solutions.
+
+
+\subsection{Solving $Ax = b$: complete solutions}
+
+\begin{lem}[Solvability of $\mA x = b$]\label{lem:solve} The system $\mA x = b$ is solvable only when $b \in C(\mA)$.	
+\end{lem}
+
+\begin{proof}
+	For any $x$, $\mA x \in C(\mA)$. Therefore, to satisfy $\mA x = b$, $b \in C(\mA)$. 
+\end{proof}
+
+\begin{lem}[Complete solution]\label{lem:compsolu} The complete solution of $\mA x = b$ is given by $x_{comp} = x_p + x_n$, where $x_p$ is a particular solution that $\mA x_p = b$ and $x_n \in N(\mA)$. 
+\end{lem}
+
+\begin{proof}
+	Suppose $x = x_p + x_0$ is an arbitrary solution to $\mA x= b$. Then we have 
+	\begin{align}
+		\mA x - \mA x_p = \mA (x- x_p) = \mA x_0 = 0.
+	\end{align}
+	Then $x_0 \in N(\mA)$.
+\end{proof}
+
+One way to find a particular solution is to let all the free variables be 0 and solve the equations. 
+
+\vspace{.2cm}
+Here is a summary table that discusses the rank of $\mA$, the form of $\mR$ and the situation about the solutions.
+
+\begin{center}
+\begin{tabular}{ c|c |c| c |c } 
+ \hline
+  & $r = m=n$ & $r = n < m$ & $r = m < n$ & $r<m,r<n$ \\ \hline 
+  $\mR$& $\mI$ & $\begin{bmatrix} \mI \\ 0	\end{bmatrix}$ & $\begin{bmatrix} \mI & \mF \end{bmatrix}$ & $\begin{bmatrix} \mI & \mF \\ 0 &0	\end{bmatrix}$\\
+  dimension of $N(\mA)$& 0 &0& $n -r$ & $n-r$ \\
+  \# solutions to $\mA X = b$ & 1 & 0 or 1 & infinitely many & 0 or infinitely many\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+\vspace{.2cm}
+
+
+
+
+
+
+
+
+\end{document}
