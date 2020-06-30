@@ -283,7 +283,7 @@ The rank of a square matrix is closely related to its invertibility.
 	
 	Consider the RREF form of $\mA$, $\mR = RREF(\mA)$. There are elimination matrix $\mE$ and permutation matrix $\mP$ such that
 	\[ \mE \mP \mA =  \mR. \]
-	By the full rankness of $\mA$,  $\mA$ has $n$ pivot columns, and thus $\mR = \mI_n$. By lemma \ref{lem:elim}, $\mE$ is invertible. The permutation matrix $\mP$ is also invertible. Then, the matrix product $\mE \mP$ is invertible and $\mA$ is the inverse of $\mE \mP$. Therefore, $\mA$ is invertible.
+	By the full rankness of $\mA$,  $\mA$ has $n$ pivot columns, and thus $\mR = \mI_n$. By lemma \ref{lem:elim}, $\mE$ is invertible. The permutation matrix $\mP$ is also invertible. Then, the matrix product $\mE \mP$ is invertible, and $\mA$ is the inverse of $\mE \mP$. Therefore, $\mA$ is invertible.
 	
 	Second, we assume $\mA$ is invertible and prove the full rankness of $\mA$ by contradiction. 
 	
@@ -332,10 +332,10 @@ Suppose there is a solution $x = (x_1, x_2) \in N(\mA)$, where $x_1 \in \bbR^{r}
 \begin{align}
 	\mR x = \begin{bmatrix} \mI_r & \mF \\ 0 & 0	\end{bmatrix} \begin{bmatrix} x_1 \\ x_2	\end{bmatrix} = \begin{bmatrix} x_1 + \mF x_2 \\  0 &\end{bmatrix} = 0.
 \end{align}
-That implies $x_1  = -\mF x_2$ and $x = \begin{bmatrix} x_1 \\ x_2	\end{bmatrix} = \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix} x_2 = \mX x_2$. Any vector  in $ N(\mA)$ is a linear combination of special solutions, i.e. $C(\mX) = N(\mA)$. Therefore, the rank of nullspace is $rank(N(\mA)) = dim(C(\mX)) = n-r$.
+That implies $x_1  = -\mF x_2$, and $x = \begin{bmatrix} x_1 \\ x_2	\end{bmatrix} = \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix} x_2 = \mX x_2$. Any vector  in $ N(\mA)$ is a linear combination of special solutions, i.e. $C(\mX) = N(\mA)$. Therefore, the rank of nullspace is $rank(N(\mA)) = dim(C(\mX)) = n-r$.
 \end{proof}
 
-Recall the definitions of pivot column and free column. In $\mA x = b$, the variables in $x$ that correspond to pivot columns are called \textit{pivot variables} and others are \textit{free variables}. If $rank(\mA) = r$, there are $n-r$ free variables, which coincides with $rank(N(\mA))$. 
+Recall the definitions of pivot column and free column. In $\mA x = b$, the variables in $x$ that correspond to pivot columns are called \textit{pivot variables}, and others are \textit{free variables}. If $rank(\mA) = r$, there are $n-r$ free variables, which coincides with $rank(N(\mA))$. 
 
 In the proof of lemma~\ref{lem:ranknull}, the columns of $\mX = \begin{bmatrix} -\mF \\ \mI_{n-r}	\end{bmatrix}$ are special solutions that compose the basis of $N(\mA)$. Practically, we find those special solutions by assigning 1 to a free variable and 0 to other free variables, and then solving the system $\mA x = 0$. 
 
