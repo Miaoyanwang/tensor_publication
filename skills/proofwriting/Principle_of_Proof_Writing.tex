@@ -1,102 +1,69 @@
-
-% Created by Bonita Graham
-% Last update: December 2019 By Kestutis Bendinskas
-
-% Authors: 
-% Please do not make changes to the preamble until after the solid line of %s.
-
 \documentclass[11pt]{article}
-\usepackage[explicit]{titlesec}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}
-\usepackage{hyphenat}
-\usepackage{ragged2e}
-\RaggedRight
 
-% These commands change the font. If you do not have Garamond on your computer, you will need to install it.
-
-\usepackage[T1]{fontenc}
-\usepackage{amsmath, amsthm}
-\usepackage{graphicx}
-
-% This adjusts the underline to be in keeping with word processors.
-\usepackage{soul}
-\setul{.6pt}{.4pt}
+\usepackage{fancybox}
 
 
-% The following sets margins to 1 in. on top and bottom and .75 in on left and right, and remove page numbers.
-\usepackage{geometry}
-\geometry{vmargin={1in,1in}, hmargin={.85in, .85in}}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\pagenumbering{gobble}
-\renewcommand{\headrulewidth}{0.0pt}
-\renewcommand{\footrulewidth}{0.0pt}
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
 
-% These Commands create the label style for tables, figures and equations.
-\usepackage[labelfont={footnotesize,bf} , textfont=footnotesize]{caption}
-\captionsetup{labelformat=simple, labelsep=period}
-\newcommand\num{\addtocounter{equation}{1}\tag{\theequation}}
-\renewcommand{\theequation}{\arabic{equation}}
-\makeatletter
-%\renewcommand\tagform@[1]{\maketag@@@ {\ignorespaces {\footnotesize{\textbf{Equation}}} #1.\unskip \@@italiccorr }}
-\makeatother
-\setlength{\intextsep}{10pt}
-\setlength{\abovecaptionskip}{2pt}
-\setlength{\belowcaptionskip}{-10pt}
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
 
-\renewcommand{\textfraction}{0.10}
-\renewcommand{\topfraction}{0.85}
-\renewcommand{\bottomfraction}{0.85}
-\renewcommand{\floatpagefraction}{0.90}
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
 
-% These commands set the paragraph and line spacing
-\titleformat{\section}
-  {\normalfont}{\thesection}{1em}{\MakeUppercase{\textbf{#1}}}
-\titlespacing\section{0pt}{0pt}{-10pt}
-\titleformat{\subsection}
-  {\normalfont}{\thesubsection}{1em}{\textbf{\textit{#1}}}
-\titlespacing\subsection{0pt}{0pt}{-8pt}
-\renewcommand{\baselinestretch}{1.15}
 
-\titleformat{\subsubsection}
-  {\normalfont}{\thesubsubsection}{0.5em}{\textbf{#1}}
-\titlespacing\subsubsection{0pt}{0pt}{-8pt}
 
-% This designs the title display style for the maketitle command
-\makeatletter
-\newcommand\sixteen{\@setfontsize\sixteen{17pt}{6}}
-\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
-\begin{flushleft}
-\sixteen\bfseries \@title
-\medskip
-\end{flushleft}
-\textit{\@author}
-\egroup}
-\makeatother
-
-% This styles the bibliography and citations.
-%\usepackage[biblabel]{cite}
-\usepackage[sort&compress]{natbib}
-\setlength\bibindent{2em}
-\makeatletter
-\renewcommand\@biblabel[1]{\textbf{#1.}\hfill}
-\makeatother
-\renewcommand{\citenumfont}[1]{\textbf{#1}}
-\bibpunct{}{}{,~}{s}{,}{,}
-\setlength{\bibsep}{0pt plus 0.3ex}
-
-%math
-\newtheorem{theorem}{Theorem}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
 \newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
 \newtheorem{defn}{Definition}
-\usepackage{amsfonts}
-\usepackage{MnSymbol}%
-\usepackage{wasysym}%
-\usepackage{stmaryrd} 
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
 \usepackage{multirow}
 
-\input macros.tex
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
 
 
 %%% track the change 
@@ -130,14 +97,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\input macros.tex
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Authors: Add additional packages and new commands here.  
-% Limit your use of new commands and special formatting.
-
-% Place your title below. Use Title Capitalization.
 
 \title{
 \centering 
@@ -145,17 +107,17 @@ Principle of Proof Writing}
 
 % Add author information below. Communicating author is indicated by an asterisk, the affiliation is shown by superscripted lower case letter if several affiliations need to be noted.
 
-\author{ \centering
-Jiaxin Hu\\ \medskip 06/14/2020 \\ 
+\date{\today}
+\author{%
+Jiaxin Hu
 }
 
-\pagestyle{empty}
+
 \begin{document}
 
-% Makes the title and author information appear.
-\vspace*{.01 in}
+
 \maketitle
-\vspace{.12 in}
+
 
 % Abstracts are required.
 \section{Math, Notation}
@@ -175,10 +137,9 @@ Jiaxin Hu\\ \medskip 06/14/2020 \\
         \item \textit{ The notation $\tL$ a shorthand of $\tL_{\tY}(\cdot)$. You should make it clear before you use it.}\\Suppose $\tA^*$ is a stationary point of $\tL(\cdot)$.\\ 
         $\rightarrow$ For notational convenience, we drop the subscript $\tY$ from the objective $\tL_{\tY}(\cdot)$. The objective function can be viewed either as a function of decision variables $\tA$ or a function of coefficient tensor $\tB$. With slight abuse of notation, we write both function as $\tL(\cdot)$ ... Suppose  $\tA^*$ is a stationary point of $\tL(\cdot)$.
         \item \textit{If you use $\nabla f$ to refer the derivative or gradient of a function, you should not use $df$ or $f'$ in the rest of the proof.}
-        \begin{align*}
-        \nabla^2 \tL\left(\tA^* \right) =\left(\begin{array}{cccc} d_{CC}^{2} \tL &d_{CM_1}^{2} \tL  & \cdots & d_{CM_K}^{2} \tL \\ d_{M_1C}^{2} \tL  &d_{M_1 M_1}^{2} \tL & \cdots &  d_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\d_{M_KC}^{2} \tL& d_{M_K M_1}^{2} \tL & \cdots & d_{M_K M_K}^{2} \tL \end{array}\right) \rightarrow
-    \left(\begin{array}{cccc} \DIFadd{\nabla}_{CC}^{2} \tL &\DIFadd{\nabla}_{CM_1}^{2} \tL  & \cdots & \DIFadd{\nabla}_{CM_K}^{2} \tL \\ \DIFadd{\nabla}_{M_1C}^{2} \tL  &\DIFadd{\nabla}_{M_1 M_1}^{2} \tL & \cdots &  \DIFadd{\nabla}_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\\DIFadd{\nabla}_{M_KC}^{2} \tL& \DIFadd{\nabla}_{M_K M_1}^{2} \tL & \cdots & \DIFadd{\nabla}_{M_K M_K}^{2} \tL \end{array}\right)
-\end{align*}
+        \begin{align}   
+         \nabla^2\tL\left(\tA^* \right) = \begin{bmatrix}  d_{CC}^{2} \tL &d_{CM_1}^{2} \tL  & \cdots & d_{CM_K}^{2} \tL \\ d_{M_1C}^{2} \tL  &d_{M_1 M_1}^{2} \tL & \cdots &  d_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\d_{M_KC}^{2} \tL& d_{M_K M_1}^{2} \tL & \cdots & d_{M_K M_K}^{2} \tL  \end{bmatrix} = \begin{bmatrix}  \DIFadd{\nabla}_{CC}^{2} \tL &\DIFadd{\nabla}_{CM_1}^{2} \tL  & \cdots & \DIFadd{\nabla}_{CM_K}^{2} \tL \\ \DIFadd{\nabla}_{M_1C}^{2} \tL  &\DIFadd{\nabla}_{M_1 M_1}^{2} \tL & \cdots &  \DIFadd{\nabla}_{M_1 M_K}^{2} \tL\\ \vdots & \vdots & \ddots & \vdots \\\DIFadd{\nabla}_{M_KC}^{2} \tL& \DIFadd{\nabla}_{M_K M_1}^{2} \tL & \cdots & \DIFadd{\nabla}_{M_K M_K}^{2} \tL  \end{bmatrix}        
+       \end{align}
 \item \textit{You should not use $\rho$ for spectral radius and contraction parameter at the same time.}\\
 Let $\rho$ be the spectral radius of $\nabla S$... Let $\rho = \rho + \epsilon$ be the contraction parameter.\\
 $\rightarrow$ Let $\rho$ be the spectral radius of $\nabla S$... Let $\rho_0 = \rho + \epsilon$ be the contraction parameter.
@@ -200,11 +161,12 @@ $(\tC, M_1, \dots,M_K) \quad \rightarrow (\tC, \mM_1,\dots,\mM_K)$.
         \item some notations $\quad \rightarrow$ some notation
         \item There exists a sub-sequences of iterate $\tA$ ...  $\quad \rightarrow$ There exist a sub-sequence of iterate $\tA$
         \item Combine the equation 7 and 8, we have ... $\quad \rightarrow$ Combining the equation 7 and 8, we have...
+        \item The set $\tE$ only contains a finite number of different equivalent classes. \\$ \rightarrow$  The set $\tE$ contains only a finite number of equivalent classes. 
     \end{itemize}
     \item[2.] Use sentences. The math notation or equation should be a noun or short clause in a sentence.
     \item[3.] Be short and concise. Proof is also a part of academic writing.
     \begin{itemize}
-        \item The set $\tE$ only contains a finite number of different equivalent classes. \\$ \rightarrow$  The set $\tE$ contains only a finite number of equivalent classes. 
+       
         \item The set $\tE$ satisfies below two properties. \\
         $ \rightarrow$ The set $\tE$ satisfies two properties below.
         \item \textit{The statement to derive $(1)$ is trivial whereas $(2)$ needs explanation.}\\
@@ -216,10 +178,36 @@ $(\tC, M_1, \dots,M_K) \quad \rightarrow (\tC, \mM_1,\dots,\mM_K)$.
         \item Trivially,... $\quad \rightarrow $ Therefore,...
         \item In other words,...  $\quad \rightarrow $ We conclude that,...
     \end{itemize}
-    \item[5.] Avoid "can". 
+    \item[5.] Avoid ``can". 
     \begin{itemize}
         \item We can conclude that,...  $\quad \rightarrow $ We conclude that,...
     \end{itemize}
+    \item[6.] Pay attention to the comma``,". \\
+    Add comma ``," before injections, such as ``and, but, or, so, yet", when : 
+    \begin{itemize}
+    	\item \textit{we are connecting three or more items.} Our model handles three types of data including continuous, count, and binary data.
+    	\item \textit{we are connecting two independent sentences.} The statistical convergence of our estimator is established, and we quantify the gain in accuracy compared to classical multivariate regression approach.
+    \end{itemize}
+    Do not add comma ``," before injections, when:
+    \begin{itemize}
+    	\item \textit{ we are connecting two verbs.} \\
+    	The paper presents the theory and discusses the results.\\
+    	Tom is not taking his ski helmet on the trip, but he is taking his new ski pants.\\
+    	Tom is not taking this ski helmet but is taking this new ski pants.
+    \end{itemize}
+    \item[7.] Always put an article before countable nouns. 
+    \begin{itemize}
+    	\item There are elimination matrix and permutation matrix such that ...\\
+    	$\quad \rightarrow $ There exist an elimination matrix and a permutation matrix such that ...
+    \end{itemize}
+    \item[8.] Use ``that", if the object of ``assume, show, imply" is a sentence.
+    \begin{itemize}
+    	\item Assume the matrix $X$ is full rank. The equation implies $X$ is invertible.\\
+    	$\quad \rightarrow $ Assume that the matrix $X$ is full rank. The equation implies that $X$ is invertible.
+    \end{itemize}
+    \item[9.] Use \`\ \`\ to complie `` in latex.
+    \item[10.] Keep a space before brackets.
+    \item[11.] Add a backslash after i.e.\ . 
 \end{enumerate}
 
 \section{Logic}
