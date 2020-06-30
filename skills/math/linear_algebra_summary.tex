@@ -91,7 +91,7 @@ Jiaxin Hu
 \begin{itemize}
     \item Given vectors $v_1 ,...,v_n$ and scalars $c_1, ..., c_n$, the sum $c_1 v_1 + \dots + c_n v_n$ is called a \textit{linear combination} of $v_1,...,v_n$.
     \item The vectors  $v_1 ,...,v_n$  are \textit{linearly independent} (or just \textit{indepedent}) if $c_1 v_1 + \dots + c_n v_n = 0$ holds only when all  $c_1,...,c_n = 0$. If the vectors  $v_1 ,...,v_n$  are \textit{dependent}, there exist scalars $c_1, ..., c_n$ which are not all equal to 0 such that $c_1 v_1 + \dots + c_n v_n = 0$.
-	\item Given a matrix $\mA \in \bbR^{m \times n}$ and a vector $x \in \bbR^{n}$,  the multiplication $\mA x$ is a linear combination of the columns of $\mA$ and $x^T \mA$ is a linear combination of the rows of $\mA$.
+	\item Given a matrix $\mA \in \bbR^{m \times n}$ and a vector $x \in \bbR^{n}$  the multiplication $\mA x$ is a linear combination of the columns of $\mA$, and $x^T \mA$ is a linear combination of the rows of $\mA$.
 	\item Matrix multiplication is typically not communicative, i.e. $\mA \mB \neq \mB \mA$. Lemma~\ref{lem:matrixcomm} describes a special case where matrix multiplication is communicative.
 	\item Suppose $\mA$ is a square matrix. The matrix $\mA$ is \textit{invertible} or \textit{non-singular} if there exists a $\mA^{-1}$ such that $\mA^{-1} \mA = \mA \mA^{-1} = I$. Otherwise, the matrix $\mA$ is \textit{singular}, and the determinant of $\mA$ is 0. 
 	\item The inverse of a matrix product $\mA\mB$ is $(\mA \mB)^{-1} = \mB^{-1} \mA^{-1}$. The product of invertible matrices is still invertible.
