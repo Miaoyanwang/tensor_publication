@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{extarrows}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\mathtoolsset{showonlyrefs=true}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{Solution to ``Chapter 2: Basic tail and concentration bounds"}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+\section{Summary}
+\begin{thm}[Markov's inequality]\label{thm:markov}
+	Suppose $X \geq 0$ is a random variable  with finite mean, we have
+	\begin{equation}
+		\bbP(X\geq t) \leq \frac{E[X]}{t},\quad \forall \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Chebyshev's inequality]\label{thm:cheb}
+	Suppose $X \geq 0$ is a random variable  with finite mean $\mu$ and finite variance, we have
+	\begin{equation}
+		\bbP(|X - \mu |\geq t) \leq \frac{var(X)}{t^2},\quad \forall \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Markov's inequality for polynomial moments]\label{thm:polymoment}
+	Suppose the random variable $X$ has a central moment of order $k$. Applying Markov's inequality to the random variable $|X - \mu|^k$ yields
+	\begin{equation}
+		\bbP(|X - \mu |\geq t) \leq \frac{\bbE[|X-\mu|^k]}{t^k},\quad \forall \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Chernoff bound]\label{thm:chernoff}
+	Suppose the random variable $X$ has a moment generating function in the neighborhood of 0, i.e.\ $\varphi_X(\lambda) = \bbE[e^{\lambda X}] < +\infty, \forall \lambda \in (-b,b), b>0$. Applying Markov's inequality to the random variable $Y = e^{\lambda(X- \mu)}$ yields
+	\begin{equation}
+		\bbP((X - \mu) \geq t) \leq \frac{\bbE[e^{\lambda X}]}{e^{\lambda t}}.
+	\end{equation}
+	Optimizing the choice of $\lambda$ for the tightest bound yields the Chernoff bound
+	\begin{equation}
+		\bbP((X - \mu) \geq t) \leq \inf_{\lambda \in [0,b)} \frac{\bbE[e^{\lambda X}]}{e^{\lambda t}}.
+	\end{equation}
+\end{thm}
+
+
+
+
+\section{Exercises}
+
+\paragraph{Exercise 2.1} (Tightness of inequalities.) The Markov and Chebyshev's inequalities can not be improved in general. 
+\begin{enumerate}
+	\item[(a)] Provide a random variable $X \geq 0$ for which Markov's inequality~\eqref{thm:markov} is met with equality.  
+	\item[(b)] Provide a random variable $Y$ for which Chebyshev's inequality~\eqref{thm:cheb} is met with equality.  
+\end{enumerate}
+
+\paragraph{Solution:} 
+\begin{enumerate}
+	\item[(a)] Recall the proof of Markov's inequality. For any $t >0$,
+	\[ \bbE[X] = \int_{0}^t x f_X(x) dx + \int_{t}^{+\infty} x f_X(x) dx \geq \int_{t}^{+\infty} x f_X(x)\geq t \int_{t}^{+\infty} f_X(x) = t \bbP( X \geq t).\]
+	 If Markov's inequality meets the equality, the inequalities above should meet equality. 
+	 
+	 Consider a variable $X$ with distribution $P(X = 0) = 1$. For any $t > 0$, the variable $X$ satisfies 
+	 \[ \int_{0}^t x f_X(x) dx = 0 \text{ and } \int_{t}^{+\infty} x f_X(x) dx =\int_{t}^{+\infty} t f_X(x) dx. \]
+	 Therefore, for variable $X$, the Markov's inequality is met with equality.
+	 \item[(b)] Chebyshev's inequality follows by applying Markov's inequality to the non-negative random variable $Y = \bbE{(X - \bbE[X])^2}$. Let the distribution of $Y$ be $\bbP(Y = 0) = 1$. Then the Markov's inequality for $Y$ and the Chebyshev's inequality for $X$ meet the equalities. By transformation, the distribution of random variable $X$ is $\bbP(X = \bbE[X]) = 1$. Therefore, for any random variable $X$ with distribution $\bbP(X = c) = 1, c \in \bbR$, the Chebyshev's inequality is met with equality.
+\end{enumerate}
+
+\paragraph{Exercise 2.2}
+\begin{lem}[Standard normal distribution]\label{lem:n01}
+	Let $\phi(z)$ be the density function of a standard normal $Z \sim N(0,1)$ variable. Then, 
+	\begin{equation}\label{eq:e22a}
+		\phi'(z) + z \phi(z) = 0,
+	\end{equation}
+	and \begin{equation}\label{eq:e22b}
+		\phi(z)(\frac{1}{z} - \frac{1}{z^3} ) \leq \bbP(Z \geq z) \leq \phi(z)(\frac{1}{z} - \frac{1}{z^3}+ \frac{3}{z^5} ), \quad \text{for all }z>0.
+	\end{equation}
+\end{lem}
+\begin{proof}First, we prove the equation~\eqref{eq:e22a}. The pdf of standard normal distribution $\phi(z)$ satisfies
+\[  \phi(z) = \frac{1}{\sqrt{2\pi}} \exp(-\frac{z^2}{2}  ); \quad \phi'(z) = -z \frac{1}{\sqrt{2\pi}} \exp(-\frac{z^2}{2} ) = -z \phi(z). \]
+	Next, we prove the equation~\eqref{eq:e22b}. Using equation~\eqref{eq:e22a}, we have
+	\begin{align}
+		\bbP(Z \geq z) &= \int_{z}^{+\infty} \phi(t) dt = \int_{z}^{+\infty} - \frac{1}{t} \phi'(t) dt = \frac{1}{z} \phi(z) - \int_{z}^{+\infty} \frac{1}{t^2} \phi(t) dt\\
+		&= \frac{1}{z} \phi(z) + \int_{z}^{+\infty} \frac{1}{t^3} \phi'(t) dt =  \frac{1}{z} \phi(z) - \frac{1}{z^3} \phi(z) + \int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt
+	\end{align}
+	Since $\frac{3}{t^4} \phi(t) \geq 0$, therefore $\bbP(Z \geq z) \geq \phi(z)(\frac{1}{z}  - \frac{1}{z^3} )$. On the other hand, 
+	\[ \int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt = \int_{z}^{+\infty} - \frac{3}{t^5} \phi'(t) dt =\frac{3}{ z^5} \phi(z) -  \int_{z}^{+\infty} \frac{15}{t^6} \phi(t) dt \leq \frac{3}{ z^5} \phi(z). \]
+	Therefore, $\bbP(Z \geq z) \leq \phi(z)(\frac{1}{z}  - \frac{1}{z^3} + \frac{3}{z^5} ).$
+\end{proof}
+
+\paragraph{Exercise 2.3}
+
+\begin{lem}[Polynomial bound and Chernoff bound]\label{lem:momcher}
+	Suppose $X \geq 0$, and that the moment generating function of $X$ exists in the neighborhood of 0. Given some $\delta > 0$ and integer $ k \in \mathbb{Z_+}$, we have
+	\[  \inf_{k \in \mathbb{Z_+} } \frac{\bbE[|X|^k]}{\delta^k} \leq \inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}}. \]
+	Consequently, an optimized bound based on polynomial moments is always at least as good as the Chernoff upper bound.
+\end{lem}
+
+\begin{proof}
+	By power series, we have
+	\begin{equation}\label{eq:power}
+		 e^{\lambda X} = \sum_{k = 0}^{+\infty } \frac{X^k \lambda^k }{k!}, \quad \forall \lambda \in \bbR
+	\end{equation}
+	Since the moment generating function $\varphi_X(\lambda)$ exists in the neighbor hood of 0, there exists a constant $b > 0$ such that 
+	\[  \inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}} = \inf_{\lambda \in (0,b)} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}} < +\infty. \]
+	Taking the expectation on both sides of the power series~\eqref{eq:power} yields
+	\[   \bbE [e^{\lambda X} ]= \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} < +\infty,\quad \forall \lambda \in (0,b). \]
+	Therefore, the moment $\bbE[|X|^k] < +\infty,\  \forall k \in \mathbb{Z}_+$ exists. Applying the power serious to $e^{\lambda \delta}$, we obtain the result
+	\[ \inf_{k \in \mathbb{Z_+} } \frac{\bbE[|X|^k]}{\delta^k} \leq \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k] }{\delta^k} = \sum_{k = 0}^{+\infty } \frac{\frac{ \bbE[|X|^k]  \lambda^k }{k!} }{\frac{\lambda^k \delta^k }{k!}  } = \inf_{\lambda > 0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}}.  \]
+\end{proof}
+
+
+
+
+
+
+\end{document}
