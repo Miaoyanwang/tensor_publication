@@ -1,0 +1,239 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{\textbf{Linear Algebra -- Part II}\\A summary for MIT 18.06SC}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+
+% Abstracts are required.
+\section{Orthogonality}
+
+\subsection{Orthogonal vectors and subspaces}
+\begin{defn}[\textit{Orthogonal vectors}]\label{def:vortho}
+	Suppose two vectors $x,y \in \bbR^{n}$. The vectors $x$ and $y$ are orthogonal \textbf{iff} $x^T y = y^T x = 0$, denoted $x \perp y$.
+\end{defn}
+
+\begin{defn}[\textit{Orthogonal subspaces}]\label{def:sortho}
+	Suppose two subspaces $S,T$. The subspaces $S$ and $T$ are orthogonal \textbf{iff} for any $s \in S$ and for any $ t \in T$, $s^T t = t^T s = 0$, denoted $S \perp T$.
+\end{defn}
+
+Given a matrix $\mA \in \bbR^{m \times n}$, there are four subspaces related to $\mA$: column space $C(\mA)$, row space $C(\mA^T)$, nullspace $N(\mA)$, and left nullspace $N(\mA^T)$. Suppose the matrix rank of $\mA$ is $rank(\mA) = r$, the dimensions of these subspaces are: 
+\[ dim(C(\mA)) = dim(C(\mA^T)) = r,\quad  dim(N(A)) = n-r,\quad dim(N(\mA^T)) = m-r. \] 
+
+\begin{thm}[Orthogonality of matrix subspaces]\label{thm:ortho}
+	Suppose a matrix $\mA \in \bbR^{m \times n}$. The row space $C(\mA^T)$ and the nullspace $N(\mA)$ are orthogonal; the column space $C(\mA)$ and the left nullspace $N(\mA^T)$ are orthogonal i.e.\
+	\[ C(\mA^T) \perp N(\mA); \quad C(\mA) \perp N(\mA^T).  \]
+\end{thm}
+
+\begin{proof}
+	Consider the matrix $\mA \in \bbR^{m \times n}$. For any vector $x \in N(\mA)$, we have $\mA x = 0$. 
+	\begin{align}
+		\mA x  = \begin{bmatrix}
+			a_1^T x \\ \vdots \\ a_m^T x 
+		\end{bmatrix} = \begin{bmatrix}
+			0\\ \vdots \\0
+		\end{bmatrix},
+	\end{align}
+	where $a_i \in \bbR^n, i \in [m]$ is the $i$-th  row of $\mA$. By the definition~\ref{def:vortho}, $x$ is orthogonal with the rows in matrix $\mA$. For any vector $v \in C(\mA^T)$, $v$ is a linear combination of the rows, i.e.\ $v = c_1 a_1 + ...+c_m a_m$, where $c_i, i\in [m]$ are constants. Multiplying vectors $v$ and $x$,
+	\[  v^T x =  c_1 a_1^T x + \cdots + c_m a_m^T x = 0.  \]
+	Therefore, $v \perp x$, and $N(\mA) \perp C(\mA^T)$.
+	
+	Similarly, for any $x \in N(\mA^T)$, we have $\mA^T x = 0$, which implies $N(\mA^T) \perp C(\mA)$. 
+\end{proof}
+
+\begin{thm}[Relationship between $\mA^T \mA$ and $\mA$]\label{thm:aa}
+	Consider a matrix $\mA \in \bbR^{m \times}$. We have
+	\begin{equation}
+		N(\mA^T \mA) = N(\mA) ; \quad rank(\mA^T \mA) = rank(\mA).
+	\end{equation}
+\end{thm}
+\begin{proof}
+	Consider the matrix $\mA \in \bbR^{m \times n}$. 
+	
+	If $x \in N(\mA)$, then $\mA x = 0 \Rightarrow \mA^T 0 = 0$, which implies that for any $x \in N(\mA)$, the vector $x \in N(\mA^T \mA)$. Therefore, we only need to prove that for any $x \in N(\mA^T \mA)$, the vector $x \in N(\mA)$. We prove this by contradiction.
+	
+	Suppose a vector $x \in N(\mA^T \mA^T)$ but $x \notin N(\mA)$. We have
+	\[ \mA x = b \neq 0, \quad \mA^T \mA x = 0 \quad \Rightarrow \quad \mA^T b = 0. \]
+	By the first equation $b \in C(\mA)$, and by the third equation $ b \in N(\mA^T)$ . This contradicts the theorem~\ref{thm:ortho}, i.e.\ $C(\mA) \perp N(\mA^T)$. 
+	
+	Next, given $N(\mA^T \mA) = N(\mA)$, the rank of matrix $rank(\mA^T \mA) = n - dim(N(\mA^T \mA)) = n - dim(N(\mA)) = rank(\mA)$.
+\end{proof}
+
+\begin{cor}[Invertibility of $\mA^T \mA$]\label{cor:invert}
+	If $\mA$ has independent columns, then $\mA^T \mA$ is invertible.
+\end{cor}
+\begin{proof}
+	If $\mA \in \bbR^{m \times n}$ has independent columns, then $rank(\mA) = n$. By the theorem~\ref{thm:aa}, $rank(\mA^T \mA) = rank(\mA) = n$. Since $\mA^T \mA \in \bbR^{n \times n}$ is a square matrix, $\mA^T \mA$ is invertible.
+\end{proof}
+
+
+\subsection{Projections onto subspaces}
+\begin{defn}[\textit{Projection and projection matrix}]\label{def:project}
+	Consider a vector $x \in \bbR^{m}$ and a matrix $\mA^{m \times n}$ that has independent columns. Suppose a vector $p \in C(\mA)$, such that
+	
+	\begin{equation}\label{eq:project}
+		(x-p) \perp C(\mA). 
+	\end{equation} 
+	
+	The vector $p$ is the projection of vector $x$ onto the space $C(\mA)$. Since $p \in C(\mA)$, there exists a vector $\hat x$ such that $p = \mA \hat x$. By equation~\eqref{eq:project}, we have
+	\[ \mA^T (x - p) = \mA^T(x - \mA \hat x) \quad  \Rightarrow\quad  \hat x = (\mA^T \mA)^{-1} \mA^T x,\quad p = \mA(\mA^T \mA)^{-1} \mA^T x.  \] 
+	The matrix $\mP =  \mA(\mA^T \mA)^{-1} \mA^T$ is called projection matrix.
+\end{defn}
+
+\begin{thm}[Properties of projection matrix]\label{thm:projectm}
+	Consider a projection matrix $\mP$ to the column space $C(\mA)$, where $\mA \in \bbR^{m \times n}$ is a matrix. Then,
+	\begin{equation}\label{eq:projectm}
+		\mP^T = \mP;\quad  \mP^2 = \mP.
+	\end{equation}
+\end{thm}
+\begin{proof}
+	Since the projection matrix $\mP =   \mA(\mA^T \mA)^{-1} \mA^T$ and $\mA^T \mA$ is symmetric, then
+	\[  \mP^T = (\mA(\mA^T \mA)^{-1} \mA^T )^T = \mA (\mA^T \mA)^{-1} \mA^T = \mP. \]
+	\[  \mP^2 = \mP^T \mP =  \mA (\mA^T \mA)^{-1} \mA^T  \mA (\mA^T \mA)^{-1} \mA^T =  \mA (\mA^T \mA)^{-1} \mA^T = \mP. \]
+\end{proof}
+
+\begin{cor}[Projection onto $N(\mA^T)$]\label{cor:iprojectm}
+	Suppose $\mP$ is a projection matrix in theorem~\ref{thm:projectm} , then $I-\mP$ is also a projection matrix to the left nullspace $N(\mA^T)$. 
+\end{cor}
+
+\begin{proof}
+	For any $x \in \bbR^m$, we have $x - \mP x \perp C(\mA)$
+	\[ x - \mP x \perp C(\mA) \quad \Rightarrow \quad (I-\mP)x \perp C(\mA) \quad \Rightarrow \quad  (I-\mP)x \in N(\mA^T) \text{ and } (x - (I-\mP)x) \perp N(\mA^T). \]
+	Therefore, $I-\mP$ is a projection matrix to the left nullspace $N(\mA^T)$.
+\end{proof}
+
+\subsection{Projection matrices and least squares}
+Given observation vector $y \in \bbR^n$ and the design matrix $\mX \in \bbR^{n \times (k+1)}$, we propose the linear regression model
+\[ y = \mX \beta +\epsilon,\]
+where $\beta = (\beta_0,\beta_1,...,\beta_k)$ are coefficients of our interests and $\epsilon$ is the noise. The least square estimate of $\beta$ minimizes the loss
+\[  \hat \beta_{LS} = \argmin_{\beta \in \bbR^{k+1}} \onorm{y - \mX \beta}^2, \]
+where $\onorm{\cdot}$ is the euclidean norm. The vector $\mX 
+\hat \beta_{LS}$ can be considered as a the projection of $y$ onto the column space of $\mX$. Therefore, we may use projection tools to solve the least square estimate. 
+
+The projection $\mX \hat \beta_{LS}$ satisfies
+\[ \mX^T( y - \mX \hat \beta_{LS} ) = 0 \quad \Rightarrow \quad \hat \beta_{LS} = (\mX^T \mX)^{-1} \mX^T y. \]
+
+The estimate $\hat \beta_{LS}$ is identical to the estimates solved by other methods  using the derivative. 
+
+\subsection{Orthogonal matrices and Gram-Schimidt}
+\begin{defn}[\textit{Orthonormal vectors}]\label{def:othronov}
+	The vectors $q_1,...,q_n$ are orthonormal if
+	\begin{align}
+		q_i^T q_j = \begin{cases}
+			0& \text{if } i\neq j\\
+			1 & \text{if } i =  j
+		\end{cases}.
+	\end{align}
+\end{defn}
+
+Orthonormal vectors are always independent.
+
+\begin{defn}[Orthonormal matrix and orthogonal matrix]\label{def:orthonom}
+	Consider a matrix $\mQ \in \bbR^{m \times n}$. If the columns of $\mQ$ are orthonormal, the matrix $\mQ$ is an orthonormal matrix. If $ m= n$, the square matrix $\mQ$ is a orthogonal matrix.
+\end{defn}
+
+If $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix, $\mQ^T \mQ = \mI_n$.  If $\mQ$ is an orthogonal matrix, $\mQ^T = \mQ^{-1}$.
+For orthonormal matrix $\mQ$, the projection matrix to $C(\mP)$  becomes $\mP = \mI_m$.
+
+\begin{defn}[Gram-Schimidt Process and QR decomposition]\label{gram-schimidt}
+Consider a matrix $\mA \in \bbR^{m \times n}$ with $rank(\mA) = n$. Gram-Schimidt process finds the orthonormal basis for $C(\mA)$. Let $a_i \in \bbR^{m}, i \in [m]$ be the columns of matrix $\mA$. 
+\begin{align}
+	&u_1 = a_1, &&\quad e_1 = \frac{u_1}{\onorm{u_1}}\\
+	&u_2 = a_2 - \frac{u_1^T a_2}{u_1^T u_1} u_1 ,&&\quad  e_2 = \frac{u_2}{\onorm{u_2}}\\
+	&u_3 = a_3 - \frac{u_1^T a_3}{u_1^T u_1} u_1 - \frac{u_2^T a_3}{u_2^T u_2} u_2,&&\quad  e_2 = \frac{u_3}{\onorm{u_3}}\\
+	\vdots
+\end{align}
+ The vectors $e_1,...,e_n$ are orthonormal basis of the $C(\mA)$. By matrix operations, we obtain a decomposition of matrix $\mA$
+ \begin{equation}\label{eq:qr}
+ 	\mA = [a_1,...,a_n] = [e_1,....,e_2] \begin{bmatrix}
+ 		e_1^T a_1 & e_1^T a_2 & \cdots & e_1^T a_n\\
+ 		0&e_2^T a_2 & \cdots & e_2^T a_n\\
+ 		\vdots &\vdots & & \vdots \\
+ 		0 &0&\cdots & e_n^T a_n
+ 	\end{bmatrix} = \mQ \mR
+ \end{equation}
+	where $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix and $\mR \in \bbR^{n \times n}$ is a upper triangular matrix. We call the matrix decomposition as equation~\eqref{eq:qr} QR decomposition.
+\end{defn}
+
+
+\end{document}
