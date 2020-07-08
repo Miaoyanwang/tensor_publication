@@ -235,5 +235,228 @@ Consider a matrix $\mA \in \bbR^{m \times n}$ with $rank(\mA) = n$. Gram-Schimid
 	where $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix and $\mR \in \bbR^{n \times n}$ is a upper triangular matrix. We call the matrix decomposition as equation~\eqref{eq:qr} QR decomposition.
 \end{defn}
 
+\section{Determinants}
+The \textit{determinant} is a number associated with any square matrix. For a square matrix $\mA$, let $\det(\mA)$ or $|\mA|$ denote the determinant of matrix $\mA$.
+
+\subsection{Properties of determinants}
+We give ten properties of determinants. The last seven properties are deduced by first three basic properties
+\begin{enumerate}
+	\item\label{prop1} The determinant of identity matrix is equal to 1, i.e.\ $\det(\mI) = 1$.
+	\item\label{prop2} Exchanging two rows of a matrix reverses the sign of the matrix's determinant. Hence, an odd number of row exchanges reverse the sign of the determinant while an even number of row exchanges maintain the sign of the determinant.
+	\item \begin{enumerate} 
+	\item[(a)]\label{prop3a} If one row of the matrix is multiplied by a constant $t$, the determinant of the matrix is multiplied by $t$.
+	\begin{align}
+		\begin{vmatrix}
+			ta&tb\\c &d 
+		\end{vmatrix} = t \begin{vmatrix}
+			a&b\\c &d
+			\end{vmatrix}
+	\end{align} 
+	\item[(b)]\label{prop3b} The determinant is linearly additive on the rows of the matrix.
+	\begin{align}
+		\begin{vmatrix}
+			a+a'&b+b'\\c &d 
+		\end{vmatrix} =  \begin{vmatrix}
+			a&b\\c &d
+			\end{vmatrix} +  \begin{vmatrix}
+			a'&b'\\c &d
+			\end{vmatrix} 
+	\end{align}
+	\end{enumerate}
+
+	\item \label{propidenticalrow} If two rows of a matrix are equal, the determinant of the matrix is 0.  
+	\begin{proof}
+		Suppose $\mA$ has two identical rows $a_i, a_j$. Exchanging $a_i, a_j$, the exchanged matrix $\mA' = \mA$. By property~\ref{prop2}, $\det(\mA) = -\det(\mA') = -\det(\mA)$. Therefore, $\det(\mA) = 0$.
+	\end{proof}
+
+	\item \label{propelim} For a square matrix $\mA \in \bbR^{n \times n}$, subtracting $t$ times of the $i$-th row from the $j$-th row does not change the determinant of $\mA$, where $i \neq j$.
+	\begin{proof}
+		By property~\ref{prop3a}, property~\ref{prop3b}, and property~\ref{propidenticalrow}, 
+	\begin{align}
+		 \begin{vmatrix}
+			a & b \\ c - ta&d -tb
+		\end{vmatrix} = \begin{vmatrix}
+			a & b \\ c &d
+		\end{vmatrix} -t \begin{vmatrix}
+			a & b \\ a& b
+		\end{vmatrix}  = \begin{vmatrix}
+			a & b \\ c &d.
+		\end{vmatrix}
+	\end{align}
+	The proof for higher-dimension matrix is similar.
+	\end{proof}
+	
+	\item\label{prop0row} If the matrix $\mA$ has a row that is all zeros, the determinant of $\mA$ is 0.
+	\begin{proof}
+		By property~\ref{prop3a}, letting $t = 0$ leads to property~\ref{prop0row}.
+	\end{proof}
+
+	
+	\item\label{propdiag} Suppose $\mA \in \bbR^{n \times n}$ is a triangular matrix with diagonal elements $d_1,...,d_n$. The determinant of $\mA$ is equal to the product $d_1 ...d_n$.
+	
+	\begin{proof}
+		By property~\ref{propelim}, eliminating the triangular matrix $\mA$ to a diagonal matrix does not change the determinant of $\mA$. By property~\ref{prop3a} and \ref{prop1}, $\det(\mA) = d_1 ...d_n \det(\mI_n) = d_1 ...d_n $. 
+	\end{proof}
+
+	
+	\item\label{propsingular} If the square matrix $\mA$ is singular, the determinant of $\mA$ is 0.
+	
+	\begin{proof}
+		If $\mA$ is a singular matrix, the reduced row echelon form of $\mA$, RREF($\mA$), has a row with all 0 elements. By property~\ref{propelim} and \ref{prop0row}, the determinant of $\mA$ is 0.
+	\end{proof}
+
+	
+	\item\label{propproduct} For square matrices $\mA, \mB \in \bbR^{n \times n}$, the determinant of the product satisfies $\det(\mA \mB) = \det(\mA) \det(\mB).$
+	
+	\begin{proof}
+		If at least one of $\mA, \mB$ is singular, the product $\mA \mB$ is also singular. Then, $\det(\mA \mB) = \det(\mA) \det(\mB) = 0$. If both $\mA, \mB$ are invertible, $\mA, \mB$ can be eliminated to diagonal matrices $\mQ_{A}, \mQ_{B}$ by QR decomposition. Suppose $a_1,...,a_n$ and $b_1,...,b_n$ are diagonal elements for $\mQ_A$ and $\mQ_B$ respectively. By property~\ref{propdiag}, $\det(AB) = \prod_{i=1}^n a_i b_i = \det(\mA) \det(\mB)$. 
+	\end{proof}
+	
+	\item\label{proptrans} For a square matrix $\mA$, the determinant $\det(\mA^T) = \det(\mA)$. 
+	
+	\begin{proof}
+		By LU decomposition, the matrix $\mA = \mL \mU$, where $\mL$ is a lower-triangular matrix and $\mU$ is an upper-triangular matrix. The transport $\mL^T ,\mU^T$ have the same diagonal elements with $\mL, \mU$ respectively. By property~\ref{propdiag}, $\det(\mL^T)= \det(\mL),  \det(\mU^T) = \det(\mU)$. Therefore, by property~\ref{propproduct}, $\det(\mA) = \det(\mL) \det(\mU) = \det(\mU^T) \det(\mL^T) = \det(\mU^T \mL^T) = \det(\mA^T)$. 
+			\end{proof}
+\end{enumerate}
+
+\subsection{Determinant computation}
+\begin{prop}[Big formula for computing determinant]
+	Consider a square matrix $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$. The big formula for computing the determinant of $\mA$ states below.
+	\[ \det(\mA) =  \sum_{(\alpha_1,...,\alpha_n) \in \tP} (-1)^{N(\alpha_1,...,\alpha_n)} a_{1,\alpha_1} ... a_{n \alpha_n},  \]
+	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$ and $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of element exchanges from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. 
+\end{prop}
+
+\begin{proof}
+	For a square matrix $\mA = \entry{a_ij} \in \bbR^{n \times n}$, we decompose the  matrix $\mA$ by the summation of $n^n$ matrices, in which there is only one entry comes from $\mA$ in each row and other entries are 0. By property~\ref{prop3b}, the determinant of $\mA$ is equal to the summation of the determinants of these $n^n$ matrices. Take a 3-by-3 square matrix as an example.
+	\begin{align}
+		\begin{vmatrix}
+			a_{11} & a_{12} & a_{13}\\
+			a_{21} & a_{22} & a_{23}\\
+			a_{31} & a_{32} & a_{33}
+		\end{vmatrix} = \begin{vmatrix}
+			a_{11} & 0& 0\\
+			a_{21} & 0 & 0\\
+			a_{31} &0 & 0
+		\end{vmatrix} + \begin{vmatrix}
+			a_{11} & 0& 0\\
+			0 & a_{22} & 0\\
+			a_{31} &0 & 0
+		\end{vmatrix} + \cdots +\begin{vmatrix}
+			0 & 0& a_{13}\\
+			0& 0 & a_{23}\\
+			 0&0 & a_{33}
+		\end{vmatrix} \overset{\Delta}{=} \mA_1 + \mA_2 +\cdots + \mA_{27}.
+	\end{align}
+	For the square matrix $\mA$,  there are $n!$ non-singular matrices among the $n^n$ matrices. The number of non-singular matrices coincides with the size of $\tP$. Intuitively, there are $n$ ways to choose an element from the first row, after which there are only $n-1$ ways to choose an element from the second row to avoid the zero determinant. Therefore, we have $n \times (n-1) \times (n-2) \times \cdots \times 2 = n!$ non-singular matrices.
+	
+	By property~\ref{propdiag} and \ref{prop2}, the determinant for the non-singular matrix follows the formula \[(-1)^{N(\alpha_1,...,\alpha_n)}  a_{1,\alpha_1} ... a_{n \alpha_n},\]
+	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$ and $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of element exchanges from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. 
+\end{proof}
+
+
+\begin{defn}[Cofactors, cofactor matrix, and cofactor formula]
+	Consider a square matrix $\mA=  \entry{a_{ij}} \in \bbR^{n \times n}$. Let $\mA_{-i,-j}$ be the submatrix of $\mA$ after removing the $i$-th row and $j$-th column. The cofactor associated with $a_{ij}$ is \[C_{ij} = (-1)^{i+j}\det(\mA_{-i,-j}).\]
+	The matrix $\mC = \entry{C_{ij}} \in \bbR^{n \times n}$ is called cofactor matrix.  The cofactor formula of $\det(\mA)$ is 
+	\[ \det(\mA) = \sum_{j}^n a_{ij} C_{ij} = \sum_{j}^n a_{ji} C_{ji} ,\quad \forall i \in [n].  \]
+\end{defn}
+
+\begin{example}[Tridiagonal matrix]
+	One example usage of cofactor formula is computing the determinant of \textit{tridiagonal matrix}. A tridiagonal matrix is a matrix in which only non-zero elements lie on or adjacent to the diagonal. Let $\mT_n \in \bbR^{n \times n}$ denote the tridiagonal matrix of 1's, i.e.\
+\begin{align}
+	\mT_n = \begin{bmatrix}
+		1 &1&0 &\cdots & 0 &0\\
+		1&1&1&\cdots &0&0\\
+		0&1&1&\cdots &0&0\\
+		\vdots &\vdots &\vdots &&\vdots &\vdots \\
+		0&0&0&\cdots&1&1
+	\end{bmatrix}_{n \times n}
+\end{align} 
+
+Let $\mT_{n, -i,-j}$ be the submatrix of  $\mT_n$ after removing the $i$-th row and the $j$-th column.   By cofactor formula, 
+\[  \det(\mT_n) = 1 \times \det(\mT_{n, -1,-1}) - 1 \times \det(\mT_{n,-1,-2}). \]
+By the definition of tridiagonal matrix, $\mT_{n,-1,-1} = \mT_{n-1}$ and $\det( \mA_{n,-1,-2}) = 1 \times \det(\mT_{n-2}) $. Therefore, 
+\[ \det(\mT_n) = \det(\mT_{n-1}) - \det(\mT_{n-2}).  \] 
+\end{example}
+
+\subsection{Inverse matrices}
+Previously, we use Gauss-Jordan elimination to obtain the inverse matrix of the invertible matrix. Here, we apply cofactor formula for computing the inverse matrix.
+
+\begin{thm}[Inverse matrix by cofactors]\label{thm:inver}
+Let $\mA \in \bbR^{n \times n}$ be an invertible matrix and $\mC$ be the cofactor matrix of $\mA$. The inverse matrix of $\mA$ satisfies
+\[  \mA^{-1} = \frac{1}{\det(\mA)} \mC^T. \]	
+\end{thm}
+
+\begin{proof}
+	It is equivalent to  show that $\mA \mC^T = \det(\mA) \mI_n$. By the definition of cofactor matrix,
+	\begin{align}
+		\mA  \mC^T = \begin{bmatrix}
+			a_{11} & a_{12} &\cdots &a_{1n}\\
+			a_{21} & a_{22} &\cdots &a_{2n}\\
+			\vdots & \vdots & & \vdots\\
+			a_{n1} & a_{n2} &\cdots &a_{nn}\\
+		\end{bmatrix} \begin{bmatrix}
+			C_{11} & C_{21} &\cdots &C_{n1}\\
+			C_{12} & C_{22} &\cdots &C_{n2}\\
+			\vdots & \vdots & & \vdots\\
+			C_{1n} & C_{2n} &\cdots &C_{nn}.\\
+		\end{bmatrix}
+	\end{align}
+	
+	Therefore, the diagonal element of $\mA \mC^T$ satisfies $(\mA \mC^T)_{ii} = \sum_k^n a_{ik} C_{ik} = \det(\mA)$. Consider the off-diagonal entries $(\mA \mC^T)_{ij} = \sum_{k}^n a_{ik} C_{jk}$, where $i \neq j$. By cofactor formula, the summation   $ \sum_{k}^n a_{ik} C_{jk}$ is equal to the determinant of a matrix whose $i$-th row and $j$-th row are identical. By property~\ref{prop0row}, the off-diagonals of $\mA \mC^T$ are 0. Then, we have $\mA \mC^T = \det(\mA) \mI_n$.
+\end{proof}
+
+\begin{defn}[Cramer's rule]
+Consider the linear system $\mA x=b$, where $\mA\in\bbR^{n \times n}$ is an invertible matrix, and $ x, b \in \bbR^n$ are vectors. Applying theorem~\ref{thm:inver}, we obtain the Cramer's rule of $x = \mA^{-1} b$.
+\[  x = \frac{1}{\det(\mA)} \mC^T b; \quad x_j = \frac{\det(\mB_j)}{\mA_j}, \] 
+	where $B_j$ the matrix that replaces the $j$-th column of $\mA$ by $b$.
+\end{defn}
+
+\begin{defn}[Parallelepiped]
+	The parallelepiped determined by $n$ vectors $v_1,...,v_n \in \bbR^n$ is the subset 
+	\[ P = \{ a_1 v_1 + \cdots + a_n v_n : 0 \leq a_1,...,a_n \leq 1 \}. \]
+	 We use $vol(P)$ to denote the volume of the parallelepiped  $P$. 
+\end{defn}
+
+\begin{prop}[Determinants and volumes]
+The absolute determinant of a square matrix $\mA$ is the volume of parallelepiped determined by the rows of $\mA$, i.e.\
+	\[ |\det(\mA)| = vol(P), \]
+	where $P$ is the parallelepiped determined by the rows of $\mA$.
+\end{prop}
+
+\begin{example}
+	The area of triangle with vertices at $(x_1,y_1), (x_2,y_2), (x_3,y_2)$ is
+	\begin{align}
+		\frac{1}{2} \begin{vmatrix}
+			x_1 & y_1 & 1\\
+			x_2 & y_2 & 1\\
+			x_3 & y_3 & 1
+		\end{vmatrix}.
+	\end{align}
+	
+	\begin{proof}
+		The two edges of the triangle are $v_1 = (x_2 - x_1, y_2 -y_1)$ and $v_2 = (x_3 - x_1, y_3 -y_1)$. The area of the triangle is half of the area of parallelepiped determined by $v_1, v_2$. Therefore, the area of triangle is 
+		\begin{align}
+			\frac{1}{2} \begin{vmatrix}
+				x_2 - x_1 &  y_2 - y_1\\
+				x_3 - x_1& y_3 -y_1
+			\end{vmatrix} =  \frac{1}{2} \left(  \begin{vmatrix}
+				x_2  &  y_2 \\
+				x_3 & y_3
+			\end{vmatrix} + \begin{vmatrix}
+				x_1 &  y_1\\
+				x_2& y_2
+			\end{vmatrix}  - \begin{vmatrix}
+				x_1 &  y_1\\
+				x_3 & y_3 
+			\end{vmatrix}    \right) = \frac{1}{2} \begin{vmatrix}
+			x_1 & y_1 & 1\\
+			x_2 & y_2 & 1\\
+			x_3 & y_3 & 1
+		\end{vmatrix}.
+		\end{align}
+	\end{proof}
+\end{example}
+
+
 
 \end{document}
