@@ -123,11 +123,22 @@ Jiaxin Hu
 \end{thm}
 
 
+\begin{thm}[Hoeffding bound for bounded variable]\label{thm:boundvar}
+Consider a random variable $X$ with mean $\mu = \bbE(X)$, and such that $X \in [a,b]$ almost surely, where $a, b$ are two constants. Then, for any $\lambda \in \bbR$, it holds
+\begin{equation}
+	\bbE[e^{\lambda X}] \leq e^{\frac{s(b-a)^2}{8}}.
+\end{equation}
+Particularly, the variable $X \sim subG(\frac{(b-a)^2}{4})$.
+\end{thm}
+
+\begin{proof}
+	See Exercise~\ref{pro:boundvar}.
+\end{proof}
 
 
 \section{Exercises}
 
-\paragraph{Exercise 2.1} (Tightness of inequalities.) The Markov and Chebyshev's inequalities can not be improved in general. 
+\subsection{Exercise 2.1} (Tightness of inequalities.) The Markov and Chebyshev's inequalities can not be improved in general. 
 \begin{enumerate}
 	\item[(a)] Provide a random variable $X \geq 0$ for which Markov's inequality~\eqref{thm:markov} is met with equality.  
 	\item[(b)] Provide a random variable $Y$ for which Chebyshev's inequality~\eqref{thm:cheb} is met with equality.  
@@ -145,7 +156,7 @@ Jiaxin Hu
 	 \item[(b)] Chebyshev's inequality follows by applying Markov's inequality to the non-negative random variable $Y = \bbE{(X - \bbE[X])^2}$. Let the distribution of $Y$ be $\bbP(Y = 0) = 1$. Then the Markov's inequality for $Y$ and the Chebyshev's inequality for $X$ meet the equalities. By transformation, the distribution of random variable $X$ is $\bbP(X = \bbE[X]) = 1$. Therefore, for any random variable $X$ with distribution $\bbP(X = c) = 1, c \in \bbR$, the Chebyshev's inequality is met with equality.
 \end{enumerate}
 
-\paragraph{Exercise 2.2}
+\subsection{Exercise 2.2}
 \begin{lem}[Standard normal distribution]\label{lem:n01}
 	Let $\phi(z)$ be the density function of a standard normal $Z \sim N(0,1)$ variable. Then, 
 	\begin{equation}\label{eq:e22a}
@@ -167,7 +178,7 @@ Jiaxin Hu
 	Therefore, $\bbP(Z \geq z) \leq \phi(z)(\frac{1}{z}  - \frac{1}{z^3} + \frac{3}{z^5} ).$
 \end{proof}
 
-\paragraph{Exercise 2.3}
+\subsection{Exercise 2.3}
 
 \begin{lem}[Polynomial bound and Chernoff bound]\label{lem:momcher}
 	Suppose $X \geq 0$, and that the moment generating function of $X$ exists in the neighborhood of 0. Given some $\delta > 0$ and integer $ k \in \mathbb{Z_+}$, we have
@@ -188,9 +199,63 @@ Jiaxin Hu
 	\[ \inf_{k \in \mathbb{Z_+} } \frac{\bbE[|X|^k]}{\delta^k} \leq \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k] }{\delta^k} = \sum_{k = 0}^{+\infty } \frac{\frac{ \bbE[|X|^k]  \lambda^k }{k!} }{\frac{\lambda^k \delta^k }{k!}  } = \inf_{\lambda > 0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}}.  \]
 \end{proof}
 
+\subsection{Exercise 2.4}\label{pro:boundvar}
+In Exercise~\ref{pro:boundvar}, we prove theorem~\ref{thm:boundvar}, Hoeffding bound for bounded variable. Consider a random variable $X$ with mean $\mu = \bbR[X]$ and such that $a \leq X \leq b$ almost surely. Define the function 
+\[ \varphi(\lambda) = \log \bbE[e^{\lambda X }]. \]
+We apply Taylor Expansion of $\varphi(\lambda)$ at 0.
+\begin{equation}\label{eq:taylor}
+	\varphi(\lambda) =  \varphi(0) + \varphi'(0) \lambda  + \frac{\varphi^{''}(\lambda_0) }{2} \lambda^2, \quad \lambda_0 = t \lambda, \text{ for some } t \in [0,1]. 
+\end{equation}
 
+In equation~\eqref{eq:taylor}, the term $\varphi(0) =\log \bbE[e^{0}] = 0$. For the first-order derivative $\varphi'(\lambda)$, we apply the power series and have
+\begin{align}
+	\varphi'(\lambda ) &= \left( \log \bbE \left[ \sum_{k = 0}^n \frac{\lambda^k X^k}{k!} \right]   \right)' = \left( \log \sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]  \right)' \\
+	&= {\sum_{k = 1}^n \frac{k \lambda^k }{k!} \bbE[X^k] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} = {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} \\
+	&= \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]}
+\end{align}
+Therefore, $\varphi'(0) = \bbE[X] = \mu$. For the second-order derivative $\varphi^{''}(\lambda)$,
+\begin{align}
+	\varphi^{''}(\lambda) &= \left( {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} \right)^{'} \\
+	&= {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+2)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} - \left( {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]}  \right)^2\\
+	&= \frac{\bbE[X^2 e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} - \left( \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} \right)^2\\
+	& \overset{\Delta}{=} \bbE_{\lambda} [X^2] - (\bbE_{\lambda} [X])^2
+\end{align}
+Therefore, the second-order derivative $\varphi''(\lambda)$ can be interpreted as the variance of $X$ with a re-weighted distribution $d P' = \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Since 
+\[ \int_{-\infty}^{+\infty} d P' = \int_{-\infty}^{+\infty}  \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X = 1, \]
+the function $P'$ is indeed a distribution. Under any distribution, we always have
+\[ var(X) = var(X - \frac{a+b}{2}) \leq \bbE[(X - \frac{a+b}{2} )^2] = \frac{(b-a)^2}{4}. \]
+Back to the equation~\eqref{eq:taylor},
+\[\varphi(\lambda) =  \varphi(0) + \varphi'(0) \lambda  + \frac{\varphi^{''}(\lambda_0) }{2} \lambda^2 \leq 0 + \lambda \mu+ \frac{(b-a)^2}{8} \lambda^2 \]
+Taking exponential on both sides of the inequality, we have
+\begin{equation}\label{eq:boundvar}
+	\bbE[e^{\lambda X}] = \exp(\varphi( \lambda)) \leq e^{\mu \lambda + \frac{(b-a)^2}{8} \lambda^2}.
+\end{equation}
+The equation~\eqref{eq:boundvar} implies that $X$ is a sub-Gaussian variable with at most $\sigma = \frac{(b-a)}{2}$.
 
+\subsection{Exercise 2.5}
+\begin{lem}[Sub-Gaussian bounds and means/variance] Consider a random variable $X$ such that
+\begin{equation}\label{eq:subg}
+	 \bbE[e^{\lambda X}] \leq e^{\frac{\lambda^2 \sigma^2}{2} + \mu \lambda}, \quad \forall \lambda \in \bbR. 
+\end{equation}
+	Then, $\bbE[X] = \mu$ and $var(X) \leq \sigma^2$.
+\end{lem}
 
+\begin{proof} First, by equation~\eqref{eq:subg}, the moment generating function of $X$ exists, and thus the mean and variance of $X$ exist. Applying power series on both sides of equation~\eqref{eq:subg},
+\begin{equation}\label{eq:taylor2}
+	 \lambda \bbE[X] + \frac{\lambda^2}{2} \bbE[X^2] + o(\lambda^2) \leq  \mu \lambda + \frac{\lambda^2 \sigma^2 + \lambda^2 \mu^2}{2} + o(\lambda^2).
+\end{equation}
+Dividing by $\lambda >0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{+}$, we have $\bbE(X) \leq \mu$ ; dividing dividing by $\lambda <0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{-}$, we have $\bbE(X) \geq \mu$. Therefore, the mean $\bbE[X] = \mu$. Similarly, we subtract $\bbE[X]\lambda$ and $\mu \lambda$ and divide $\frac{2}{\lambda^2}$ on both sides of equation~\eqref{eq:taylor2}. We have $ \bbE[X^2] \leq \sigma^2 + \mu^2$, and thus $var(X) \leq \bbE[X^2]  - (\bbE[X])^2 = \sigma^2$.
+\end{proof}
 
+\paragraph{Question:} Suppose the smallest possible $\sigma$ satisfying the inequality~\eqref{eq:subg} is chosen. Is it true that $var(X) = \sigma^2$?
 
+\paragraph{Solution:} The statement that $var(X) = \sigma^2$ is not always true. Recall the function $\varphi(\lambda)$ in exercise~\ref{pro:boundvar}. By the results in exercise~\ref{pro:boundvar},  the equation~\eqref{eq:subg} is equal to 
+\begin{equation}\label{eq:question}
+	\varphi^{''}(\lambda) \leq  \sigma^2, \quad \forall \lambda \in \bbR,
+\end{equation}
+where $\varphi^{''} (\lambda)$ is the variance of $X$ with with a re-weighted distribution $d P' = \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. If the statement that $var(X) = \sigma^2$ is true, then $\max_{\lambda}\varphi^{''}(\lambda) = \varphi^{''}(0)$, which is not always true. A counter example is below.
+
+Consider a random variable $X \sim Ber(1/3)$ with $var(X) = 2/9$. Let $\lambda = 1$. The re-weighted distribution $dP'$ is
+\[ P'(X = 0) = \frac{2}{3\bbE[ e^{X} ]};\quad  P'(X = 1) = \frac{e}{3\bbE[ e^{X} ]}, \quad \text{where } \bbE[ e^{X} ] = \frac{2}{3} + \frac{e}{3}.  \]
+Therefore, the variance of $X$ with $dP'$ is $\frac{2}{3\bbE[ e^{X} ]} \times  \frac{e}{3\bbE[ e^{X} ]} = 0.2442 > 2/9$. Therefore, the smallest possible $\sigma^2$ is strictly larger than $var(X)$ in this case.
 \end{document}
