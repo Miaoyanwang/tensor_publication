@@ -208,14 +208,14 @@ The estimate $\hat \beta_{LS}$ is identical to the estimates solved by other met
 
 Orthonormal vectors are always independent.
 
-\begin{defn}[Orthonormal matrix and orthogonal matrix]\label{def:orthonom}
+\begin{defn}[\textit{Orthonormal matrix and orthogonal matrix}]\label{def:orthonom}
 	Consider a matrix $\mQ \in \bbR^{m \times n}$. If the columns of $\mQ$ are orthonormal, the matrix $\mQ$ is an orthonormal matrix. If $ m= n$, the square matrix $\mQ$ is a orthogonal matrix.
 \end{defn}
 
 If $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix, $\mQ^T \mQ = \mI_n$.  If $\mQ$ is an orthogonal matrix, $\mQ^T = \mQ^{-1}$.
 For orthonormal matrix $\mQ$, the projection matrix to $C(\mP)$  becomes $\mP = \mI_m$.
 
-\begin{defn}[Gram-Schimidt Process and QR decomposition]\label{gram-schimidt}
+\begin{defn}[\textit{Gram-Schimidt Process and QR decomposition}]\label{gram-schimidt}
 Consider a matrix $\mA \in \bbR^{m \times n}$ with $rank(\mA) = n$. Gram-Schimidt process finds the orthonormal basis for $C(\mA)$. Let $a_i \in \bbR^{m}, i \in [m]$ be the columns of matrix $\mA$. 
 \begin{align}
 	&u_1 = a_1, &&\quad e_1 = \frac{u_1}{\onorm{u_1}}\\
@@ -354,7 +354,7 @@ We give ten properties of determinants. The last seven properties are deduced by
 \end{proof}
 
 
-\begin{defn}[Cofactors, cofactor matrix, and cofactor formula]
+\begin{defn}[\textit{Cofactors, cofactor matrix, and cofactor formula}]
 	Consider a square matrix $\mA=  \entry{a_{ij}} \in \bbR^{n \times n}$. Let $\mA_{-i,-j}$ be the submatrix of $\mA$ after removing the $i$-th row and $j$-th column. The cofactor associated with $a_{ij}$ is \[C_{ij} = (-1)^{i+j}\det(\mA_{-i,-j}).\]
 	The matrix $\mC = \entry{C_{ij}} \in \bbR^{n \times n}$ is called cofactor matrix.  The cofactor formula of $\det(\mA)$ is 
 	\[ \det(\mA) = \sum_{j}^n a_{ij} C_{ij} = \sum_{j}^n a_{ji} C_{ji} ,\quad \forall i \in [n].  \]
@@ -405,13 +405,13 @@ Let $\mA \in \bbR^{n \times n}$ be an invertible matrix and $\mC$ be the cofacto
 	Therefore, the diagonal element of $\mA \mC^T$ satisfies $(\mA \mC^T)_{ii} = \sum_k^n a_{ik} C_{ik} = \det(\mA)$. Consider the off-diagonal entries $(\mA \mC^T)_{ij} = \sum_{k}^n a_{ik} C_{jk}$, where $i \neq j$. By cofactor formula, the summation   $ \sum_{k}^n a_{ik} C_{jk}$ is equal to the determinant of a matrix whose $i$-th row and $j$-th row are identical. By property~\ref{prop0row}, the off-diagonals of $\mA \mC^T$ are 0. Then, we have $\mA \mC^T = \det(\mA) \mI_n$.
 \end{proof}
 
-\begin{defn}[Cramer's rule]
+\begin{defn}[\textit{Cramer's rule}]
 Consider the linear system $\mA x=b$, where $\mA\in\bbR^{n \times n}$ is an invertible matrix, and $ x, b \in \bbR^n$ are vectors. Applying theorem~\ref{thm:inver}, we obtain the Cramer's rule of $x = \mA^{-1} b$.
 \[  x = \frac{1}{\det(\mA)} \mC^T b; \quad x_j = \frac{\det(\mB_j)}{\mA_j}, \] 
 	where $B_j$ the matrix that replaces the $j$-th column of $\mA$ by $b$.
 \end{defn}
 
-\begin{defn}[Parallelepiped]
+\begin{defn}[\textit{Parallelepiped}]
 	The parallelepiped determined by $n$ vectors $v_1,...,v_n \in \bbR^n$ is the subset 
 	\[ P = \{ a_1 v_1 + \cdots + a_n v_n : 0 \leq a_1,...,a_n \leq 1 \}. \]
 	 We use $vol(P)$ to denote the volume of the parallelepiped  $P$. 
@@ -456,6 +456,123 @@ The absolute determinant of a square matrix $\mA$ is the volume of parallelepipe
 		\end{align}
 	\end{proof}
 \end{example}
+
+\section{Eigenvalues and eigenvectors}
+\begin{defn}[\textit{Eigenvalues and eigenvectors}]\label{def:eigen}
+	Consider a square matrix $\mA$, an eigenvector of $\mA$ is a non-zero vector such that:
+	\[ \mA x = \lambda x, \quad \text{for some } \lambda \in \bbR. \]
+	The value $\lambda$ is called the eigenvalue of $\mA$, and $x$ is the eigenvector associated with eigenvalue $\mA$. Usually, eigenvectors are normalized, i.e.\ $\onorm{x} = 1$, where $\onorm{\cdot}$ is the euclidean distance.
+	
+	Particularly, the vectors associated with eigenvalue 0 consists of the nullspace of $\mA$.
+\end{defn}
+
+\begin{defn}[\textit{Trace of square matrix}]\label{def:trace}
+Consider a square matrix $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$. The trace of $\mA$ is defined as
+\[ tr(\mA) = \sum_{i}^n a_{ii}.\] 
+\end{defn}
+
+\begin{defn}[\textit{Characteristic polynomial}]\label{def:charac}
+	Let $\lambda$ denote the eigenvalue of the matrix $\mA\in \bbR^{n \times n}$. Then the matrix $\mA - \lambda \mI$ is a singular matrix. Therefore,
+	\[ \det(\mA - \lambda I_n) = 0 \quad  \Leftrightarrow \quad (-1)^n \lambda^n + tr(\mA)\lambda^{n-1} + \cdots + (-1)^n \det(\mA) \overset{\Delta}{=} P(\lambda) = 0.   \]
+	 The polynomial $P(\lambda)$ is called the characteristic equation of $\mA$. 
+\end{defn}
+
+Since the characteristic polynomial $P(\lambda)$ is of degree $n$, there are $n$ solutions to the equation $P(\lambda) = 0$. The solutions $\lambda_1,...,\lambda_n$ are $n$ eigenvalues of $\mA$, which may be complex and may not be distinct with each other. Note that the complex eigenvalues come in conjugate pairs, because $\overline{ P(\lambda)} = P(\overline{ \lambda})$. 
+
+\begin{thm}[Summation and production of eigenvalues]\label{thm:speigen}
+	For an square matrix $\mA \in \bbR^{n \times n}$, let $\lambda_1,...\lambda_n$ denote the $n$ eigenvalues of $\mA$. Then 
+	\begin{equation}
+		\sum_{i}^n \lambda_i = tr(\mA); \quad \prod_{i=1}^n \lambda_i = \det(\mA).
+	\end{equation} 
+\end{thm}
+
+\begin{proof}
+	First, we re-write characteristic polynomial $P(\lambda)$ of $\mA$ as
+	\begin{equation}\label{eq:poly}
+		P(\lambda) = (-1)^n (\lambda - \lambda_1)\cdots (\lambda - \lambda_n), 
+	\end{equation}   
+	where $\lambda_i, i \in [n]$ are $n$ eigenvalues of $\mA$. By the equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Compared with definition~\ref{def:charac}, we have $tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_1 \cdots \lambda_n $. Therefore, $\prod_{i=1}^n = \det(\mA)$.
+\end{proof}
+
+
+\begin{thm}[Independence of eigenvectors]\label{thm:indepeigen} 
+Consider a square matrix $\mA$ with at least two different eigenvalues. The eigenvectors associated with different eigenvalues are independent.
+\end{thm}
+
+\begin{proof}
+	Suppose the square matrix has $n$ different eigenvalues $\lambda_1,...,\lambda_n$ with associated eigenvectors  $v_1,...,v_n$. Let the linear combination $c_1 v_1 + ... + c_n v_n = 0$. We need to show $c_1 =\cdots = c_n = 0$.
+	
+	Then we have
+	\begin{equation}\label{eq:indep1}
+		\mA(c_1 v_1 + ... + c_n v_n ) = c_1 \lambda_1 v_1 + ... + c_n \lambda_n v_n = 0;  
+		\end{equation}
+		\begin{equation}\label{eq:indep2}
+		\lambda_1 (c_1 v_1 + ... + c_n v_n ) = c_1 \lambda_1 v_1 + ... + c_n \lambda_1 v_n = 0. 
+	\end{equation}
+	Subtracting the equations~\eqref{eq:indep1} from \eqref{eq:indep2}, 
+	\begin{equation}\label{eq:indep3}
+		 c_2 (\lambda_1 - \lambda_2) v_2 + \cdots + c_n (\lambda_1 - \lambda_n) v_n  = 0
+	\end{equation}
+	Repeating the steps from equation~\eqref{eq:indep1} to equation~\eqref{eq:indep3}, finally we have 
+	\[ c_n(\lambda_1 - \lambda_n)(\lambda_2 - \lambda_n)\cdots (\lambda_{n-1} - \lambda_n) v_n = 0.    \]
+	 Since $\lambda_1 ,..., \lambda_n$ are distinct, and $v_n$ is a non-zero vector, we have $c_n = 0$. Similarly, plugging $c_n = 0$ back to previous steps, we have $c_1 = \cdots = c_n = 0$. Therefore, $v_1,...,v_n$ are independent.
+\end{proof}
+
+\begin{thm}[Eigenvalues for symmetric and antisymmetric matrices]\label{def:symmeign}
+	Symmetric square matrices  with all real entries have real eigenvalues. For antisymmetric matrices,  i.e.\ $\mA^T = - \mA$, all eigenvalues are imaginary $\lambda = b i$, where $b \in \bbR, i = \sqrt{-1}$.
+\end{thm}
+\begin{proof}
+	First, we prove that symmetric square matrices have real eigenvalues by contradiction. 
+	
+	Suppose a real and symmetric matrix $\mA$ has a complex eigenvalue $\lambda$ with eigenvector $x$. Since $\mA$ is real, then the eigenvector $x$ is also complex. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then we have
+	\begin{equation}\label{eq:symm}
+		\mA x = \lambda x;\quad \mA \overline x = \overline \lambda \overline x.
+	\end{equation} 
+	Premultiply $\overline x^T$ on both sides of the first equation in \eqref{eq:symm} and premultiply $x^T$ on both sides of the second equation in \eqref{eq:symm}. By the symmetry of $\mA$,
+	\[ \overline x^T \mA x  = x^T \mA^T \overline x = x^T \mA \overline x .\]
+	Subtract the two equations in \eqref{eq:symm}, we have
+	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
+	By the fact that $x^T \overline x$ is a real number, the coefficient for $i$ in $\lambda$ is equal to 0, which contradicts that $\lambda$ is complex.
+	
+	Next, we prove that the eigenvalues for antisymmetric matrices are imaginary by the similar procedures above. 
+	Suppose $\mA$ is an antisymmetric matrix with complex eigenvalue $\lambda$ and complex eigenvector $x$, we have
+	\[ \overline x^T \mA x  = x^T \mA^T \overline x  =  -x^T \mA \overline x .  \] 
+	Therefore, we have
+	\[  0 = ( \overline x^T \mA x +  x^T \mA \overline x ) = (\lambda + \overline \lambda) x^T \overline x.   \]
+	Since $x^T \overline x$ is a real number, the real part in $\lambda$ is equal to 0. Therefore, eigenvalues for antisymmetric matrices are imaginary.
+\end{proof}
+
+\begin{thm}[Eigenvalues for triangular matrices]\label{thm:trianeigen}
+	For triangular matrices, the eigenvalues are the entries on the diagonal.
+\end{thm}
+
+\begin{proof}
+Suppose $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ is a square matrix. By the property of determinant~\ref{propdiag}, 
+\[ \det(\mA) = \prod_{i=1}^n a_{ii}  ; \quad \det(\mA - \lambda \mI_n) = \prod_{i=1}^n (a_{ii}-\lambda). \]
+To let $\det(\mA - \lambda \mI_n) = 0$, $\lambda = a_{ii}, \forall i\in[n]$. Therefore, the entries on the diagonal are the eigenvalues of a triangular matrix.
+\end{proof}
+
+\begin{thm}[Eigenvalues for powers of the matrix]
+	Consider a matrix $\mA$ with a eigenvalue $\lambda$ and the associated eigenvector $x$. For any polynomial $P$, 
+	\[ P(\mA) x = P(\lambda) x. \]
+\end{thm}
+\begin{proof}
+	For any integer $k \geq 0$ and constant $c \in \bbR$,
+	\[ c\mA^k x = c\mA^{k-1} \mA x= c\lambda \mA^{k-1} x = \cdots = c\lambda^k x.\]
+	Therefore, for any polynomial $P(\mA)x = P(\lambda)x$.
+\end{proof}
+
+\begin{thm}[Eigenvalues for the inverse]
+Suppose $\mA \in \bbR^{n \times n}$ is an invertible matrix. Let $\lambda_1,...,\lambda_n$ denote the non-zero eigenvalue of $\mA$, and $x_1,...x_n$eigenvectors corresponds to $\lambda_i$. Then  $\lambda_1^{-1},...,\lambda_m^{-1}, \lambda_{m+1},...,\lambda_n $ and $x_1,...x_n$ are eigenvalues and associated eigenvectors of $\mA^{-1}$.
+\end{thm}
+
+\begin{proof}
+	Since the nullspace of $\mA$ contains only a zero vector, $\lambda_i >0 \forall i \in [n]$. For any $\lambda_i$ and $x_i$, multiplying $x_i$ on both sides of the equation $\mA^{-1} \mA = \mI_n$, we have 
+	\[ \mA^{-1} \mA x_i = x_i \quad \Rightarrow\quad  \mA^{-1} x_i = {\lambda}^{-1}.  \]
+	Therefore, $\mA^{-1}$ share the same eigenvectors with $\mA$, and the reciprocal of the eigenvalues of $\mA$ are the eigenvalues of $\mA^{-1}$.
+\end{proof}
+
+
 
 
 
