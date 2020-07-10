@@ -147,8 +147,10 @@ Particularly, the variable $X \sim subG(\frac{(b-a)^2}{4})$.
 \paragraph{Solution:} 
 \begin{enumerate}
 	\item[(a)] Recall the proof of Markov's inequality. For any $t >0$,
-	\[ \bbE[X] = \int_{0}^t x f_X(x) dx + \int_{t}^{+\infty} x f_X(x) dx \geq \int_{t}^{+\infty} x f_X(x)\geq t \int_{t}^{+\infty} f_X(x) = t \bbP( X \geq t).\]
-	 If Markov's inequality meets the equality, the inequalities above should meet equality. 
+	\begin{equation}\label{eq:markov}
+		\bbE[X] = \int_{0}^t x f_X(x) dx + \int_{t}^{+\infty} x f_X(x) dx \geq \int_{t}^{+\infty} x f_X(x)\geq t \int_{t}^{+\infty} f_X(x) = t \bbP( X \geq t).
+	\end{equation}
+	 If Markov's inequality meets the equality, the inequality~\eqref{eq:markov} meets the equality.
 	 
 	 Consider a variable $X$ with distribution $P(X = 0) = 1$. For any $t > 0$, the variable $X$ satisfies 
 	 \[ \int_{0}^t x f_X(x) dx = 0 \text{ and } \int_{t}^{+\infty} x f_X(x) dx =\int_{t}^{+\infty} t f_X(x) dx. \]
