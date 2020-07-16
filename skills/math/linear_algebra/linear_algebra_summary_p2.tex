@@ -90,23 +90,23 @@ Jiaxin Hu
 
 \subsection{Orthogonal vectors and subspaces}
 \begin{defn}[\textit{Orthogonal vectors}]\label{def:vortho}
-	Consider two vectors $x,y \in \bbR^{n}$. The vectors $x$ and $y$ are orthogonal,  denoted $x \perp y$, if and only if $x^T y = y^T x = 0$.
+	Let  $x,y \in \bbR^{n}$ be two vectors. The vectors $x$ and $y$ are orthogonal,  denoted $x \perp y$, if and only if $x^T y = y^T x = 0$.
 \end{defn}
 
 \begin{defn}[\textit{Orthogonal subspaces}]\label{def:sortho}
-	Consider two subspaces $S,T$. The subspaces $S$ and $T$ are orthogonal,  denoted $S \perp T$, if and only if for any $s \in S$ and $ t \in T$, $s^T t = t^T s = 0$.
+	Let  $S,T$ be two subspaces $S,T$. The subspaces $S$ and $T$ are orthogonal,  denoted $S \perp T$, if and only if for any $s \in S$ and $ t \in T$, $s^T t = t^T s = 0$.
 \end{defn}
 
-Given a matrix $\mA \in \bbR^{m \times n}$, there are four subspaces related to $\mA$\colon column space $C(\mA)$, row space $C(\mA^T)$, nullspace $N(\mA)$, and left nullspace $N(\mA^T)$. Suppose the rank of $\mA$ is $rank(\mA) = r$, the dimensions of these subspaces are: 
+Let $\mA \in \bbR^{m \times n}$ be a matrix. There are four subspaces related to $\mA\colon$ column space $C(\mA)$, row space $C(\mA^T)$, nullspace $N(\mA)$, and left nullspace $N(\mA^T)$. Suppose the rank of $\mA$ is $rank(\mA) = r$, the dimensions of these subspaces are: 
 \[ dim(C(\mA)) = dim(C(\mA^T)) = r,\quad  dim(N(A)) = n-r,\quad dim(N(\mA^T)) = m-r. \] 
 
 \begin{thm}[Orthogonality of matrix subspaces]\label{thm:ortho}
-	Consider a matrix $\mA \in \bbR^{m \times n}$. The row space $C(\mA^T)$ and the nullspace $N(\mA)$ are orthogonal; the column space $C(\mA)$ and the left nullspace $N(\mA^T)$ are orthogonal, i.e.\
-	\[ C(\mA^T) \perp N(\mA); \quad C(\mA) \perp N(\mA^T).  \]
+	Let  $\mA \in \bbR^{m \times n}$ be a matrix. The row space $C(\mA^T)$ and the nullspace $N(\mA)$ are orthogonal. The column space $C(\mA)$ and the left nullspace $N(\mA^T)$ are orthogonal; i.e.,
+	\[ C(\mA^T) \perp N(\mA)\quad  \text{and} \quad C(\mA) \perp N(\mA^T).  \]
 \end{thm}
 
 \begin{proof}
-	Consider the matrix $\mA \in \bbR^{m \times n}$. For any vector $x \in N(\mA)$, we have $\mA x = 0$. 
+	For any vector $x \in N(\mA)$, we have $\mA x = 0$. Specifically,
 	\begin{align}
 		\mA x  = \begin{bmatrix}
 			a_1^T x \\ \vdots \\ a_m^T x 
@@ -114,32 +114,31 @@ Given a matrix $\mA \in \bbR^{m \times n}$, there are four subspaces related to 
 			0\\ \vdots \\0
 		\end{bmatrix},
 	\end{align}
-	where $a_i \in \bbR^n, i \in [m]$ is the $i$-th  row of $\mA$. By definition~\ref{def:vortho}, $x$ is orthogonal to the rows in matrix $\mA$. For any vector $v \in C(\mA^T)$, $v$ is a linear combination of the rows $v = c_1 a_1 + ...+c_m a_m$, where $c_i, i\in [m]$ are constants. Multiplying vectors $v$ and $x$, we have
+	where $a_i \in \bbR^n$ is the $i$-th  row of $\mA$, for all $ i \in [m]$. By Definition~\ref{def:vortho}, $x$ is orthogonal to the rows in matrix $\mA$. For any vector $v \in C(\mA^T)$, $v$ is a linear combination of the rows $v = c_1 a_1 + ...+c_m a_m$, where $c_i \in \bbR$, for all $i\in [m]$. Taking inner product between vectors $v$ and $x$, we have
 	\[  v^T x =  c_1 a_1^T x + \cdots + c_m a_m^T x = 0.  \]
 	Therefore, $v \perp x$, and $N(\mA) \perp C(\mA^T)$.
 	
 	Similarly, for any $x \in N(\mA^T)$, we have $\mA^T x = 0$, which implies $N(\mA^T) \perp C(\mA)$. 
 \end{proof}
 
-\begin{thm}[Relationship between $\mA^T \mA$ and $\mA$]\label{thm:aa}
-	Consider a matrix $\mA \in \bbR^{m \times n}$. We have
+\begin{thm}[Relationship between $\mA^T \mA$ and $\mA$]\label{thm:aa}Let $\mA \in \bbR^{m \times n}$ be a matrix. We have
 	\begin{equation}
 		N(\mA^T \mA) = N(\mA) ; \quad rank(\mA^T \mA) = rank(\mA).
 	\end{equation}
 \end{thm}
 \begin{proof}
-	Consider a matrix $\mA \in \bbR^{m \times n}$. First, we prove that $N(\mA^T \mA) = N(\mA)$.
+	Fxirst, we prove that $N(\mA^T \mA) = N(\mA)$.
 	
-	On one hand, if $x \in N(\mA)$, then $\mA x = 0 \Rightarrow \mA^T  \mA x = \mA^T 0 = 0$. Therefore, for any $x \in N(\mA)$, the vector $x \in N(\mA^T \mA)$. 
+	On one hand, if $x \in N(\mA)$, then $\mA x = 0$, which implies that $ \mA^T  \mA x = \mA^T 0 = 0$. Therefore, for any $x \in N(\mA)$, the vector $x \in N(\mA^T \mA)$. 
 	
 	
-	On the other hand, we  prove that for any $x \in N(\mA^T \mA)$ the vector $x \in N(\mA)$ by contradiction.
+	On the other hand, we  prove  by contradiction that for any $x \in N(\mA^T \mA)$ the vector $x \in N(\mA)$.
 	
 	Suppose there is a vector $x \in N(\mA^T \mA^T)$ but $x \notin N(\mA)$. We have
 	\begin{equation}\label{eq:aaa}
 		\mA x = b \neq 0, \quad \mA^T \mA x = 0 \quad \Rightarrow \quad \mA^T b = 0.
 	\end{equation} 
-	By the first equality in \eqref{eq:aaa}, $b \in C(\mA)$, and by the third equation in \eqref{eq:aaa}, $ b \in N(\mA^T)$. This contradicts the Theorem~\ref{thm:ortho}, $C(\mA) \perp N(\mA^T)$. Therefore, for any $x \in N(\mA^T \mA)$, the vector $x \in N(\mA)$.
+	By the first equality in \eqref{eq:aaa}, $b \in C(\mA)$, and by the third equation in \eqref{eq:aaa}, $ b \in N(\mA^T)$. This contradicts the Theorem~\ref{thm:ortho} that $C(\mA) \perp N(\mA^T)$. Therefore, for any $x \in N(\mA^T \mA)$, the vector $x \in N(\mA)$.
 	
 	Next, given $N(\mA^T \mA) = N(\mA)$, we have $rank(\mA^T \mA) = n - dim(N(\mA^T \mA)) = n - dim(N(\mA)) = rank(\mA)$.
 \end{proof}
@@ -148,56 +147,71 @@ Given a matrix $\mA \in \bbR^{m \times n}$, there are four subspaces related to 
 	If $\mA$ has independent columns, then $\mA^T \mA$ is invertible.
 \end{cor}
 \begin{proof}
-	If $\mA \in \bbR^{m \times n}$ has independent columns, then $rank(\mA) = n$. By Theorem~\ref{thm:aa}, $rank(\mA^T \mA) = rank(\mA) = n$. Since $\mA^T \mA \in \bbR^{n \times n}$ is a square matrix, $\mA^T \mA$ is invertible.
+Suppose $\mA \in \bbR^{m \times n}$ is a matrix with independent columns; i.e., $rank(\mA) = n$. By Theorem~\ref{thm:aa}, $rank(\mA^T \mA) = rank(\mA) = n$. Since $\mA^T \mA \in \bbR^{n \times n}$ is a square matrix, $\mA^T \mA$ is invertible.
 \end{proof}
 
 
 \subsection{Projections onto subspaces}
-\begin{defn}[\textit{Projection and projection matrix}]\label{def:project}
-	Given a vector $x \in \bbR^{n}$ and a matrix $\mA^{m \times n}$ with independent columns, the vector $p \in C(\mA)$, such that
+\begin{defn}[\textit{Projection and projection matrix}]\label{def:project} Let  $x \in \bbR^{n}$ be a vector and $\mA^{n \times m}$ be a matrix with independent columns. The vector $p \in C(\mA)$ that satisfies
 	\begin{equation}\label{eq:project}
 		(x-p) \perp C(\mA),
 	\end{equation} 
-	
-	is the projection of vector $x$ onto the space $C(\mA)$. Since $p \in C(\mA)$, there exists a vector $\hat x$ such that $p = \mA \hat x$. By equation~\eqref{eq:project}, we have
-	\[ \mA^T (x - p) = \mA^T(x - \mA \hat x) = 0  \quad  \Rightarrow\quad  \hat x = (\mA^T \mA)^{-1} \mA^T x,\quad p = \mA(\mA^T \mA)^{-1} \mA^T x.  \] 
-	The matrix $\mP \overset{\Delta}{=}   \mA(\mA^T \mA)^{-1} \mA^T$ is called a projection matrix.
+	is called the projection of vector $x$ onto the column space $C(\mA)$. For all $x \in \bbR^{n}$ and the corresponding projection $p$, the matrix $\mP \in \bbR^{m \times m}$ that satisfies
+	\begin{equation}
+		p = \mP x,
+	\end{equation}
+	is called the projection matrix of $\mA$ from $\bbR^n$ onto the column space  $C(\mA)$.
 \end{defn}
 
+\begin{prop}[Projection matrix of $C(\mA)$]\label{prop:project}
+	Let  $x \in \bbR^{n}$ be a vector and $\mA^{m \times n}$ be a matrix with independent columns. The projection matrix of $\mA$ from $\bbR^n$ onto the column space  $C(\mA)$ is 
+	\begin{equation}
+		\mP =  \mA (\mA^T \mA)^{-1} \mA^T.
+	\end{equation}
+\end{prop}
+
+\begin{proof}
+	By Definition~\ref{def:project}, the projection $p \in C(\mA)$. Then, there exists a  vector $\hat x \in \bbR^m$ such that $p = \mA \hat x$.  By equation~\eqref{eq:project}, for all $x \in \bbR^n$, we have 
+\[ A^T (x - \mA \hat x) = 0 \quad \Rightarrow  \quad \hat x = (\mA^T \mA)^{-1} \mA^T x \quad \Rightarrow \quad p = \mA (\mA^T \mA)^{-1} \mA^T  x. \]
+Therefore, the matrix $\mP =  \mA (\mA^T \mA)^{-1} \mA^T$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $C(\mA)$.
+\end{proof}
+ 
 \begin{thm}[Properties of projection matrix]\label{thm:projectm}
-	Consider a projection matrix $\mP$ to the column space $C(\mA)$, where $\mA \in \bbR^{m \times n}$ is a matrix. Then,
+Let $\mA \in \bbR^{m \times n}$ be a matrix, and $\mP$ be the projection matrix of $\mA$ onto the column space. Then,
 	\begin{equation}\label{eq:projectm}
 		\mP^T = \mP;\quad  \mP^2 = \mP.
 	\end{equation}
 \end{thm}
 \begin{proof}
-	Since the projection matrix $\mP =   \mA(\mA^T \mA)^{-1} \mA^T$ and $\mA^T \mA$ is symmetric, then
+	By Proposition~\ref{prop:project}, the projection matrix is $\mP =   \mA(\mA^T \mA)^{-1} \mA^T$. Then,
 	\[  \mP^T = (\mA(\mA^T \mA)^{-1} \mA^T )^T = \mA (\mA^T \mA)^{-1} \mA^T = \mP. \]
 	\[  \mP^2 = \mP^T \mP =  \mA (\mA^T \mA)^{-1} \mA^T  \mA (\mA^T \mA)^{-1} \mA^T =  \mA (\mA^T \mA)^{-1} \mA^T = \mP. \]
 \end{proof}
 
 \begin{cor}[Projection onto $N(\mA^T)$]\label{cor:iprojectm}
-	Suppose $\mP$ is a projection matrix in Theorem~\ref{thm:projectm}, then $\mI-\mP$ is also a projection matrix to the left nullspace $N(\mA^T)$. 
+	Suppose $\mP$ is a projection matrix in Theorem~\ref{thm:projectm}. Then $\mI-\mP$ is also a projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $N(\mA^T)$. 
 \end{cor}
 
 \begin{proof}
-	For any $x \in \bbR^n$, we have
-	\[ x - \mP x \perp C(\mA) \quad \Rightarrow \quad (I-\mP)x \perp C(\mA) \quad \Rightarrow \quad  (\mI-\mP)x \in N(\mA^T) \text{ and } (x - (\mI-\mP)x) \perp N(\mA^T). \]
-	Therefore, $\mI-\mP$ is a projection matrix to the left nullspace $N(\mA^T)$.
+	By Definition~\ref{def:project}, for any $x \in \bbR^n$, we have
+	\[ x - \mP x \perp C(\mA) \quad \Rightarrow \quad (I-\mP)x \perp C(\mA). \]
+	By Theorem~\ref{thm:ortho}, the column space of $\mA$ is orthogonal to the left null space of $\mA$. Then,
+	\[ (\mI-\mP)x \in N(\mA^T) \quad \text{ and }\quad  (x - (\mI-\mP)x) \perp N(\mA^T). \]
+	Therefore, $\mI-\mP$ is a projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $N(\mA^T)$.
 \end{proof}
 
 \subsection{Projection matrices and least squares}
-Given an observation vector $y \in \bbR^n$ and a design matrix $\mX \in \bbR^{n \times (k+1)}$, we propose the linear regression model
+Let $y \in \bbR^n$ be a vector and $\mX \in \bbR^{n \times (k+1)}$ be a design matrix. We propose the linear regression model as
 \[ y = \mX \beta +\epsilon,\]
-where $\beta = (\beta_0,\beta_1,...,\beta_k)$ are regression coefficients and $\epsilon$ is the noise. The least square estimate of $\beta$ is the minimizer of the loss, i.e.\
+where $\beta = (\beta_0,\beta_1,...,\beta_k)$ are regression coefficients and $\epsilon$ is the noise. The least square estimate of $\beta$ is the minimizer of the loss; i.e.,
 \[  \hat \beta_{LS} = \argmin_{\beta \in \bbR^{k+1}} \onorm{y - \mX \beta}^2, \]
-where $\onorm{\cdot}$ is the euclidean norm. The vector $\mX 
-\hat \beta_{LS}$ can be considered as a the projection of $y$ onto the column space of $\mX$, which minimizes the distance from $y$ to the column space $C(\mX)$. Therefore, we may use projection tools to solve the least square estimate. 
+where $\onorm{\cdot}$ is the euclidean norm. We consider the vector $\mX 
+\hat \beta_{LS}$ as the projection of $y$ onto the column space of $\mX$, which minimizes the distance from $y$ to the column space $C(\mX)$. Therefore, we may use projection to solve the minimization problem. 
 
-The projection $\mX \hat \beta_{LS}$ satisfies
+By Definition~\ref{def:project}, the projection $\mX \hat \beta_{LS}$ satisfies
 \[ \mX^T( y - \mX \hat \beta_{LS} ) = 0 \quad \Rightarrow \quad \hat \beta_{LS} = (\mX^T \mX)^{-1} \mX^T y. \]
 
-The estimate $\hat \beta_{LS}$ consists with the estimates solved by using the derivative. 
+The estimate $\hat \beta_{LS}$ is consistent with the estimates solved by using the derivative. 
 
 \subsection{Orthogonal matrices and Gram-Schimidt}
 \begin{defn}[\textit{Orthonormal vectors}]\label{def:othronov}
@@ -213,39 +227,39 @@ The estimate $\hat \beta_{LS}$ consists with the estimates solved by using the d
 Orthonormal vectors are always independent.
 
 \begin{defn}[\textit{Orthonormal matrix and orthogonal matrix}]\label{def:orthonom}
-	Consider a matrix $\mQ \in \bbR^{m \times n}$. If the columns of $\mQ$ are orthonormal, the matrix $\mQ$ is an orthonormal matrix. If $ m= n$, the square matrix $\mQ$ is an orthogonal matrix.
+	Let  $\mQ \in \bbR^{m \times n}$ be a matrix. The matrix $\mQ$ is an orthonormal matrix, if the columns of $\mQ$ are orthonormal. When $ m= n$, the square matrix $\mQ$ is an orthogonal matrix.
 \end{defn}
 
-If $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix, $\mQ^T \mQ = \mI_n$.  If $\mQ$ is an orthogonal matrix, $\mQ^T = \mQ^{-1}$.
-For orthonormal matrix $\mQ$, the projection matrix to $C(\mP)$  becomes $\mP = \mI_m$.
+Suppose $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix. Then, we have $\mQ^T \mQ = \mI_n$.  When $m = n$, $\mQ$ is an orthogonal matrix and $\mQ^T = \mQ^{-1}$. The projection matrix of $\mQ$ onto the column space $C(\mQ)$, denoted $\mP$,  becomes $\mP = \mI_m$.
 
 \begin{defn}[\textit{Gram-Schimidt Process and QR decomposition}]\label{gram-schimidt}
-Consider a matrix $\mA \in \bbR^{m \times n}$ with $rank(\mA) = n$. Gram-Schimidt process finds the orthonormal basis for $C(\mA)$. Let $a_i \in \bbR^{m}, i \in [m]$ be the columns of matrix $\mA$. 
+Let $\mA \in \bbR^{m \times n}$ be a matrix with $rank(\mA) = n$, and  $a_i \in \bbR^{m}$ be the column of matrix $\mA$, for all $i \in [n]$. Gram-Schimidt process finds the orthonormal basis for $C(\mA)$ as following,
 \begin{align}
-	&u_1 = a_1, &&\quad e_1 = \frac{u_1}{\onorm{u_1}}\\
-	&u_2 = a_2 - \frac{u_1^T a_2}{u_1^T u_1} u_1 ,&&\quad  e_2 = \frac{u_2}{\onorm{u_2}}\\
-	&u_3 = a_3 - \frac{u_1^T a_3}{u_1^T u_1} u_1 - \frac{u_2^T a_3}{u_2^T u_2} u_2,&&\quad  e_2 = \frac{u_3}{\onorm{u_3}}\\
-	\vdots
+	&u_1 = a_1, &&\quad e_1 = \frac{u_1}{\onorm{u_1}};\\
+	&u_2 = a_2 - \frac{u_1^T a_2}{u_1^T u_1} u_1 ,&&\quad  e_2 = \frac{u_2}{\onorm{u_2}};\\
+	&u_3 = a_3 - \frac{u_1^T a_3}{u_1^T u_1} u_1 - \frac{u_2^T a_3}{u_2^T u_2} u_2,&&\quad  e_2 = \frac{u_3}{\onorm{u_3}};\\
+	\vdots\\
+	&u_n = a_n - \sum_{k = 1}^{n-1} \frac{u_k^T a_k}{u_k^T u_k} u_k, && \quad e_n = \frac{u_n}{\onorm{u_n}}.
 \end{align}
- The vectors $e_1,...,e_n$ are orthonormal basis of the $C(\mA)$. By matrix operations, we obtain a decomposition of matrix $\mA$
+ The vectors $e_1,...,e_n$ are orthonormal basis of the $C(\mA)$. Based on the basis obtained by Gram-Schimidit, we decompose the matrix $\mA$ as following,
  \begin{equation}\label{eq:qr}
  	\mA = [a_1,...,a_n] = [e_1,....,e_2] \begin{bmatrix}
  		e_1^T a_1 & e_1^T a_2 & \cdots & e_1^T a_n\\
  		0&e_2^T a_2 & \cdots & e_2^T a_n\\
  		\vdots &\vdots & & \vdots \\
  		0 &0&\cdots & e_n^T a_n
- 	\end{bmatrix} = \mQ \mR
+ 	\end{bmatrix} = \mQ \mR,
  \end{equation}
-	where $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix and $\mR \in \bbR^{n \times n}$ is an upper triangular matrix. We call the matrix decomposition in equation~\eqref{eq:qr} QR decomposition.
+	where $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix and $\mR \in \bbR^{n \times n}$ is an upper triangular matrix. The matrix decomposition in equation~\eqref{eq:qr} is called QR decomposition.
 \end{defn}
 
 \section{Determinants}
 The \textit{determinant} is a number associated with any square matrix. For a square matrix $\mA$, let $\det(\mA)$ or $|\mA|$ denote the determinant of matrix $\mA$.
 
 \subsection{Properties of determinants}
-We give ten properties of determinants. The last seven properties are deduced by first three basic properties.
+We give ten properties of determinants. The last seven properties are deduced by the first three basic properties.
 \begin{enumerate}
-	\item\label{prop1} The determinant of identity matrix is equal to 1, i.e.\ $\det(\mI) = 1$.
+	\item\label{prop1} The determinant of identity matrix is equal to 1; i.e., $\det(\mI) = 1$.
 	\item\label{prop2} Exchanging two rows of a matrix reverses the sign of the matrix's determinant. Hence, an odd number of row exchanges reverse the sign of the determinant while an even number of row exchanges maintain the sign of the determinant.
 	\item\label{prop3} \begin{enumerate} 
 	\item[(a)] If one row of the matrix is multiplied by a constant $t$, the determinant of the matrix is multiplied by $t$.
@@ -268,14 +282,14 @@ We give ten properties of determinants. The last seven properties are deduced by
 	\end{align}
 	\end{enumerate}
 
-	\item \label{propidenticalrow} If two rows of a matrix are equal, the determinant of the matrix is 0.  
+	\item \label{propidenticalrow} If the matrix contains two identical rows, the determinant of the matrix is 0.  
 	\begin{proof}
-		Suppose $\mA$ has two identical rows $a_i, a_j$. The matrix after exchanging $a_i, a_j$, $\mA'$, is the same as the original matrix $\mA$. By property~\ref{prop2}, $\det(\mA) = -\det(\mA') = -\det(\mA)$. Therefore, $\det(\mA) = 0$.
+		Suppose $\mA$ has two identical rows $a_i, a_j$. The matrix after exchanging $a_i, a_j$, denoted $\mA'$, is the same as the original matrix $\mA$. By property~\ref{prop2}, we have $\det(\mA) = -\det(\mA') = -\det(\mA)$. Therefore, $\det(\mA) = 0$.
 	\end{proof}
 
-	\item \label{propelim} For a square matrix $\mA \in \bbR^{n \times n}$, subtracting $t$ times of the $i$-th row from the $j$-th row does not change the determinant of $\mA$, where $i \neq j$.
+	\item \label{propelim} Subtracting $t$ times of the $i$-th row from the $j$-th row does not change the determinant of the matrix, where $i \neq j$.
 	\begin{proof}
-		By property~\ref{prop3} and property~\ref{propidenticalrow}, 
+		Take a two-by-two matrix as an example. By property~\ref{prop3} and property~\ref{propidenticalrow}, 
 	\begin{align}
 		 \begin{vmatrix}
 			a & b \\ c - ta&d -tb
@@ -284,53 +298,74 @@ We give ten properties of determinants. The last seven properties are deduced by
 		\end{vmatrix} -t \begin{vmatrix}
 			a & b \\ a& b
 		\end{vmatrix}  = \begin{vmatrix}
-			a & b \\ c &d.
-		\end{vmatrix}
+			a & b \\ c &d
+		\end{vmatrix}.
 	\end{align}
 	The proof for higher-dimension matrix is similar.
 	\end{proof}
 	
-	\item\label{prop0row} If the matrix $\mA$ has a row that is all zeros, the determinant of $\mA$ is 0.
+	\item\label{prop0row} If the matrix has a row that is all zeros, the determinant of the matrix is 0.
 	\begin{proof}
 		By property~\ref{prop3}, letting $t = 0$ leads to property~\ref{prop0row}.
 	\end{proof}
 
 	
-	\item\label{propdiag} Suppose $\mA \in \bbR^{n \times n}$ is a triangular matrix with diagonal elements $d_1,...,d_n$. Then, the determinant $\det(\mA) = \prod_{i = 1}^n d_i$. 
+	\item\label{propdiag} Let $\mA \in \bbR^{n \times n}$ be a triangular matrix with diagonal elements $d_1,...,d_n$. The determinant $\det(\mA) = \prod_{i = 1}^n d_i$. 
 	\begin{proof}
-		By property~\ref{propelim}, eliminating the triangular matrix $\mA$ to a diagonal matrix does not change the determinant of $\mA$. By property~\ref{prop3} and \ref{prop1}, $\det(\mA) = d_1 ...d_n \det(\mI_n) = d_1 ...d_n $. 
+	We eliminate the matrix $\mA$ to a diagonal matrix, denoted $\mA'$. By property~\ref{propelim}, $\det{\mA} = \det{\mA'}$. Since $\mA$ is triangular, the diagonal elements of $\mA'$ are still $d_1,...,d_n$.
+ 		 By property~\ref{prop3} and \ref{prop1}, $\det(\mA') = \prod_{i = 1}^n d_i\det(\mI_n) =\prod_{i = 1}^n d_i$. Therefore, $\det(\mA) = \prod_{i = 1}^n d_i$.
 	\end{proof}
 
 	
-	\item\label{propsingular} If the square matrix $\mA$ is singular, the determinant of $\mA$ is 0.
+	\item\label{propsingular} If the square matrix is singular, the determinant of the matrix is 0.
 	
 	\begin{proof}
-		If $\mA$ is a singular matrix, the reduced row echelon form of $\mA$, RREF($\mA$), has a row with all 0 entries. By property~\ref{propelim} and \ref{prop0row}, the determinant of $\mA$ is 0.
+		If $\mA$ is a singular matrix, the reduced row echelon form of $\mA$, denoted $RREF(\mA)$, has a row with all 0 entries. By and \ref{prop0row}, $\det(RREF(\mA)) = 0$. Therefore, by property~\ref{propelim}, we have $\det(\mA) =\det(RREF(\mA)) =  0$. 
 	\end{proof}
 
 	
-	\item\label{propproduct} For square matrices $\mA, \mB \in \bbR^{n \times n}$, the determinant of the product satisfies $\det(\mA \mB) = \det(\mA) \det(\mB).$
+	\item\label{propproduct} Let  $\mA, \mB \in \bbR^{n \times n}$ be two square matrices, the determinant of the matrix product is $\det(\mA \mB) = \det(\mA) \det(\mB).$
 	
 	\begin{proof}
-		If at least one of $\mA, \mB$ is singular, the product $\mA \mB$ is also singular. Then, $\det(\mA \mB) = \det(\mA) \det(\mB) = 0$. If both $\mA, \mB$ are invertible, $\mA, \mB$ can be eliminated to diagonal matrices $\mD_{A}, \mD_{B}$ by elimination. Suppose $a_1,...,a_n$ and $b_1,...,b_n$ are diagonal elements for $\mD_A$ and $\mD_B$ respectively. By property~\ref{propdiag}, $\det(AB) = \prod_{i=1}^n a_i b_i = \det(\mA) \det(\mB)$. 
+		First, if at least one of $\mA, \mB$ is singular, the product $\mA \mB$ is also singular. Then, $\det(\mA \mB) = \det(\mA) \det(\mB) = 0$. 
+		
+		Second, let $\mE$ be an elimination matrix. The product $\mE \mB$ means implementing a linear operation on the rows of $\mB$. By property~\ref{propelim}, linear operation does not change the determinant of $\mB$. Therefore, we have
+		\begin{equation}\label{eq:producteli}
+			|\mE \mB| = |\mE| |\mB|
+		\end{equation}
+		
+		Last, suppose that both $\mA, \mB$ are invertible. By elimination, there exist a sequence of elimination matrix $\{ \mE_i \}_{i = 1}^n$ such that 
+		\[ \mE_n \cdots \mE_1 \mA = \mI.  \]
+		By Lemma 2 in Linear Algebra-Part I, the inverse of an elimination matrix is still an elimination matrix. Let $\mE'_k$ denote the inverse $\mE^{-1}_k$, for all $k \in [n]$. We rewrite $\mA$ as
+		\[ \mA = \mE'_n \cdots \mE'_1. \]
+		Combing equation~\eqref{eq:producteli}, we have
+		\begin{equation}\label{eq:prod1}
+			|\mA \mB| = | \mE'_n \cdots \mE'_1 \mB | = |\mE'_n| |\mE'_{n-1} \cdots \mE'_1 \mB| = \cdots = |\mE'_n|\cdots |\mE'_1||\mB|. 
+		\end{equation}
+		Applying the equation~\eqref{eq:producteli} again to the term $|\mE'_n|\cdots |\mE'_1| $, we have
+		\begin{equation}\label{eq:prod2}
+			|\mE'_n|\cdots |\mE'_1|  =|\mE'_n|\cdots |\mE'_3| |\mE'_2 \mE'_1| = \cdots = | \mE'_n \cdots \mE'_1|.
+		\end{equation}
+		Hence, combing equation~\eqref{eq:prod1} with equation~\eqref{eq:prod2}, we obtain the result 
+		\[ |\mA \mB|  = | \mE'_n \cdots \mE'_1| |\mB| = |\mA| |\mB|.\]
 	\end{proof}
 	
-	\item\label{proptrans} For a square matrix $\mA$, the determinant $\det(\mA^T) = \det(\mA)$. 
+	\item\label{proptrans} Let $\mA$ be a square matrix, the determinant $\det(\mA^T) = \det(\mA)$. 
 	
 	\begin{proof}
-		By LU decomposition, the matrix $\mA = \mL \mU$, where $\mL$ is a lower-triangular matrix and $\mU$ is an upper-triangular matrix. The transport $\mL^T ,\mU^T$ have the same diagonal elements with $\mL, \mU$ respectively. By property~\ref{propdiag}, $\det(\mL^T)= \det(\mL),  \det(\mU^T) = \det(\mU)$. Therefore, by property~\ref{propproduct}, $\det(\mA) = \det(\mL) \det(\mU) = \det(\mU^T) \det(\mL^T) = \det(\mU^T \mL^T) = \det(\mA^T)$. 
+		By LU decomposition, we rewrite the matrix as $\mA = \mL \mU$, where $\mL$ is a lower-triangular matrix and $\mU$ is an upper-triangular matrix. Note that the transports $\mL^T,\mU^T$ have the same diagonal elements with $\mL, \mU$ respectively. By property~\ref{propdiag}, $\det(\mL^T)= \det(\mL),  \det(\mU^T) = \det(\mU)$. Therefore, combing property~\ref{propproduct}, we have  $\det(\mA) = \det(\mL) \det(\mU) = \det(\mU^T) \det(\mL^T) = \det(\mU^T \mL^T) = \det(\mA^T)$. 
 			\end{proof}
 \end{enumerate}
 
 \subsection{Determinant computation}
 \begin{prop}[Big formula for computing determinant]
-	Consider a square matrix $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$. The big formula for computing the determinant of $\mA$ is
+	Let  $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ be a square matrix. The big formula for computing the determinant of $\mA$ is
 	\[ \det(\mA) =  \sum_{(\alpha_1,...,\alpha_n) \in \tP} (-1)^{N(\alpha_1,...,\alpha_n)} a_{1,\alpha_1} ... a_{n \alpha_n},  \]
 	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$, $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of necessary exchanges from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. 
 \end{prop}
 
 \begin{proof}
-	For a square matrix $\mA = \entry{a_ij} \in \bbR^{n \times n}$, we decompose the  matrix $\mA$ by the summation of $n^n$ matrices, in which there is only one entry comes from $\mA$ in each row and other entries are 0. By property~\ref{prop3}, the determinant of $\mA$ is equal to the summation of the determinants of these $n^n$ matrices. Take a 3-by-3 square matrix as an example.
+	Let $\mA = \entry{a_ij} \in \bbR^{n \times n}$ be a square matrix. We decompose the  matrix $\mA$ by the summation of $n^n$ matrices, denoted $\mA'_i$, where $i \in [n^n]$. For any $\mA'_i$, there is only one entry comes from $\mA$ in each row and other entries are 0. By property~\ref{prop3}, the determinant $\det(\mA) = \sum_{i=1}^{n^n} \det(\mA'_i)$. Take a 3-by-3 square matrix as an example.
 	\begin{align}
 		\begin{vmatrix}
 			a_{11} & a_{12} & a_{13}\\
@@ -348,23 +383,23 @@ We give ten properties of determinants. The last seven properties are deduced by
 			0 & 0& a_{13}\\
 			0& 0 & a_{23}\\
 			 0&0 & a_{33}
-		\end{vmatrix} \overset{\Delta}{=} \mA_1 + \mA_2 +\cdots + \mA_{27}.
+		\end{vmatrix} = \mA'_1 + \mA'_2 +\cdots + \mA'_{27}.
 	\end{align}
-	For the square matrix $\mA$,  there are $n!$ nonsingular matrices among the $n^n$ matrices. The number of nonsingular matrices coincides with the size of $\tP$. Intuitively, there are $n$ ways to choose an element from the first row, after which there are only $n-1$ ways to choose an element from the second row to avoid the zero determinant. Therefore, we have $n \times (n-1) \times (n-2) \times \cdots \times 2 = n!$ nonsingular matrices.
+	There are $n!$ nonsingular matrices among matrices $\mA'_i$. The number of nonsingular matrices coincides with the size of $\tP$. Intuitively, there are $n$ ways to choose an element from the first row, after which there are only $n-1$ ways to choose an element from the second row to avoid the zero determinant. Therefore, we have $n \times (n-1) \times (n-2) \times \cdots \times 2 = n!$ nonsingular matrices.
 	
-	By property~\ref{propdiag} and \ref{prop2}, the determinant for the nonsingular matrix follows the formula \[(-1)^{N(\alpha_1,...,\alpha_n)}  a_{1,\alpha_1} ... a_{n \alpha_n},\]
+	By property~\ref{propdiag} and \ref{prop2}, the determinant of a nonsingular $\mA'_i$ follows the formula \[(-1)^{N(\alpha_1,...,\alpha_n)}  a_{1,\alpha_1} ... a_{n \alpha_n},\]
 	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$, $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of necessary exchanges from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. 
 \end{proof}
 
 
 \begin{defn}[\textit{Cofactors, cofactor matrix, and cofactor formula}]
-	Consider a square matrix $\mA=  \entry{a_{ij}} \in \bbR^{n \times n}$. Let $\mA_{-i,-j}$ be the submatrix of $\mA$ after removing the $i$-th row and $j$-th column. The cofactor associated with $a_{ij}$ is \[C_{ij} = (-1)^{i+j}\det(\mA_{-i,-j}).\]
-	The matrix $\mC = \entry{C_{ij}} \in \bbR^{n \times n}$ is called cofactor matrix.  The cofactor formula of $\det(\mA)$ is 
-	\[ \det(\mA) = \sum_{j}^n a_{ij} C_{ij} = \sum_{j}^n a_{ji} C_{ji} ,\quad \forall i \in [n].  \]
+	Let $\mA=  \entry{a_{ij}} \in \bbR^{n \times n}$ be a square matrix, and $\mA_{-i,-j}$ be the submatrix of $\mA$ after removing the $i$-th row and $j$-th column. The cofactor associated with $a_{ij}$ is defined as \[C_{ij} = (-1)^{i+j}\det(\mA_{-i,-j}).\]
+	The matrix $\mC = \entry{C_{ij}} \in \bbR^{n \times n}$ is called cofactor matrix.  The cofactor formula of $\det(\mA)$ is
+	\[ \det(\mA) = \sum_{j}^n a_{ij} C_{ij} = \sum_{j}^n a_{ji} C_{ji} ,\quad \text{ for all } i \in [n].  \]
 \end{defn}
 
 \begin{example}[Tridiagonal matrix]
-	One example of cofactor formula is computing the determinant of \textit{tridiagonal matrix}. A tridiagonal matrix is a matrix in which only nonzero elements lie on or adjacent to the diagonal. Let $\mT_n \in \bbR^{n \times n}$ denote the tridiagonal matrix of 1's, i.e.\
+	One example of using cofactor formula is computing the determinant of \textit{tridiagonal matrix}. The tridiagonal matrix is a matrix in which only nonzero elements lie on or adjacent to the diagonal. Let $\mT_n \in \bbR^{n \times n}$ denote the tridiagonal matrix of 1's; i.e.,
 \begin{align}
 	\mT_n = \begin{bmatrix}
 		1 &1&0 &\cdots & 0 &0\\
@@ -372,12 +407,12 @@ We give ten properties of determinants. The last seven properties are deduced by
 		0&1&1&\cdots &0&0\\
 		\vdots &\vdots &\vdots &&\vdots &\vdots \\
 		0&0&0&\cdots&1&1
-	\end{bmatrix}_{n \times n}
+	\end{bmatrix}_{n \times n}.
 \end{align} 
 
-Let $\mT_{n, -i,-j}$ be the submatrix of  $\mT_n$ after removing the $i$-th row and the $j$-th column.   By cofactor formula, 
+Let $\mT_{n, -i,-j}$ be the submatrix of  $\mT_n$ after removing the $i$-th row and the $j$-th column.   By cofactor formula, we have
 \[  \det(\mT_n) = 1 \times \det(\mT_{n, -1,-1}) - 1 \times \det(\mT_{n,-1,-2}). \]
-By the definition of tridiagonal matrix, $\mT_{n,-1,-1} = \mT_{n-1}$ and $\det( \mA_{n,-1,-2}) = 1 \times \det(\mT_{n-2}) $. Therefore, 
+By the definition of tridiagonal matrix, $\mT_{n,-1,-1} = \mT_{n-1}$, and $\det( \mA_{n,-1,-2}) = 1 \times \det(\mT_{n-2}) $. Therefore, 
 \[ \det(\mT_n) = \det(\mT_{n-1}) - \det(\mT_{n-2}).  \] 
 \end{example}
 
@@ -385,12 +420,14 @@ By the definition of tridiagonal matrix, $\mT_{n,-1,-1} = \mT_{n-1}$ and $\det( 
 Previously, we use Gauss-Jordan elimination to obtain the inverse matrix of an invertible matrix. Here, we apply cofactor formula to compute the inverse matrix.
 
 \begin{thm}[Inverse matrix by cofactors]\label{thm:inver}
-Let $\mA \in \bbR^{n \times n}$ be an invertible matrix and $\mC$ be the cofactor matrix of $\mA$. The inverse matrix of $\mA$ satisfies
+Let $\mA \in \bbR^{n \times n}$ be an invertible matrix, and $\mC$ be the cofactor matrix of $\mA$. The inverse matrix of $\mA$ satisfies
 \[  \mA^{-1} = \frac{1}{\det(\mA)} \mC^T. \]	
 \end{thm}
 
 \begin{proof}
-	It is equivalent to  show that $\mA \mC^T = \det(\mA) \mI_n$. By the definition of cofactor matrix,
+	It is equivalent to  show that $\mA \mC^T = \det(\mA) \mI_n$. 
+	
+	Let $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ be an invertible matrix, and $C_{ij}$ be the cofactor of $a_{ij}$. By the definition of cofactor matrix, we have
 	\begin{align}
 		\mA  \mC^T = \begin{bmatrix}
 			a_{11} & a_{12} &\cdots &a_{1n}\\
@@ -401,27 +438,27 @@ Let $\mA \in \bbR^{n \times n}$ be an invertible matrix and $\mC$ be the cofacto
 			C_{11} & C_{21} &\cdots &C_{n1}\\
 			C_{12} & C_{22} &\cdots &C_{n2}\\
 			\vdots & \vdots & & \vdots\\
-			C_{1n} & C_{2n} &\cdots &C_{nn}.\\
-		\end{bmatrix}
+			C_{1n} & C_{2n} &\cdots &C_{nn}\\
+		\end{bmatrix},
 	\end{align}
 	
-	Therefore, the diagonal elements of $\mA \mC^T$ are $(\mA \mC^T)_{ii} = \sum_k^n a_{ik} C_{ik} = \det(\mA), \forall i \in [n]$. Consider the off-diagonal entries $(\mA \mC^T)_{ij} = \sum_{k}^n a_{ik} C_{jk}$, where $i \neq j$. By cofactor formula, the summation   $ \sum_{k}^n a_{ik} C_{jk}$ is equal to the determinant of a matrix whose $i$-th row and $j$-th row are identical. By property~\ref{prop0row}, the off-diagonals of $\mA \mC^T$ are 0. Then, we have $\mA \mC^T = \det(\mA) \mI_n$.
+	Therefore, the diagonal elements of $\mA \mC^T$ are $(\mA \mC^T)_{ii} = \sum_k^n a_{ik} C_{ik} = \det(\mA)$, for all $ i \in [n]$. Consider the off-diagonal entries $(\mA \mC^T)_{ij} = \sum_{k}^n a_{ik} C_{jk}$, where $i \neq j$. By cofactor formula, the summation   $ \sum_{k}^n a_{ik} C_{jk}$ is equal to the determinant of a matrix whose $i$-th row and $j$-th row are identical. Combining property~\ref{prop0row}, the off-diagonals of $\mA \mC^T$ are 0. Then, we have $\mA \mC^T = \det(\mA) \mI_n$.
 \end{proof}
 
 \begin{defn}[\textit{Cramer's rule}]
-Consider the linear system $\mA x=b$, where $\mA\in\bbR^{n \times n}$ is an invertible matrix, and $ x, b \in \bbR^n$ are vectors. Applying Theorem~\ref{thm:inver}, we obtain the Cramer's rule of $x = \mA^{-1} b$.
-\[  x = \frac{1}{\det(\mA)} \mC^T b; \quad x_j = \frac{\det(\mB_j)}{\mA_j}, \] 
-	where $B_j$ the matrix that replaces the $j$-th column of $\mA$ by $b$.
+Let  $\mA\in\bbR^{n \times n}$  be  an invertible matrix, $ x, b \in \bbR^n$ be vectors. Applying Theorem~\ref{thm:inver} to the linear system $\mA x=b$, we obtain the Cramer's rule of $x = \mA^{-1} b$, 
+\[  x = \frac{1}{\det(\mA)} \mC^T b\quad \text{ and } \quad x_j = \frac{\det(\mB_j)}{\mA_j}, \] 
+	where $\mB_j$ is the matrix $\mA$ after replacing the $j$-th column by $b$.
 \end{defn}
 
 \begin{defn}[\textit{Parallelepiped}]
-	The parallelepiped determined by $n$ vectors $v_1,...,v_n \in \bbR^n$ is the subset 
+	The parallelepiped determined by $n$ vectors $v_1,...,v_n \in \bbR^n$ is defined as the following subset,
 	\[ P = \{ a_1 v_1 + \cdots + a_n v_n \colon 0 \leq a_1,...,a_n \leq 1 \}. \]
 	 We use $vol(P)$ to denote the volume of the parallelepiped  $P$. 
 \end{defn}
 
 \begin{prop}[Determinants and volumes]
-The absolute determinant of a square matrix $\mA$ is the volume of parallelepiped determined by the rows of $\mA$, i.e.\
+The absolute determinant of a square matrix $\mA$ is the volume of parallelepiped determined by the rows of $\mA$; i.e.,
 	\[ |\det(\mA)| = vol(P(\mA)), \]
 	where $P(\mA)$ is the parallelepiped determined by the rows of $\mA$.
 \end{prop}
@@ -462,28 +499,32 @@ The absolute determinant of a square matrix $\mA$ is the volume of parallelepipe
 
 \section{Eigenvalues and eigenvectors}
 \begin{defn}[\textit{Eigenvalues and eigenvectors}]\label{def:eigen}
-	Consider a square matrix $\mA$, an eigenvector of $\mA$ is a nonzero vector such that:
+	Let $\mA \in \bbR^{n \times m}$ be a square matrix. Suppose there is a nonzero vector $x \in \bbR^{m}$ such that
 	\[ \mA x = \lambda x, \quad \text{for some } \lambda \in \mathbb{C}. \]
-	The value $\lambda$ is called the eigenvalue of $\mA$, and $x$ is the eigenvector associated with eigenvalue $\lambda$. Usually, eigenvectors are normalized, i.e.\ $\onorm{x} = 1$, where $\onorm{\cdot}$ is the euclidean distance. For simplicity, all the eigenvectors mentioned below are normalized. Besides, the eigenvectors associated with eigenvalue 0 span the nullspace of $\mA$.
+	The vector $x$ is called the eigenvector of $\mA$. The value $\lambda$ is called the eigenvalue of $\mA$, and $x$ is the eigenvector associated with eigenvalue $\lambda$.
 \end{defn}
 
+ Usually, eigenvectors are normalized; i.e., $\onorm{x} = 1$, where $\onorm{\cdot}$ is the euclidean distance. For simplicity, all the eigenvectors mentioned below are normalized. Besides, the eigenvectors associated with eigenvalue 0 span the nullspace of $\mA$.
+
 \begin{defn}[\textit{Trace of square matrix}]\label{def:trace}
-Consider a square matrix $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$. The trace of $\mA$ is defined as
+Let $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ be a square matrix. The trace of $\mA$ is defined as
 \[ tr(\mA) = \sum_{i}^n a_{ii}.\] 
 \end{defn}
 
 \begin{defn}[\textit{Characteristic polynomial}]\label{def:charac}
-	Let $\lambda$ denote an eigenvalue of the matrix $\mA\in \bbR^{n \times n}$. Then the matrix $\mA - \lambda \mI$ is a singular matrix. Therefore,
-	\[ \det(\mA - \lambda I_n) = 0 \quad  \Leftrightarrow \quad (-1)^n \lambda^n + tr(\mA)\lambda^{n-1} + \cdots + (-1)^n \det(\mA) \overset{\Delta}{=} P(\lambda) = 0.   \]
-	 The polynomial $P(\lambda)$ is called the characteristic equation of $\mA$. 
+	Let $\lambda$ denote an eigenvalue of the matrix $\mA\in \bbR^{n \times n}$.
+	The determinant of $\mA - \lambda \mI_n$ is a polynomial of $\lambda$, denoted $P(\lambda)$. We call the polynomial $P(\lambda)$ as the characteristic polynomial of $\mA$. Specifically,
+	\begin{equation}\label{def:charapoly}
+		 P(\lambda)  = (-1)^n \lambda^n +  (-1)^n  tr(\mA)\lambda^{n-1} + \cdots + (-1)^n \det(\mA). 
+	\end{equation}
 \end{defn}
 
-Since the characteristic polynomial $P(\lambda)$ is of degree $n$, there are $n$ solutions to the equation $P(\lambda) = 0$. The solutions $\lambda_1,...,\lambda_n$ are $n$ eigenvalues of $\mA$, which may be complex and may not be distinct with each other. Note that the complex eigenvalues come in conjugate pairs, because $\overline{ P(\lambda)} = P(\overline{ \lambda})$. 
+Since the characteristic polynomial $P(\lambda)$ is of degree $n$, there are $n$ solutions to the equation $P(\lambda) = 0$. The solutions to $P(\lambda) = 0$, denoted $\lambda_1,...,\lambda_n$, are $n$ eigenvalues of $\mA$, which may be complex. If the complex eigenvalues exist, the complex eigenvalues come in conjugate pairs, because $P(\overline{ \lambda}) = \overline{ P(\lambda)} $ is also equal to 0, where $\overline{ \lambda}$ is the conjugate of $\lambda$. Note that $n$ eigenvalues are not necessarily distinct with each other. 
 
 \subsection{Properties for eigenvectors and eigenvalues}
 
 \begin{thm}[Summation and production of eigenvalues]\label{thm:speigen}
-	For a square matrix $\mA \in \bbR^{n \times n}$, let $\lambda_1,...\lambda_n$ denote the $n$ eigenvalues of $\mA$. Then 
+	Let  $\mA \in \bbR^{n \times n}$ be a square matrix, and $\lambda_1,...\lambda_n$ be the $n$ eigenvalues of $\mA$. Then,
 	\begin{equation}
 		\sum_{i=1}^n \lambda_i = tr(\mA); \quad \prod_{i=1}^n \lambda_i = \det(\mA).
 	\end{equation} 
@@ -494,99 +535,108 @@ Since the characteristic polynomial $P(\lambda)$ is of degree $n$, there are $n$
 	\begin{equation}\label{eq:poly}
 		P(\lambda) = (-1)^n (\lambda - \lambda_1)\cdots (\lambda - \lambda_n), 
 	\end{equation}   
-	where $\lambda_i, i \in [n]$ are $n$ eigenvalues of $\mA$. By equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Compared with definition~\ref{def:charac}, we have $tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_1 \cdots \lambda_n $. Therefore, $\prod_{i=1}^n \lambda_i = \det(\mA)$.
+	where $\lambda_i$ are $n$ eigenvalues of $\mA$, for all $ i \in [n]$. By equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Compared with Definition~\ref{def:charac}, we have $tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_1 \cdots \lambda_n $ while the constant term in Defintion~\ref{def:charac} is $(-1)^n \det(\mA)$.  Therefore, we have $\prod_{i=1}^n \lambda_i = \det(\mA)$.
 \end{proof}
 
 \begin{defn}[\textit{Similar matrices}]\label{def:similar}
-	Consider a square matrix $\mA \in \bbR^{n \times n}$. For any invertible matrix $\mB \in \bbR^{n \times n}$, the matrix product $\mB \mA \mB^{-1}$ is called the similar matrix of $\mA$.
+	Let $\mA \in \bbR^{n \times n}$ be a square matrix, and $\mB \in \bbR^{n \times n}$ be a invertible matrix. The matrix product $\mB \mA \mB^{-1}$ is called the similar matrix of $\mA$.
 \end{defn}
 
 \begin{thm}[Eigenvalues for similar matrices]\label{thm:similar}
-	Consider a sqaure matrix $\mA$. The similar matrices of $\mA$ share the same eigenvalues of $\mA$.
+	Let $\mA$ be a square matrix. Any similar matrices of $\mA$ share the same eigenvalues of $\mA$.
 \end{thm}
 \begin{proof}
-	Let $\mB \mA \mB^{-1}$ be the similar matrix of $\mA$, and $\lambda_1,...,\lambda_n$ be the eigenvalues of $\mA$. Then, for any $\lambda_i$, there is an eigenvector, such that, 
-	\[ \lambda x = \mA x \quad \Leftrightarrow \quad \lambda \mB x = \mB \mA \mB^{-1} \mB x.\]
-	Since $x$ is a nonzero vector, and $\mB$ is invertible, the vector $\mB x$ is also a nonzero vector. Therefore, $\lambda$ is an eigenvalue of $\mB \mA \mB^{-1}$ with associated eigenvector $\mB x$.
+	Let $\mB \mA \mB^{-1}$ be a similar matrix of $\mA$, and $\lambda_1,...,\lambda_n$ be the eigenvalues of $\mA$. Then, for all $\lambda_i$, there is an eigenvector $x_i$ such that
+	\[ \lambda_i x_i = \mA x_i \quad \Leftrightarrow \quad \lambda_i \mB x_i = \mB \mA \mB^{-1} \mB x_i.\]
+	Since $x_i$ is a nonzero vector, and $\mB$ is invertible, the vector $\mB x_i$ is also a nonzero vector. Therefore, $\lambda_i$ is an eigenvalue of $\mB \mA \mB^{-1}$ with associated eigenvector $\mB x_i$, for all $i \in [n]$.
 \end{proof}
 
 \begin{thm}[Eigenvalues for powers of the matrix]
-	Consider a matrix $\mA$ with a eigenvalue $\lambda$ and the associated eigenvector $x$. For any polynomial $P$, 
+	Let $\mA$ be a matrix, $\lambda$  be a eigenvalue of $\mA$, and $x$ be the eigenvector associated with $\lambda$. For any polynomial $P$, we have
 	\[ P(\mA) x = P(\lambda) x. \]
 \end{thm}
 \begin{proof}
-	For any integer $k \geq 0$ and constant $c \in \bbR$,
+	For all integer $k \geq 0$ and constant $c \in \bbR$, we have
 	\[ c\mA^k x = c\mA^{k-1} \mA x= c\lambda \mA^{k-1} x = \cdots = c\lambda^k x.\]
-	Therefore, for any polynomial $P$, $P(\mA)x = P(\lambda)x$.
+	Therefore, $P(\mA)x = P(\lambda)x$, for any polynomial $P$.
 \end{proof}
 
 \begin{thm}[Eigenvalues for the inverse]
-Suppose $\mA \in \bbR^{n \times n}$ is an invertible matrix. Let $\lambda_1,...,\lambda_n$ denote the eigenvalue of $\mA$, and $x_1,...x_n$ denote the associated eigenvectors. Then,  $\lambda_1^{-1},...,\lambda_n^{-1}$ and $x_1,...x_n$ are the eigenvalues and associated eigenvectors of $\mA^{-1}$, respectively.
+Let $\mA \in \bbR^{n \times n}$ be an invertible matrix, $\lambda_1,...,\lambda_n$ be the eigenvalues of $\mA$, and $x_1,...x_n$ be the eigenvectors associated with $\lambda_1,...,\lambda_n$. Then,  $\lambda_1^{-1},...,\lambda_n^{-1}$  are the eigenvalues of $\mA^{-1}$, and $x_1,...x_n$ are eigenvectors associated with  $\lambda_1^{-1},...,\lambda_n^{-1}$.
 \end{thm}
 
 \begin{proof}
-	Since the nullspace of $\mA$ contains only a zero vector, the eigenvaluest $\lambda_i >0,  \forall i \in [n]$. For any $\lambda_i$ and $x_i$, multiplying $x_i$ on both sides of the equation $\mA^{-1} \mA = \mI_n$, we have 
+	Since the nullspace of $\mA$ contains only a zero vector, the eigenvalue $\lambda_i >0$, for all $  i \in [n]$. For all $\lambda_i$ and $x_i$, multiplying $x_i$ on both sides of the equation $\mA^{-1} \mA = \mI_n$ yields
 	\[ \mA^{-1} \mA x_i = x_i \quad \Rightarrow\quad  \mA^{-1} x_i = {\lambda_i}^{-1} x_i.  \]
-	Therefore, $\mA^{-1}$ share the same eigenvectors set with $\mA$, and the reciprocal of the eigenvalues of $\mA$ are the eigenvalues of $\mA^{-1}$.
+	Therefore, $\lambda_i^{-1}$ is the eigenvalue of $\mA^{-1}$, and $x_i$ is the eigenvector associated with $\lambda^{-1}_i$, for all $i \in [n]$.
 \end{proof}
 
 \begin{thm}[Independence of eigenvectors]\label{thm:indepeigen} 
-Suppose the square matrix $\mA$ has at least two different eigenvalues. The eigenvectors associated with different eigenvalues are independent.
+Let $\mA$ be a square matrix with at least two different eigenvalues. The eigenvectors associated with different eigenvalues are independent.
 \end{thm}
 
 \begin{proof}
-	Suppose the square matrix $\mA \in \bbR^{n \times n}$ has $m$ different eigenvalues $\lambda_1,...,\lambda_m$ with associated eigenvectors  $v_1,...,v_m$. Let the linear combination $c_1 v_1 + ... + c_m v_m = 0$.	
+	Suppose the square matrix $\mA \in \bbR^{n \times n}$ has $m$ different eigenvalues $\lambda_1,...,\lambda_m$ with associated eigenvectors  $v_1,...,v_m$. Consider a linear combination $c_1 v_1 + ... + c_m v_m = 0$, where $c_i \in \bbR$, for all $i \in [m]$.	
 	Then we have
 	\begin{equation}\label{eq:indep1}
-		\mA(c_1 v_1 + ... + c_m v_m ) = c_1 \lambda_1 v_1 + ... + c_m \lambda_m v_m = 0;  
+		\mA(c_1 v_1 + ... + c_m v_m ) = c_1 \lambda_1 v_1 + ... + c_m \lambda_m v_m = 0,
 		\end{equation}
+		and
 		\begin{equation}\label{eq:indep2}
 		\lambda_1 (c_1 v_1 + ... + c_m v_m ) = c_1 \lambda_1 v_1 + ... + c_m \lambda_1 v_m = 0. 
 	\end{equation}
-	Subtracting the equations~\eqref{eq:indep1} from \eqref{eq:indep2}, 
+	Subtracting the equations~\eqref{eq:indep1} from \eqref{eq:indep2} yields
 	\begin{equation}\label{eq:indep3}
-		 c_2 (\lambda_1 - \lambda_2) v_2 + \cdots + c_m (\lambda_1 - \lambda_m) v_m  = 0
+		 c_2 (\lambda_1 - \lambda_2) v_2 + \cdots + c_m (\lambda_1 - \lambda_m) v_m  = 0.
 	\end{equation}
-	Repeating the steps from equation~\eqref{eq:indep1} to equation~\eqref{eq:indep3}, finally we have 
+	Consider the new linear combination $ c_2 (\lambda_1 - \lambda_2) v_2 + \cdots + c_m (\lambda_1 - \lambda_m) v_m = 0$ and repeat the steps from equation~\eqref{eq:indep1} to equation~\eqref{eq:indep3}. After $m$ iterations, we have 
 	\[ c_m(\lambda_1 - \lambda_m)(\lambda_2 - \lambda_m)\cdots (\lambda_{m-1} - \lambda_m) v_m = 0.    \]
-	 Since $\lambda_1 ,..., \lambda_m$ are distinct, and $v_m$ is a nonzero vector, we have $c_m = 0$.  Plugging $c_m = 0$ back to previous steps leads to that $c_1 = \cdots = c_m = 0$. Therefore, $v_1,...,v_m$ are independent.
+	 Since $\lambda_1 ,..., \lambda_m$ are distinct, and $v_m$ is a nonzero vector, the coefficient $c_m = 0$.  Plugging $c_m = 0$ back to previous steps, we have $c_1 = \cdots = c_m = 0$. Therefore, $v_1,...,v_m$ are independent.
 \end{proof}
 
 \begin{thm}[Eigenvalues for triangular matrices]\label{thm:trianeigen}
-	For triangular matrices, the eigenvalues are the entries on the diagonal.
+	The eigenvalues for a triangular matrix are the entries on the diagonal.
 \end{thm}
 
 \begin{proof}
-Suppose $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ is a triangular matrix. By the property of determinant~\ref{propdiag}, 
+Let $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ be a triangular matrix. By the property of determinant~\ref{propdiag}, we have
 \[ \det(\mA) = \prod_{i=1}^n a_{ii}  ; \quad \det(\mA - \lambda \mI_n) = \prod_{i=1}^n (a_{ii}-\lambda). \]
-To let $\det(\mA - \lambda \mI_n) = 0$, $\lambda = a_{ii}, \forall i\in[n]$. Therefore, the entries on the diagonal are the eigenvalues of a triangular matrix.
+To let $\det(\mA - \lambda \mI_n) = 0$, we have $\lambda = a_{ii}$, for all $ i\in[n]$. Therefore, the entries on the diagonal are the eigenvalues of a triangular matrix.
 \end{proof}
 
 
 \subsection{Eigenvalues and eigenvectors for symmetric matrices}
 
+\begin{defn}[Antisymmetric matrices]
+	The matrix $\mA$ is an antisymmetric matrix if $\mA$ satisfies
+	\[\mA^T = - \mA. \] 
+\end{defn}
+
 \begin{thm}[Eigenvalues for symmetric and antisymmetric matrices]\label{thm:symmeign}
-	Symmetric square matrices  with all real entries have real eigenvalues. For antisymmetric matrices which satisfy $\mA^T = - \mA$, all eigenvalues are imaginary, i.e.\ $\lambda = b i$, where $b \in \bbR, i = \sqrt{-1}$.
+All the eigenvalues of a symmetric square matrix with only real entries are real. All the eigenvalues of an antisymmetric square matrix are imaginary; i.e., $\lambda = b i$, where $b \in \bbR, i = \sqrt{-1}$.
 \end{thm}
 \begin{proof}
-	First, we prove that symmetric square matrices with all real entries have real eigenvalues by contradiction. 
+	First, we prove by contradiction that symmetric square matrices with all real entries have real eigenvalues. 
 	
-	Suppose a symmetric real matrix $\mA$ has a complex eigenvalue $\lambda$ with eigenvector $x$. Since $\mA$ is real, then the eigenvector $x$ is also complex. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then we have
+	Let  $\mA$  be a symmetric  matrix with only real entries. Suppose $\lambda$  is a complex eigenvalue of $\mA$, and $x$ is the eigenvector associated with $\lambda$. Since all the entries of $\mA$ are real, the eigenvector $x$ is also complex. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then we have
 	\begin{equation}\label{eq:symm}
-		\mA x = \lambda x;\quad \mA \overline x = \overline \lambda \overline x.
+		\overline x^T \mA x = \overline x^T \lambda x,
 	\end{equation} 
-	Premultiply $\overline x^T$ on both sides of the first equation in \eqref{eq:symm} and premultiply $x^T$ on both sides of the second equation in \eqref{eq:symm}. By the symmetry of $\mA$,
-	\[ \overline x^T \mA x  = x^T \mA^T \overline x = x^T \mA \overline x .\]
-	Subtracting the two equations in \eqref{eq:symm}, we have
-	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
-	By the fact that $x^T \overline x$ is a real number, the imaginary part of $\lambda$ is equal to 0, which contradicts that $\lambda$ is complex.
+	and
+	\begin{equation}\label{eq:symm2}
+		x^T \mA \overline x = x^T \overline \lambda \overline x.
+	\end{equation}
+	 By the symmetry of $\mA$, we have
+	\[ \overline x^T \mA x  = x^T \mA^T \overline x = x^T \mA \overline x .\] 
+	 Subtracting the equation~\eqref{eq:symm} from equation~\eqref{eq:symm2} yields	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
+	Since that $x^T \overline x$ is a real number, the imaginary part of $\lambda$ is equal to 0, which contradicts the assumption that $\lambda$ is complex.
 	
 	Next, we prove that the eigenvalues for antisymmetric matrices are imaginary. 
-	Suppose $\mA$ is an antisymmetric matrix with a complex eigenvalue $\lambda$ and complex eigenvector $x$.  By similar procedures for symmetric matrices, we have
+	Let $\mA$ be an antisymmetric matrix,  $\lambda$ be a complex eigenvalue of $\mA$, and $x$ be the complex eigenvector associated with $\lambda$. By the antisymmetry of $\mA$, we have
 	\[ \overline x^T \mA x  = x^T \mA^T \overline x  =  -x^T \mA \overline x .  \] 
-	Then,
+	Then, 
 	\[  0 = ( \overline x^T \mA x +  x^T \mA \overline x ) = (\lambda + \overline \lambda) x^T \overline x.   \]
-	Since $x^T \overline x$ is a real number, the real part of $\lambda$ is equal to 0. Therefore, eigenvalues for antisymmetric matrices are imaginary.
+	Since that $x^T \overline x$ is a real number, the real part of $\lambda$ is equal to 0. Therefore, the eigenvalues for an antisymmetric matrix are imaginary.
 \end{proof}
 
 \begin{thm}[Orthogonality of eigenvectors for symmetric matrices]\label{thm:symmortho}
@@ -595,18 +645,18 @@ The eigenvectors of a symmetric matrix $\mA \in \bbR^{n \times n}$ associated wi
 
 
 \begin{proof}
-	Suppose $\lambda_1$ and $\lambda_2$ are two different eigenvalues of $\mA$ with associated eigenvector $x_1, x_2$, respectively. By the symmetry of $\mA$, we have
-	\[ x_2^T \mA x_1 = x_1^T \mA^T x_2  = x_1^T \mA x_2,\]
-	then 
+	Let $\lambda_1$ and $\lambda_2$ be two different eigenvalues of $\mA$, and  $x_1, x_2$ are two eigenvectors associated with $\lambda_1$ and $\lambda_2$, respectively. By the symmetry of $\mA$, we have
+	\[ x_2^T \mA x_1 = x_1^T \mA^T x_2  = x_1^T \mA x_2.\]
+	Then,
 	\[  0 = ( x_2^T \mA x_1 -  x_1^T \mA x_2 ) = (\lambda_1 - \lambda_2) x_2^T x_1. \]
 	Since $\lambda_1, \lambda_2$ are different, we have $\lambda_1 - \lambda_2 \neq 0$ and $x_2^T x_1 = 0$. Therefore, $x_1$ and $x_2$ are orthogonal. 
 \end{proof}
 
-\begin{thm}[Eigenvectors for repeated eigenvalues of symmetric matrices]\label{thm:symmrepeat} Consider a symmetric matrix $\mA \in \bbR^{n \times n}$. If $\lambda_0$ is a repeated eigenvalue of $\mA$ with multiplicity $2 \leq m \leq n$, then there exist $m$ orthonormal eigenvectors corresponding to $\lambda_0$.
+\begin{thm}[Eigenvectors for repeated eigenvalues of symmetric matrices]\label{thm:symmrepeat} Let  $\mA \in \bbR^{n \times n}$ be a symmetric matrix. Suppose $\lambda_0$ is a repeated eigenvalue of $\mA$ with multiplicity $m$, where $2 \leq m \leq n$. There exist $m$ orthonormal eigenvectors associated with $\lambda_0$.
 \end{thm}
 
 \begin{proof}
-	First, there is at least one nonzero eigenvector $x_0$ for $\lambda_0$. For any $x_0 \in \bbR^{n}$, there are $n-1$ additional orthogonal vectors $y_1,...,y_{n-1}$, such that $y_j \perp x_0, \forall j \in [(n-1)]$ and $(x_0, y_1,...,y_{n-1})$ forms the basis of $\bbR^n$. Let $\mY = [y_1,...y_{n-1}]$ and $\mX = [x_0,Y]$. Since $\mA$ is a symmetric matrix, $x_0^T \mA = \lambda_0 x_0^T $. We have
+	First, let $x_0$ be a nonzero eigenvector associated with $\lambda_0$. For any $x_0 \in \bbR^{n}$, there are $n-1$ additional orthogonal vectors $y_1,...,y_{n-1}$ such that $y_j \perp x_0$, for all $j \in [(n-1)]$,  and $(x_0, y_1,...,y_{n-1})$ forms the basis of $\bbR^n$. Let $\mY = [y_1,...y_{n-1}]$ and $\mX = [x_0,Y]$. Since $\mA$ is a symmetric matrix, we have $x_0^T \mA = \lambda_0 x_0^T $. Consider the following matrix product,
 	\begin{align}\label{eq:symmrepeat}
 		\mX^T \mA \mX =  \begin{bmatrix}
 			x_0^T \mA x_0 & x_0^T \mA \mY\\
@@ -616,40 +666,42 @@ The eigenvectors of a symmetric matrix $\mA \in \bbR^{n \times n}$ associated wi
 			0 & \mY^T \mA \mY 
 		\end{bmatrix} .
 	\end{align}
-	Note that $\mX$ is an orthogonal matrix which satisfies $\mX^T = \mX^{-1}$. By Theorem~\ref{thm:similar}, $\mX^T \mA \mX$ is a similar matrix of $\mA$, and $\mX^T \mA \mX$ share the same eigenvalues of $\mA$. Then, $\lambda_0$ is also a repeated eigenvalue of $\mX^T \mA \mX$. The determinant of $\mX^T \mA \mX - \lambda \mI_n$ is 
-	\[  \det(\mX^T \mA \mX - \lambda \mI_n) = (\lambda_0 - \lambda) \det(\mY^T \mA \mY - \lambda \mI_{n-1}). \]
-	Since $\lambda_0$ has multiplicity $m \geq 2$, then $\det(\mY^T \mA \mY - \lambda_0 \mI_{n-1}) = 0$. Therefore, the dimension of the nullspace of $\mX^T \mA \mX - \lambda_0 \mI_n$ is larger than 2. Let $v_1,v_2$ be the two orthogonal vectors in the nullspace of $\mX^T \mA \mX - \lambda_0 \mI_n$. Then $v_1, v_2$ are two eigenvectors of $\mX^T \mA \mX$, and $\mX v_1, \mX v_2$ are two orthogonal eigenvectors of $\mA$ associated with $\lambda_0$. 
+	Note that $\mX$ is an orthogonal matrix which satisfies $\mX^T = \mX^{-1}$. By Theorem~\ref{thm:similar}, $\mX^T \mA \mX$ is a similar matrix of $\mA$. Hence, $\lambda_0$ is also a repeated eigenvalue of $\mX^T \mA \mX$. The characteristic  polynomial of $\mX^T \mA \mX - \lambda \mI_n$ is 
+	\[  P(\lambda) = \det(\mX^T \mA \mX - \lambda \mI_n) = (\lambda_0 - \lambda) \det(\mY^T \mA \mY - \lambda \mI_{n-1}). \]
+	Since $\lambda_0$ has multiplicity $m \geq 2$, the term $\det(\mY^T \mA \mY - \lambda_0 \mI_{n-1}) = 0$. Therefore, the dimension of the nullspace of $\mX^T \mA \mX - \lambda_0 \mI_n$ is larger than 2. Let $v_1,v_2$ be the two orthogonal vectors in the nullspace of $\mX^T \mA \mX - \lambda_0 \mI_n$. Then $v_1, v_2$ are two eigenvectors of $\mX^T \mA \mX$, and $\mX v_1, \mX v_2$ are two orthogonal eigenvectors of $\mA$ associated with $\lambda_0$. 
 	
-	Replace $x_0$ by two orthogonal vectors $x_1 = \mX v_1, x_2 = \mX v_2$ and repeat the steps above. Finally, we will have $m$ orthogonal eigenvectors of $\mA$ associated with $\lambda_0$.
+	Replace $x_0$ by two orthogonal vectors $x_1 = \mX v_1, x_2 = \mX v_2$ and repeat the above steps. Finally, we will have $m$ orthogonal eigenvectors of $\mA$ associated with $\lambda_0$.
 \end{proof}
 
 \subsection{Diagonalization}
 
 \begin{defn}[Diagonalization]
-	Suppose the square matrix $\mA \in \bbR^{n \times n}$ has $n$ independent eigenvectors. Then the matrix $\mA$ can be diagonalized as
-	\[ \mA = \mS^{-1} \Lambda \mS, \]
-	where $\mS \in \bbR{n \times n}$ is a matrix whose columns are $n$ independent eigenvectors of $\mA$ and $\Lambda \in \bbR^{n \times n}$ is a diagonal matrix whose entries are $n$ eigenvalues of $\mA$.
+	Let  $\mA \in \bbR^{n \times n}$ be a square matrix with $n$ independent eigenvectors. We diagonalize the matrix $\mA$ as
+	\begin{equation}\label{eq:defdiag}
+		\mA = \mS^{-1} \Lambda \mS,
+	\end{equation}
+	where $\Lambda \in \bbR^{n \times n}$ is a diagonal matrix whose entries are $n$ eigenvalues of $\mA$ and  $\mS \in \bbR^{n \times n}$ is a matrix whose columns are independent eigenvectors of $\mA$ associated with eigenvalues in $\Lambda$.
 \end{defn}
 
 \begin{thm}[Diagonalization of symmetric matrices]
-Suppose $\mA$ is a symmetric matrix, then $\mA$ can be diagonalized.
+Let $\mA$ be a symmetric matrix. The matrix $\mA$ can be diagonalized.
 \end{thm}
 
 \begin{proof}
-	By Theorems~\ref{thm:symmortho} and Theorem~\ref{thm:symmrepeat}, for any symmetric matrix $\mA \in \bbR^{n \times n}$, $\mA$ have $n$ orthogonal eigenvectors, even though there may have repeated eigenvalues.
+	By Theorems~\ref{thm:symmortho} and Theorem~\ref{thm:symmrepeat}, for any symmetric matrix $\mA \in \bbR^{n \times n}$, $\mA$ have $n$ orthogonal eigenvectors, even though there may have repeated eigenvalues. Therefore, the matrix $\mA$ can be diagonalized as equation~\eqref{eq:defdiag}.
 \end{proof}
 
 \begin{thm}[Descent of matrix powers]
-	If a square matrix $\mA \in \bbR^{n \times n}$ has $n$ independent eigenvectors with eigenvalues $\lambda_1,...,\lambda_n$, then $\mA^k \rightarrow 0$ as $k \rightarrow +\infty$ if and only if all $|\lambda_i| < 1$.
+	Let $\mA \in \bbR^{n \times n}$ be  a square matrix with eigenvalues $\lambda_1,...,\lambda_n$, and  $n$ independent eigenvectors associated with the eigenvalues. The power of matrix $\mA^k \rightarrow 0$ as $k \rightarrow +\infty$ if and only if $|\lambda_i| < 1$, for all $i \in [n]$.
 \end{thm}
 
 \begin{proof}
-	We diagonalize the matrix $\mA$ as $\mA =\mS^{-1} \Lambda \mS$. For any positive integer $k$, $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then 
+	We diagonalize the matrix $\mA$ as $\mA =\mS^{-1} \Lambda \mS$. For all integer $k\geq 0$, we have $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then,
 	\[ \lim_{k \rightarrow +\infty} \mA^k = \lim_{k \rightarrow +\infty} \mS^{-1} \Lambda^{k} \mS  =  \lim_{k \rightarrow +\infty} \mS^{-1} \begin{bmatrix}
 		|\lambda_i|^k & \cdots &0\\
 		\vdots & &\vdots\\
 		0 & \cdots & |\lambda_n|^k
-	\end{bmatrix} \mS  = 0 \quad \Leftrightarrow \quad  |\lambda_i| < 1, \forall i \in [n]. \]
+	\end{bmatrix} \mS  = 0 \quad \Leftrightarrow \quad  |\lambda_i| < 1, \text{ for all } i \in [n]. \]
 \end{proof}
 
 
