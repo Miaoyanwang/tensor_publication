@@ -25,9 +25,13 @@
 \algnewcommand\algorithmicoutput{\textbf{Output:}}
 \algnewcommand\INPUT{\item[\algorithmicinput]}
 \algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+\usepackage{dsfont}
+\usepackage{colonequals}
 
 \mathtoolsset{showonlyrefs=true}
 
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\subG}{subG}
 
 
 \theoremstyle{plain}
@@ -91,44 +95,44 @@ Jiaxin Hu
 
 \section{Summary}
 \begin{thm}[Markov's inequality]\label{thm:markov}
-	Suppose $X \geq 0$ is a random variable  with finite mean, we have
+	Let $X \geq 0$ be a random variable  with finite mean. We have
 	\begin{equation}\label{eq:thmmarkov}
-		\bbP(X\geq t) \leq \frac{E[X]}{t},\quad \text{ for all } \ t > 0.
+		\bbP(X\geq t) \leq \frac{\bbE[X]}{t},\quad \text{ for all } \ t > 0.
 	\end{equation}  
 \end{thm}
 
 \begin{thm}[Chebyshev's inequality]\label{thm:cheb}
-	Suppose $X \geq 0$ is a random variable  with finite mean $\mu$ and finite variance, we have
+	Let $X \geq 0$ be a random variable  with finite mean $\mu$ and finite variance. We have
 	\begin{equation}\label{eq:cheby}
-		\bbP(|X - \mu |\geq t) \leq \frac{var(X)}{t^2},\quad \text{ for all } \ t > 0.
+		\bbP(|X - \mu |\geq t) \leq \frac{\var(X)}{t^2},\quad \text{ for all } \ t > 0.
 	\end{equation}  
 \end{thm}
 
 \begin{thm}[Markov's inequality for polynomial moments]\label{thm:polymoment}
-	Suppose the random variable $X$ has a central moment of order $k$. Applying Markov's inequality to the random variable $|X - \mu|^k$ yields
+	Let $X$ be a random variable. Suppose that the order $k$ central moment of $X$ exists. Applying Markov's inequality to the random variable $|X - \mu|^k$ yields
 	\begin{equation}\label{eq:poly}
-		\bbP(|X - \mu |\geq t) \leq \frac{\bbE[|X-\mu|^k]}{t^k},\quad \text{ for all } \ t > 0.
+		\bbP(|X - \mu |\geq t) \leq \frac{\bbE\left[|X-\mu|^k\right]}{t^k},\quad \text{ for all } \ t > 0.
 	\end{equation}  
 \end{thm}
 
 \begin{thm}[Chernoff bound]\label{thm:chernoff}
-	Suppose the random variable $X$ has a moment generating function in the neighborhood of 0; i.e.\, $\varphi_X(\lambda) = \bbE[e^{\lambda X}] < +\infty,$ for all $\lambda \in (-b,b)$ with some $b>0$. Applying Markov's inequality to the random variable $Y = e^{\lambda(X- \mu)}$ yields
+ Let $X$ be a random variable. Suppose that the moment generating function of $X$, denoted $\varphi_X(\lambda)$, exists in the neighborhood of 0; i.e., $\varphi_X(\lambda) = \bbE[e^{\lambda X}] < +\infty,$ for all $\lambda \in (-b,b)$ with some $b>0$. Applying Markov's inequality to the random variable $Y = e^{\lambda(X- \mu)}$ yields
 	\begin{equation}\label{eq:chernoff1}
-		\bbP((X - \mu) \geq t) \leq \frac{\bbE[e^{\lambda (X-\mu)}]}{e^{\lambda t}}, \quad \text{ for all } \lambda\in (-b,b).
+		\bbP((X - \mu) \geq t) \leq \frac{\bbE\left[e^{\lambda (X-\mu)}\right]}{e^{\lambda t}}, \quad \text{ for all } \lambda\in (-b,b).
 	\end{equation}
-	Optimizing the choice of $\lambda$ for the tightest bound yields the Chernoff bound
+	Optimizing the choice of $\lambda$ for the tightest bound, we obtain the Chernoff bound
 	\begin{equation}\label{eq:chernoff2}
-		\bbP((X - \mu) \geq t) \leq \inf_{\lambda \in [0,b)} \frac{\bbE[e^{\lambda (X-\mu)}]}{e^{\lambda t}}.
+		\bbP((X - \mu) \geq t) \leq \inf_{\lambda \in [0,b)} \frac{\bbE\left[e^{\lambda (X-\mu)}\right]}{e^{\lambda t}}.
 	\end{equation}
 \end{thm}
 
 
 \begin{thm}[Hoeffding bound for bounded variable]\label{thm:boundvar}
-Consider a random variable $X$ with mean $\mu = \bbE(X)$. Assume that $X$ is bounded and $X \in [a,b]$ almost surely, where $a, b$ are two constants. Then, for any $\lambda \in \bbR$, we have
+Let $X$ be a random variable with mean $\mu = \bbE(X)$. Suppose that $X \in [a,b]$ almost surely, where $a\leq b\in\bbR$ are two constants. Then, we have
 \begin{equation}
-	\bbE[e^{\lambda X}] \leq e^{\frac{s(b-a)^2}{8}}.
+	\bbE[e^{\lambda X}] \leq e^{\frac{s(b-a)^2}{8}}, \quad \text{for all } \lambda \in \bbR.
 \end{equation}
-Particularly, the variable $X \sim subG(\frac{(b-a)^2}{4})$.
+Consequently, the variable $X \sim \subG\left(\frac{(b-a)^2}{4}\right)$.
 \end{thm}
 
 \begin{proof}
@@ -138,7 +142,7 @@ Particularly, the variable $X \sim subG(\frac{(b-a)^2}{4})$.
 
 
 \begin{thm}[Moment of sub-Gaussian variable]\label{thm:momsubg}
-Let $X \sim sG(\sigma^2)$. For all integer $k \geq 1$, we have
+Let $X \sim \subG(\sigma^2)$. For all integer $k \geq 1$, we have
 \begin{equation}\label{eq:thmmomsubg}
 	\bbE[|X|^k] \leq  k 2^{k/2} \sigma^k \Gamma(\frac{k}{2} ),
 \end{equation} 
@@ -147,24 +151,42 @@ where the Gamma function is defined as $\Gamma(x) = \int_{0}^{+\infty} t^{x -1} 
 
 
 \begin{thm}[One-sided Bernstein’s inequality]\label{thm:oneber}
- Let $X$ be a random variable. If $X \leq b$ almost surely, then 
+ Let $X$ be a random variable. Suppose $X \leq b$ almost surely. We have 
 \begin{equation}\label{eq:thmoneber1}
-	\bbE[e^{\lambda (X-\bbE[X])}] \leq exp\left\{ \frac{\lambda^2 \bbE[X^2]/2}{1 - b\lambda /3}  \right\}, \quad \text{for all } \lambda \in [0, 3/b).
+	\bbE\left[e^{\lambda (X-\bbE[X])}\right] \leq exp\left\{ \frac{\lambda^2 \bbE[X^2]/2}{1 - b\lambda /3}  \right\}, \quad \text{for all } \lambda \in [0, 3/b).
 \end{equation}
-Consequently, suppose there are $n$ independent variables $X_i \leq b$ almost surely, for all $i \in [n]$. We have
+Consequently, let $X_i$ be independent variables, and $X_i \leq b$ almost surely, for all $i \in [n]$. We have
 \begin{equation}\label{eq:thmoneber2}
-	\bbP[\sum_{i = 1}^n (X_i - \bbE[X_i] ) \geq n\delta ] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[X_i^2] /n + b \delta /3} \right\},\quad \text{ for all } \delta \geq 0.
+	\bbP\left[\sum_{i = 1}^n (X_i - \bbE[X_i] ) \geq n\delta \right] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[X_i^2] /n + b \delta /3} \right\},\quad \text{ for all } \delta \geq 0.
 \end{equation}  
-Particularly, suppose there are $n$ independent non-negative variables $Y_i \geq 0$, for all $i \in [n]$. The equation~\eqref{eq:thmoneber2} becomes
+Particularly, let $X_i$ be independent nonnegative variables, for all $i \in [n]$. The equation~\eqref{eq:thmoneber2} becomes
 \begin{equation}\label{eq:thmonber0}
-	\bbP[\sum_{i = 1}^n (Y_i - \bbE[Y_i] ) \leq n\delta ] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[Y_i^2] /n} \right\},\quad \text{ for all } \delta \geq 0.
+	\bbP\left[\sum_{i = 1}^n (Y_i - \bbE[Y_i] ) \leq n\delta \right] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[Y_i^2] /n} \right\},\quad \text{ for all } \delta \geq 0.
 \end{equation} 
 \end{thm}
 
+\begin{defn}[Bernstein's condition]
+Let $X$ be a random variable with mean $\mu = \bbE[X]$ and variance $ \sigma^2 = \var(X)$. We say $X$ satisfies the Bernstein's condition with parameter $b$ if
+\begin{equation}
+	\left| \bbE [(X -\mu)^k ]\right| \leq \frac{1}{2} k! \sigma^2 b^{k-2}, \quad \text{for } k =3, 4,....
+\end{equation} 
+\end{defn}
+Note that every bounded random variable $X$ satisfies the Bernstein's condition.
+
+\begin{thm}[Bernstein-type bound] For any variable $X$ satisfying the Bernstein's condition, we have
+\begin{equation}
+	\bbE\left[e^{\lambda (X-\mu)}\right] \leq \exp\left\{ \frac{\lambda^2 \sigma^2}{2(1 - b |\lambda|)} \right\},\quad \text{for all } |\lambda| \leq \frac{1}{b}, 
+\end{equation}
+and the concentration inequality
+\begin{equation}
+	\bbP\left[|X - \mu| \geq t\right] \leq 2 \exp \left\{ -\frac{t^2}{2(\sigma^2 + bt)} \right\}, \quad \text{for all }t \geq 0.
+\end{equation}
+	
+\end{thm}
 
 \section{Exercises}
 
-\subsection{Exercise 2.1} (Tightness of inequalities.) The Markov's and Chebyshev's inequalities can not be improved in general. 
+\subsection{Exercise 2.1} (Tightness of inequalities.) The Markov's and Chebyshev's inequalities are not able to be improved in general. 
 \begin{enumerate}
 	\item[(a)] Provide a random variable $X \geq 0$ that attains the equality in Markov's inequality~\eqref{eq:thmmarkov}.  
 	\item[(b)] Provide a random variable $Y$ that attains the equality in Chebyshev's inequality~\eqref{eq:cheby}.  
@@ -173,7 +195,7 @@ Particularly, suppose there are $n$ independent non-negative variables $Y_i \geq
 \paragraph{Solution:} 
 \begin{enumerate}
 
-\item[(a)] For a given constant $t >0$, we define a variable $Y_{t} = X - t\mI_{[X\geq t]}$, where $\mI$ is the indicator function. Noted that $Y_{t}$ is a nonnegative variable, the Markov's inequality follows by taking expectation to $Y$,
+\item[(a)] For a given constant $t >0$, we define a variable $Y_{t} = X - t \mathds{1}{[X\geq t]}$, where $\mathds{1}$ is the indicator function. Note that $Y_{t}$ is a nonnegative variable. The Markov's inequality follows by taking the expectation to $Y_t$,
 \begin{equation}
 	\bbE[Y_t] = \bbE[X] - t \bbP[X \geq t] \geq 0.
 \end{equation}
@@ -181,13 +203,13 @@ Therefore, Markov's inequality meets the equality if and only if the expectation
 
 Hence, for the given constant $t >0$, the nonnegative variable $X$ with distribution $\bbP(X \in \{ 0,t\}) = 1$ attains the equality of Markov's inequality.
 
-\item[(b)]  Chebyshev's inequality follows by applying Markov's inequality to the non-negative random variable $Z = {(X - \bbE[X])^2}$. Similarly as part (a), given a constant $t > 0$, the variable $Z = {(X - \bbE[X])^2}$ with distribution $\bbP(Z \in \{ 0,t^2 \}) = 1$ attains the equality of the Markov's inequality for $Z$ and the Chebyshev's inequality for $X$. By transformation, the distribution of $X$ satisfies the followings formula,
+\item[(b)]  Chebyshev's inequality follows by applying Markov's inequality to the nonnegative random variable $Z = {(X - \bbE[X])^2}$. As in part (a), given a constant $t > 0$, the variable $Z = {(X - \bbE[X])^2}$ with distribution $\bbP(Z \in \{ 0,t^2 \}) = 1$ attains the equality of the Markov's inequality for $Z$. Consequently, the variable $X$ attains the equality of the Chebyshev's inequality for $X$. By transformation, the distribution of $X$ satisfies the followings formula,
 \begin{align}
 \bbP(X = x) = 
 	\begin{cases}
-		p & \text{if } x = c,\\
-		\frac{1-p}{2} & \text{if } x = c-t \text{ or } x = c+t, \\
-		0 & \text{ otherwise },
+		\quad p & \text{if } x = c,\\
+		\quad \frac{1-p}{2} & \text{if } x = c-t \text{ or } x = c+t, \\
+		\quad 0 & \text{ otherwise },
 	\end{cases}
 	\end{align}
 where $c \in \bbR$ is a constant and $p \in [0,1]$.
@@ -211,7 +233,7 @@ where $c \in \bbR$ is a constant and $p \in [0,1]$.
 \end{enumerate}
 
 \begin{rmk}[Tightness of Markov's inequality]
-	Only a few variables can attain the equalities in Markov's and Chebyshev's inequalities. In research, we should pay attention to the concentration bounds tighter than Markov's inequality.
+	Only a few variables attain the equalities in Markov's and Chebyshev's inequalities. In research, we should pay attention to the concentration bounds tighter than Markov's inequality.
 \end{rmk}
 
 
@@ -222,32 +244,32 @@ where $c \in \bbR$ is a constant and $p \in [0,1]$.
 		\phi'(z) + z \phi(z) = 0,
 	\end{equation}
 	and \begin{equation}\label{eq:e22b}
-		\phi(z)(\frac{1}{z} - \frac{1}{z^3} ) \leq \bbP(Z \geq z) \leq \phi(z)(\frac{1}{z} - \frac{1}{z^3}+ \frac{3}{z^5} ), \quad \text{for all }z>0.
+		\phi(z)\left(\frac{1}{z} - \frac{1}{z^3} \right) \leq \bbP(Z \geq z) \leq \phi(z)\left(\frac{1}{z} - \frac{1}{z^3}+ \frac{3}{z^5} \right), \quad \text{for all }z>0.
 	\end{equation}
 \end{lem}
 \begin{proof}First, we prove the equation~\eqref{eq:e22a}. 
 
-The pdf of standard normal distribution is
-\[  \phi(z) = \frac{1}{\sqrt{2\pi}} \exp(-\frac{z^2}{2}  ).\]
+The pdf of the standard normal distribution is
+\[  \phi(z) = \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2}  \right).\]
 
-The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$.
-\[\quad \phi'(z) = -z \frac{1}{\sqrt{2\pi}} \exp(-\frac{z^2}{2} ) = -z \phi(z). \] 
+The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$. Specifically,
+\[\quad \phi'(z) = -z \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2} \right) = -z \phi(z). \] 
 	Next, we prove the equation~\eqref{eq:e22b}. 
 	
 	We write the upper tail probability of the standard normal variable as
 	\begin{equation}\label{eq:e22pro1}
 		\bbP(Z \geq z) = \int_{z}^{+\infty} \phi(t) dt = \int_{z}^{+\infty} - \frac{1}{t} \phi'(t) dt = \frac{1}{z} \phi(z) - \int_{z}^{+\infty} \frac{1}{t^2} \phi(t) dt,  
 	\end{equation}
-	where the second equality follows by the equation~\eqref{eq:e22b}. Applying the equation~\eqref{eq:e22b} to the last term in equation~\eqref{eq:e22pro1} yields
+	where the second equality follows by the equation~\eqref{eq:e22a}. Applying the equation~\eqref{eq:e22a} to the last term in equation~\eqref{eq:e22pro1} yields
 	\begin{equation}\label{eq:e22pro2}
 	\int_{z}^{+\infty} \frac{1}{t^2} \phi(t) dt = \int_{z}^{+\infty} \frac{1}{t^3} \phi'(t) dt = - \frac{1}{z^3} \phi(z) + \int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt \geq  - \frac{1}{z^3} \phi(z)
 	\end{equation}
-	Plugging the equation~\eqref{eq:e22pro2} into the equation~\eqref{eq:e22pro1} , we have $\bbP(Z \geq z) \geq \phi(z)(\frac{1}{z}  - \frac{1}{z^3} )$. On the other hand, applying the equation~\eqref{eq:e22b} again to the equation~\eqref{eq:e22pro2} yields
+	Plugging the equation~\eqref{eq:e22pro2} into the equation~\eqref{eq:e22pro1}, we obtain $\bbP(Z \geq z) \geq \phi(z)\left(\frac{1}{z}  - \frac{1}{z^3} \right)$. Applying the equation~\eqref{eq:e22a} again to the equation~\eqref{eq:e22pro2} yields
 	\begin{equation}\label{eq:e22pro3}
 		\int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt = \int_{z}^{+\infty} - \frac{3}{t^5} \phi'(t) dt =\frac{3}{ z^5} \phi(z) -  \int_{z}^{+\infty} \frac{15}{t^6} \phi(t) dt \leq \frac{3}{ z^5} \phi(z).
 	\end{equation}
 	
-	Combing equations~\eqref{eq:e22pro1}, \eqref{eq:e22pro2}, and  \eqref{eq:e22pro3}, we have $\bbP(Z \geq z) \leq \phi(z)(\frac{1}{z}  - \frac{1}{z^3} + \frac{3}{z^5} ).$
+	Combing equations~\eqref{eq:e22pro1}, \eqref{eq:e22pro2} and  \eqref{eq:e22pro3}, we obtain $\bbP(Z \geq z) \leq \phi(z)\left(\frac{1}{z}  - \frac{1}{z^3} + \frac{3}{z^5} \right).$
 \end{proof}
 
 \begin{rmk}
@@ -257,7 +279,7 @@ The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$.
 \subsection{Exercise 2.3}
 
 \begin{lem}[Polynomial bound and Chernoff bound]\label{lem:momcher}
-	Let $X \geq 0$ be a non-negative variable. Suppose that the moment generating function of $X$, denoted $\varphi_{X}(\lambda)$, exists in the neighborhood of $\lambda = 0$. Given some $\delta > 0$, we have
+	Let $X \geq 0$ be a nonnegative variable. Suppose that the moment generating function of $X$, denoted $\varphi_{X}(\lambda)$, exists in the neighborhood of $\lambda = 0$. Given some $\delta > 0$, we have
 	\begin{equation}\label{eq:lempoly}
 		\inf_{k \in \mathbb{Z_+} } \frac{\bbE[|X|^k]}{\delta^k} \leq \inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}}. 
 	\end{equation}
@@ -272,26 +294,26 @@ The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$.
 	\end{equation}
 	Since the moment generating function $\varphi_X(\lambda)$ exists in the neighborhood of $\lambda = 0$, there exists a constant $b > 0$ such that 
 		\[   \bbE [e^{\lambda X} ]= \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} < +\infty,\quad \text{ for all } \lambda \in (0,b). \]
-	Therefore, the moment  $\bbE[|X|^k]$ exists for all $ k \in \mathbb{Z_+}$. Applying power series~\eqref{eq:power} to the right hand side of equation~\eqref{eq:lempoly} yields
+	 Hence, the moment  $\bbE[|X|^k]$ exists, for all $ k \in \mathbb{Z_+}$. Applying power series~\eqref{eq:power} to the right hand side of equation~\eqref{eq:lempoly} yields
 	\begin{equation}\label{eq:powertopoly}
 		\inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}} = \frac{ \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} }{ \sum_{k = 0}^{+\infty } \frac{\lambda^k \delta^k }{k!}  }.	\end{equation}
 	By Cauchy's third inequality, we have
 	\begin{equation}\label{eq:cauchy3}
 		\frac{ \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} }{ \sum_{k = 0}^{+\infty } \frac{\lambda^k \delta^k }{k!}  } \geq \inf_{k \in \mathbb{Z}_{+} } \frac{\bbE[|X|^k]}{\delta^k}  
 	\end{equation}
-	Therefore, the equation~\eqref{eq:lempoly} follows by combining the equation~\eqref{eq:powertopoly} with equation~\eqref{eq:cauchy3}.	
+	Therefore, we obtain the equation~\eqref{eq:lempoly} by combining the equation~\eqref{eq:powertopoly} with equation~\eqref{eq:cauchy3}.	
 \end{proof}
 
 \begin{rmk}
-	Applying different functions $g(X)$ to the Markov's inequality leads to different bounds for the tail probability of variable $X$. Equation~\eqref{eq:lempoly} implies that optimized polynomial bound is tighter than the Chernoff bound, provided that the moment generating function of $X$ exsits.  
+	Applying different functions $g(X)$ to the Markov's inequality leads to different bounds for the tail probability of variable $X$. Equation~\eqref{eq:lempoly} implies that optimized polynomial bound is at least as tight as the Chernoff bound, provided that the moment generating function of $X$ exsits.  
 \end{rmk}
 
 \subsection{Exercise 2.4}\label{pro:boundvar}
-In Exercise~\ref{pro:boundvar}, we prove the Theorem~\ref{thm:boundvar},  the Hoeffding bound for a bounded variable. 
+In Exercise~\ref{pro:boundvar}, we prove Theorem~\ref{thm:boundvar},  the Hoeffding bound for a bounded variable. 
 
 \begin{proof}
 	
-Suppose $X$ is a bounded random variable, where $X \in [a,b]$ almost surely, and $a 
+Let $X$ be a bounded random variable, and $X \in [a,b]$ almost surely, where $a 
 \leq b \in \bbR$ are two constants. Let $\mu = \bbE[X]$. Define the function 
 \[ g(\lambda) = \log \bbE[e^{\lambda X }], \quad  \text{ for all } \lambda \in \bbR. \]
 Applying Taylor Expansion to $g(\lambda)$ at 0, we have
@@ -299,30 +321,30 @@ Applying Taylor Expansion to $g(\lambda)$ at 0, we have
 	g(\lambda) =  g(0) + g'(0) \lambda  + \frac{g''(\lambda_0) }{2} \lambda^2, \quad \text{where } \lambda_0 = t \lambda, \text{ for some } t \in [0,1]. 
 \end{equation}
 
-In equation~\eqref{eq:taylor}, the term $g(0) =\log \bbE[e^{0}] = 0$. By power series \eqref{eq:power}, we calculate the first derivative $g'(\lambda)$ as following,
+In equation~\eqref{eq:taylor}, the term $g(0) =\log \bbE[e^{0}] = 0$. By power series \eqref{eq:power}, we obtain the first derivative $g'(\lambda)$ as follows,
 \begin{align}
 	g'(\lambda ) & = \left( \log \sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]  \right)' \\
 	&= {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]}  \label{eq:firstde} \\
 	&= \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]}.
 \end{align}
-Therefore, $g'(0) = \bbE[X] = \mu$. Taking the derivative to equation~\eqref{eq:firstde}, we calculate the second-order derivative $g''(\lambda)$ as following,
+Therefore, $g'(0) = \bbE[X] = \mu$. Taking the derivative to equation~\eqref{eq:firstde}, we obtain the second-order derivative $g''(\lambda)$ as follows,
 \begin{align}
 	g''(\lambda)
 	&= {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+2)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} - \left( {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]}  \right)^2\\
 	&= \frac{\bbE[X^2 e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} - \left( \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} \right)^2.\\
 	%& \overset{\Delta}{=} \bbE_{\lambda} [X^2] - (\bbE_{\lambda} [X])^2
 \end{align}
-We interpret the second-order derivative $g''(\lambda)$ interpreted as the variance of $X$ with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Taking integral of 1 with respect to $dP'$, we have
+We interpret the second-order derivative $g''(\lambda)$ as the variance of $X$ with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Taking integral of 1 with respect to $dP'$, we have
 \begin{equation}
 	\int_{-\infty}^{+\infty} d P' = \int_{-\infty}^{+\infty}  \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X = 1,
 \end{equation} 
-which implies that the function $P'$ is indeed a distribution. Under all possible re-weighted distributions, the variance of $X$ is upper bounded as following,
-\[ var(X) = var(X - \frac{a+b}{2}) \leq \bbE[(X - \frac{a+b}{2} )^2] \leq \frac{(b-a)^2}{4}, \]
-where the term $\frac{(b-a)^2}{4}$ follows by letting $X$ distribute only on the boundary $a$ and $b$. Hence, the second-order derivative $g''(\lambda) \leq \frac{(b-a)^2}{4}$. We plug the results of $g'$ and $g''$ into the equation~\eqref{eq:taylor}. Then,
+which implies that the function $P'$ is a valid probability distribution. Under all possible re-weighted distributions, the variance of $X$ is upper bounded as follows,
+\[ \var(X) = \var(X - \frac{a+b}{2}) \leq \bbE[(X - \frac{a+b}{2} )^2] \leq \frac{(b-a)^2}{4}, \]
+where the term $\frac{(b-a)^2}{4}$ follows by letting $X$ supported on the boundaries $a$ and $b$ only. Hence, the second-order derivative $g''(\lambda) \leq \frac{(b-a)^2}{4}$. We plug the results of $g'$ and $g''$ into the equation~\eqref{eq:taylor}. Then,
 \begin{equation}\label{eq:e24}
 	g(\lambda) =  g(0) + g'(0) \lambda  + \frac{g''(\lambda_0) }{2} \lambda^2 \leq 0 + \lambda \mu+ \frac{(b-a)^2}{8} \lambda^2. 
 \end{equation}
-Taking the exponential on both sides of the inequality~\eqref{eq:e24}, we have
+Taking the exponentiation on both sides of the inequality~\eqref{eq:e24}, we have
 \begin{equation}\label{eq:boundvar}
 	\bbE[e^{\lambda X}] = \exp(g( \lambda)) \leq e^{\mu \lambda + \frac{(b-a)^2}{8} \lambda^2}.
 \end{equation}
@@ -339,31 +361,31 @@ The equation~\eqref{eq:boundvar} implies that $X$ is a sub-Gaussian variable wit
 \begin{equation}\label{eq:subg}
 	 \bbE[e^{\lambda X}] \leq e^{\frac{\lambda^2 \sigma^2}{2} + \mu \lambda}, \quad \text{ for all } \lambda \in \bbR. 
 \end{equation}
-	Then, $\bbE[X] = \mu$ and $var(X) \leq \sigma^2$.
+	Then, $\bbE[X] = \mu$ and $\var(X) \leq \sigma^2$.
 \end{lem}
 
-\begin{proof} By equation~\eqref{eq:subg}, the moment generating function of $X$, denoted $\varphi_X(\lambda)$ , exists in the neighborhood of $\lambda = 0$.  Hence, the mean and variance of $X$ exist. For all $\lambda$ in the neighborhood of $\lambda = 0$, applying power series on both sides of equation~\eqref{eq:subg} yields 
+\begin{proof} By equation~\eqref{eq:subg}, the moment generating function of $X$, denoted $\varphi_X(\lambda)$, exists in the neighborhood of $\lambda = 0$.  Hence, the mean and variance of $X$ exist. For all $\lambda$ in the neighborhood of $\lambda = 0$, applying power series on both sides of equation~\eqref{eq:subg} yields 
 \begin{equation}\label{eq:taylor2}
 	 \lambda \bbE[X] + \frac{\lambda^2}{2} \bbE[X^2] + o(\lambda^2) \leq  \mu \lambda + \frac{\lambda^2 \sigma^2 + \lambda^2 \mu^2}{2} + o(\lambda^2). 
 \end{equation}
-Dividing by $\lambda >0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{+}$, we have $\bbE(X) \leq \mu$. Dividing by $\lambda <0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{-}$, we have $\bbE(X) \geq \mu$. Therefore, the mean $\bbE[X] = \mu$. Then, we divide ${2}/{\lambda^2}$ on both sides of equation~\eqref{eq:taylor2}. The term $\bbE[X]\lambda$ and  $\mu \lambda$ are cancelled. We have $ \bbE[X^2] \leq \sigma^2 + \mu^2$, and thus $var(X) \leq \bbE[X^2]  - (\bbE[X])^2 = \sigma^2$.
+Dividing by $\lambda >0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{+}$, we have $\bbE(X) \leq \mu$. Dividing by $\lambda <0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{-}$, we have $\bbE(X) \geq \mu$. Therefore, we obtain the mean $\bbE[X] = \mu$. Then, we divide ${2}/{\lambda^2}$ on both sides of equation~\eqref{eq:taylor2}, for $\lambda \neq 0$. The term $\bbE[X]\lambda$ and  $\mu \lambda$ are cancelled. We have $ \bbE[X^2] \leq \sigma^2 + \mu^2$, and thus the $\var(X) \leq \bbE[X^2]  - (\bbE[X])^2 = \sigma^2$.
 \end{proof}
 
-\paragraph{Question:} Let $\sigma^2_{min}$ denote the smallest possible $\sigma$ satisfying the inequality~\eqref{eq:subg}. Is it true that $var(X) = \sigma_{min}^2$?
+\paragraph{Question:} Let $\sigma^2_{min}$ denote the smallest possible $\sigma$ satisfying the inequality~\eqref{eq:subg}. Is it true that $\var(X) = \sigma_{min}^2$?
 
-\paragraph{Solution:} The statement that $var(X) = \sigma_{min}^2$ is not necessarily true. Recall the function $g(\lambda)$ in exercise~\ref{pro:boundvar}. By the results in exercise~\ref{pro:boundvar},  the equation~\eqref{eq:subg} is equal to 
+\paragraph{Solution:} The statement that $\var(X) = \sigma_{min}^2$ is not necessarily true. Recall the function $g(\lambda)$ in Exercise~\ref{pro:boundvar}. By the results in Exercise~\ref{pro:boundvar},  the equation~\eqref{eq:subg} is equal to 
 \begin{equation}\label{eq:question}
 	g''(\lambda) \leq  \sigma^2, \quad \text{ for all } \lambda \in \bbR,
 \end{equation}
-where $g'' (\lambda)$ is the variance of $X$ with with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$ and $g'' (0) = var(X)$. Therefore, $\max_{\lambda}g''(\lambda) = \sigma_{min}^2$. To let the equality $var(X) = \sigma_{min}^2$ hold, we need to show that $\max_{\lambda}g''(\lambda) = g''(0)$ holds for $X$. 
+where $g'' (\lambda)$ is the variance of $X$ with the re-weighted distribution defined in Exercise~\ref{pro:boundvar}. Therefore, we have $\max_{\lambda}g''(\lambda) = \sigma_{min}^2$. Note that $g''(0) = \var(X)$. To let the equality $\var(X) = \sigma_{min}^2$ hold, we need to show that $\max_{\lambda}g''(\lambda) = g''(0)$ holds for $X$. 
 
 \vspace{0.2cm}
-However, the statement $\max_{\lambda}g''(\lambda) = g''(0)$ is not always true.  A counter example is below. 
-Consider a random variable $Y \sim Ber(1/3)$. The variance of $Y$ is $var(Y) = 2/9$. Let $\lambda = 1$. The re-weighted distribution $dP'$ is
+However, the statement $\max_{\lambda}g''(\lambda) = g''(0)$ is not necessarily true.  A counter example is below. 
+Consider a random variable $Y \sim Ber(1/3)$. The variance of $Y$ is $\var(Y) = 2/9$. Let $\lambda = 1$. The re-weighted distribution $dP'$ is
 \[ P'(Y = 0) = \frac{2}{3\bbE[ e^{Y} ]}\quad  \text{and}\quad  P'(Y = 1) = \frac{e}{3 \bbE[ e^{ Y } ]}, \quad \text{where } \bbE[ e^{Y} ] = \frac{2}{3} + \frac{e}{3}.  \]
-The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y} ]} = 0.2442 > 2/9$. Therefore, for this variable $Y$, we have $var(Y) <  g''(1) \leq \max_{\lambda}g''(\lambda) = \sigma^2_{min}$. 
+The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y} ]} = 0.2442 > 2/9$. Therefore, we have $\var(Y) <  g''(1) \leq \max_{\lambda}g''(\lambda) = \sigma^2_{min}$. The statement $\max_{\lambda}g''(\lambda) = g''(0)$ is not true for this variable $Y$.
 \begin{rmk}
-	Parameters of a sub-Gaussian distribution provide the exact value of the mean, $ \bbE[X] = \mu$, and an upper bound of the variance, $var(X) \leq \sigma^2$. For any variable $X$ whose moment generating function exists, the tail distribution of $X$ can be bounded by a sub-Gaussian distribution with a proper choice of $\sigma^2$.
+	Parameters of a sub-Gaussian distribution provide the exact value of the mean and an upper bound of the variance; i.e., $ \bbE[X] = \mu$ and $\var(X) \leq \sigma^2$. Suppose the moment generating function of variable  $X$ exists over the entire real interval. The tail distribution of $X$ is always bounded by a sub-Gaussian distribution with a proper choice of $\sigma^2$.
 \end{rmk}
 
 
@@ -371,36 +393,85 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 \subsection{Exercise 2.6}
 
 
-\begin{lem}[Lower bounds on squared sub-Gaussians]\label{lem:lowersquare} Let $\{ X_i \}_{i=1}^n$ be an i.i.d.\ sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. The normalized summation $Z_n = \frac{1}{n} \sum_{i=1}^n X_i^2$ satisfies
+\begin{lem}[Lower bounds on squared sub-Gaussians]\label{lem:lowersquare} Let $\{ X_i \}_{i=1}^n$ be an i.i.d.\ sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. The normalized sum $Z_n = \frac{1}{n} \sum_{i=1}^n X_i^2$ satisfies
 \begin{equation}\label{eq:lowersquare}
 	\bbP[Z_n - \bbE[Z_n] \leq \sigma^2 \delta ] \leq e^{-n\delta^2 /16}, \quad \text{ for all } \delta \geq 0.
 \end{equation}
-	The equation~\eqref{eq:lowersquare} implies that the lower tail of the summation of squared sub-Gaussian variables behave in a sub-Gaussian way.
+	The equation~\eqref{eq:lowersquare} implies that the lower tail of the sum of squared sub-Gaussian variables behaves in a sub-Gaussian way.
 \end{lem}
 
 \begin{proof}
-	Since $X_i^2$ are i.i.d.\ nonnegative variables, we apply the equation~\eqref{eq:thmonber0} in Theorem~\ref{thm:oneber} to the variables $X_i^2$, where $i \in [n]$. Then,
+	Since $X_i^2$ are i.i.d.\ nonnegative variables, we apply the equation~\eqref{eq:thmonber0} to the variables $\{X_i^2\}_{i=1}^n$. Then, we have
 	\begin{equation}\label{eq:e26a}
-		\bbP[\sum_{i=1}^n (X_i^2 -\bbE[X_i^2]) \leq n \sigma^2 \delta] \leq exp\left\{ - \frac{n\delta^2 \sigma^4}{ \bbE[X_1^4]} \right\},  \quad \text{for all }\delta \geq 0.
+		\bbP\left[\sum_{i=1}^n (X_i^2 -\bbE[X_i^2]) \leq n \sigma^2 \delta\right] \leq \exp\left\{ - \frac{n\delta^2 \sigma^4}{ \bbE[X_1^4]} \right\},  \quad \text{for all }\delta \geq 0.
 	\end{equation}
-	By the equation~\eqref{eq:thmmomsubg} in Theorem~\ref{thm:momsubg}, we have
+	By equation~\eqref{eq:thmmomsubg}, we have
 	\begin{equation}\label{eq:e26x4}
 		\bbE[X_1^4] \leq 16 \sigma^4. 
 	\end{equation}
-	Combing equations~\eqref{eq:e26a}, \eqref{eq:e26x4}, and the definition of $Z_n$, we have
+	Combing equations~\eqref{eq:e26a}, \eqref{eq:e26x4} and the definition of $Z_n$, we obtain 
 	\begin{equation}
-		\bbP[Z_n - \bbE[Z_n] \leq \sigma^2 \delta ]  \leq exp\left\{ - \frac{n\delta^2}{16} \right\},  \quad \text{for all }\delta \geq 0.
+		\bbP[Z_n - \bbE[Z_n] \leq \sigma^2 \delta ]  \leq \exp\left\{ - \frac{n\delta^2}{16} \right\},  \quad \text{for all }\delta \geq 0.
 	\end{equation}
 \end{proof}
 
 \begin{rmk}
-	Equation~\eqref{eq:lowersquare} implies that the lower tail of the summation of squared sub-Gaussian variables behave in a sub-Gaussian way. In following sections, we will show that the variable $Z_n - \bbE[Z_n]$ in Lemma~\ref{lem:lowersquare} is a sub-exponential variable.
+	Equation~\eqref{eq:lowersquare} implies that the lower tail of the sum of squared sub-Gaussian variables behaves in a sub-Gaussian way. In following sections, we will show that the variable $Z_n - \bbE[Z_n]$ in Lemma~\ref{lem:lowersquare} is a sub-exponential variable.
 \end{rmk}
 
+\subsection{Exercise 2.7}
+\begin{lem}[Bennett’s inequality]\label{lem:bennett}
+	Let $X_1,...,X_n$ be a sequence of independent zero-mean random variables with $|X_i| \leq b$ and $\var(X_i) = \sigma_i^2$, for all $i \in [n]$. Then, we have Bennett's inequality
+	\begin{equation}\label{eq:bennett}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] \leq \exp \left\{-\frac{n \sigma^{2}}{b^{2}} h\left(\frac{b \delta}{\sigma^{2}}\right)\right\}, \quad \text{for all }\delta \geq 0,
+	\end{equation} 
+	where $\sigma^2 = \frac{1}{n} \sum_{i=1}^n \sigma_i^2$ and $h(t) \colonequals (1+t)\log (1+t) - t$ supported on $t \geq 0$.
+\end{lem}
 
+\begin{proof}
+	First, we consider the moment generating function of $X_i$, for all $i \in [n]$.
+	
+	\vspace{0.2cm}
+	By the power series, for all $i \in [n]$, we have
+	\begin{align}\label{eq:e27power}
+		\bbE\left[e^{\lambda X_i}\right] = \sum_{k = 0}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} 
+		= 1 + 0 + \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \leq \exp\left\{ \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \right\},
+	\end{align}
+	where the 0 is deduced from $\bbE[X_i] = 0$, and the last inequality follows by $1 + x \leq e^x$. By $|X_i|<b$, we obtain an upper bound of the sum term in equation~\eqref{eq:e27power} as follows
+	\begin{equation}\label{eq:e27upper}
+		\sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!}  \leq \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^2 |X_i|^{k-2}] }{k!} \leq  \sum_{k = 2}^{+\infty} \frac{\lambda^k \sigma^2_i b^{k-2}}{k!} = \sigma_i^2  \left(  \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right).
+	\end{equation}
+	Combing the equation~\eqref{eq:e27power} with equation~\eqref{eq:e27upper}, we find an upper bound of the moment generating function of $\sum_{i=1}^n X_i$. That is
+	\begin{equation}\label{eq:e27uppert}
+		\bbE\left[e^{\lambda \sum_{i = 1}^n X_i }\right] = \prod_{i = 1}^n \bbE\left[e^{\lambda X_i}\right] \leq \exp\left\{ n \sigma^2 \left( \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right)  \right\},
+	\end{equation}
+	where $\sigma^2 = \frac{1}{n} \sum_{i=1}^n \sigma_i^2$. Combing the Chernoff bound with equation~\eqref{eq:e27uppert}, the upper tail of $\sum_{i=1}^n X_i$ follows 
+	\begin{align}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] &\leq  \exp\left\{  n \sigma^2 \left(  \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right)  - 
+		\lambda n \delta \right\} \\
+		&= \exp \left\{ \frac{n\sigma^2}{b^2} \left( e^{\lambda b} - \lambda b- \lambda \frac{\delta b^2}{\sigma^2} - 1 \right)  \right\}, \quad \text{for all } \delta \geq 0. \label{eq:e27exp}
+	\end{align} 
+	By the first-order condition of minimization, the $\lambda$ that satisfies $\lambda b= \log\left(1 + \frac{\delta b}{\sigma^2} \right)$ minimizes the term $ \left( e^{\lambda b} - \lambda b- \lambda \frac{\delta b^2}{\sigma^2} - 1 \right) $. Plugging $\lambda b= \log\left(1 + \frac{\delta b}{\sigma^2} \right)$ into the equation~\eqref{eq:e27exp}, we obtain the Bennett's inequality 
+	\begin{equation}\label{eq:e27bennett}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] \leq  \exp \left\{-\frac{n \sigma^{2}}{b^{2}} h\left(\frac{b \delta}{\sigma^{2}}\right)\right\}, \quad \text{for all }\delta \geq 0,
+	\end{equation}
+	where $h(t) \colonequals (1+t)\log (1+t) - t$ supported on $t \geq 0$.
+	
+	\vspace{0.2cm}
+	Further, we show that the Bennett's inequality is at least as good as the Bernstein’s inequality.
+	
+	\vspace{0.2cm}
+	The Bernstein's inequality for $\sum_{i=1}^n X_i$ is
+	\begin{align}\label{eq:e27bern}
+			\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta \right] \leq \exp \left\{ \frac{-3n\delta^2}{(2 b \delta + 6 \sigma^2)} \right\}  %=\exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} \frac{3b^2\delta^2}{2\sigma^2(b\delta + 6 \sigma^2)} \right\} 
+			= \exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} g\left(\frac{b\delta}{\sigma^2}\right) \right\}.
+	\end{align}
+	where $g(t) \colonequals  \frac{3t^2}{2t + 6} $, for all $ t \geq 0$. Since $g(t)\leq h(t)$ holds for all $t \geq 0$, we conclude that the Bennett's inequality~\eqref{eq:e27bennett} is at least as good as Bernstein's inequality~\eqref{eq:e27bern}. 
+\end{proof}
 
-
-
+\begin{rmk} 
+	So far, we have three inequalities that control the tail of bounded variables: Hoeffding's inequality, Bernstein's inequality, and Bennett's inequality. Particularly, Hoeffding's inequality implies the sub-Gaussianity of bounded variables. As the proof for Lemma~\ref{lem:bennett} shows, Bennett's inequality is at least as good as the Bernstein's inequality, for all bounded variables.
+\end{rmk}
 
 
 

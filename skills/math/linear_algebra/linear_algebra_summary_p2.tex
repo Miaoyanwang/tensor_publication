@@ -25,7 +25,10 @@
 \algnewcommand\INPUT{\item[\algorithmicinput]}
 \algnewcommand\OUTPUT{\item[\algorithmicoutput]}
 
-
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\tr}{tr}
 
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
@@ -97,8 +100,8 @@ Jiaxin Hu
 	Let  $S,T$ be two subspaces. The subspaces $S$ and $T$ are orthogonal,  denoted $S \perp T$, if and only if for any $s \in S$ and any $ t \in T$, $s^T t = t^T s = 0$.
 \end{defn}
 
-Let $\mA \in \bbR^{m \times n}$ be a matrix. There are four subspaces related to $\mA\colon$ column space $C(\mA)$, row space $C(\mA^T)$, nullspace $N(\mA)$, and left nullspace $N(\mA^T)$. Suppose the rank of $\mA$ is $rank(\mA) = r$. The dimensions of these subspaces are: 
-\[ dim(C(\mA)) = dim(C(\mA^T)) = r,\quad  dim(N(A)) = n-r,\quad dim(N(\mA^T)) = m-r. \] 
+Let $\mA \in \bbR^{m \times n}$ be a matrix. There are four subspaces related to $\mA\colon$ column space $C(\mA)$, row space $C(\mA^T)$, nullspace $N(\mA)$, and left nullspace $N(\mA^T)$. Suppose the rank of $\mA$ is $\rank(\mA) = r$. The dimensions of these subspaces are: 
+\[ \dim(C(\mA)) = \dim(C(\mA^T)) = r,\quad  \dim(N(A)) = n-r,\quad \dim(N(\mA^T)) = m-r. \] 
 
 \begin{thm}[Orthogonality of matrix subspaces]\label{thm:ortho}
 	Let  $\mA \in \bbR^{m \times n}$ be a matrix. The row space $C(\mA^T)$ and the nullspace $N(\mA)$ are orthogonal. The column space $C(\mA)$ and the left nullspace $N(\mA^T)$ are orthogonal. That is
@@ -121,96 +124,102 @@ Let $\mA \in \bbR^{m \times n}$ be a matrix. There are four subspaces related to
 	Similarly, for any $x \in N(\mA^T)$, we have $\mA^T x = 0$, which implies  that $N(\mA^T) \perp C(\mA)$. 
 \end{proof}
 
+For notational convenience, we use the shorthands $\mA$ for the column space $C(\mA)$ and $\mA^{\perp}$ for the nullspace $N(\mA)$ in the rest of this section. Though $\mA$ usually denotes a matrix, the meaning of $\mA$ should be clear given the context. For example, $\rank(\mA)$ refers the rank of matrix $\mA$, while $\dim(\mA)$ refers to the dimension of the column space $C(\mA)$. Specifically, for a vector $v$, $v \in \mA$ means that the vector $v$ belongs to the column space $C(\mA)$.
+ 
+\vspace{0.2cm}
+Given a matrix $\mA \in \bbR^{m \times n}$, we also rewrite the Theorem~\ref{thm:ortho} as
+\[ \mA^T \perp \mA^{\perp} \quad \text{and} \quad \mA \perp \mA^{T,\perp}. \]
+
 \begin{thm}[Relationship between $\mA^T \mA$ and $\mA$]\label{thm:aa}Let $\mA \in \bbR^{m \times n}$ be a matrix. We have
 	\begin{equation}
-		N(\mA^T \mA) = N(\mA) \quad \text{and} \quad rank(\mA^T \mA) = rank(\mA).
+		(\mA^T \mA)^{\perp} = \mA^{\perp} \quad \text{and} \quad \rank(\mA^T \mA) = \rank(\mA).
 	\end{equation}
 \end{thm}
 \begin{proof}
-	First, we prove that $N(\mA^T \mA) = N(\mA)$.
+	First, we prove that $(\mA^T \mA)^{\perp} = \mA^{\perp}$.
 	
-	On one hand, if the vector $x \in N(\mA)$, then $\mA x = 0$. Multiplying the matrix $\mA^T$ on both sides of the equation, we have $ \mA^T  \mA x = 0$. Therefore, for any $x \in N(\mA)$, the vector $x \in N(\mA^T \mA)$. 
+	On one hand, if the vector $x \in \mA^{\perp}$, then $\mA x = 0$. Multiplying the matrix $\mA^T$ on both sides of the equation, we have $ \mA^T  \mA x = 0$. Therefore, for any $x \in \mA^{\perp}$, the vector $x \in (\mA^T \mA)^{\perp}$. 
 	\iffalse
 	
-	On the other hand, we  prove  by contradiction that for any $x \in N(\mA^T \mA)$ the vector $x \in N(\mA)$.
+	On the other hand, we  prove  by contradiction that for any $x \in (\mA^T \mA)^{\perp}$ the vector $x \in \mA^{\perp}$.
 	
-	Suppose there is a vector $x \in N(\mA^T \mA^T)$ but $x \notin N(\mA)$. We have
+	Suppose there is a vector $x \in (\mA^T \mA^T)^{\perp}$ but $x \notin \mA^{\perp}$. We have
 	\begin{equation}\label{eq:aaa}
 		\mA x = b \neq 0, \quad \mA^T \mA x = 0 \quad \Rightarrow \quad \mA^T b = 0.
 	\end{equation} 
-	By the first equality in \eqref{eq:aaa}, $b \in C(\mA)$, and by the third equation in \eqref{eq:aaa}, $ b \in N(\mA^T)$. This contradicts the Theorem~\ref{thm:ortho} that $C(\mA) \perp N(\mA^T)$. Therefore, for any $x \in N(\mA^T \mA)$, the vector $x \in N(\mA)$.
+	By the first equality in \eqref{eq:aaa}, $b \in \mA$, and by the third equation in \eqref{eq:aaa}, $ b \in \mA^{T,\perp}$. This contradicts the Theorem~\ref{thm:ortho} that $\mA \perp \mA^{T,\perp}$. Therefore, for any $x \in (\mA^T \mA)^{\perp}$, the vector $x \in \mA^{\perp}$.
 	
 	\fi
 	
-	On the other hand, if the vector $x \in N(\mA^T \mA^T)$, we have
+	On the other hand, if the vector $x \in (\mA^T \mA)^{\perp}$, we have
 	\[ \mA^T \mA x = 0.\]
-	Then, the vector $\mA x \in N(\mA^T)$. By the definition of matrix-to-vector multiplication, we also have $\mA x \in C(\mA)$.  By the Theorem~\ref{thm:ortho}, the subspaces $N(\mA^T) \perp C(\mA)$. Therefore, $\mA x = 0$, and thus $x \in N(\mA)$.
+	Then, the vector $\mA x \in  \mA^{T,\perp}$. By the definition of matrix-to-vector multiplication, we also have $\mA x \in \mA$.  By the Theorem~\ref{thm:ortho}, the subspaces $\mA^{T,\perp} \perp \mA$. Therefore, $\mA x = 0$, and we obtain that $x \in \mA^{\perp}$.
 	\vspace{0.2cm}
 	
-	Next, we prove that $rank(\mA^T \mA) = rank(\mA)$. 
+	Next, we prove that $\rank(\mA^T \mA) = \rank(\mA)$. 
 	
-	Given $N(\mA^T \mA) = N(\mA)$, we have $rank(\mA^T \mA) = n - dim(N(\mA^T \mA)) = n - dim(N(\mA)) = rank(\mA)$.
+	Given $(\mA^T \mA)^{\perp} = \mA^{\perp}$, we have $\rank(\mA^T \mA) = n - \dim((\mA^T \mA)^{\perp}) = n - \dim(\mA^{\perp}) = \rank(\mA)$.
 \end{proof}
 
 \begin{cor}[Invertibility of $\mA^T \mA$]\label{cor:invert}
 	If $\mA$ has independent columns, then $\mA^T \mA$ is invertible.
 \end{cor}
 \begin{proof}
-Suppose $\mA \in \bbR^{m \times n}$ is a matrix with independent columns; i.e., $rank(\mA) = n$. By Theorem~\ref{thm:aa}, $rank(\mA^T \mA) = rank(\mA) = n$. Since $\mA^T \mA \in \bbR^{n \times n}$ is a square matrix, $\mA^T \mA$ is invertible.
+Suppose $\mA \in \bbR^{m \times n}$ is a matrix with independent columns; i.e., $\rank(\mA) = n$. By Theorem~\ref{thm:aa}, $\rank(\mA^T \mA) = \rank(\mA) = n$. Since $\mA^T \mA \in \bbR^{n \times n}$ is a square matrix, $\mA^T \mA$ is invertible.
 \end{proof}
 
 
 \subsection{Projections onto subspaces}
-\begin{defn}[\textit{Projection and projection matrix}]\label{def:project} Let  $x \in \bbR^{x}$ be a vector and $\mA^{n \times m}$ be a matrix. The vector $p_{C(\mA)}(x) \in C(\mA)$ that satisfies
+\begin{defn}[\textit{Projection and projection matrix}]\label{def:project} Let  $x \in \bbR^{x}$ be a vector and $\mA^{n \times m}$ be a matrix. The vector $p_{\mA}(x) \in \mA$ that satisfies
 	\begin{equation}\label{eq:project}
-		(x-p_{C(\mA)}(x)) \perp C(\mA),
+		(x-p_{\mA}(x)) \perp \mA,
 	\end{equation} 
-	is called the projection of vector $x$ onto the column space $C(\mA)$. For all $x \in \bbR^n$, the matrix  $\mP_{C(\mA)} \in \bbR^{n \times n}$  that satisfies	\begin{equation}
-		p_{C(\mA)}(x) =\mP_{C(\mA)} x,
+	is called the projection of vector $x$ onto the column space $\mA$. For all $x \in \bbR^n$, the matrix  $\mP_{\mA} \in \bbR^{n \times n}$  that satisfies	\begin{equation}
+		p_{\mA}(x) =\mP_{\mA} x,
 	\end{equation}
-	is called the projection matrix of $\mA$ from $\bbR^n$ onto the column space  $C(\mA)$. Note that the projection $p_{C(\mA)}(x)$ depends on the vector $x$ and the space $C(\mA)$, while the projection matrix $\mP_{C(\mA)}$ depends only on the space $C(\mA)$. 
+	is called the projection matrix of $\mA$ from $\bbR^n$ onto the column space $\mA$. Note that the projection $p_{\mA}(x)$ depends on the vector $x$ and the space $\mA$, while the projection matrix $\mP_{\mA}$ depends on the space $\mA$ only. 
 \end{defn}
 
-\begin{prop}[Projection matrix of $C(\mA)$]\label{prop:project}
-	Let  $x \in \bbR^{n}$ be a vector and $\mA^{n \times m}$ be a matrix with independent columns. The projection matrix of $\mA$ from $\bbR^n$ onto the column space  $C(\mA)$ is 
+\begin{prop}[Projection matrix of $\mA$]\label{prop:project}
+	Let  $x \in \bbR^{n}$ be a vector and $\mA^{n \times m}$ be a matrix with independent columns. The projection matrix of $\mA$ from $\bbR^n$ onto the column space  $\mA$ is 
 	\begin{equation}
-		\mP_{C(\mA)} =  \mA (\mA^T \mA)^{-1} \mA^T.
+		\mP_{\mA} =  \mA (\mA^T \mA)^{-1} \mA^T.
 	\end{equation}
 \end{prop}
 
 \begin{proof}
-Let $x_0$ be an arbitrary vector of $\bbR^n$. By Definition~\ref{def:project}, the projection $p_{C(\mA)}(x_0) \in C(\mA)$. Then, there exists a vector $v(x_0) \in \bbR^m$ such that $p_{C(\mA)}(x_0) = \mA  v(x_0)$.  By equation~\eqref{eq:project}, we have 
+Let $x_0$ be an arbitrary vector of $\bbR^n$. By Definition~\ref{def:project}, the projection $p_{\mA}(x_0) \in \mA$. Then, there exists a vector $v(x_0) \in \bbR^m$ such that $p_{\mA}(x_0) = \mA  v(x_0)$.  By equation~\eqref{eq:project}, we have 
 \begin{equation}\label{eq:projectca}
-	A^T (x_0 - \mA v(x_0)) = 0 \quad \Rightarrow  \quad v(x_0) = (\mA^T \mA)^{-1} \mA^T x_0 \quad \Rightarrow \quad p_{C(\mA)}(x_0)  = \mA (\mA^T \mA)^{-1} \mA^T  x_0. 
+	A^T (x_0 - \mA v(x_0)) = 0 \quad \Rightarrow  \quad v(x_0) = (\mA^T \mA)^{-1} \mA^T x_0 \quad \Rightarrow \quad p_{\mA}(x_0)  = \mA (\mA^T \mA)^{-1} \mA^T  x_0. 
 \end{equation}
-Since $x_0$ is arbitrary, the equation~\eqref{eq:projectca} still holds after replacing all the $x_0$ by $x$, for all $x \in \bbR^n$. Therefore, the matrix $\mP_{C(\mA)} =  \mA (\mA^T \mA)^{-1} \mA^T$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $C(\mA)$.
+Since $x_0$ is arbitrary, the equation~\eqref{eq:projectca} still holds after replacing all the $x_0$ by $x$, for all $x \in \bbR^n$. Therefore, the matrix $\mP_{\mA} =  \mA (\mA^T \mA)^{-1} \mA^T$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $\mA$.
 \end{proof}
  
 \begin{thm}[Properties of projection matrix]\label{thm:projectm}
-Let $\mA \in \bbR^{m \times n}$ be a matrix, and $\mP_{C(\mA)}$ be the projection matrix of $\mA$ onto the column space $C(\mA)$. Then,
+Let $\mA \in \bbR^{m \times n}$ be a matrix, and $\mP_{\mA}$ be the projection matrix of $\mA$ onto the column space $\mA$. Then,
 	\begin{equation}\label{eq:projectm}
-		\mP_{C(\mA)}^T = \mP_{C(\mA)}\quad \text{and}\quad  \mP_{C(\mA)}^2 = \mP_{C(\mA)}.
+		\mP_{\mA}^T = \mP_{\mA}\quad \text{and}\quad  \mP_{\mA}^2 = \mP_{\mA}.
 	\end{equation}
 \end{thm}
 \begin{proof}
-	By Proposition~\ref{prop:project}, the projection matrix is $\mP_{C(\mA)} =   \mA(\mA^T \mA)^{-1} \mA^T$. Then,
-	\[  \mP_{C(\mA)}^T = (\mA(\mA^T \mA)^{-1} \mA^T )^T = \mA (\mA^T \mA)^{-1} \mA^T = \mP_{C(\mA)}. \]
+	By Proposition~\ref{prop:project}, the projection matrix is $\mP_{\mA} =   \mA(\mA^T \mA)^{-1} \mA^T$. Then,
+	\[  \mP_{\mA}^T = (\mA(\mA^T \mA)^{-1} \mA^T )^T = \mA (\mA^T \mA)^{-1} \mA^T = \mP_{\mA}. \]
 Similarly, we have
-	\[  \mP_{C(\mA)}^2 = \mP_{C(\mA)}^T \mP_{C(\mA)} =  \mA (\mA^T \mA)^{-1} \mA^T  \mA (\mA^T \mA)^{-1} \mA^T =  \mA (\mA^T \mA)^{-1} \mA^T = \mP_{C(\mA)}. \]
+	\[  \mP_{\mA}^2 = \mP_{\mA}^T \mP_{\mA} =  \mA (\mA^T \mA)^{-1} \mA^T  \mA (\mA^T \mA)^{-1} \mA^T =  \mA (\mA^T \mA)^{-1} \mA^T = \mP_{\mA}. \]
 \end{proof}
 
-\begin{cor}[Projection onto $N(\mA^T)$]\label{cor:iprojectm}
-	Suppose $\mP_{C(\mA)}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $C(\mA)$. Then $\mI-\mP_{C(\mA)}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $N(\mA^T)$. 
+\begin{cor}[Projection onto $\mA^{T,\perp}$]\label{cor:iprojectm}
+	Suppose $\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $\mA$. Then $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $\mA^{T,\perp}$. 
 \end{cor}
 
 \begin{proof}
-	By Definition~\ref{def:project}, for all $x \in \bbR^n$, $\mP_{C(\mA)} x$ is the projection of $x$ from $\bbR^n$ to $C(\mA)$. Then,
-	\[ x - \mP_{C(\mA)} x \perp C(\mA) \quad \Rightarrow \quad (\mI-\mP_{C(\mA)})x \perp C(\mA). \]
-	By Theorem~\ref{thm:ortho}, we have $C(\mA) \perp N(\mA^T)$. Since $rank(C(\mA)) + rank(N(\mA^T)) = n$, $C(\mA)  \cup N(\mA^T) = \bbR^n$. Then, we have
-	\[ (\mI-\mP_{C(\mA)})x \in N(\mA^T).\]
-	Since $\mP_{C(\mA)} x$ is the projection of $x$ from $\bbR^n$ to $C(\mA)$,  the vector $\mP_{C(\mA)} x \in C(\mA)$, for all  $x \in \bbR^n$. We have,
-	\[ x -  (\mI-\mP_{C(\mA)})x = \mP_{C(\mA)} x \in C(\mA) \quad \Rightarrow \quad  x -  (\mI-\mP_{C(\mA)})x \perp N(\mA^T).\]
-	Therefore, for all $x \in \bbR^n$, $(\mI-\mP_{C(\mA)})x$ is the projection of $x$ from $\bbR^n$ onto the left nullspace $N(\mA^T)$, and thus $\mI-\mP_{C(\mA)}$ is the projection matrix of $\mA$ from $\bbR^n$ onto $N(\mA^T)$.
+	By Definition~\ref{def:project}, for all $x \in \bbR^n$, $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ onto $\mA$. Then,
+	\[ x - \mP_{\mA} x \perp \mA \quad \Rightarrow \quad (\mI-\mP_{\mA})x \perp \mA. \]
+	By Theorem~\ref{thm:ortho}, we have $\mA \perp \mA^{T,\perp}$. Since $\dim(\mA) + \dim(\mA^{T,\perp}) = n$, we have $\mA  \cup \mA^{T,\perp} = \bbR^n$. Then, we have
+	\[ (\mI-\mP_{\mA})x \in  \mA^{T,\perp}.\]
+	Since $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ to $\mA$,  the vector $\mP_{\mA} x \in \mA$, for all  $x \in \bbR^n$. We have,
+	\[ x -  (\mI-\mP_{\mA})x = \mP_{\mA} x \in \mA \quad \Rightarrow \quad  x -  (\mI-\mP_{\mA})x \perp \mA^{T,\perp}.\]
+	Therefore, for all $x \in \bbR^n$, $(\mI-\mP_{\mA})x$ is the projection of $x$ from $\bbR^n$ onto the left nullspace $\mA^{T,\perp}$, and $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto $\mA^{T,\perp}$.
 \end{proof}
 
 \subsection{Projection matrices and least squares}
@@ -218,8 +227,8 @@ Let $y \in \bbR^n$ be a vector and $\mX \in \bbR^{n \times (k+1)}$ be a design m
 \[ y = \mX \beta +\epsilon,\]
 where $\beta = (\beta_0,\beta_1,...,\beta_k)^T$ are regression coefficients and $\epsilon$ is the noise. The least-squares estimate of $\beta$ is the minimizer of the squared loss; i.e.,
 \[  \hat \beta_{LS} = \argmin_{\beta \in \bbR^{k+1}} \onorm{y - \mX \beta}^2, \]
-where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $C(\mX)$ minimizes the Euclidean distance from $y$ to the column space $C(\mX)$. Hence,   we consider the vector $\mX 
-\hat \beta_{LS}$ as the projection of $y$ onto the column space $C(\mX)$. Therefore, we may use projection to solve the minimization problem. 
+where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $\mX$ minimizes the Euclidean distance from $y$ to the column space $\mX$. Hence,   we consider the vector $\mX 
+\hat \beta_{LS}$ as the projection of $y$ onto the column space $\mX$. Therefore, we may use projection to solve the minimization problem. 
 
 By Definition~\ref{def:project}, the projection $\mX \hat \beta_{LS}$ satisfies
 \[ \mX^T( y - \mX \hat \beta_{LS} ) = 0 \quad \Rightarrow \quad \hat \beta_{LS} = (\mX^T \mX)^{-1} \mX^T y. \]
@@ -243,10 +252,10 @@ Orthonormal vectors are always independent.
 	Let  $\mQ \in \bbR^{m \times n}$ be a matrix. The matrix $\mQ$ is an orthonormal matrix, if the columns of $\mQ$ are orthonormal. When $ m= n$, the square matrix $\mQ$ is an orthogonal matrix.
 \end{defn}
 
-Suppose $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix. Then, we have $\mQ^T \mQ = \mI_n$.  When $m = n$, $\mQ$ is an orthogonal matrix and $\mQ^T = \mQ^{-1}$. The projection matrix of $\mQ$ onto the column space $C(\mQ)$, denoted $\mP_{C(\mQ)}$,  becomes $\mP_{C(\mQ)} = \mI_m$.
+Suppose $\mQ \in \bbR^{m \times n}$ is an orthonormal matrix. Then, we have $\mQ^T \mQ = \mI_n$.  When $m = n$, $\mQ$ is an orthogonal matrix and $\mQ^T = \mQ^{-1}$. The projection matrix of $\mQ$ onto the column space $C(\mQ)$, denoted $\mP_{\mQ}$,  becomes $\mP_{\mQ} = \mI_m$.
 
 \begin{defn}[\textit{Gram-Schimidt Process and QR decomposition}]\label{gram-schimidt}
-Let $\mA \in \bbR^{m \times n}$ be a matrix with $rank(\mA) = n$, and  $a_i \in \bbR^{m}$ be the $i$-th column of matrix $\mA$, for all $i \in [n]$. Gram-Schimidt process finds the orthonormal basis for $C(\mA)$ as follows,
+Let $\mA \in \bbR^{m \times n}$ be a matrix with $\rank(\mA) = n$, and  $a_i \in \bbR^{m}$ be the $i$-th column of matrix $\mA$, for all $i \in [n]$. Gram-Schimidt process finds the orthonormal basis for $\mA$ as follows,
 \begin{align}
 	&u_1 = a_1, &&\quad e_1 = \frac{u_1}{\onorm{u_1}};\\
 	&u_2 = a_2 - \frac{u_1^T a_2}{u_1^T u_1} u_1 ,&&\quad  e_2 = \frac{u_2}{\onorm{u_2}};\\
@@ -254,7 +263,7 @@ Let $\mA \in \bbR^{m \times n}$ be a matrix with $rank(\mA) = n$, and  $a_i \in 
 	\vdots\\
 	&u_n = a_n - \sum_{k = 1}^{n-1} \frac{u_k^T a_k}{u_k^T u_k} u_k, && \quad e_n = \frac{u_n}{\onorm{u_n}}.
 \end{align}
- The vectors $e_1,...,e_n$ are orthonormal basis of $C(\mA)$. Based on the basis obtained by Gram-Schimidit, we decompose the matrix $\mA$ as follows,
+ The vectors $e_1,...,e_n$ are orthonormal basis of $\mA$. Based on the basis obtained by Gram-Schimidit, we decompose the matrix $\mA$ as follows,
  \begin{equation}\label{eq:qr}
  	\mA = [a_1,...,a_n] = [e_1,....,e_2] \begin{bmatrix}
  		e_1^T a_1 & e_1^T a_2 & \cdots & e_1^T a_n\\
@@ -469,12 +478,12 @@ Let  $\mA\in\bbR^{n \times n}$  be  an invertible matrix, and $ x, b \in \bbR^n$
 \begin{defn}[\textit{Parallelepiped}]
 	The parallelepiped determined by $n$ vectors $v_1,...,v_n \in \bbR^n$ is defined as the following subset,
 	\[ P = \{ a_1 v_1 + \cdots + a_n v_n \colon 0 \leq a_1,...,a_n \leq 1 \}. \]
-	 We use $vol(P)$ to denote the volume of the parallelepiped  $P$. 
+	 We use $\vol(P)$ to denote the volume of the parallelepiped  $P$. 
 \end{defn}
 
 \begin{prop}[Determinants and volumes]
 The absolute determinant of a square matrix $\mA$ is the volume of parallelepiped determined by the rows of $\mA$; i.e.,
-	\[ |\det(\mA)| = vol(P(\mA)), \]
+	\[ |\det(\mA)| = \vol(P(\mA)), \]
 	where $P(\mA)$ is the parallelepiped determined by the rows of $\mA$.
 \end{prop}
 
@@ -523,14 +532,14 @@ The absolute determinant of a square matrix $\mA$ is the volume of parallelepipe
 
 \begin{defn}[\textit{Trace of square matrix}]\label{def:trace}
 Let $\mA = \entry{a_{ij}} \in \bbR^{n \times n}$ be a square matrix. The trace of $\mA$ is defined as
-\[ tr(\mA) = \sum_{i = 1}^n a_{ii}.\] 
+\[ \tr(\mA) = \sum_{i = 1}^n a_{ii}.\] 
 \end{defn}
 
 \begin{defn}[\textit{Characteristic polynomial}]\label{def:charac}
 	Let $\lambda$ denote an eigenvalue of the matrix $\mA\in \bbR^{n \times n}$.
 	The determinant of $\mA - \lambda \mI_n$ is a polynomial of $\lambda$, denoted $P(\lambda)$. We call the polynomial $P(\lambda)$ as the characteristic polynomial of $\mA$. Specifically,
 	\begin{equation}\label{def:charapoly}
-		 P(\lambda)  = (-1)^n \lambda^n +  (-1)^n  tr(\mA)\lambda^{n-1} + \cdots + (-1)^n \det(\mA). 
+		 P(\lambda)  = (-1)^n \lambda^n +  (-1)^n  \tr(\mA)\lambda^{n-1} + \cdots + (-1)^n \det(\mA). 
 	\end{equation}
 \end{defn}
 
@@ -548,7 +557,7 @@ The eigenvalues of a matrix are not necessarily distinct with each other.
 \begin{thm}[Summation and production of eigenvalues]\label{thm:speigen}
 	Let  $\mA \in \bbR^{n \times n}$ be a square matrix, and $\lambda_1,...\lambda_n$ be the eigenvalues of $\mA$. Then,
 	\begin{equation}
-		\sum_{i=1}^n \lambda_i = tr(\mA)\quad \text{and} \quad \prod_{i=1}^n \lambda_i = \det(\mA).
+		\sum_{i=1}^n \lambda_i = \tr(\mA)\quad \text{and} \quad \prod_{i=1}^n \lambda_i = \det(\mA).
 	\end{equation} 
 \end{thm}
 
@@ -557,7 +566,7 @@ The eigenvalues of a matrix are not necessarily distinct with each other.
 	\begin{equation}\label{eq:poly}
 		P(\lambda) = (-1)^n (\lambda - \lambda_1)\cdots (\lambda - \lambda_n), 
 	\end{equation}   
-	where $\lambda_i$ are the eigenvalues of $\mA$, for all $ i \in [n]$. In equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Comparing the equation~\eqref{eq:poly} with Definition~\ref{def:charac}, we obtain $tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_i $, while the constant term in Defintion~\ref{def:charac} is $(-1)^n \det(\mA)$.  Therefore, we obtain $\prod_{i=1}^n \lambda_i = \det(\mA)$.
+	where $\lambda_i$ are the eigenvalues of $\mA$, for all $ i \in [n]$. In equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Comparing the equation~\eqref{eq:poly} with Definition~\ref{def:charac}, we obtain $\tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_i $, while the constant term in Defintion~\ref{def:charac} is $(-1)^n \det(\mA)$.  Therefore, we obtain $\prod_{i=1}^n \lambda_i = \det(\mA)$.
 \end{proof}
 
 \begin{defn}[\textit{Similar matrices}]\label{def:similar}
