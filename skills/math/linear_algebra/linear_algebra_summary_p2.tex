@@ -128,7 +128,7 @@ For notational convenience, we use the shorthands $\mA$ for the column space $C(
  
 \vspace{0.2cm}
 Given a matrix $\mA \in \bbR^{m \times n}$, we also rewrite the Theorem~\ref{thm:ortho} as
-\[ \mA^T \perp \mA^{\perp} \quad \text{and} \quad \mA \perp \mA^{T,\perp}. \]
+\[ \mA^T \perp \mA^{\perp} \quad \text{and} \quad \mA \perp (\mA^{T})^{\perp}. \]
 
 \begin{thm}[Relationship between $\mA^T \mA$ and $\mA$]\label{thm:aa}Let $\mA \in \bbR^{m \times n}$ be a matrix. We have
 	\begin{equation}
@@ -208,18 +208,18 @@ Similarly, we have
 	\[  \mP_{\mA}^2 = \mP_{\mA}^T \mP_{\mA} =  \mA (\mA^T \mA)^{-1} \mA^T  \mA (\mA^T \mA)^{-1} \mA^T =  \mA (\mA^T \mA)^{-1} \mA^T = \mP_{\mA}. \]
 \end{proof}
 
-\begin{cor}[Projection onto $\mA^{T,\perp}$]\label{cor:iprojectm}
-	Suppose $\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $\mA$. Then $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $\mA^{T,\perp}$. 
+\begin{cor}[Projection onto $(\mA^{T})^{\perp}$]\label{cor:iprojectm}
+	Suppose $\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the column space $\mA$. Then $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto the left nullspace $(\mA^{T})^{\perp}$. 
 \end{cor}
 
 \begin{proof}
-	By Definition~\ref{def:project}, for all $x \in \bbR^n$, $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ onto $\mA$. Then,
+	Let $x \in \bbR^n$ be a vector. By Definition~\ref{def:project}, $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ onto $\mA$. Then,
 	\[ x - \mP_{\mA} x \perp \mA \quad \Rightarrow \quad (\mI-\mP_{\mA})x \perp \mA. \]
-	By Theorem~\ref{thm:ortho}, we have $\mA \perp \mA^{T,\perp}$. Since $\dim(\mA) + \dim(\mA^{T,\perp}) = n$, we have $\mA  \cup \mA^{T,\perp} = \bbR^n$. Then, we have
-	\[ (\mI-\mP_{\mA})x \in  \mA^{T,\perp}.\]
-	Since $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ to $\mA$,  the vector $\mP_{\mA} x \in \mA$, for all  $x \in \bbR^n$. We have,
-	\[ x -  (\mI-\mP_{\mA})x = \mP_{\mA} x \in \mA \quad \Rightarrow \quad  x -  (\mI-\mP_{\mA})x \perp \mA^{T,\perp}.\]
-	Therefore, for all $x \in \bbR^n$, $(\mI-\mP_{\mA})x$ is the projection of $x$ from $\bbR^n$ onto the left nullspace $\mA^{T,\perp}$, and $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto $\mA^{T,\perp}$.
+	By Theorem~\ref{thm:ortho}, we have $\mA \perp (\mA^{T})^{\perp}$. Since $\dim(\mA) + \dim((\mA^{T})^{\perp}) = n$, we have $\mA  \cup (\mA^{T})^{\perp} = \bbR^n$. Then, we have
+	\[ (\mI-\mP_{\mA})x \in  (\mA^{T})^{\perp}.\]
+	Since $\mP_{\mA} x$ is the projection of $x$ from $\bbR^n$ to $\mA$,  the vector $\mP_{\mA} x \in \mA$. We have,
+	\[ x -  (\mI-\mP_{\mA})x = \mP_{\mA} x \in \mA \quad \Rightarrow \quad  x -  (\mI-\mP_{\mA})x \perp (\mA^{T})^{\perp}.\]
+	Therefore, $(\mI-\mP_{\mA})x$ is the projection of $x$ from $\bbR^n$ onto the left nullspace $\mA^{T,\perp}$. Since the above conclusion holds for all $x \in \bbR^n$, $\mI-\mP_{\mA}$ is the projection matrix of $\mA$ from $\bbR^n$ onto $\mA^{T,\perp}$.
 \end{proof}
 
 \subsection{Projection matrices and least squares}
@@ -227,13 +227,12 @@ Let $y \in \bbR^n$ be a vector and $\mX \in \bbR^{n \times (k+1)}$ be a design m
 \[ y = \mX \beta +\epsilon,\]
 where $\beta = (\beta_0,\beta_1,...,\beta_k)^T$ are regression coefficients and $\epsilon$ is the noise. The least-squares estimate of $\beta$ is the minimizer of the squared loss; i.e.,
 \[  \hat \beta_{LS} = \argmin_{\beta \in \bbR^{k+1}} \onorm{y - \mX \beta}^2, \]
-where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $\mX$ minimizes the Euclidean distance from $y$ to the column space $\mX$. Hence,   we consider the vector $\mX 
-\hat \beta_{LS}$ as the projection of $y$ onto the column space $\mX$. Therefore, we may use projection to solve the minimization problem. 
+where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $\mX$ minimizes the Euclidean distance from $y$ to the column space $\mX$. Hence, the vector $\mX \hat \beta_{LS}$ is the projection of $y$ onto the column space $\mX$. Therefore, we may use projection to solve the least squares problem. 
 
 By Definition~\ref{def:project}, the projection $\mX \hat \beta_{LS}$ satisfies
 \[ \mX^T( y - \mX \hat \beta_{LS} ) = 0 \quad \Rightarrow \quad \hat \beta_{LS} = (\mX^T \mX)^{-1} \mX^T y. \]
 
-The estimate $\hat \beta_{LS}$ is consistent with the estimates solved using the first-order condition for the least-squares optimization. 
+The estimate $\hat \beta_{LS}$ is the same as the estimates solved using the first-order condition for the least-squares optimization. 
 
 \subsection{Orthogonal matrices and Gram-Schimidt}
 \begin{defn}[\textit{Orthonormal vectors}]\label{def:othronov}
@@ -246,7 +245,7 @@ The estimate $\hat \beta_{LS}$ is consistent with the estimates solved using the
 	\end{align}
 \end{defn}
 
-Orthonormal vectors are always independent.
+Orthonormal vectors are independent.
 
 \begin{defn}[\textit{Orthonormal matrix and orthogonal matrix}]\label{def:orthonom}
 	Let  $\mQ \in \bbR^{m \times n}$ be a matrix. The matrix $\mQ$ is an orthonormal matrix, if the columns of $\mQ$ are orthonormal. When $ m= n$, the square matrix $\mQ$ is an orthogonal matrix.
@@ -309,7 +308,7 @@ We give ten properties of determinants. The last seven properties are deduced fr
 		Suppose $\mA$ has two identical rows $a_i, a_j$. The matrix after exchanging $a_i, a_j$, denoted $\mA'$, is the same as the original matrix $\mA$. By property~\ref{prop2}, we have $\det(\mA) = -\det(\mA') = -\det(\mA)$. Therefore, $\det(\mA) = 0$.
 	\end{proof}
 
-	\item \label{propelim} Subtracting a multiplier of the $i$-th row from the $j$-th row maintains the determinant of the matrix, where $i \neq j$.
+	\item \label{propelim} Subtracting a multiplier of the $i$-th row from the $j$-th row preserves the determinant of the matrix, where $i \neq j$.
 	\begin{proof}
 		Take a 2-by-2 matrix as an example. By properties~\ref{prop3} and~\ref{propidenticalrow}, for any constant $t \in \bbR$, we have 
 	\begin{align}
@@ -353,7 +352,7 @@ We give ten properties of determinants. The last seven properties are deduced fr
 	\begin{proof}
 		First, suppose that at least one of $\mA, \mB$ is singular. The product $\mA \mB$ is also singular. Then, $\det(\mA \mB) = \det(\mA) \det(\mB) = 0$. 
 		
-		Second, let $\mE$ be an elimination matrix. The product $\mE \mB$ means implementing a linear operation on the rows of $\mB$. By property~\ref{propelim}, linear operation maintains the determinant of $\mB$. Note that the determinant of an elimination matrix is 1. Therefore, we have
+		Second, let $\mE$ be an elimination matrix. The product $\mE \mB$ means implementing a linear operation on the rows of $\mB$. By property~\ref{propelim}, linear operation preserves the determinant of $\mB$. Note that the determinant of an elimination matrix is 1. Therefore, we have
 		\begin{equation}\label{eq:producteli}
 			|\mE \mB| = |\mE| |\mB|.
 		\end{equation}
@@ -423,7 +422,7 @@ We give ten properties of determinants. The last seven properties are deduced fr
 \end{defn}
 
 \begin{example}[Tridiagonal matrix]
-	One example of using the cofactor formula is computing the determinant of a \textit{tridiagonal matrix}. The tridiagonal matrix is a matrix in which nonzero elements lie only on or adjacent to the diagonal. Let $\mT_n \in \bbR^{n \times n}$ denote the tridiagonal matrix of 1's; i.e.,
+	One example of using the cofactor formula is computing the determinant of a \textit{tridiagonal matrix}. The tridiagonal matrix is a matrix in which nonzero elements locate only on or adjacent to the diagonal. Let $\mT_n \in \bbR^{n \times n}$ denote the tridiagonal matrix of 1's; i.e.,
 \begin{align}
 	\mT_n = \begin{bmatrix}
 		1 &1&0 &\cdots & 0 &0\\
@@ -562,7 +561,7 @@ The eigenvalues of a matrix are not necessarily distinct with each other.
 \end{thm}
 
 \begin{proof}
-	First, we re-write the characteristic polynomial $P(\lambda)$ of $\mA$ as a factor formula,
+	First, we re-write the characteristic polynomial $P(\lambda)$ of $\mA$ using the factorization form,
 	\begin{equation}\label{eq:poly}
 		P(\lambda) = (-1)^n (\lambda - \lambda_1)\cdots (\lambda - \lambda_n), 
 	\end{equation}   
@@ -732,7 +731,7 @@ Symmetric matrices are diagonalizable.
 \end{proof}
 
 \begin{thm}[Descent of matrix powers]
-	Let $\mA \in \bbR^{n \times n}$ be  a square matrix with eigenvalues $\lambda_1,...,\lambda_n$, and  $n$ independent eigenvectors associated with the eigenvalues. The power of the matrix $\mA^k \rightarrow 0$ as $k \rightarrow +\infty$ if and only if $|\lambda_i| < 1$, for all $i \in [n]$.
+	Let $\mA \in \bbR^{n \times n}$ be  a diagonalizable matrix with eigenvalues $\lambda_1,...,\lambda_n$. The power of the matrix $\mA^k \rightarrow 0$ as $k \rightarrow +\infty$ if and only if $|\lambda_i| < 1$, for all $i \in [n]$.
 \end{thm}
 
 \begin{proof}
