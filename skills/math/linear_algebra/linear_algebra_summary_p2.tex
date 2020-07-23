@@ -649,7 +649,7 @@ All the eigenvalues of a symmetric matrix with real entries only are real. All t
 \begin{proof}
 	First, we prove by contradiction that a symmetric matrix with real entries only has real eigenvalues. 
 	
-	Let  $\mA$  be a symmetric  matrix with real entries only. Suppose $\lambda$  is a complex eigenvalue of $\mA$ with nonzero imaginary part, and $x$ is the eigenvector associated with $\lambda$. Since all the entries of $\mA$ are real, the eigenvector $x$ is also a complex vector with nonzero imaginary part. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then,  we have
+	Let  $\mA$  be a symmetric  matrix with real entries only. Suppose $\lambda$  is a complex eigenvalue of $\mA$ with  a nonzero imaginary part, and $x$ is the eigenvector associated with $\lambda$. Since all the entries of $\mA$ are real, the eigenvector $x$ is also a complex vector with a nonzero imaginary part. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then,  we have
 	\begin{equation}\label{eq:symm}
 		\overline x^T \mA x = \overline x^T \lambda x,
 	\end{equation} 
@@ -660,7 +660,7 @@ All the eigenvalues of a symmetric matrix with real entries only are real. All t
 	 By the symmetry of $\mA$, we have
 	\[ \overline x^T \mA x  = x^T \mA^T \overline x = x^T \mA \overline x .\] 
 	 Subtracting the equation~\eqref{eq:symm2} from equation~\eqref{eq:symm} yields	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
-	Since that $x^T \overline x$ is a nonzero real number, the imaginary part of $\lambda$ is equal to 0, which contradicts the assumption that $\lambda$ has nonzero imaginary part. Therefore, the eigenvalues of $\mA$ are real.
+	Since that $x^T \overline x$ is a nonzero real number, the imaginary part of $\lambda$ is equal to 0, which contradicts the assumption that $\lambda$ has a nonzero imaginary part. Therefore, the eigenvalues of $\mA$ are real.
 	
 	\vspace{0.2cm}
 	Next, we prove that the eigenvalues for antisymmetric matrices are imaginary. 
@@ -737,7 +737,7 @@ Symmetric matrices are diagonalizable.
 
 \begin{proof}
 Since $\mA$ has $n$ independent eigenvectors, the matrix $\mA$ is diagonalizable.
-	Let $\mA =\mS^{-1} \Lambda \mS$, where the definitions of $\Lambda, \mS$ are the same as that in Definition~\ref{def:diagonalization}. For all integer $k\geq 0$, we have $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then,
+	Let $\mA =\mS^{-1} \Lambda \mS$, where $\Lambda, \mS$ are defined the same as Definition~\ref{def:diagonalization}. For all integer $k\geq 0$, we have $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then,
 	\[ \lim_{k \rightarrow +\infty} \mA^k = \lim_{k \rightarrow +\infty} \mS^{-1} \Lambda^{k} \mS  =  \lim_{k \rightarrow +\infty} \mS^{-1} \begin{bmatrix}
 		|\lambda_i|^k & \cdots &0\\
 		\vdots & &\vdots\\
