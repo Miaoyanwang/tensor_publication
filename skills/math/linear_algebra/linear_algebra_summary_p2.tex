@@ -124,7 +124,7 @@ Let $\mA \in \bbR^{m \times n}$ be a matrix. There are four subspaces related to
 	Similarly, for any $x \in N(\mA^T)$, we have $\mA^T x = 0$, which implies  that $N(\mA^T) \perp C(\mA)$. 
 \end{proof}
 
-For notational convenience, we use the shorthands $\mA$ for the column space $C(\mA)$ and $\mA^{\perp}$ for the nullspace $N(\mA)$ in the rest of this section. Though $\mA$ usually denotes a matrix, the meaning of $\mA$ should be clear given the context. For example, $\rank(\mA)$ refers the rank of matrix $\mA$, while $\dim(\mA)$ refers to the dimension of the column space $C(\mA)$. Specifically, for a vector $v$, $v \in \mA$ means that the vector $v$ belongs to the column space $C(\mA)$.
+For notational convenience, we use the shorthands $\mA$ for the column space $C(\mA)$ and $\mA^{\perp}$ for the nullspace $N(\mA)$ in the rest of this section. Though $\mA$ usually denotes a matrix, the meaning of $\mA$ should be clear given the context. For example, $\rank(\mA)$ refers to the rank of matrix $\mA$, while $\dim(\mA)$ refers to the dimension of the column space $C(\mA)$. Specifically, for a vector $v$, $v \in \mA$ means that the vector $v$ belongs to the column space $C(\mA)$.
  
 \vspace{0.2cm}
 Given a matrix $\mA \in \bbR^{m \times n}$, we also rewrite the Theorem~\ref{thm:ortho} as
@@ -153,7 +153,7 @@ Given a matrix $\mA \in \bbR^{m \times n}$, we also rewrite the Theorem~\ref{thm
 	
 	On the other hand, if the vector $x \in (\mA^T \mA)^{\perp}$, we have
 	\[ \mA^T \mA x = 0.\]
-	Then, the vector $\mA x \in  \mA^{T,\perp}$. By the definition of matrix-to-vector multiplication, we also have $\mA x \in \mA$.  By the Theorem~\ref{thm:ortho}, the subspaces $\mA^{T,\perp} \perp \mA$. Therefore, $\mA x = 0$, and we obtain that $x \in \mA^{\perp}$.
+	Then, the vector $\mA x \in  (\mA^{T})^{\perp}$. By the definition of matrix-to-vector multiplication, we also have $\mA x \in \mA$.  By Theorem~\ref{thm:ortho}, the subspaces $(\mA^{T})^{\perp} \perp \mA$. Therefore, $\mA x = 0$, and we obtain that $x \in \mA^{\perp}$.
 	\vspace{0.2cm}
 	
 	Next, we prove that $\rank(\mA^T \mA) = \rank(\mA)$. 
@@ -227,7 +227,7 @@ Let $y \in \bbR^n$ be a vector and $\mX \in \bbR^{n \times (k+1)}$ be a design m
 \[ y = \mX \beta +\epsilon,\]
 where $\beta = (\beta_0,\beta_1,...,\beta_k)^T$ are regression coefficients and $\epsilon$ is the noise. The least-squares estimate of $\beta$ is the minimizer of the squared loss; i.e.,
 \[  \hat \beta_{LS} = \argmin_{\beta \in \bbR^{k+1}} \onorm{y - \mX \beta}^2, \]
-where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $\mX$ minimizes the Euclidean distance from $y$ to the column space $\mX$. Hence, the vector $\mX \hat \beta_{LS}$ is the projection of $y$ onto the column space $\mX$. Therefore, we may use projection to solve the least squares problem. 
+where $\onorm{\cdot}$ is the Euclidean norm.  The projection of $y$ onto $\mX$ minimizes the Euclidean distance from $y$ to the column space $\mX$. Hence, the vector $\mX \hat \beta_{LS}$ is the projection of $y$ onto the column space $\mX$. Therefore, we may use projection to solve the least-squares problem. 
 
 By Definition~\ref{def:project}, the projection $\mX \hat \beta_{LS}$ satisfies
 \[ \mX^T( y - \mX \hat \beta_{LS} ) = 0 \quad \Rightarrow \quad \hat \beta_{LS} = (\mX^T \mX)^{-1} \mX^T y. \]
@@ -411,7 +411,7 @@ We give ten properties of determinants. The last seven properties are deduced fr
 	There are $n!$ nonsingular matrices among matrices $\mA'_i$. The number of nonsingular matrices coincides with the size of $\tP$. Specifically, there are $n$ ways to choose an element from the first row, after which there are only $n-1$ ways to choose an element from the second row to avoid the zero determinant. Therefore, we have $n \times (n-1) \times (n-2) \times \cdots \times 2 = n!$ nonsingular matrices.
 	
 	By properties~\ref{propdiag} and \ref{prop2}, the determinant of a nonsingular $\mA'_i$ follows the formula \[(-1)^{N(\alpha_1,...,\alpha_n)}  a_{1\alpha_1} ... a_{n \alpha_n},\]
-	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$, $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of swaps from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. The determinant of $\mA$ follows by the summation of the nonsingular matrices' determinants.
+	where $(\alpha_1, \alpha_2, ...,\alpha_n)$ is the permutation of $(1,2,...,n)$, $\tP$ is the collection of all possible  $(\alpha_1,...,\alpha_n)$, and $N(\alpha_1,...,\alpha_n)$ is the number of swaps from $(\alpha_1,\alpha_2,...,\alpha_n)$  to $(1,2,...,n)$. The determinant of $\mA$ is the sum of the nonsingular matrices' determinants.
 \end{proof}
 
 
@@ -565,7 +565,7 @@ The eigenvalues of a matrix are not necessarily distinct with each other.
 	\begin{equation}\label{eq:poly}
 		P(\lambda) = (-1)^n (\lambda - \lambda_1)\cdots (\lambda - \lambda_n), 
 	\end{equation}   
-	where $\lambda_i$ are the eigenvalues of $\mA$, for all $ i \in [n]$. In equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Comparing the equation~\eqref{eq:poly} with Definition~\ref{def:charac}, we obtain $\tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_i $, while the constant term in Defintion~\ref{def:charac} is $(-1)^n \det(\mA)$.  Therefore, we obtain $\prod_{i=1}^n \lambda_i = \det(\mA)$.
+	where $\lambda_i$ are the eigenvalues of $\mA$, for all $ i \in [n]$. In equation~\eqref{eq:poly}, the coefficient for $\lambda^{n-1}$ is equal to $(-1)^n\sum_{i=1}^n \lambda_i$. Comparing equation~\eqref{eq:poly} with Definition~\ref{def:charac}, we obtain $\tr(\mA) = \sum_{i=1}^n \lambda_i$. Similarly, the constant term in equation~\eqref{eq:poly} is $(-1)^n \prod_{i=1}^n \lambda_i $, while the constant term in Defintion~\ref{def:charac} is $(-1)^n \det(\mA)$.  Therefore, we obtain $\prod_{i=1}^n \lambda_i = \det(\mA)$.
 \end{proof}
 
 \begin{defn}[\textit{Similar matrices}]\label{def:similar}
@@ -598,7 +598,7 @@ Let $\mA \in \bbR^{n \times n}$ be an invertible matrix, and $(\lambda_i, x_i)$ 
 \begin{proof}
 	Since $\mA$ is invertible, the eigenvalue $\lambda_i \neq 0$, for all $  i \in [n]$. Multiplying $x_i$ on both sides of the equation $\mA^{-1} \mA = \mI_n$ yields
 	\[ \mA^{-1} \mA x_i = x_i \quad \Rightarrow\quad  \mA^{-1} x_i = {\lambda_i}^{-1} x_i, \quad \text{for all } i \in [n]. \]
-Therefore, $(\lambda_i^{-1},x_i)$ is the eigenvalue-eigenvector pair of $\mA^{-1}$, for all $i \in [n]$.
+Therefore, $(\lambda_i^{-1},x_i)$ is the $i$-th eigenvalue-eigenvector pair of $\mA^{-1}$, for all $i \in [n]$.
 \end{proof}
 
 \begin{thm}[Independence of eigenvectors]\label{thm:indepeigen} 
@@ -615,7 +615,7 @@ Therefore, $(\lambda_i^{-1},x_i)$ is the eigenvalue-eigenvector pair of $\mA^{-1
 		\begin{equation}\label{eq:indep2}
 		\lambda_1 (c_1 v_1 + ... + c_m v_m ) = c_1 \lambda_1 v_1 + ... + c_m \lambda_1 v_m = 0. 
 	\end{equation}
-	Subtracting the equations~\eqref{eq:indep1} from \eqref{eq:indep2} yields
+	Subtracting equations~\eqref{eq:indep1} from \eqref{eq:indep2} yields
 	\begin{equation}\label{eq:indep3}
 		 c_2 (\lambda_1 - \lambda_2) v_2 + \cdots + c_m (\lambda_1 - \lambda_m) v_m  = 0.
 	\end{equation}
@@ -638,7 +638,7 @@ To let $\det(\mA - \lambda \mI_n) = 0$, we obtain $\lambda = a_{ii}$, for all $ 
 \subsection{Eigenvalues and eigenvectors for symmetric matrices}
 
 \begin{defn}[Antisymmetric matrices]
-	The matrix $\mA$ is an antisymmetric matrix if 
+	A matrix $\mA$ is antisymmetric if 
 	\[\mA^T = - \mA. \] 
 \end{defn}
 
@@ -648,7 +648,7 @@ All the eigenvalues of a symmetric matrix with real entries only are real. All t
 \begin{proof}
 	First, we prove by contradiction that a symmetric matrix with real entries only has real eigenvalues. 
 	
-	Let  $\mA$  be a symmetric  matrix with real entries only. Suppose $\lambda$  is a complex eigenvalue of $\mA$ with  a nonzero imaginary part, and $x$ is the eigenvector associated with $\lambda$. Since all the entries of $\mA$ are real, the eigenvector $x$ is also a complex vector with a nonzero imaginary part. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then,  we have
+	Let  $\mA$  be a symmetric  matrix with real entries only. Suppose $\lambda$  is a complex eigenvalue of $\mA$ with  a nonzero imaginary part, and $x$ is the eigenvector associated with $\lambda$. Since all the entries of $\mA$ are real, the eigenvector $x$ is also a complex vector. Let $\overline \lambda$ and $\overline x$ denote the conjugate eigenvalue and eigenvector, respectively. Then,  we have
 	\begin{equation}\label{eq:symm}
 		\overline x^T \mA x = \overline x^T \lambda x,
 	\end{equation} 
@@ -658,7 +658,7 @@ All the eigenvalues of a symmetric matrix with real entries only are real. All t
 	\end{equation}
 	 By the symmetry of $\mA$, we have
 	\[ \overline x^T \mA x  = x^T \mA^T \overline x = x^T \mA \overline x .\] 
-	 Subtracting the equation~\eqref{eq:symm2} from equation~\eqref{eq:symm} yields	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
+	 Subtracting equation~\eqref{eq:symm2} from equation~\eqref{eq:symm} yields	\[  0 = ( \overline x^T \mA x -  x^T \mA \overline x ) = (\lambda - \overline \lambda) x^T \overline x.  \]
 	Since that $x^T \overline x$ is a nonzero real number, the imaginary part of $\lambda$ is equal to 0, which contradicts the assumption that $\lambda$ has a nonzero imaginary part. Therefore, the eigenvalues of $\mA$ are real.
 	
 	\vspace{0.2cm}
@@ -727,7 +727,7 @@ Symmetric matrices are diagonalizable.
 \end{thm}
 
 \begin{proof}
-	By Theorems~\ref{thm:symmortho} and \ref{thm:symmrepeat}, for any symmetric matrix $\mA \in \bbR^{n \times n}$, $\mA$ have $n$ orthogonal eigenvectors with possibly repeated eigenvalues. Therefore, the matrix $\mA$   is able to be diagonalized as equation~\eqref{eq:defdiag}.
+	By Theorems~\ref{thm:symmortho} and \ref{thm:symmrepeat}, for any symmetric matrix $\mA \in \bbR^{n \times n}$, $\mA$ has $n$ orthogonal eigenvectors with possibly repeated eigenvalues. Therefore, the matrix $\mA$   is able to be diagonalized as equation~\eqref{eq:defdiag}.
 \end{proof}
 
 \begin{thm}[Descent of matrix powers]
@@ -735,8 +735,7 @@ Symmetric matrices are diagonalizable.
 \end{thm}
 
 \begin{proof}
-Since $\mA$ has $n$ independent eigenvectors, the matrix $\mA$ is diagonalizable.
-	Let $\mA =\mS^{-1} \Lambda \mS$, where $\Lambda, \mS$ are defined the same as Definition~\ref{def:diagonalization}. For all integer $k\geq 0$, we have $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then,
+Since $\mA$ is diagonalizable, let $\mA =\mS^{-1} \Lambda \mS$, where $\Lambda, \mS$ are defined the same as Definition~\ref{def:diagonalization}. For all integer $k\geq 0$, we have $\mA^k = \mS^{-1} \Lambda^{k} \mS$. Then,
 	\[ \lim_{k \rightarrow +\infty} \mA^k = \lim_{k \rightarrow +\infty} \mS^{-1} \Lambda^{k} \mS  =  \lim_{k \rightarrow +\infty} \mS^{-1} \begin{bmatrix}
 		|\lambda_i|^k & \cdots &0\\
 		\vdots & &\vdots\\

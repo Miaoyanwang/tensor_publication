@@ -95,14 +95,14 @@ Jiaxin Hu
 
 \section{Summary}
 \begin{thm}[Markov's inequality]\label{thm:markov}
-	Let $X \geq 0$ be a random variable  with finite mean. We have
+	Let $X \geq 0$ be a random variable  with a finite mean. We have
 	\begin{equation}\label{eq:thmmarkov}
 		\bbP(X\geq t) \leq \frac{\bbE[X]}{t},\quad \text{ for all } \ t > 0.
 	\end{equation}  
 \end{thm}
 
 \begin{thm}[Chebyshev's inequality]\label{thm:cheb}
-	Let $X \geq 0$ be a random variable  with finite mean $\mu$ and finite variance. We have
+	Let $X \geq 0$ be a random variable  with a finite mean $\mu$ and a finite variance. We have
 	\begin{equation}\label{eq:cheby}
 		\bbP(|X - \mu |\geq t) \leq \frac{\var(X)}{t^2},\quad \text{ for all } \ t > 0.
 	\end{equation}  
@@ -128,7 +128,7 @@ Jiaxin Hu
 
 
 \begin{thm}[Hoeffding bound for bounded variable]\label{thm:boundvar}
-Let $X$ be a random variable with mean $\mu = \bbE(X)$. Suppose that $X \in [a,b]$ almost surely, where $a\leq b\in\bbR$ are two constants. Then, we have
+Let $X$ be a random variable with $\mu = \bbE(X)$. Suppose that $X \in [a,b]$ almost surely, where $a\leq b\in\bbR$ are two constants. Then, we have
 \begin{equation}
 	\bbE[e^{\lambda X}] \leq e^{\frac{s(b-a)^2}{8}}, \quad \text{for all } \lambda \in \bbR.
 \end{equation}
@@ -171,7 +171,7 @@ Let $X$ be a random variable with mean $\mu = \bbE[X]$ and variance $ \sigma^2 =
 	\left| \bbE [(X -\mu)^k ]\right| \leq \frac{1}{2} k! \sigma^2 b^{k-2}, \quad \text{for } k =3, 4,....
 \end{equation} 
 \end{defn}
-Note that every bounded random variable $X$ satisfies the Bernstein's condition.
+Note that bounded random variables satisfy the Bernstein's condition.
 
 \begin{thm}[Bernstein-type bound] For any variable $X$ satisfying the Bernstein's condition, we have
 \begin{equation}
@@ -305,7 +305,7 @@ The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$. Spec
 \end{proof}
 
 \begin{rmk}
-	Applying different functions $g(X)$ to the Markov's inequality leads to different bounds for the tail probability of variable $X$. Equation~\eqref{eq:lempoly} implies that optimized polynomial bound is at least as tight as the Chernoff bound, provided that the moment generating function of $X$ exsits.  
+	Applying different functions $g(X)$ to the Markov's inequality leads to different bounds for the tail probability of variable $X$. Equation~\eqref{eq:lempoly} implies that the optimized polynomial bound is at least as tight as the Chernoff bound, provided that the moment generating function of $X$ exsits in the neighborhood of 0.  
 \end{rmk}
 
 \subsection{Exercise 2.4}\label{pro:boundvar}
@@ -334,7 +334,7 @@ Therefore, $g'(0) = \bbE[X] = \mu$. Taking the derivative to equation~\eqref{eq:
 	&= \frac{\bbE[X^2 e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} - \left( \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} \right)^2.\\
 	%& \overset{\Delta}{=} \bbE_{\lambda} [X^2] - (\bbE_{\lambda} [X])^2
 \end{align}
-We interpret the second-order derivative $g''(\lambda)$ as the variance of $X$ with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Taking integral of 1 with respect to $dP'$, we have
+We interpret the second-order derivative $g''(\lambda)$ as the variance of $X$ with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Taking the integral of 1 with respect to $dP'$, we have
 \begin{equation}
 	\int_{-\infty}^{+\infty} d P' = \int_{-\infty}^{+\infty}  \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X = 1,
 \end{equation} 
@@ -421,7 +421,7 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 
 \subsection{Exercise 2.7}
 \begin{lem}[Bennett’s inequality]\label{lem:bennett}
-	Let $X_1,...,X_n$ be a sequence of independent zero-mean random variables with $|X_i| \leq b$ and $\var(X_i) = \sigma_i^2$, for all $i \in [n]$. Then, we have Bennett's inequality
+	Let $X_1,...,X_n$ be a sequence of independent zero-mean random variables with $|X_i| \leq b$ and $\var(X_i) = \sigma_i^2$, for all $i \in [n]$. Then, we have the Bennett's inequality
 	\begin{equation}\label{eq:bennett}
 		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] \leq \exp \left\{-\frac{n \sigma^{2}}{b^{2}} h\left(\frac{b \delta}{\sigma^{2}}\right)\right\}, \quad \text{for all }\delta \geq 0,
 	\end{equation} 
@@ -437,7 +437,7 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 		\bbE\left[e^{\lambda X_i}\right] = \sum_{k = 0}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} 
 		= 1 + 0 + \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \leq \exp\left\{ \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \right\},
 	\end{align}
-	where the 0 is comes from the fact that $\bbE[X_i] = 0$, and the last inequality follows from $1 + x \leq e^x$. By $|X_i|<b$, we bound the last term in equation~\eqref{eq:e27power} as follows
+	where the 0 comes from the fact that $\bbE[X_i] = 0$, and the last inequality follows from $1 + x \leq e^x$. By $|X_i|<b$, we bound the last term in equation~\eqref{eq:e27power} as follows
 	\begin{equation}\label{eq:e27upper}
 		\sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!}  \leq \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^2 |X_i|^{k-2}] }{k!} \leq  \sum_{k = 2}^{+\infty} \frac{\lambda^k \sigma^2_i b^{k-2}}{k!} = \sigma_i^2  \left(  \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right).
 	\end{equation}
@@ -464,13 +464,13 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 	The Bernstein's inequality for $\sum_{i=1}^n X_i$ is
 	\begin{align}\label{eq:e27bern}
 			\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta \right] \leq \exp \left\{ \frac{-3n\delta^2}{(2 b \delta + 6 \sigma^2)} \right\}  %=\exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} \frac{3b^2\delta^2}{2\sigma^2(b\delta + 6 \sigma^2)} \right\} 
-			= \exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} g\left(\frac{b\delta}{\sigma^2}\right) \right\}.
+			= \exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} g\left(\frac{b\delta}{\sigma^2}\right) \right\}, \quad \text{for all } \delta \geq 0,
 	\end{align}
-	where $g(t) \colonequals  \frac{3t^2}{2t + 6} $, for all $ t \geq 0$. Since $g(t)\leq h(t)$ holds for all $t \geq 0$, we conclude that the Bennett's inequality~\eqref{eq:e27bennett} is at least as good as Bernstein's inequality~\eqref{eq:e27bern}. 
+	where $g(t) \colonequals  \frac{3t^2}{2t + 6} $ for $ t \geq 0$. Since $g(t)\leq h(t)$ holds for all $t \geq 0$, we conclude that the Bennett's inequality~\eqref{eq:e27bennett} is at least as good as Bernstein's inequality~\eqref{eq:e27bern}. 
 \end{proof}
 
 \begin{rmk} 
-	So far, we have three inequalities that control the tail of bounded variables: Hoeffding's inequality, Bernstein's inequality, and Bennett's inequality. Particularly, Hoeffding's inequality implies the sub-Gaussianity of bounded variables. As the proof for Lemma~\ref{lem:bennett} shows, Bennett's inequality is at least as good as the Bernstein's inequality, for bounded random variables.
+	So far, we have three inequalities controlling the tail of bounded variables: Hoeffding's inequality, Bernstein's inequality, and Bennett's inequality. Particularly, Hoeffding's inequality implies the sub-Gaussianity of bounded variables. As the proof for Lemma~\ref{lem:bennett} shows, Bennett's inequality is at least as good as the Bernstein's inequality, for bounded random variables.
 \end{rmk}
 
 
