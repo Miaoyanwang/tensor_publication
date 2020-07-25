@@ -34,6 +34,13 @@
 \DeclareMathOperator{\subG}{subG}
 
 
+\newcommand{\of}[1]{\left(#1\right)}
+\newcommand{\off}[1]{\left[#1\right]}
+\newcommand{\offf}[1]{\left\{#1\right\}}
+\newcommand{\aabs}[1]{\left|#1\right|}
+
+
+
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}{Lemma}
@@ -167,7 +174,7 @@ Particularly, let $X_i$ be independent nonnegative variables, for all $i \in [n]
 
 \begin{defn}[Bernstein's condition]
 Let $X$ be a random variable with mean $\mu = \bbE[X]$ and variance $ \sigma^2 = \var(X)$. We say $X$ satisfies the Bernstein's condition with parameter $b$ if
-\begin{equation}
+\begin{equation}\label{eq:berncond}
 	\left| \bbE [(X -\mu)^k ]\right| \leq \frac{1}{2} k! \sigma^2 b^{k-2}, \quad \text{for } k =3, 4,....
 \end{equation} 
 \end{defn}
@@ -178,7 +185,7 @@ Note that bounded random variables satisfy the Bernstein's condition.
 	\bbE\left[e^{\lambda (X-\mu)}\right] \leq \exp\left\{ \frac{\lambda^2 \sigma^2}{2(1 - b |\lambda|)} \right\},\quad \text{for all } |\lambda| \leq \frac{1}{b}, 
 \end{equation}
 and the concentration inequality
-\begin{equation}
+\begin{equation}\label{eq:thmbernconc}
 	\bbP\left[|X - \mu| \geq t\right] \leq 2 \exp \left\{ -\frac{t^2}{2(\sigma^2 + bt)} \right\}, \quad \text{for all }t \geq 0.
 \end{equation}
 	
@@ -473,6 +480,81 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 	So far, we have three inequalities controlling the tail of bounded variables: Hoeffding's inequality, Bernstein's inequality, and Bennett's inequality. Particularly, Hoeffding's inequality implies the sub-Gaussianity of bounded variables. As the proof for Lemma~\ref{lem:bennett} shows, Bennett's inequality is at least as good as the Bernstein's inequality, for bounded random variables.
 \end{rmk}
 
+\subsection{Exercise 2.8}
+\begin{lem}[Bernstein and expectation] Let $Z$ be a nonnegative random variable satisfying the following concentration inequality
+\begin{equation}\label{eq:berncond1}
+	\bbP[Z \geq t] \leq C e^{- \frac{t^2}{2(\nu^2 +B t)}}, \quad \text{for all } t \geq 0,
+\end{equation}
+	where $(\nu, B)$ are two positive constants and $C \geq 1$. Then, the expectation of $Z$ satisfies 
+	\begin{equation}\label{eq:bernexpec}
+		\bbE[Z] \leq 2 \nu (\sqrt{\pi} + \sqrt{\log C}) + 4B (1 + \log C).
+	\end{equation}
+	Further, let $\{ X_i\}_{i=1}^n$ be a sequence of i.i.d.\ zero-mean variables satisfying the Bernstein condition \eqref{eq:berncond}. The sample mean of $\{ X_i\}_{i=1}^n$  satisfies
+	\begin{equation}\label{eq:e28sample}
+		\bbE \off{ \aabs{\frac{1}{n} \sum_{i=1}^n X_i }} \leq 2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+\end{lem}
 
+\begin{proof}
+	First, we prove the equation~\eqref{eq:bernexpec}. 
+	
+	\vspace{0.2cm}
+	By equation~\eqref{eq:berncond1}, we have
+	\begin{align}
+		\bbP[Z \geq t] &\leq C \max \offf{\exp \of{-\frac{t^2}{4 \nu^2}}, \exp \of{-\frac{t^2}{4 Bt}} }\\
+		&\leq C \exp \of{-\frac{t^2}{4 \nu^2}} + C \exp \of{-\frac{t^2}{4 Bt}}.\label{eq:e28tail}
+	\end{align}
+	
+	Plugging the inequality~\eqref{eq:e28tail} to $\bbE[Z] = \int_{0}^{+\infty} \bbP[Z \geq t] dt$, we have
+	\begin{equation}
+		\bbE[Z] = \int_{0}^{+ \infty} \min \offf{1, C \exp \of{-\frac{t^2}{4 \nu^2}}} dt + \int_{0}^{+ \infty} \min\offf{1, C \exp \of{-\frac{t^2}{4 Bt}}} dt   \colonequals I_1 + I_2.
+	\end{equation}
+	
+	To evaluate $I_1$, we spilt the integral to avoid the minimization. Solving $1 = C \exp \of{-\frac{t^2}{4 \nu^2}} $, the minimization term becomes
+	\begin{align}
+		\min \offf{1, C \exp \of{-\frac{t^2}{4 \nu^2}}} = \begin{cases}
+			\quad 1 & \text{when } t \leq 2\nu \sqrt{\log C},\\
+			\quad C \exp \of{-\frac{t^2}{4 \nu^2}} & \text{when } t \geq 2\nu \sqrt{\log C}.
+		\end{cases}
+	\end{align}
+	Therefore, we evaluate $I_1$ as follows,
+	\begin{align}
+		I_1 &= \int_{0}^{ 2\nu \sqrt{\log C}} 1 dt + \int_{2\nu \sqrt{\log C}}^{+\infty} C \exp \of{-\frac{t^2}{4 \nu^2}} dt\\
+		(\text{let}\quad y = \frac{t}{2\nu} - \sqrt{\log C})\quad &=  2\nu \sqrt{\log C} + 2\nu\int_{0}^{+\infty} \exp \of{-y^2 - 2y \sqrt{\log C}} dy\\
+		&\leq  2\nu \sqrt{\log C} + 2\nu\int_{0}^{+\infty} \exp \of{-y^2} dy.
+	\end{align}
+	By Gaussian integral $\int_{0}^{+\infty} e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$, we obtain $I_1 \leq 2\nu (\sqrt{\pi} + \sqrt{\log C})$. Similarly, we evaluate $I_2$ as follows 
+	\begin{align}
+		I_2 &= \int_{0}^{4B \log C} 1 dt + \int_{4B \log C}^{+\infty} C \exp \of{-\frac{t}{4B}} dt\\
+		 &= 4B (\log C + 1).
+	\end{align}
+	Hence, we obtain the expectation of $Z$,
+	\begin{equation}
+		\bbE[Z] = I_1 + I_2 \leq  2\nu (\sqrt{\pi} + \sqrt{\log C}) + 4B (\log C + 1).
+	\end{equation}
+	
+	\vspace{0.2cm}
+	Next, we prove the equation~\eqref{eq:e28sample}.
+	
+	\vspace{0.2cm}
+	For all $i \in [n]$, since $X_i$ satisfies the Bernstein condition with parameter $(\sigma,b)$, the variable $X_i$ satisfies the concentration bound~\eqref{eq:thmbernconc},
+	\begin{equation}
+		\bbP[|X_i| \geq t] \leq 2 \exp \offf{- \frac{t^2}{2(\sigma^2 + bt)}}, \quad \text{for all }t \geq 0. 
+	\end{equation}
+	By equation~\eqref{eq:bernexpec}, we have
+	\begin{equation}
+		\bbE[|X_i|] \leq  2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+	
+	Therefore, the expectation of the sample mean satisfies
+	\begin{equation}
+		\bbE \off{ \aabs{\frac{1}{n} \sum_{i=1}^n X_i }} \leq \frac{1}{n} \sum_{i=1}^n \bbE[|X_i|] \leq 2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+	
+\end{proof}
+
+\begin{rmk}
+	For all nonnegative random variables satisfying the Bernstein-type inequality \eqref{eq:berncond1} with parameters $(\nu,B,C)$, the expectations of the variables are upper bounded by a function of $(\nu,B,C)$. Particularly, for a zero-mean random variable $X$ satisfying the Bernstein condition with parameter $b$, $|X|$ satisfies the inequality \eqref{eq:berncond1} with parameters $(\sigma,b,2)$, where $\sigma^2 = \var(X)$.  The expectation of the absolute variable $|X|$ depends on the variance $\sigma^2$ and the parameter $b$.
+\end{rmk}
 
 \end{document}
