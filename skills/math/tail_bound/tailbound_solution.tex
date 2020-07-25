@@ -557,4 +557,46 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 	For all nonnegative random variables satisfying the Bernstein-type inequality \eqref{eq:berncond1} with parameters $(\nu,B,C)$, the expectations of the variables are upper bounded by a function of $(\nu,B,C)$. Particularly, for a zero-mean random variable $X$ satisfying the Bernstein condition with parameter $b$, $|X|$ satisfies the inequality \eqref{eq:berncond1} with parameters $(\sigma,b,2)$, where $\sigma^2 = \var(X)$.  The expectation of the absolute variable $|X|$ depends on the variance $\sigma^2$ and the parameter $b$.
 \end{rmk}
 
+\subsection{Exercise 2.9}
+\begin{lem}
+	Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in (0,1/2]$. Consider the binomial random variable $Z_n = \sum_{i=1}^n X_i$. The tail probability of $Z_n$ is upper bounded as
+	\begin{equation}\label{eq:lembinupper}
+		\bbP\off{Z_n \leq \delta n} \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (0,\alpha),
+	\end{equation}
+	where the quantity 
+	\begin{equation}
+		D(\delta \Vert \alpha) \colonequals \delta \log \frac{\delta}{\alpha} + (1-\delta) \log \frac{1-\delta}{1-\alpha}
+	\end{equation}
+	is the KL divergence between the Bernoulli distributions with parameters $\delta$ and $\alpha$, respectively.
+	
+	Further, the upper bound~\eqref{eq:lembinupper} is strictly tighter than the Hoeffding bound for all $\delta \in (0,\alpha)$.
+\end{lem}
+
+\begin{proof}
+    Applying the Chernoff inequality to the random variable $Z_n$, we have
+    \begin{equation}\label{eq:e29upper}
+    	\bbP[Z_n \leq \delta n] \leq \frac{\bbE\off{e^{\lambda Z_n}}}{e^{\lambda \delta n}} = \offf {\exp \offf{\log \of{1 - \alpha + \alpha e^{\lambda})}- \lambda \delta }}^n,\quad \text{for all } \lambda \in \bbR,
+    \end{equation}
+    where the second equality follows from the moment generating function of $Z_n$
+    \[\bbE\off{e^{\lambda Z_n}} = \of{1 - \alpha + \alpha e^{\lambda}}^n. \]
+    The upper bound~\eqref{eq:e29upper} achieves the minimum when $\lambda = \log {\frac{\delta(1-\alpha)}{\alpha(1 - \delta)}}$ by the first-order condition. Plugging the minimizer into equation~\eqref{eq:e29upper}, we obtain the result
+    \[ \bbP\off{Z_n \leq \delta n}  \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (0,\alpha).  \]
+    
+    \vspace{0.2cm}
+    Next, we show that equation~\eqref{eq:lembinupper} is strictly better than Hoeffding bound for all $\delta \in (0,\alpha)$.
+    
+    \vspace{0.2cm}
+    Hoeffding bound for random variable $Z_n$ is 
+    \begin{equation}\label{eq:e29hoeff}
+    	\bbP\off{Z_n \leq \delta n} \leq e^{ {-2n(\delta - \alpha)^2}}, \quad \text{for all }\delta \in (0,\alpha).
+    \end{equation}
+    Note that parameter $\alpha$ is fixed. Consider the function $g(\delta) = 2(\delta - \alpha)^2 - D\of{\delta \Vert \alpha}$ for $\delta \in (0,\alpha)$. The first-order derivative and  second-order derivative of $g$ are
+    \[ g'(\delta) = 4(\delta - \alpha) - \log \frac{\delta}{\alpha} + \log \frac{1-\delta}{1-\alpha} \quad \text{and} \quad g''(\delta) = 4 - \frac{1}{\delta} - \frac{1}{1-\delta}. \] 
+    Note that $ g(\alpha) = g'(\alpha) = 0$, and $g''(\delta) < 0$ for all $0 < \delta < 1/2$. We have $g(\delta) < 0$, for all $\delta \in (0,\alpha)$. Hence, the upper bound~\eqref{eq:lembinupper} is strictly better than Hoeffding bound~\eqref{eq:e29hoeff}.
+    
+\end{proof}
+
+\begin{rmk}
+	The upper bound on a binomial tail may be a function of the KL divergence between Bernoulli distributions with distinct parameters. The bound using KL divergence is strictly tighter than the Hoeffding bound. The underperformance of Hoeffding bound may attribute to the utilization of the sub-Gaussian parameter $\sigma^2$. The sub-Gaussian parameter $\sigma^2$ is not necessarily the optimal choice to describe the tail performance of a random variable with good properties. 
+\end{rmk}
 \end{document}
