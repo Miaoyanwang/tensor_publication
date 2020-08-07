@@ -32,6 +32,7 @@
 
 \DeclareMathOperator{\var}{var}
 \DeclareMathOperator{\subG}{subG}
+\DeclareMathOperator{\tr}{Trace}
 
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -193,6 +194,25 @@ and the concentration inequality
 \end{equation}
 	
 \end{thm}
+
+\begin{defn}[Bounded difference property] Let $f\colon \bbR^n \mapsto \bbR$ be a function. The function $f$ satisfies the bounded difference property with parameter $(L_1,...,L_n)$ if we have
+	\begin{equation}\label{eq:defbounded}
+		\aabs{f(x^{(k)}) - f(x^{'(k)})} \leq L_k,
+	\end{equation}
+	 for all $k \in [n]$ and for all $x^{(k)} = (x_1,...,x_k,...,x_n), x^{'(k)} = (x_1,...,x'_k,...,x_n)\in\bbR^n$.
+\end{defn}
+
+
+
+\begin{thm}[Bounded differences inequality] \label{thm:bounddiff}
+Let $f\colon \bbR^n \mapsto \bbR$ be a function satisfies the bounded difference property~\eqref{eq:defbounded}, and the random variable $X = (X_1,...,X_n)$ has independent components. Then,
+\begin{equation}
+	\bbP\off{\aabs{f(X) -\bbE[f(X)] } \geq t} \leq 2 e^{-\frac{2t^2}{\sum_{i=1}^n L_i^2}}, \quad \text{for all }t \geq 0.
+\end{equation}
+
+	
+\end{thm}
+
 
 \section{Exercises}
 
@@ -756,4 +776,313 @@ The lower bound of $\bbE[Z_n] $ is
 	 \fi
 \end{proof}
 
+\subsection{Exercise 2.12}
+\begin{lem}[Sharp upper bounds for sub-Gaussian maxima]
+	Let $\{X_i\}_{i = 1}^n$ be a sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. Then, we have
+	\begin{equation}
+		\bbE \off{\max_{i \in [n]} X_i} \leq \sqrt{2\sigma^2 \log n}, \quad \text{for all } n \geq 1.
+	\end{equation}
+	Note that independence assumptions are unnecessary.
+\end{lem}
+
+\begin{proof}
+	For all $t >0$, the function $f(x) = \exp \of{tx}$ is a convex function. Apply the function $f(x)$ to $\bbE \off{\max_{i \in [n]} X_i} $. By Jensen's inequality, we have
+	\begin{equation}\label{eq:e212}
+		\exp \offf{t \bbE \off{\max_{i \in [n]} X_i} } \leq \bbE\off{\exp \of{t \max_{i \in [n]} X_i }} \leq \sum_{i= 1}^n \bbE\off{\exp \of{t X_i }} \leq n e^{\frac{t^2 \sigma^2}{2}}, \quad \text{for all }t > 0,
+	\end{equation}
+	where the last inequality follows from the sub-Gaussianity of $X_i$s. Take the log of both sides of equation~\eqref{eq:e212}. We have
+	\begin{equation}\label{eq:e212b}
+		\bbE \off{\max_{i \in [n]} X_i}  \leq \frac{\log n}{t} + \frac{t\sigma^2}{2}.
+	\end{equation}
+	Plugging $t = \frac{\sqrt{2\log n} }{\sigma}$ into the equation~\eqref{eq:e212b}, we obtain
+	\[ \bbE \off{\max_{i \in [n]} X_i}  \leq \sqrt{2 \sigma^2 \log n}.\]
+\end{proof}
+
+
+\subsection{Exercise 2.13}
+\begin{lem}[Operations on sub-Gaussian variables]
+	Let $X_1$ and $X_2$ be two zero-mean sub-Gaussian variables with parameters $\sigma_1$ and $\sigma_2$ respectively. 
+	\begin{enumerate}
+		\item[(a).] If $X_1$ and $X_2$ are independent, then random variable $X_1 + X_2$ is sub-Gaussian with parameter $\sqrt{\sigma_1^2 + \sigma_2^2}$.
+		\item[(b).] Without independence assumptions, then random variable $X_1 + X_2$ is sub-Gaussian with parameter at most 
+		%$2 \sqrt{\sigma_1^2 +\sigma_2^2 }$.
+		$\sigma_1 + \sigma_2$.
+		\item[(c).] If $X_1$ and $X_2$ are independent, then random variable $X_1 X_2$ is sub-exponential with parameter $(\nu, b) = \of{\sqrt{2}\sigma_1 \sigma_2, \frac{1}{\sqrt{2}\sigma_1 \sigma_2}}$.
+	\end{enumerate}
+\end{lem}
+
+\begin{proof}
+	First, we prove $(a)$.
+	
+	\vspace{0.2cm}
+	Since $X_1\sim \subG(\sigma_1)$ and $X_2 \sim \subG(\sigma_2)$ are independent, we have
+	\begin{equation}
+		\bbE\off{e^{t(X_1 + X_2)}} = \bbE\off{e^{tX_1}} \bbE\off{e^{tX_2}} \leq e^{\frac{t^2(\sigma_1^2 + \sigma_2^2)}{2}},\quad \text{for all }t \in \bbR.
+	\end{equation}
+	Therefore, $X_1 +X_2$ is sub-Gaussian with parameter $\sqrt{\sigma_1^2 + \sigma_2^2}$.
+	
+	\vspace{0.2cm}
+Next, we prove $(b)$.
+
+\vspace{0.2cm}
+For all $t \in \bbR$, we have
+\begin{equation}\label{eq:e213b}
+	\bbE\off{e^{t(X_1 + X_2)}} = \bbE \off{e^{t X_1} e^{t X_2}}.
+\end{equation}
+Introduce $p,q \geq 1$ such that $\frac{1}{p} + \frac{1}{q} = 1$. By Holder's inequality, the equation~\eqref{eq:e213b} becomes
+\begin{equation}\label{eq:e213b2}
+	\bbE\off{e^{t(X_1 + X_2)}} \leq \of{\bbE \off{e^{ p t X_1}  } }^{\frac{1}{p}}
+	 \of{\bbE \off{e^{ pt X_2}  }}^{\frac{1}{q}} \leq e^{  \frac{pt^2 \sigma_1^2 + qt^2 \sigma_2^2}{2} },
+\end{equation}
+where the last inequality follows from the sub-Gaussianity of $X_1$ and $X_2$. The inequality~\eqref{eq:e213b2} achieves its minimum when $p = \sigma_2/\sigma_1 +1$. Plugging the minimizer to inequality~\eqref{eq:e213b2}, we obtain
+\begin{equation}
+	\bbE\off{e^{t(X_1 + X_2)}} \leq e^{\frac{t^2(\sigma_1 + \sigma_2
+	)^2}{2}}.
+\end{equation}
+Therefore, the random variable $X_1 + X_2$ is sub-Gaussian with parameter at most $\sigma_1 + \sigma_2$.
+
+\vspace{0.2cm}
+
+Last, we prove $(c)$.
+
+\vspace{0.2cm}
+
+\end{proof}
+
+\subsection{Exercise 2.14}
+\begin{lem}
+	Let $X$ be a scalar random variable. Suppose there exist two positive constant $c_1, c_2$ such that
+	\begin{equation}\label{eq:leme214}
+		\bbP \off{|X - \bbE[X]| \geq t} \leq c_1 e^{-c_2 t^2},\quad \text{for all }t\geq 0.
+	\end{equation}
+	Then, the variance $\var(X) \leq {c_1}/{c_2}$. 
+	
+	\vspace{0.2cm}
+	Let $m_X$ be the median of $X$; i.e., $\bbP[X \geq m_X] \geq 1/2$ and  $\bbP[X \leq m_X] \geq 1/2$. Note that the median $m_X$ is not necessarily unique. Given mean concentration~\eqref{eq:leme214}, for all median $m_X$, we have
+	\begin{equation}\label{eq:leme214b}
+		\bbP[|X - m_X| \geq t] \leq c_3 e^{-c_4t^2}, \quad \text{for all }t \geq 0,
+	\end{equation} 
+	where $c_3 \colonequals 4c_1$ and $c_4 \colonequals c_2/8$.
+	
+	 Conversely, if the equation~\eqref{eq:leme214b} holds, the mean concentration~\eqref{eq:leme214} also holds with parameter $c_1 = 2c_3$ and $c_2 = c_4/4$.
+\end{lem}
+
+\begin{proof}
+	First, we show the variance  $\var(X) \leq {c_1}/{c_2}$.
+	
+	\vspace{0.2cm}
+	
+	By the definition of variance, we have
+	\begin{equation}\label{eq:e2141}
+		\var(X) = \bbE[(X-\bbE[X])^2] = \int_{0}^{+\infty} \bbP \off{|X - \bbE[X]| \geq \sqrt{t} }dt.
+	\end{equation}
+	Since $X$ satisfies the mean concentration equation~\eqref{eq:leme214}, for all $t > 0$, we have
+	\begin{equation}\label{eq:e2142}
+		\bbP \off{|X - \bbE[X]| \geq \sqrt{t} } \leq c_1 e^{-c_2 t}.
+	\end{equation}
+	Plugging the equation~\eqref{eq:e2142} into equation~\eqref{eq:e2141}, we obtain
+	\[ \var(X) \leq \frac{c_1}{c_2}. \]
+	
+	\vspace{0.2cm}
+	
+	Next, we show by an example that the median of $X$, $m_X$, is not necessarily unique.
+	
+	\vspace{0.2cm}
+	Consider a random variable $Y \sim Bin(5,1/2)$. Then, we have $\bbP[Y \geq 3] = 1/2$ and $\bbP[Y \leq 3] > 1/2$. Meanwhile, we also have $\bbP[Y \geq 2] > 1/2$ and $\bbP[Y \leq 2] = 1/2$. By the definition of median, the number $2$ and $3$ both are the median of $Y$. Therefore, the median of a random variable is not necessarily unique.
+	
+	\vspace{0.2cm}
+	
+	Then, we prove the median concentration~\eqref{eq:leme214b}, provided that random variable $X$ satisfies the mean concentration~\eqref{eq:leme214}.
+	
+	\vspace{0.2cm}
+	
+	Let $\Delta = |\bbE[X] - m_X|$. Consider the following two cases.
+	\begin{enumerate}
+		\item[1.] Case 1: Suppose $t \geq 2\Delta$. 
+		
+		\vspace{0.2cm}
+		Note the triangle inequality $|X - \bbE[X]| \geq |X - m_X| - \Delta$ and the assumption $\frac{t}{2} \geq \Delta$. We have
+		\begin{equation}
+			\bbP[|X - m_X| \geq t] \leq \bbP \off{|X - m_X| \geq \frac{t}{2} + \Delta} \leq   \bbP \off{|X - \bbE[X]|  \geq \frac{t}{2}}.
+		\end{equation}
+		By equation~\eqref{eq:leme214}, we obtain
+		\begin{equation}\label{eq:e214case1}
+			\bbP[|X - m_X| \geq t] \leq c_1 e^{-\frac{c_2t^2}{4}}.
+		\end{equation}
+		
+		\item[2.] Case 2:   Suppose $t < 2\Delta$. 
+		
+		\vspace{0.2cm}
+		By the definition of median, we have
+		\begin{equation}\label{eq:e214ca2a}
+			\bbP[|X - \bbE[X]| \geq \Delta] \geq \bbP[X \geq m_X] \geq \frac{1}{2}.
+		\end{equation}
+		Meanwhile, by equation~\eqref{eq:leme214}, we have
+		\begin{equation}\label{eq:e214ca2b}
+			\bbP[|X - \bbE[X]| \geq \Delta] \leq c_1 e^{-c_2 \Delta^2}.
+		\end{equation}
+		
+		Combing the assumption $\Delta > \frac{t}{2}$  and inequalities~\eqref{eq:e214ca2a} \eqref{eq:e214ca2b}, we obtain
+		\begin{equation}\label{eq:e214case2}
+			\bbP[|X - m_X| \geq t]\leq 1\leq 2c_1  e^{-c_2 \Delta^2} \leq 2c_1  e^{-\frac{c_2 t^2}{4}}. 
+		\end{equation}
+		
+	\end{enumerate}
+	
+	Hence, combing the inequality~\eqref{eq:e214case1} and inequality~\eqref{eq:e214case2}, we conclude that
+	\begin{equation}
+		\bbP[|X - m_X| \geq t] \leq c_3 e^{-c_4 t^2}, 
+	\end{equation}
+	where $c_3 = 2c_1$ and $c_4 = c_2/4$. The upper bound also holds when $c_3 = 4 c_1$ and $c_4 = c_2/8$.
+	
+	\vspace{0.2cm}
+	
+	Last, we prove the mean concentration~\eqref{eq:leme214}, provided that the random variable $X$ satisfies the median concentration~\eqref{eq:leme214b}. 
+	
+	\vspace{0.2cm}
+	
+	As the proof for median concentration~\eqref{eq:leme214b}, we also consider the following two cases.
+	\begin{enumerate}
+		\item[1.] Case 1: Suppose $t \geq 2\Delta$.
+		
+		\vspace{0.2cm}
+		Note the triangle inequality $|X - m_X| + \Delta \geq |X - \bbE[X]|$ and the assumption $\frac{t}{2} \geq \Delta$. We have
+		\begin{equation}
+			\bbP[|X - \bbE[X]| \geq t ] \leq \bbP \off{|X - m_X| \geq \frac{t}{2}} \leq c_3 e^{-\frac{c_4 t^2}{4}},
+		\end{equation}
+		where the last inequality follows from the median concentration~\eqref{eq:leme214b}.
+		
+		\item[2.] Case 2: Suppose $t < 2\Delta$.
+	\end{enumerate}
+	\end{proof}
+	
+	\subsection{Exercise 2.15}
+	\begin{lem}
+		Let $\{X_i\}_{i=1}^n$ be i.i.d.\ sample of random variables with density $f$ on the real line. A standard estimate of $f$ is the kernel density estimate 
+		\begin{equation}
+			\hat f_n (x) = \frac{1}{nh} \sum_{i=1}^n  K\of{ \frac{x- X_i}{h} },
+		\end{equation}
+		where $K \colon \bbR \mapsto [0,+\infty )$ is a kernel function satisfying $\int_{-\infty}^{+\infty} K(x) dx = 1$, and $h > 0$ is a bandwidth parameter. Suppose we assess the estimate $\hat f_n (x)$ using the $L^1$ norm; i.e.,
+		\[ \onorm{\hat f_n - f}_1 = \int_{-\infty}^{+\infty} |\hat f_n(t) - f(t)|dt. \]
+		The upper tail probability of the $L^1$ norm satisfies
+		\begin{equation}
+			\bbP\off{\onorm{\hat f_n - f}_1 - \bbE \off{\onorm{\hat f_n - f}_1}\geq \delta} \leq e^{-\frac{n\delta^2}{8}},\quad \text{for all } \delta \geq 0.
+		\end{equation}
+	\end{lem}
+	
+	\begin{proof}
+		Note that $\onorm{\hat f_n - f}_1$ is a function of $X = (X_1,...,X_n)$, denoted $g(X) = g(X_1,...,X_n) = \onorm{\hat f_n - f}_1$ and $g\colon \bbR^n \mapsto \bbR$. Let $x^{(k)} = (x_1,...,x_k,...,x_n) \in \bbR^n$ and $x^{'(k)} = (x_1,...,x'_k,...,x_n)\in \bbR^n$ be two vectors. The absolute difference between the $g(x^{(k)})$ and $g(x^{'(k)})$ is
+		\begin{align}
+			|g(x^{(k)}) - g(x^{'(k)})|
+			&= \aabs{\int_{-\infty}^{+\infty} \aabs{ \frac{1}{nh} \sum_{i = 1}^n K \of{\frac{t-x_i}{h}} -f(t)  } -\aabs{ \frac{1}{nh} \sum_{i \neq k}^n K \of{\frac{t-x_i}{h}} -f(t) + \frac{1}{nh} K\of{\frac{t-x'_k}{h}}   } dt} \\
+			&\leq \int_{-\infty}^{+\infty} \aabs{\frac{1}{nh} \of{K\of{\frac{t-x_k}{h}} - K\of{\frac{t-x'_k}{h}}  } }dt\\
+			&\leq \frac{1}{nh} \of{ \int_{-\infty}^{+\infty} K\of{\frac{t-x_k}{h}}dt + \int_{-\infty}^{+\infty} K\of{\frac{t-x'_k}{h}}dt }.  \label{eq:e215int}
+		\end{align}
+		
+		Let $t_1 = \frac{t-x_k}{h}$. By the definition of $K$, the first integral in equation~\eqref{eq:e215int} are
+		\begin{equation}
+			\int_{-\infty}^{+\infty} K\of{\frac{t-x_k}{h}}dt = h\int_{-\infty}^{+\infty} K\of{t_1}dt_1 = h.
+		\end{equation}
+		Similarly, the second integral $\int_{-\infty}^{+\infty} K\of{\frac{t-x'_k}{h}}dt = h$. Then, we conclude the function $g$ satisfies
+		\begin{equation}\label{eq:e215diff}
+			|g(x^{(k)}) - g(x^{'(k)})|  \leq \frac{2}{n}.
+		\end{equation}
+		The inequality~\eqref{eq:e215diff} also holds for all $k \in [n]$ and for all $x^{(k)},x^{'(k)} \in \bbR^n$. Therefore, $g(X)$ satisfies the bounded difference property~\eqref{eq:defbounded} with parameters $(\frac{2}{n},..., \frac{2}{n})$. By Theorem~\ref{thm:bounddiff}, we obtain
+		\begin{equation}
+			\bbP\off{\onorm{\hat f_n - f}_1 - \bbE \off{\onorm{\hat f_n - f}_1} \geq \delta} \leq e^{-\frac{n\delta^2}{2}} \leq e^{-\frac{n\delta^2}{8}} .
+		\end{equation}
+		
+	\end{proof}
+	
+	
+    \subsection{Exercise 2.16}
+    \begin{lem}
+    	Let $\{X_i\}_{i=1}^n$ be a sequence of independent variables taking values in a Hilbert space $\mathbb{H}$. Suppose that $\onorm{X_i}_{\mathbb{H}} \leq b_i$ almost surely, for all $i \in [n]$. Consider the real valued random variable $S_n = \onorm{\sum_{i=1}^n X_i}_{\mathbb{H}}$. The concentration bound of $S_n$ is
+    	\begin{equation}\label{eq:e216a}
+    		\bbP\off{|S_n - \bbE[S_n]| \geq n\delta} \leq 2e^{-\frac{n\delta^2}{8b^2}}, \quad \text{for all } \delta \geq 0,
+    	\end{equation}
+    	where $b^2 = \frac{1}{n} \sum_{i=1}^n b_i^2$. The upper tail probability bound of $S_n$ is
+    	\begin{equation}\label{eq:e216b}
+    		\bbP \off{\frac{S_n}{n} \geq a + \delta} \leq e^{-\frac{n\delta^2}{8b^2}}, \quad \text{for all }\delta \geq 0,
+    	\end{equation}
+    	where $a = \sqrt{\frac{1}{n} \sum_{i=1}^n \bbE \off{\onorm{X_i}^2_{\mathbb{H}}} }$.
+    \end{lem} 
+    
+    \begin{proof} First, we prove the concentration bound~\eqref{eq:e216a}.
+    
+    \vspace{0.2cm}
+    	Note that $S_n$ is a function of $X=(X_1,...,X_n)$, denoted $S_n(X) = S_n(X_1,...,X_n)$, and $S_n(X) \colon \bbR^n \mapsto \bbR$.  Let $x^{(k)} = (x_1,...,x_k,...,x_n) \in \bbR^n$ and $x^{'(k)} = (x_1,...,x'_k,...,x_n)\in \bbR^n$ be two vectors. The absolute difference between $S_n(x^{(k)})$ and $S_n(x^{'(k)})$ is
+    	\begin{align}
+    		\aabs{S_n(x^{(k)}) - S_n(x^{'(k)})} &= \aabs{\onorm{x_1 + \cdots +x_k + \cdots + x_n}_{\mathbb{H}} - \onorm{x_1 + \cdots +x'_k + \cdots + x_n}_{\mathbb{H}} }\\
+    		& \leq \onorm{x_k - x'_k}_{\mathbb{H}}\\
+    		& \leq 2b_k, \label{eq:e216diff}
+    	\end{align}
+    	where the last inequality follows by the boundedness $\onorm{X_k}_{\mathbb{H}} \leq b_k$, for all $k \in [n]$. The inequality~\eqref{eq:e216diff} also holds for all $k \in [n]$ and for all $x^{(k)},x^{'(k)} \in \bbR^n$. Therefore, $S_n(X)$ satisfies the bounded property~\eqref{eq:defbounded} with parameters $(2b_1,...,2b_n)$. By Theorem~\ref{thm:bounddiff}, we obtain
+    	\begin{equation}
+    		\bbP\off{|S_n - \bbE[S_n]| \geq n\delta} \leq 2 e^{- \frac{n \delta^2}{2b^2}} \leq 2 e^{- \frac{n \delta^2}{8b^2}}, \quad \text{for all }\delta \geq 0.
+    	\end{equation}
+    	
+    	\vspace{0.2cm}
+    	Next, we prove the upper tail probability bound~\eqref{eq:e216b}.
+    	
+    	\vspace{0.2cm}
+    	The expectation of $S_n(X) = \bbE \off{ \sum_{i=1}^n  \onorm{X_i}_{\mathbb{H}}}$ satisfies
+    	\begin{equation}\label{eq:e216ineq}
+    		 \bbE \off{ \onorm{ \sum_{i=1}^n  X_i}_{\mathbb{H}} } \leq \sqrt{ \bbE \off{ \onorm{\sum_{i=1}^n X_i }_{\mathbb{H}}^2  }} = \sqrt{ \sum_{i=1}^n \bbE \off{ \onorm{X_i}^2_{\mathbb{H}} } } = na,
+    	\end{equation}
+    	where the first inequality follows by the fact that $\bbE[X^2] \geq (\bbE[X] )^2$ and the second equation follows by the independence of $\{X_i\}_{i=1}^n$. Therefore, combing the inequality~\eqref{eq:e216ineq} with the concentration bound~\eqref{eq:e216a}, we obtain
+    	\begin{equation}
+    		\bbP \off{\frac{S_n}{n} \geq a + \delta} = \bbP \off{S_n - na \geq n\delta} \leq \bbP \off{S_n - \bbE[S_n] \geq n\delta } \leq e^{-\frac{n\delta^2}{8 b^2}}.
+    	\end{equation}
+    \end{proof}
+    
+    \subsection{Exercise 2.17}
+    \begin{lem}[Hanson-Wright Inequality]
+   Let $\mQ = \entry{\mQ_{ij}}  \in \bbR^{n \times n} $ be a positive semi-definite matrix, and $\{X_i\}_{i = 1}^n$ be i.i.d.\ random variables with mean zero, variance 1 and $\sigma-$sub-Gaussian. Consider the random variable $Z = \sum_{i= 1}^n \sum_{j = 1}^n \mQ_{ij} X_i X_j$. The Hanson-Wright inequality for $Z$ is
+   \begin{equation}
+   	\bbP \off{Z \geq \tr (\mQ) + \sigma t } \leq 2 e^{- \min \offf{\frac{c_1 t}{\onorm{\mQ}_{op}  } , \frac{c_2 t^2}{\onorm{\mQ}^2_F} }}, \quad \text{for all } t \geq 0,
+   \end{equation}
+   where $\onorm{\mQ}_{op}$ is the operator norm of matrix $\mQ$, $\onorm{\mQ}_F$ is the Frobenius norm of matrix $\mQ$, and $c_1,c_2$ are two universal constants independent with $n$ and $t$.
+    \end{lem}
+    
+    The proof for Hanson-Wright Inequality under the special case that $X_i \stackrel{i.i.d.}{\sim} N(0,1)$ is below. Let $\sigma  = 1$.
+    
+    \begin{proof}
+    	Since the random variables ${X_i}_{i=1}^n$ are independent and $\var(X_i) = 1$ for all $i \in [n]$, the expectation $\bbE[Z] = \sum_{i = 1}^{n} \mQ_{ii} = \tr(\mQ)$. Then, the upper tail probability of $Z$ becomes
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } = \bbP \off{ \of{  \sum_{i = 1}^{n} \mQ_{ii} (X^2_i - 1) + \sum_{i \neq j} \mQ_{ij} X_i X_j }\geq t   }
+    	\end{equation}
+    	For two random variable $X,Y$ and constant $t$, we have the inequality $ \bbP[X+Y \geq t] \leq \bbP[X \geq t/2] + \bbP[Y \geq t/2]$. Hence, the tail probability is upper bounded as
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } \leq \bbP\off{ \sum_{i =1 }^n \mQ_{ii}(X_i^2 - 1) \geq \frac{t}{2}  } + \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \equalscolon p_1 + p_2.
+    	\end{equation} 
+    	
+    	Consider $p_1$. For a standard normal variable $X$,  the squared variable $X^2 \sim \chi^2_1$ and $X^2$ is sub-exponential with parameter $(\nu, b) = (2,4)$. Given a constant $c$, $cX^2$ is still sub-exponential with parameters $(2 c, 4 c^2)$. Hence, for all $i \in [n]$, the variable $\mQ_{ii} X_i^2$ is sub-exponential with parameters $(2 \mQ_{ii}, 4 \mQ^2_{ii} )$. By the Bernstein-type inequalities(non-asymptotic 5.16), the probability $p_1$ is upper bounded as following,
+    	\begin{equation}
+    		p_1 = \bbP \off{\sum_{i=1}^n { \of{ \mQ_{ii}X^2_i - \mQ_{ii}\bbE[X^2_i]   } \geq \frac{t}{2} }} \leq \exp \of{ - \min \offf{  \frac{c t^2}{\sum_{i}^n \mQ^2_{ii} }, \frac{c't}{\max_{i \in [n]  }|\mQ_{ii}| } }},
+    	\end{equation}
+    	where $c$ and $c'$ are two constants independent with $n$ and $t$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Consider $p_2$. For two i.i.d.\ standard normal variables $X,Y$, the product $XY = \frac{1}{4}(X+Y)^2 - \frac{1}{4}(X-Y )^2$, where $ \frac{1}{2} (X+Y)^2$ and $\frac{1}{2} (X-Y)^2$ follow the chi-square distribution $\chi^2_1$ independently. Then, $XY$ is the subtraction of two independent sub-exponential variables. Let $D_1$ and $D_2$ be two identical and independent sub-exponential variables with parameters $(\nu, b)$. We have
+    	\[ \bbE[e^{\lambda (D_1-D_2)}] = \bbE[e^{\lambda D_1}] \bbE[e^{-\lambda D_2}] \leq e^{v^2 \lambda^2}, \quad \text{for all } |\lambda | < \frac{1}{b}.  \]
+    	Therefore, the subtraction of two identical and independent sub-exponential variables $D_1 -D_2$ is still sub-exponential with parameters $(\sqrt{2}\nu, b)$.
+    	
+    	\vspace{0.2cm}
+    	Back to $\mQ_{ij} X_i X_j$, where $i \neq j$. By the discussion above, the variable $\mQ_{ij} X_i X_j$ is sub-exp onential with parameters $(\sqrt{2} \mQ_{ij}, \mQ_{ij}^2)$. By the Bernstein-type inequalities, the probability $p_2$ is upper bounded as following,
+    	\begin{equation}
+    		p_2 = \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \leq \exp \of{ - \min \offf{  \frac{c'' t^2}{\sum_{i\neq j} \mQ^2_{ij} }, \frac{c'''t}{\max_{i\neq j   }|\mQ_{ij}| } }},
+    	\end{equation}
+    	where $c''$ and $c'''$ are two constants independent with $n$ and $t$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Therefore, by the definition of Frobenius norm and the fact that $\max_{i,j\in[n]}|\mQ_{ij}| \leq \onorm{\mQ}_{op} $, we obtain the goal inequality
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } \leq p_1 + p_2 \leq 2\exp \of{ - \min \offf{  \frac{c_2 t^2}{\onorm{\mQ}^2_F}, \frac{c_1t}{\onorm{\mQ}_{op} }} },
+    	\end{equation}
+    	for some universal constants $c_1,c_2$ independent with $n$ and $t$.
+    \end{proof}
+    
 \end{document}
