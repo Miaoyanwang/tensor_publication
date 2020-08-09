@@ -580,7 +580,7 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 	For a nonnegative random variables satisfying the Bernstein-type inequality \eqref{eq:berncond1}, the expectation of the variable is upper bounded by a function of the parameter $(\nu,B,C)$. Particularly, for a zero-mean random variable $X$ satisfying the Bernstein condition with parameter $b$, $|X|$ satisfies the inequality \eqref{eq:berncond1} with parameters $(\sigma,b,2)$, where $\sigma^2 = \var(X)$.  Then, the expectation of the absolute variable $|X|$ is upper bounded by a function of $(\sigma^2, b)$. 
 \end{rmk}
 
-\subsection{Exercise 2.9}
+\subsection{Exercise 2.9}\label{exe:29}
 \begin{lem}[Sharp upper bounds on binomial tails]
 	Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in (0,1/2]$. Consider the binomial random variable $Z_n = \sum_{i=1}^n X_i$. The tail probability of $Z_n$ is upper bounded as
 	\begin{equation}\label{eq:lembinupper}
@@ -624,7 +624,7 @@ The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y
 \end{rmk}
 
 
-\subsection{Exercise 2.10}
+\subsection{Exercise 2.10}\label{exe:210}
 \begin{lem}[Lower bounds on binomial tails]
 	Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in (0,1/2]$. Consider the binomial random variable $Z_n \colonequals \sum_{i=1}^n X_i$. For some fixed $\delta \in (0,\alpha)$, let $m = \floor{n\delta}$; i.e., $m$ is the largest integer less or equal to $n \delta$. Let $ \tilde \delta = {m}/{n}$. We have
 	\begin{equation}\label{eq:e2101}
@@ -1048,16 +1048,16 @@ Last, we prove $(c)$.
     The proof for Hanson-Wright Inequality under the special case that $X_i \stackrel{i.i.d.}{\sim} N(0,1)$ is below. Let $\sigma  = 1$.
     
     \begin{proof}
-    	Since the random variables ${X_i}_{i=1}^n$ are independent and $\var(X_i) = 1$ for all $i \in [n]$, the expectation $\bbE[Z] = \sum_{i = 1}^{n} \mQ_{ii} = \tr(\mQ)$. Then, the upper tail probability of $Z$ becomes
+    	Since the random variables $\{X_i\}_{i=1}^n$ are independent and $\var(X_i) = 1$ for all $i \in [n]$, the expectation $\bbE[Z] = \sum_{i = 1}^{n} \mQ_{ii} = \tr(\mQ)$. Then, the upper tail probability of $Z$ becomes
     	\begin{equation}
     		\bbP \off{ Z \geq \tr(\mQ) +  t } = \bbP \off{ \of{  \sum_{i = 1}^{n} \mQ_{ii} (X^2_i - 1) + \sum_{i \neq j} \mQ_{ij} X_i X_j }\geq t   }
     	\end{equation}
-    	For two random variable $X,Y$ and constant $t$, we have the inequality $ \bbP[X+Y \geq t] \leq \bbP[X \geq t/2] + \bbP[Y \geq t/2]$. Hence, the tail probability is upper bounded as
+    	For two random variables $X,Y$ and a constant $t$, we have the inequality $ \bbP[X+Y \geq t] \leq \bbP[X \geq t/2] + \bbP[Y \geq t/2]$. Hence, the tail probability is upper bounded as
     	\begin{equation}
     		\bbP \off{ Z \geq \tr(\mQ) +  t } \leq \bbP\off{ \sum_{i =1 }^n \mQ_{ii}(X_i^2 - 1) \geq \frac{t}{2}  } + \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \equalscolon p_1 + p_2.
     	\end{equation} 
     	
-    	Consider $p_1$. For a standard normal variable $X$,  the squared variable $X^2 \sim \chi^2_1$ and $X^2$ is sub-exponential with parameter $(\nu, b) = (2,4)$. Given a constant $c$, $cX^2$ is still sub-exponential with parameters $(2 c, 4 c^2)$. Hence, for all $i \in [n]$, the variable $\mQ_{ii} X_i^2$ is sub-exponential with parameters $(2 \mQ_{ii}, 4 \mQ^2_{ii} )$. By the Bernstein-type inequalities(non-asymptotic 5.16), the probability $p_1$ is upper bounded as following,
+    	Consider $p_1$. For a standard normal variable $X$,  the squared variable $X^2 \sim \chi^2_1$ and thus $X^2$ is sub-exponential with parameter $(\nu, b) = (2,4)$. Given a constant $c$, $cX^2$ is still sub-exponential with parameters $(2 c, 4 c^2)$. Hence, for all $i \in [n]$, the variable $\mQ_{ii} X_i^2$ is sub-exponential with parameters $(2 \mQ_{ii}, 4 \mQ^2_{ii} )$. By the Bernstein-type inequalities(non-asymptotic 5.16), the probability $p_1$ is upper bounded as following,
     	\begin{equation}
     		p_1 = \bbP \off{\sum_{i=1}^n { \of{ \mQ_{ii}X^2_i - \mQ_{ii}\bbE[X^2_i]   } \geq \frac{t}{2} }} \leq \exp \of{ - \min \offf{  \frac{c t^2}{\sum_{i}^n \mQ^2_{ii} }, \frac{c't}{\max_{i \in [n]  }|\mQ_{ii}| } }},
     	\end{equation}
@@ -1070,7 +1070,7 @@ Last, we prove $(c)$.
     	Therefore, the subtraction of two identical and independent sub-exponential variables $D_1 -D_2$ is still sub-exponential with parameters $(\sqrt{2}\nu, b)$.
     	
     	\vspace{0.2cm}
-    	Back to $\mQ_{ij} X_i X_j$, where $i \neq j$. By the discussion above, the variable $\mQ_{ij} X_i X_j$ is sub-exp onential with parameters $(\sqrt{2} \mQ_{ij}, \mQ_{ij}^2)$. By the Bernstein-type inequalities, the probability $p_2$ is upper bounded as following,
+    	Back to $\mQ_{ij} X_i X_j$, where $i \neq j$. By the discussion above, for all $i\neq j$, the variable $\mQ_{ij} X_i X_j$ is sub-exponential with parameters $(\sqrt{2} \mQ_{ij}, \mQ_{ij}^2)$. By the Bernstein-type inequalities, the probability $p_2$ is upper bounded as following,
     	\begin{equation}
     		p_2 = \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \leq \exp \of{ - \min \offf{  \frac{c'' t^2}{\sum_{i\neq j} \mQ^2_{ij} }, \frac{c'''t}{\max_{i\neq j   }|\mQ_{ij}| } }},
     	\end{equation}
@@ -1084,5 +1084,206 @@ Last, we prove $(c)$.
     	\end{equation}
     	for some universal constants $c_1,c_2$ independent with $n$ and $t$.
     \end{proof}
+    
+    \subsection{Exercise 2.18}
+    
+    \begin{defn}[Orlicz Norms]\label{def:orlicz}
+     Let $\psi \colon \bbR_+ \mapsto \bbR_+$ be a strictly increasing convex function satisfying $\psi(0) = 0$. The $\psi$-Orlicz norm of a random variable $X$ is defined as
+    \begin{equation}
+    	\onorm{X}_{\psi} \colonequals \inf \offf{t > 0\colon \bbE\off{\psi \of{t^{-1} |X| } } \leq 1  }.
+    \end{equation}
+    The norm $\onorm{X}_{\psi}$ is infinite if there is no finite $t$ such that the expectation $ \bbE\off{\psi \of{t^{-1} |X| } }$ exists.
+    \end{defn}
+    
+     Given the function $\psi_q(u) = u^{q}$ for some $q \in [1,+\infty)$, the Orlicz norm is simply the $l_q$-norm $\onorm{X}_q = \of{ \bbE[|X|^q] }^{1/q}$.
+
+    \begin{lem}
+    Let $\psi_q(u) = \exp(u^q) - 1$ be a function for $u \in \bbR_+$ with positive parameter $q \in [1,+\infty)$, and $\onorm{\cdot}_{\psi_q}$ denote the $\psi_q$-Orlicz norm. Then,
+    \begin{enumerate}
+    	\item[(a.)] If $\onorm{X}_{\psi_q} < +\infty$, there exists two positive constants $c_1,c_2$ such that
+    	\begin{equation}\label{eq:lemorlicztail}
+    		\bbP[|X| > t] \leq c_1 \exp \of{-c_2 t^q},\quad \text{for all } t > 0.
+    	\end{equation}
+    	In particular, the constants $c_1 = 2$ and $c_2 = \onorm{X}_{\psi_q}$.
+    	
+    	\item[(b.)] If the random variable $X$ satisfies the tail bound~\eqref{eq:lemorlicztail}, the Orlicz norm $\onorm{X}_{\psi_q} < +\infty$.
+    \end{enumerate}
+    \end{lem}
+    \begin{proof}
+    	First, we prove $(a)$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Let $t_0$ denote the Orlicz norm $\onorm{X}_{\psi_q}$. Since $t_0 < +\infty$, the expectation $ \bbE \off{ \exp \of{\lambda |X|^q} }$ exists for $\lambda \in  [0,t^{-q}_0]$. Applying Chernoff's bound to $|X|^q$, the upper tail bound of $|X|$ becomes
+    	\begin{equation}\label{eq:e218tailbound}
+    		\bbP [|X|>t] = \bbP \off{\frac{|X|^q}{t^q_0} > \frac{t^q}{t^q_0}} \leq e^{-\lambda t^q} \bbE \off{ \exp \of{\lambda |X|^q} }, \quad \text{for all } t\geq 0, \lambda\in [0,t^{-q}_0].
+    	\end{equation}
+    	 By the definition of Orlicz norm, the expectation satisfies
+    	\begin{equation}\label{eq:e218ep}
+    		\bbE \off{ \exp \of{ t^{-q}_0|X|^q} } = \bbE \off{ \psi( t^{-1}_0 |X| )} + 1 \leq 2.
+    	\end{equation}
+    	Let $\lambda = t^{-q}_0$ and plug the expectation~\eqref{eq:e218ep} to the inequality~\eqref{eq:e218tailbound}. Then, we obtain the tail bound
+    	\begin{equation}
+    		\bbP [|X|>t] \leq 2 e^{- \onorm{X}^{-q}_{\psi_q} t^q },\quad 
+    		\text{for all }  t \geq 0.
+    	\end{equation}
+    	
+    	\vspace{0.2cm}
+    	Next, we prove $(b)$.
+    	
+    	\vspace{0.2cm}
+     Let $t_1$ be a positive constant. 	Note the fact that $\bbE[X] = \int_{-\infty}^{+\infty} \bbP(X >t) dt  $. The expectation of $\bbE[ \exp(t^{-q}_1 |X| )  ]$ is
+    	\begin{align}
+    		\bbE[ \exp(t^{-q}_1 |X|^q )  ] &= \int_{0}^{+\infty} \bbP \off{ \exp \of{\frac{|X|^q}{t^q_1}} > \exp \of{\frac{t^q}{t^q_1}} } dt \\
+    		& = \int_{0}^{+\infty} \bbP \off{ |X| > t } dt \\
+    		& \leq  \int_{0}^{+\infty} c_1 \exp(-c_2 t^q) dt\label{eq:e218integral},
+       	\end{align}
+       	where the last inequality follows from the tail bound~\eqref{eq:lemorlicztail}. Let $u = c_2 t^q$. The integral in equation~\eqref{eq:e218integral} becomes
+       	\[  \int_{0}^{+\infty} c_1 \exp(-c_2 t^q) dt = \frac{c_1}{q c_2^{1/q}} \int_{0}^{+\infty} u^{1/q-1}e^{-u} du =  \frac{c_1}{q c_2^{1/q}} \Gamma(1/q) < +\infty.  \]
+       	Therefore, the expectation 
+       	\begin{equation}
+       		\bbE \off{ \psi(t_1^{-1} |X| )} =  \bbE[ \exp(t^{-q}_1 |X|^q )  ] - 1 < +\infty, \quad \text{for all } t_1 > 0,
+       	\end{equation}
+       	which implies the Orlicz norm $\onorm{X}_{\psi_q}$ is definite.
+    \end{proof}
+    
+\subsection{Exercise 2.19}
+\begin{lem}[Maxima of Orlicz variables] Recall the definition of Orlicz norm~\ref{def:orlicz}. Let $\{X\}_{i=1}^n$ be a sequence of i.i.d.\ zero-mean random variables. Given a positive, increasing and convex function $\psi \colon \bbR_+ \mapsto \bbR_+$, the random variable $X_i$ has a finite Orlicz norm $\sigma = \onorm{X_i}_{\psi}$, for all $i \in [n]$. Then, the maxima of $X_i$ satisfies
+\begin{equation}
+	\bbE \off{ \max_{i\in[n]} |X_i| } < \sigma \psi^{-1}(n).
+\end{equation}
+	
+\end{lem}
+
+\begin{proof}
+	Since $\psi$ is a convex function, by Jensen's inequality, we have
+	\begin{equation}\label{eq:e219max}
+		\psi \of{\bbE \off{\max_{i \in [n]} \frac{|X_i|}{\sigma}  } } \leq \bbE \off{ \max_{i\in[n]} \psi \of{\frac{|X_i|}{\sigma}}   } \leq n \bbE \off{ \psi \of{\frac{|X_1|}{\sigma}} }.
+	\end{equation}
+	By the definition of Orlicz norm, we have $\bbE \off{ \psi \of{\frac{|X_1|}{\sigma}} } \leq 1$. Therefore, taking the inverse function $\psi^{-1}$ on both sides of inequality~\eqref{eq:e219max}, we obtain
+	\[  \bbE \off{\max_{i \in [n]} {|X_i|} } \leq \sigma \psi^{-1}(n).  \]
+\end{proof}
+    
+\subsection{Exercise 2.20}
+
+\begin{lem}
+	Let $\{X_i\}_{i=1}^n$ be a sequence of independent zero-mean random variables. Suppose that for some fixed integer $m \geq 1$, the random variables satisfy the following moment bound,
+\begin{equation}\label{eq:e220mom}
+	\onorm{X_i}_{2m} \colonequals \of{\bbE[X^{2m}_i] }^{\frac{1}{2m}} \leq C_m, \quad \text{for all } i \in [n].
+\end{equation}
+Then, we have the tail bound
+\begin{equation}
+	\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } \leq B_m \of{\frac{1}{\sqrt{n} \delta}}^{2m}, \quad \text{for all } \delta >0,
+\end{equation}
+where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
+\end{lem}
+
+\textit{Hint:} Let $\{X_i\}_{i=1}^n$ be a sequence of independent zero-mean random variables. The Rosenthal’s inequality is
+\begin{equation}\label{eq:rosenthal}
+	\bbE \off{\of{\sum_{i=1}^n X_i}^{2m}} \leq R_m \offf{\sum_{i=1}^n \bbE \off{X^{2m}_i} + \of{\sum_{i=1}^n \bbE [X^2_i]}^m },
+\end{equation}
+ where $R_m$ is a universal constant depending on $m$ only.
+ 
+ \begin{proof}
+ 	Applying the $2m$-order central moment version of the Markov's inequality to $\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } $, we have the tail bound
+ 	\begin{equation}\label{eq:e220tail}
+ 		\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } = \bbP \off{\aabs{  \sum_{i=1}^n X_i } \geq n \delta } \leq (n\delta)^{-2m} \bbE \off{ \of{\sum_{i=1}^n X_i}^{2m} }.
+ 	\end{equation}
+ 	
+ 	By the moment bound, for all $i\in [n]$, we have
+ 	\begin{equation}\label{eq:e220inequ}
+ 		\bbE \off{X^2_i}  \leq \bbE \off{X^{2m}_i} \leq C^{2m}_m.
+ 	\end{equation}
+ 	Plugging the inequality~\eqref{eq:e220inequ} to the Rosenthal's inequality~\eqref{eq:rosenthal}, we obtain
+ 	\begin{equation}\label{eq:e220exp}
+ 		\bbE \off{\of{\sum_{i=1}^n X_i}^{2m}} \leq R_m\of{nC^{2m}_m  + n^m C^{2m^2}_m  }. 
+ 	\end{equation}
+ 	Combining the inequality~\eqref{eq:e220exp} with tai bound~\eqref{eq:e220tail}, we have
+ 	\begin{equation}
+ 		\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } \leq \frac{R_m\of{nC^{2m}_m  + n^m C^{2m^2}_m  } }{n^{2m} \delta^{2m}} = B_m\of{ \frac{1}{\sqrt{n} \delta}}^{2m}, \quad \text{for all }\delta > 0,
+ 	\end{equation}
+ 	where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
+ \end{proof}
+ 
+ \subsection{Exercise 2.21}
+ \begin{defn}
+ 	Let $X=(X_1,...,X_n)$ be a sequence of i.i.d.\ Bernoulli variables with parameter $1/2$. Represent X using a codebook of $N$ binary vectors, denoted $\{z^1,...,z^N\}$, where $z^j = \entry{z^j_i} \in \bbR^n$ is a vector, for all $j \in [N]$. The rescaled Hamming distortion is defined as
+ 	\begin{equation}
+ 		\delta \colonequals \bbE \off{ \min_{j \in [N]} \rho_H(X, z^j) } = \bbE \off{ \min_{j \in [N]} \frac{1}{n} \sum_{i = 1}^n  \mathds{1} \off{X_i \neq z^j_i} }. 
+ 	\end{equation}
+ \end{defn}
+ 
+ The goal of lossy data compression is to find a representation of $X$ with rescaled Hamming distortion as small as possible. When we use a codebook with $N = 2^n$ codewords, we always achieve the 0 distortion. However, obtaining the distortion with $N = 2^n$ codewords is computationally expensive. Our goal is find a proper rate  $R < 1$ such that using a codebook with $N = 2^{Rn}$ codewords achieves a good compression performance. 
+ 
+ \begin{lem}
+ 	
+ 	Let $X=(X_1,...,X_n)$ be a sequence of i.i.d.\ Bernoulli variables with parameter $1/2$. Let $\delta \in (0,1)$. Suppose that the rate $R$ is upper bounded as
+ 	\begin{equation}
+ 		R < D_2(\delta || 1/2 ) = \delta \log_2 \frac{\delta}{1/2} + (1-\delta) \log_2 \frac{1-\delta}{1/2}.
+ 	\end{equation}
+ 	
+ 	Let  $\Delta_R \colonequals R - D_2(\delta || 1/2 )$. If $\Delta_R < 0$, 
+ 	then the probability of achieving distortion $\delta$ goes to 0 as $n$ goes to the infinity, for all codebook $\{z^1,...,z^N\}$. If $\Delta_R > 0$, the probability of achieving distortion $\delta$ goes to 1 as $n$ goes to the infinity, for all codebook $\{z^1,...,z^N\}$.
+ 	
+ \end{lem}
+ 
+ \begin{proof} First, we prove the probability of achieving the distortion under $\Delta_R < 0$.
+ 
+ \vspace{0.2cm}
+ 
+ 	Consider the random variables $V^j = \mathds{1}\off{\rho_H(X,z^j) \leq \delta}  $, for all $j \in [N]$. Given the codeword $z^j$, the variable $\mathds{1} \off{X_i - z^j_i}$ is still a Bernoulli random variable. Recalling the tail bound~\eqref{eq:lembinupper} in Exercise \ref{exe:29}, we have
+ 	\begin{equation}
+ 		\bbP \off{V^j = 1} = \bbP \off{\sum_{i=1}^n \mathds{1} \off{X_i - z^j_i} \leq n\delta} \leq e^{-nD(\delta || 1/2)}, \quad \text{for all }j\in [N].
+ 	\end{equation}
+ 	Since the sum of $V^j$, denoted $V = \sum_{j=1}^N V^j$, follows the Binomial distribution $Bin(N, \bbP \off{V^j = 1} )$, the probability of not achieving the distortion $\delta$ is
+ 	\begin{equation}\label{eq:e221av0}
+ 		\bbP[V = 0] \geq \of{1 - e^{-nD(\delta || 1/2)}}^N.
+ 	\end{equation}
+  Let $R_0 = D_2(\delta || 1/2)$ and $N_0 = 2^{R_0 n} = (2\delta)^{n\delta}(2(1-\delta))^{n(1-\delta)}$. By the definition of KL divergence, we have $e^{-nD(\delta || 1/2)} = N^{-1}_0$. Note that the ratio $\frac{N}{N_0} = 2^{(\Delta_R)n}$ goes to 0 as $n$ goes to the infinity. Hence, the limit of the probability~\eqref{eq:e221av0} is
+  \begin{equation}
+  	\lim_{n \rightarrow +\infty} \bbP[V = 0] \geq \lim_{n \rightarrow +\infty} \of{\of{1 - \frac{1}{N_0}}^{N_0} }^{\frac{N}{N_0}} = 1.
+  \end{equation}
+  
+  Therefore, when $\Delta_R < 0$, the probability of achieving distortion $\delta$ goes to 0 as $n$ goes to the infinity.
+ 	
+ 	
+ 	\vspace{0.2cm}
+ 	Next,  we prove the probability of achieving the distortion under $\Delta_R > 0$. 
+ 	
+ 	\vspace{0.2cm}
+ 	Recall the tail bound~\eqref{eq:e2103} in Exercise~\ref{exe:210}. We have the upper bound of $\bbP \off{V^j = 1}$, where
+ 	\begin{equation}\label{eq:e221prob}
+ 		\bbP \off{V^j = 1} = \bbP \off{\sum_{i=1}^n \mathds{1} \off{X_i - z^j_i} \leq n\delta} \geq \frac{1}{n+1}e^{-nD(\delta || 1/2)}, \quad \text{for all }j\in [N].
+ 	\end{equation}
+ 	Then the probability of not achieving the distortion $\delta$ is
+ 	\begin{equation}
+ 		\bbP[V = 0] \leq \of{1 - \frac{1}{n+1} e^{-nD(\delta || 1/2)}}^N.
+ 	\end{equation}
+ 	
+ 	Since the difference $\Delta_R > 0$, then the ratio $\frac{N}{N_0(n+1)} = \frac{2^{(\Delta_R) n} }{n+1}$ goes to infinity as $n$ goes to infinity. 
+ 	
+ 	 Hence, the limit of the probability of not achieving the distortion $\delta$ is
+ 	 \begin{equation}
+ 	 	\lim_{n \rightarrow +\infty} \bbP[V = 0] \leq \lim_{n \rightarrow +\infty} \of{1 - \frac{1}{n+1} e^{-nD(\delta || 1/2)}}^N = \lim_{n \rightarrow +\infty}\of{ \of{1 - \frac{1}{(n+1)N_0}}^{(n+1)N_0}}^{\frac{N}{(n+1)N_0}} = 0.
+ 	 \end{equation}
+ 	 
+ 	 Therefore, when $\Delta_R > 0$, the probability of achieving distortion $\delta$ goes to 1 as $n$ goes to the infinity. 
+ 	 
+ 	 \vspace{0.2cm}
+ 	 
+ 	 An alternative version of the proof when $\Delta_R > 0$ is below.
+ 	 
+ 	 \vspace{0.2cm}
+ 	 Let $p = \bbP \off{V^j = 1}$. By the Bernoulli's inequality, the probability of not achieving the distortion $\delta$ satisfies
+ 	 \begin{equation}
+ 	 	\bbP \off{V = 0} = \of{1 - p}^N \leq \frac{1}{1 - Np} = \frac{Np(1-p)}{Np(1-p) + N^2 p^2} = \frac{(\bbE[V])^2}{\bbE \off{V^2}}.
+ 	 \end{equation}
+ 	  Therefore, by inequality~\eqref{eq:e221prob} the limit of the probability of achieving the distortion $\delta$ is
+ 	  \begin{equation}
+ 	  	\lim_{n \rightarrow +\infty}  \bbP \off{V \geq 1} \geq \lim_{n \rightarrow +\infty}   1- \frac{1}{N p} \geq \lim_{n \rightarrow +\infty}  1 - \frac{n+1}{N N_0 } = 1.
+ 	  \end{equation}
+ \end{proof}
+ 
+ \subsection{Exercise 2.22}
     
 \end{document}
