@@ -737,12 +737,18 @@ The lower bound of $\bbE[Z_n] $ is
 \begin{equation}\label{eq:e2112}
 	\bbE[Z_n] \geq (1- 1/e) \sqrt{\sigma^2 \log n} , \quad \text{for all }n \geq 6.
 \end{equation}
+
+Moreover, we have
+\begin{equation}\label{eq:e2113}
+	\frac{\bbE[Z_n]}{\sqrt{2 \sigma^2 \log n}} \rightarrow 1, \quad \text{as $n \rightarrow +\infty$}.
+\end{equation}
+
 \end{lem}
 
 The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the constant.
 
 \begin{proof}
-	%First, we prove the equation~\eqref{eq:e2111}.
+	First, we prove the equation~\eqref{eq:e2111}.
 	
 	\vspace{0.2cm}
 	Consider the tail probability of $Z_n$. We have
@@ -761,7 +767,7 @@ The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the
 	 \begin{equation}\label{eq:e211proupper}
 	 	\bbP[|X_1| \geq t] \leq 2 \sqrt{\frac{2}{\pi}} \frac{\sigma}{t} e^{-\frac{t^2}{2\sigma^2}}.
 	 \end{equation}
-	 Hence, let $ u = \frac{ t}{\sigma}$, the last integral in equation~\eqref{eq:e211pro1} is upper bounded as
+	Let $ u = \frac{ t}{\sigma}$. Hence, for $c > \sigma$, the last integral in equation~\eqref{eq:e211pro1} is upper bounded as
 	 \begin{align}
 	 	 \int_{c}^{+\infty} n\bbP[|X_1| \geq t] dt &\leq \frac{2n \sigma}{c} \sqrt{\frac{2}{\pi}} \int_{c}^{+\infty} e^{-\frac{t^2}{2\sigma^2} }dt \\  
 	 	 %& = \frac{2n \sigma^2}{c} \sqrt{\frac{2}{\pi}}   \int_{\frac{c}{\sigma}}^{+\infty} e^{-\frac{u^2}{2}} dt \\
@@ -772,6 +778,22 @@ The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the
 	 \begin{equation}
 	 	\bbE[Z_n] \leq \sqrt{2\sigma^2 \log n} + \frac{2\sigma}{\sqrt{2\log n}}   \sqrt{\frac{2}{\pi}}  \leq \sqrt{2\sigma^2 \log n} + \frac{4\sigma}{\sqrt{2\log n}}, \quad \text{for all }n \geq 2.
 	 \end{equation}
+	 
+	 
+	 \textbf{Alternative Way:} An alternative proof for equation~\eqref{eq:e2111} is below.
+	 
+	 Since $\{X_i\}_{i=1}^n$ are i.i.d.\ random normal variables following $N(0, \sigma^2)$, by Exercise~\ref{ex:12}, we have 
+	 \begin{equation}
+	 	\bbE[\max_{i \in [n]} X_i] \leq \sqrt{2 \sigma^2 \log n}, \quad \text{for all } n \geq 1.
+	 \end{equation}
+	 Note that $\max_{i \in [n]} |X_i| = \max_{i \in [2n]} X_i$, where $X_{n + i} = - X_i $, for all $i\in[n]$. Then, we have $\max_{i \in [n]}|X_i| \leq \sqrt{2 \sigma^2 \log(2n)}$. Note that
+	 \begin{equation}
+	 	 \of{\sqrt{2 \sigma^2 \log n} + \frac{4\sigma}{\sqrt{2 \log n}}}^2 = 2 \sigma^2 \log n + 8\sigma^2 \of{1 + \frac{1}{\log n}} \geq 2 \sigma^2 \log n + 2 \sigma^2 \log 2 = (\sqrt{2 \sigma^2 \log 2n} )^2.
+ 	 \end{equation}
+ 	 Therefore, we obtain the upper bound
+ 	 \begin{equation}
+ 	 	\bbE[Z_n] \leq \sqrt{2 \sigma^2 \log(2n)} \leq \sqrt{2 \sigma^2 \log n} + \frac{4\sigma}{\sqrt{2 \log n}}.
+ 	 \end{equation}
 	 
 	 
 	 \vspace{0.2cm}
@@ -792,6 +814,21 @@ The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the
 	 \begin{equation}
 	 	\bbE \off{Z_n} \geq \sigma \sqrt{\log n} \off{1 - \of{1 - \frac{1}{n}   }^n} \geq \of{1 - \frac{1}{e}} \sigma \sqrt{\log n}, \quad \text{for all }n \geq 6.
 	 \end{equation}
+	 
+	 \vspace{0.2cm}
+	 Last, we prove the convergence property~\eqref{eq:e2113}.
+	 
+	\textbf{My thoughts:} To prove $\lim_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}}  = 1$, we need to prove $\limsup_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}}  = \liminf_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}} = 1$. The $\limsup$ part is easy because of the upper bound~\eqref{eq:e2111}. Then, we only need to prove the $\liminf$ part.
+	
+	Note that 
+	\[\bbE[Z_n] \geq \sqrt{2 \sigma^2 \log n}  \bbP \off{Z_n > \sigma \sqrt{2 \log n}} =  \sigma \sqrt{2\log n} \off{1 - \of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n}. \]
+	
+	If I can prove that $\lim_{n \rightarrow +\infty}\of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n = 0 $, the problem is done.
+	
+	Note that $\bbP \off{|X_i| > \sigma \sqrt{2\log n}}  = 2 \bbP \off{X_i > \sigma \sqrt{2\log n}} \leq 2 \sqrt{\frac{2}{\pi}} \frac{\sigma}{\sqrt{2 \sigma^2 \log n}} e^{-\log n} = \frac{2}{\pi n \sqrt{\log n}}$. Then, the limit is upper bounded
+	 \[\lim_{n \rightarrow +\infty}\of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n \leq \lim_{n \rightarrow +\infty} \of{1 -  \frac{2}{\pi n \sqrt{\log n}} }^n = 1. \]
+	 
+	 I can not get the result I want.
 	 
 	 \iffalse
 	 By Markov's inequality, the expectation of $Z_n$ satisfies
@@ -814,11 +851,13 @@ The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the
 	 \fi
 \end{proof}
 
+
+
 \begin{rmk}
-	The absolute Gaussian maxima $Z_n$ concentrates around $\sigma \sqrt{\log n}$ for large $n$. Standard Gaussian variables concentrate around 0, while the maxima of the $n$ standard Gaussian variables is no longer a Gaussian variables. The scale of Gaussian maxima scales as $\sqrt{n}$, however, the sum of $n$ i.i.d.\ Gaussian variables scales as $n$.
+	The absolute Gaussian maxima $Z_n$ concentrates around $\sigma \sqrt{\log n}$ for large $n$. Standard Gaussian variables concentrate around 0, while the maxima of the $n$ standard Gaussian variables is no longer a Gaussian variable. The scale of Gaussian maxima scales as $\sqrt{n}$, however, the sum of $n$ i.i.d.\ Gaussian variables scales as $n$.
 \end{rmk}
 
-\subsection{Exercise 2.12}
+\subsection{Exercise 2.12}\label{ex:12}
 \begin{lem}[Sharp upper bounds for sub-Gaussian maxima]
 	Let $\{X_i\}_{i = 1}^n$ be a sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. Then, we have
 	\begin{equation}
@@ -841,7 +880,7 @@ The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the
 \end{proof}
 
 \begin{rmk}
-	The maxima for $n$ i.i.d.\ sub-Gaussian variables also share the similar concentration property as Gaussian variables in Exercise~\ref{Gausmax}. The maxima $\max_{i \in [n]} X_i$ concentrates around the sub-Gaussian parameter $\sigma$.
+	The maxima for $n$ i.i.d.\ sub-Gaussian variables is upper bounded by $\sigma \sqrt{\log n}$. The independence assumption is not necessary for the upper bound of sub-Gaussian maxima.
 \end{rmk}
 
 \subsection{Exercise 2.13}
@@ -891,6 +930,32 @@ Therefore, the random variable $X_1 + X_2$ is sub-Gaussian with parameter at mos
 Last, we prove $(c)$.
 
 \vspace{0.2cm}
+\textbf{My thoughts:} Note that $X_1 X_2 = \frac{1}{4}\of{(X_1 + X_2)^2 - (X_1 - X_2)^2}$. By part $(a)$, we have $X_1 + X_2$ and $X_1 - X_2$ are sub-Gaussian with the parameter $\sqrt{\sigma_1^2 + \sigma^2_2}$. Note that for a variable $X \sim \subG(\sigma^2)$, the variable $Z = X^2 - \bbE[X^2] \sim \text{subE}(16\sigma^2, 16\sigma^2)$. 
+\vspace{0.2cm}
+
+The characteristic function of $X_1 X_2$ is 
+\begin{equation}\label{eq:e13c1}
+	\bbE[e^{t X_1 X_2}] = \bbE[e^{\frac{t}{4} \of{(X_1 + X_2)^2 - (X_1 - X_2)^2} }] = \bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ], \quad \text{for all } t \in \bbR.
+\end{equation} 
+By Cauchy-Schwartz inequality, the expectation~\eqref{eq:e13c1} satisfies
+\begin{equation}\label{eq:e13c2}
+	\bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ] \leq \of{\bbE[ e^{\frac{t}{2} (X_1 +X_2 )^2} ]}^{1/2} \of{\bbE[ e^{-\frac{t}{2} (X_1 -X_2 )^2} ]}^{1/2}.
+\end{equation}
+
+Let $Z_1 = (X_1 + X_2)^2 - \bbE[(X_1 + X_2)^2]$. Note that $\bbE[X^2_i] = \var{(X_i)} \leq \sigma^2_i $, for $ i = 1,2$, and the variable $Z_1 \sim \text{subE}(16(\sigma^2_1 + \sigma^2_2), 16(\sigma^2_1 + \sigma^2_2))$. We have
+\begin{equation}\label{eq:e13c3}
+	\bbE[ e^{\frac{t}{2} (X_1 +X_2 )^2} ] = \bbE[e^{\frac{t}{2} Z_1 + \frac{t}{2} \bbE[(X_1 + X_2)^2] }] \leq \bbE[e^{\frac{t}{2} Z_1}] e^{ \frac{t}{2} (\sigma_1^2 + \sigma_2^2) } \leq e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2 + \frac{t}{2} (\sigma^2_1 + \sigma_2^2) },
+\end{equation}
+for all  $|t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}$. Similarly, we have
+\begin{equation}\label{eq:e13c4}
+	\bbE[ e^{-\frac{t}{2} (X_1 -X_2 )^2} ]  \leq  e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2 - \frac{t}{2} (\sigma^2_1 + \sigma_2^2) },
+\end{equation}
+for all  $|t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}$. Plug the inequalities \eqref{eq:e13c3} and \eqref{eq:e13c4} into the inequality~\eqref{eq:e13c2}. We have
+\begin{equation}
+		\bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ]  \leq  e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2}, \quad \text{for all } |t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}.
+\end{equation}
+Therefore, the variable $X_1 X_2 \sim \text{subE}(8(\sigma^2_1 + \sigma^2_2),8(\sigma^2_1 + \sigma^2_2) )$.
+
 
 \end{proof}
 
@@ -1009,7 +1074,7 @@ Last, we prove $(c)$.
 	\end{proof}
 	
 	\begin{rmk}
-		The concentration around mean implies the concentration around median for $n$ variables, vice versa. 
+	If a variable concentrates around mean, the variable also concentrates around the median, vice versa.
 	\end{rmk}
 	
 	
@@ -1052,7 +1117,7 @@ Last, we prove $(c)$.
 	\end{proof}
 	
 	\begin{rmk}
-		Kernel density estimator satisfies the bounded difference property and possesses a concentration property around the mean.
+		Kernel density estimator satisfies the bounded difference property and possesses a concentration property. Kernel density estimator converges to its mean in probability at the speed of $e^{-n}$ when $n$ goes to infinity.
 	\end{rmk}
 	
 	
@@ -1098,7 +1163,7 @@ Last, we prove $(c)$.
     \end{proof}
     
     \begin{rmk}
-    	The concentration inequalities also apply to the Hilbert space. 
+    	The sample mean also for $n$ variables in a Hilbert space converge to its expectation in probability at the speed of $e^{-n}$.
     \end{rmk}
     
     \subsection{Exercise 2.17}
@@ -1153,7 +1218,7 @@ Last, we prove $(c)$.
     Reference: http://www-personal.umich.edu/~rudelson/papers/rv-Hanson-Wright.pdf.
     
     \begin{rmk}
-    	For a random vector $X$, Hanson-Wright Inequality implies the concentration property for the matrix product $X^T \mQ X$, where $\mQ$ is a positive semi-definite matrix.
+    	For a random vector $X$, Hanson-Wright Inequality implies the tail probability of matrix product $X^T \mQ X$ is upper bounded at the leve of $e^{-\min\{ \onorm{\mQ}^{-2}_F, \onorm{\mQ}^{-1}_{op} \}}$, where $\mQ$ is a positive semi-definite matrix. 
     \end{rmk}
     
     
@@ -1220,7 +1285,7 @@ Last, we prove $(c)$.
     \end{proof}
     
     \begin{rmk}
-    	For a random variable $X$, the existence of $X$'s Orlicz norm implies the boundedness of the tail probability of $X$.
+    	For a random variable $X$, the existence of $X$'s Orlicz norm implies the tail probability of $X$ is upper bounded at the level of $e^{-\onorm{X}^{-q}_{\varphi} }$. 
     \end{rmk}
     
 \subsection{Exercise 2.19}
@@ -1241,7 +1306,7 @@ Last, we prove $(c)$.
 \end{proof}
 
 \begin{rmk}
-	The maxima of Orlicz variables concentrates around the Orlicz norm $\sigma$ and scales as $\psi^{-1}(n)$. In previous exercises, the maxima of sub-Gaussian variables concentrates around the sub-Gaussian variable $\sigma$ and scales at $\log (n)$. 
+	The maxima of Orlicz variables is upper bounded by the Orlicz norm $\sigma$ and scales as $\psi^{-1}(n)$. In previous exercises, the maxima of sub-Gaussian variables concentrates around the sub-Gaussian variable $\sigma$ and scales at $\log (n)$. 
 \end{rmk}
     
 \subsection{Exercise 2.20}
@@ -1286,7 +1351,7 @@ where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
  \end{proof}
  
  \begin{rmk}
- 	For $n$ independent variables $X_i$, the moment condition for $X_i$ implies the boundedness of the tail probability for the sample mean $\frac{1}{n} \sum_{i=1}^n X_i$.
+ 	For $n$ independent zero-mean variables $X_i$, the order $2m$ moment condition for $X_i$ implies that the sample mean $\frac{1}{n} \sum_{i=1}^n X_i$ converges to 0 at the speed of $n^{-m}$.
  \end{rmk}
  
  \subsection{Exercise 2.21}
@@ -1373,6 +1438,5 @@ where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
  	To compress a random vector with Bernoulli entries and achieve a desired rescaled Hamming distortion $\delta$, the number of necessary codewords, $N$, should be larger than  $2^{D(\delta ||1/2) n}$, where $D(\delta ||1/2)$ is the KL divergence between the two Bernoulli distributions with parameter $\delta$ and $1/2$ and $n$ is the size of the random vector. 
  \end{rmk}
  
- \subsection{Exercise 2.22}
     
 \end{document}
