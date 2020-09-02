@@ -49,8 +49,11 @@ tensor_regress1 = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL,
   C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))
   
   tckr = tucker(C_ts, ranks = core_shape)
-  W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
-  G = tckr$Z
+  #W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## initilized tucker factors
+  #G = tckr$Z
+  W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
+  G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
+  
   A = X_covar1%*%W1
   B = X_covar2%*%W2
   C = X_covar3%*%W3
