@@ -1,6 +1,0 @@
-Update the package in the future:
-
-1. suppress set.seed() option in the sim.data().
-
-2. Change the name of output quantities to be meaningful. 
-

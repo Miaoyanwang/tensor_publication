@@ -1,10 +1,11 @@
 #### code for new graph
-
+set.seed(1) ## set seed for the entire simulation
 library(tensorregress)
 library(ggplot2)
 #devtools::install_github("thomasp85/patchwork")
 library(patchwork)
 source("new_graph_bricks.R")
+source("sim_data.R")
 
 model = c("normal","binary","poisson")
 dimen = c(30,25)
@@ -25,7 +26,7 @@ for (i in 1:3) {
   k = 1
   for (j in 1:2) {
     for (r in 1:2) {
-      my_data = sim_data(seed = NA, rep(dimen[j],3), rep(rank[r],3), p = rep(floor(0.4*dimen[j]) ,3),dist = model[i], dup = 1,signal = 5)
+      my_data = sim_data(seed = NA, rep(dimen[j],3), rep(rank[r],3), p = rep(floor(0.4*dimen[j]) ,3),dist = model[i], dup = 1,signal = 10)
       ptm = proc.time()
       my_reg =  tensor_regress1(tsr = my_data$tsr[[1]], X_covar1 = my_data$X_covar1, X_covar2 = my_data$X_covar2,X_covar3 = my_data$X_covar3,
                                 rep(rank[r],3), Nsim = 20, cons = "non",dist = model[i])
