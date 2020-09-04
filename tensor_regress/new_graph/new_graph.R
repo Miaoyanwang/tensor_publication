@@ -1,5 +1,5 @@
 #### code for new graph
-set.seed(1) ## set seed for the entire simulation
+set.seed(0) ## set seed for the entire simulation
 library(tensorregress)
 library(ggplot2)
 #devtools::install_github("thomasp85/patchwork")
@@ -26,10 +26,12 @@ for (i in 1:3) {
   k = 1
   for (j in 1:2) {
     for (r in 1:2) {
-      my_data = sim_data(seed = NA, rep(dimen[j],3), rep(rank[r],3), p = rep(floor(0.4*dimen[j]) ,3),dist = model[i], dup = 1,signal = 10)
+        if(i==1) signal=3
+        else if(i==2) signal=10
+        else if(i==3) signal=6
+      my_data = sim_data(seed = NA, rep(dimen[j],3), rep(rank[r],3), p = rep(floor(0.4*dimen[j]) ,3),dist = model[i], dup = 1,signal = signal)
       ptm = proc.time()
-      my_reg =  tensor_regress1(tsr = my_data$tsr[[1]], X_covar1 = my_data$X_covar1, X_covar2 = my_data$X_covar2,X_covar3 = my_data$X_covar3,
-                                rep(rank[r],3), Nsim = 20, cons = "non",dist = model[i])
+      my_reg =  tensor_regress1(tsr = my_data$tsr[[1]], X_covar1 = my_data$X_covar1, X_covar2 = my_data$X_covar2,X_covar3 = my_data$X_covar3,rep(rank[r],3), Nsim = 20, cons = "non",dist = model[i])
       time1 = proc.time() - ptm
       
       time[k] = time1[3]
@@ -68,7 +70,7 @@ p1 = ggplot(data = plotdata, aes(x = iter,y = lglk/10000)) +
   geom_hline(yintercept=olglk1/10000, color = "#F2AB1D" , lty = "dashed",lwd = 1)+
   geom_hline(yintercept=olglk2/10000, color = "#6F9B3C",lty = "dashed",lwd = 1)+
   guides( color = guide_legend(title = "Setting"), linetype = guide_legend("Setting"), shape = guide_legend("Setting"))+
-  labs(y = "log-likelihood x 10^4",x = "micro-iteration",size = 16) +
+  labs(y = "log-likelihood x 10^4",x = "iteration",size = 16) +
   theme(axis.text.y = element_text(size = 16 ) , 
         axis.text.x = element_text(size = 16 ),
         legend.text=element_text(size=16), 
@@ -124,7 +126,7 @@ p3 = ggplot(data = plotdata, aes(x = iter,y = lglk/10000)) +
   geom_hline(yintercept=olglk1/10000, color = "#F2AB1D" , lty = "dashed",lwd = 1)+
   geom_hline(yintercept=olglk2/10000, color = "#6F9B3C",lty = "dashed",lwd = 1)+
   guides( color = guide_legend(title = "Setting"), linetype = guide_legend("Setting"), shape = guide_legend("Setting"))+
-  labs(x = "micro-iteration",size = 16) +
+  labs(x = "iteration",size = 16) +
   theme(axis.text.y = element_text(size = 16 ) , 
         axis.text.x = element_text(size = 16 ),
         legend.text=element_text(size=16), 
@@ -184,7 +186,7 @@ p5 = ggplot(data = plotdata, aes(x = iter,y = lglk/10000)) +
   geom_hline(yintercept=olglk1/10000, color = "#F2AB1D" , lty = "dashed",lwd = 1)+
   geom_hline(yintercept=olglk2/10000, color = "#6F9B3C",lty = "dashed",lwd = 1)+
   guides( color = guide_legend(title = "Setting"), linetype = guide_legend("Setting"), shape = guide_legend("Setting"))+
-  labs(x = "micro-iteration",size = 16) +
+  labs(x = "iteration",size = 16) +
   theme(axis.text.y = element_text(size = 16 ) , 
         axis.text.x = element_text(size = 16 ),
         legend.text=element_text(size=16), 

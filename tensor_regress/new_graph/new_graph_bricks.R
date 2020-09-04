@@ -212,8 +212,7 @@ loss_gr <- function(beta,y,X,lambda,alpha,dist){
 
 glm_modify=function(y,x,dist){
   if(dist=="binary"){
-    fit1 =suppressWarnings(speedglm(y~-1+x,family=binomial(link="logit")))
-    
+    fit1=suppressWarnings(speedglm(y~-1+x,family=binomial(link="logit")))
     return(list(coef(fit1), logLik(fit1)))
   }
   else if (dist=="normal"){
@@ -222,7 +221,7 @@ glm_modify=function(y,x,dist){
     return(list(coef(fit1), logLik(fit1)))
   }
   else if (dist=="poisson"){
-    fit1 =suppressWarnings(speedglm(y~-1+x,family=poisson(link="log")))
+    fit1=suppressWarnings(speedglm(y~-1+x,family=poisson(link="log")))
     return(list(coef(fit1), logLik(fit1)))
   }
 }
