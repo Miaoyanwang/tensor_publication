@@ -77,7 +77,7 @@
 
 \if1\blind
 {
-  \title{\bf Supervised Tensor Decomposition with Side-information on Multiple Modes}
+  \title{\bf Supervised Tensor Decomposition with Side Information on Multiple Modes}
   \author{Jiaxin Hu, Zhuoyan Xu, and Miaoyan Wang\\
     Department of Statistics, University of Wisconsin-Madison}
   \maketitle
@@ -89,18 +89,28 @@
   \bigskip
   \bigskip
   \begin{center}
-    {\LARGE\bf Exponential Family Tensor Regression with Covariates on Multiple Modes}
+    {\LARGE\bf General Tensor Regression with Covariates on Multiple Modes}
 \end{center}
   \medskip
 } \fi
 
 \bigskip
 \begin{abstract}
-We consider the problem of decomposing a high-order tensor with exponential-family entries, given side information on multiple modes. Such data problems arise frequently in applications such as neuroimaging, network analysis, and spatial-temporal modeling. We propose a new family of tensor response regression that treats side-information as incorporate covariates and we establish the accuracy guarantees for our proposed estimation. Unlike earlier methods on unsupervised tensor decomposition, our supervised approach allows high-dimensionality in both the tensor data and the covariate matrices on multiple modes. An efficient alternating updating algorithm is further developed. Our proposal handles a broad range of data types, including continuous, count, and binary observations. Through simulation and applications to two real datasets, we demonstrate the outperformance of our approach over the state-of-art.
+Higher-order tensors have recently received increasing attention across science and engineering. While most tensor decomposition methods are developed for a single tensor observation, scientific applications often generate side information, including node features and interactions thereof, together with the tensor data. 
+Identifying the relationship between a high-dimensional tensor and multi-mode features is an important yet challenging problem in neuroimaging, network analysis, and spatial-temporal modeling. 
+Here, we develop a regression approach that incorporates side information as structured covariates, and present several case studies to show the benefit of proposed approach.  
+Unlike unsupervised tensor decomposition, our supervised tensor factors capture the most effective dimension reduction of the data tensor confined to the feature spaces. 
+%supervised tensor decomposition method that incorporates side information on multiple modes. 
+%We consider the problem of decomposing a higher-order tensor with exponential-family entries, given side information on multiple modes. 
+%Such data problems arise frequently in applications such as neuroimaging, network analysis, and spatial-temporal modeling. 
+%We develop a regression approach that incorporates side information as structured covariates along multiple sides. 
+%Unlike unsupervised tensor decomposition, the supervised approach finds the optimal low-rank factor matrices confined to the feature spaces. 
+An efficient alternating updating algorithm is further developed. Our proposal handles a broad range of data types, including continuous, count, and binary observations. We apply the method to diffusion tensor imaging data from human connectome project and multi-relational social network data. Our approach identifies the key global connectivity pattern and pinpoints the local regions that are associated with covariates. 
+
 \end{abstract}
 
 \noindent%
-{\it Keywords:}  Tensor-response models, Multiple covariates, Dimension reduction, Reduced-rank regression, Generalized linear models 
+{\it Keywords:} Applications and case studies, Supervised dimension reduction, Exponential family observation, Reduced-rank tensor regression
 \vfill
 
 \newpage
@@ -109,7 +119,7 @@ We consider the problem of decomposing a high-order tensor with exponential-fami
 \label{sec:intro}
 
 
-Nowadays, multi-dimensional arrays, a.k.a.\ tensors, are collected with additional covariates on multiple modes in many modern scientific and engineering studies. One example is neuroimaging~\citep{sun2017store,zhou2013tensor}. The brain connectivity networks are collected from a sample of individuals, accompanied by individual characteristics such as age, gender, and diseases status (see Figure~\ref{fig:intro1}a). Another example is in the field of network analysis~\citep{baldin2018optimal,hoff2005bilinear}. A typical social network consists of nodes that represent people and edges that represent the friendships. Other covariates such as people’s demographic information and the closeness of a friendship are often available. In both examples, it is of keen scientific interest to identify the variation in the response (e.g., brain connectivity, social community patterns) that may be affected by additional covariates. These seemingly different problems can be formulated as a regression problem in the tensor sense. 
+Multi-dimensional arrays, known as tensors, are collected with additional covariates on multiple modes in many modern scientific and engineering studies. A popular example is the filed of neuroimaging~\citep{sun2017store,zhou2013tensor}. The brain connectivity networks are collected from a sample of individuals, accompanied by individual characteristics such as age, gender, and diseases status (see Figure~\ref{fig:intro1}a). Another example is in the field of network analysis~\citep{baldin2018optimal,hoff2005bilinear}. A typical social network consists of nodes that represent people and edges that represent the friendships. Covariates such as people’s demographic information and the closeness of a friendship are often available. In both examples, it is of keen scientific interest to identify the variation in the array data (e.g., brain connectivity, social community patterns) that is affected by additional covariates. These seemingly different problems can be formulated as a regression problem in the tensor sense. 
 
 Emerging instances of the non-Gaussian datasets also require the effective tools applicable to a wide range of data, such as continuous, binary and count data. Examples include the Political Social science data \citep{hu2015scalable} which is a count dataset, and the brain connectivity network data \citep{wang2019common} which is usually encoded as binary datasets. Easily treating these datasets as Gaussian-valued data will yield unstable estimations and lead the predictions fall outside the valid range. A number of previous methods have been proposed \citep{yu2016learning, llosa2018tensor, raskutti2015convex, zhao2012higher} to address the tensor regression problem in various forms (e.g.\ scalar-to-tensor regression, tensor-response regression) from distinct perspectives. However, these methods assume the Gaussianity in the model, treating the input as Gaussian valued entries. Novel methods for exponential family tensor regression are necessary this time.
 
@@ -352,8 +362,8 @@ Note that the feasible set $\tP$ is a non-convex set. Therefore, the optimizatio
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=15cm]{loglike}
-\caption{Trajectory of the objective function with various dimension $d$ and rank $r$ under (a) Gaussian (b) Bernoulli (c)Poisson models. The dashed line represents the objective value at true parameter $\tL_{\tY}(\tB_{true})$. A micro-iteration refers to the update for one of the $K$ blocks. Four micro-iterations consist of a complete ``while'' iteration in Algorithm~\ref{alg:B}.}\label{fig:loglike}
+\includegraphics[width=15cm]{new_log.pdf}
+\caption{Trajectory of the objective function with various dimension $d$ and rank $r$ under (a) Gaussian (b) Bernoulli (c) Poisson models. The dashed line represents the objective value at true parameter $\tL_{\tY}(\tB_{true})$. A micro-iteration refers to the update for one of the $K$ blocks. Four micro-iterations consist of a complete ``while'' iteration in Algorithm~\ref{alg:B}.}\label{fig:loglike}
 \end{figure}
 
 
@@ -480,6 +490,7 @@ The second application concerns the multi-relational network analysis with node-
 
 We applied our tensor regression model to the \emph{Nations} data. The multi-relational network $\tY\in\{0,1\}^{14\times 14\times 56}$ was treated as the response tensor, and the country attributes $\mM\in\mathbb{R}^{14\times 6}$ were treated as covariates on both the 1st and 2nd modes. The BIC criterion suggests a rank $\mr=(4,4,4)$ for the coefficient tensor $\tB\in\mathbb{R}^{6\times 6 \times 56}$. Table~\sref{fig:s1} shows the $K$-mean clustering of the 56 relations based on the 3$^\text{rd}$ mode factor $\mM_3\in\mathbb{R}^{56\times 4}$. We found that the relations reflecting the similar aspects of international affairs are grouped together. In particular, Cluster I consists of political relations such as \emph{officialvisits, intergovorgs}, and \emph{militaryactions}; Clusters II and III capture the economical relations such as \emph{economicaid, booktranslations, tourism}; and Cluster IV represents the Cold War alliance blocs. The similarity among entities in each cluster suggests the plausibility of our dimension reduction. 
 
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=10cm]{coef.pdf}
@@ -489,6 +500,28 @@ We applied our tensor regression model to the \emph{Nations} data. The multi-rel
 
 
 To investigate the effects of dyadic attributes towards connections, we depicted the estimated coefficients $\hat \tB=\entry{\hat b_{ijk}}$ for several relation types (Figure~\ref{fig:est}). Note that entries $\hat b_{ijk}$ can be interpreted as the contribution, at the logit scale, of covariate pair $(i,j)$ ($i$th covariate for the ``sender'' country and $j$th covariate for the ``receiver'' country) towards the connection of relation $k$.  Several interesting findings emerge from the observation. We found that relations belonging to a same cluster tend to have similar covariate effects. For example, the relations \emph{warnings} and \emph{ecnomicaid} are classified into Cluster II, and both exhibit similar covariate pattern (Figure~\ref{fig:est}a-b). Moreover, the majority of the diagonal entries $\hat \tB(i,i,k)$ positively contribute to the connection. This suggests that countries with coherent attributes tend to interact more often than others. We also found that the \emph{constitutional} attribute is an important predictor for the \emph{commonbloc} relation, whereas the effect is weaker for other relations (Figure~\ref{fig:est}d). This is not surprising, as the block partition during Cold War is associated with the \emph{constitutional} attribute. 
+
+
+\begin{table}[H]
+\begin{tabular}{c|l}
+\hline
+\multirow{4}{*}{Cluster I}  &officialvisits, intergovorgs,  militaryactions, violentactions, duration, \\
+&negativebehavior, boycottembargo, aidenemy, negativecomm, accusation, \\
+& protestsunoffialacts,    nonviolentbehavior, emigrants, relexports,   \\
+& timesincewar, commonbloc2, rintergovorgs3, relintergovorgs\\
+\hline
+\multirow{4}{*}{Cluster II}& economicaid, booktranslations, tourism, relbooktranslations, releconomicaid, \\
+& conferences, severdiplomatic, expeldiplomats, attackembassy, unweightedunvote,\\
+& reltourism, tourism3, relemigrants, emigrants3, students, relstudents, \\
+&exports, exports3, lostterritory, dependent, militaryalliance, warning  \\
+\hline
+\multirow{2}{*}{Cluster III} & treaties, reltreaties, exportbooks, relexportbooks, weightedunvote, ngo, \\
+&relngo, ngoorgs3, embassy, reldiplomacy, timesinceally, independence, commonbloc1\\
+\hline
+Cluster IV & commonbloc0, blockpositionindex\\
+\end{tabular}
+\caption{$K$-means clustering of relations based on factor matrix in the coefficient tensor.}\label{tab:s1}
+\end{table}
 
 
 \section{Conclusion}
@@ -628,29 +661,6 @@ Figure~\ref{fig:s1} compares the estimated coefficients from our method (tensor 
 \caption{Comparison of coefficient estimation in the HCP data.}\label{fig:s1}
 \end{figure}
 
-\subsection{Nations data analysis}
-Table~\ref{tab:s1} summarizes the $K$-means clustering of the 56 relations based on the $3^{\text{rd}}$ mode factor $\mM_3\in\mathbb{R}^{56\times 4}$ in the tensor regression model. 
-
-\begin{table}[H]
-\begin{tabular}{c|l}
-\hline
-\multirow{4}{*}{Cluster I}  &officialvisits, intergovorgs,  militaryactions, violentactions, duration, \\
-&negativebehavior, boycottembargo, aidenemy, negativecomm, accusation, \\
-& protestsunoffialacts,    nonviolentbehavior, emigrants, relexports,   \\
-& timesincewar, commonbloc2, rintergovorgs3, relintergovorgs\\
-\hline
-\multirow{4}{*}{Cluster II}& economicaid, booktranslations, tourism, relbooktranslations, releconomicaid, \\
-& conferences, severdiplomatic, expeldiplomats, attackembassy, unweightedunvote,\\
-& reltourism, tourism3, relemigrants, emigrants3, students, relstudents, \\
-&exports, exports3, lostterritory, dependent, militaryalliance, warning  \\
-\hline
-\multirow{2}{*}{Cluster III} & treaties, reltreaties, exportbooks, relexportbooks, weightedunvote, ngo, \\
-&relngo, ngoorgs3, embassy, reldiplomacy, timesinceally, independence, commonbloc1\\
-\hline
-Cluster IV & commonbloc0, blockpositionindex\\
-\end{tabular}
-\caption{$K$-means clustering of relations based on factor matrix in the coefficient tensor.}\label{tab:s1}
-\end{table}
 
 \section*{Acknowledgements}
 This research was supported by NSF grant DMS-1915978 and the University of Wisconsin-Madison, Office of the Vice Chancellor for Research and Graduate Education with funding from the Wisconsin Alumni Research Foundation. The authors would like to thank Chen Zhang from Wisconsin State Lab of Hygiene for help with figure 4. 
