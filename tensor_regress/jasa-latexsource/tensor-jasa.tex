@@ -123,18 +123,18 @@ In addition to the aforementioned challenges, many instances of tensor observati
 \end{figure*}
 
 We present a general model and associated method for decomposing exponential family tensors with multiple side information. 
-We formulate the learning task as a structured regression problem, with tensor observation serving as the response, and the side information forming multiple covariate matrices. Figure~\ref{fig:intro1}b illustrates our model in the special case of order-3 tensors. A low-rank structure is imposed to the mean tensor $\mathbb{E}(\tY)\in\mathbb{R}^{d_1\times d_2\times d_3}$, where unlike classical decomposition, the tensor factors are assumed to belong to the subspace spanned by known features $\mX_k\in\mathbb{R}^{p_k\times d_k}$ for $k=1,2,3$. The unknown ``transformation'' matrix $\mM_k\in\mathbb{R}^{p_k\times r_k}$ link the data tensor to each of the feature matrices, thus allowing the identification the variation in the tensor entries attributable to the side information
+We formulate the learning task as a structured regression problem, with tensor observation serving as the response, and the side information forming multiple covariate matrices. Figure~\ref{fig:intro1}b illustrates our model in the special case of order-3 tensors. A low-rank structure is imposed to the mean tensor $\mathbb{E}(\tY)\in\mathbb{R}^{d_1\times d_2\times d_3}$, where unlike classical decomposition, the tensor factors are assumed to belong to the space spanned by known features $\mX_k\in\mathbb{R}^{p_k\times d_k}$ for $k=1,2,3$. The unknown matrix (referred to as ``dimension reduction matrix'') $\mM_k\in\mathbb{R}^{r_k\times p_k}$ link the tensor factor to the feature space, thus allowing the identification the variation in the tensor entries attributable to the side information.
 
 In addition, we use ideas from generalized linear model (GLM) to allow heteroscedacity due to mean-variance relationship across tensor entries. This flexibility is important in practice. In classical GLM, the sample size $n$ and feature dimension $d$ are well defined; however, in the tensor data analysis, we observe only one single realization of tensor response but up to $K$ feature matrices, where $K$ is the number of tensor modes.  Both the sample size and feature dimension grow exponentially in $K$. We overcome the high-dimensionality using a possibly non-linear, low-rank constraint in the mean tensor, thereby encouraging the sharing among entries in the data tensor. The statistical convergence of our estimator is established, and we quantify the gain in predictive power through several case studies. 
  
-Our work is closely related to but also clearly distinctive from several lines of previous work. The first line is a class of \textit{unsupervised} tensor decomposition such as Tucker and CP decomposition~\citep{de2000multilinear, kolda2009tensor,zhang2018tensor, hong2020generalized} that aims to find the best low-rank representation of data tensor. In contrast, our model can be viewed a \textit{supervised} tensor learning, which aims to identify the association between a data tensor and covariates. The low-rank structure is determined jointly by the tensor data and feature matrices on multiple sides.
+Our work is closely related to but also clearly distinctive from several lines of previous work. The first line is a class of \textit{unsupervised} tensor decomposition such as Tucker and CP decomposition~\citep{de2000multilinear, kolda2009tensor,zhang2018tensor, hong2020generalized} that aims to find the best low-rank representation of data tensor. In contrast, our model can be viewed a \textit{supervised} tensor learning, which aims to identify the association between a data tensor and covariates. The low-rank factorization is determined jointly by the tensor data and feature matrices on multiple sides.
 
 The second line of work studies the scalar-to-tensor regression models, in which the response is a scalar and the \textit{predictor} is a tensor~\citep{zhou2013tensor,chen2019non}. Our proposal is orthogonal to theirs because we treat the tensor as random variables. The difference in model settings yields different focuses and interpretations. Consider the neuroimaging analysis as an example. The scalar-to-tensor regression aims to predict the individual response based on brain connectivity network, while tensor-to-scalar model focuses on understanding the variation in the brain connectivity that is attribute to the individual features such as age, gender and disease status. The scalar-to-tensor model is not suitable for tensor dimension reduction because it lacks the modeling of stochastic noise in the data tensor. 
 
 The third line of work studies the tensor-on-tensor regression models, in which both the response and predictor are tensors~\citep{raskutti2015convex, lock2018tensor, gahrooei2020multiple}. Our model shares a common ground but is complementary to earlier approaches. As we show in Section~\ref{subsec:statprob}, the supervised tensor decomposition 
-has an interesting interpretation as a special tensor-on-tensor regression. Nevertheless, our work differs from previous work in scope and application domains. Previous methods~\citep{gahrooei2020multiple,lock2018tensor} mainly focus on Gaussian tensor. The Frobenius norm used in the objective is statistical suboptimal for general exponential family tensors. Maximum likelihood estimator (MLE) is studied in~\cite{raskutti2015convex} and a convex relaxation algorithm is proposed to solve for low-rank tensor coefficients. However, in the tensor case, convex MLE suffers from both computational intractability and statistical suboptimality. We advocate the non-convex approach and provide strong evidence for its success in our setting. Most previous tensor regression focuses on prediction~\citep{lock2018tensor,raskutti2015convex,gahrooei2020multiple}, and we focuses on finding optimal transformation matrices $\mM_k$ in order to pinpoint important feature subspaces towards prediction (see Figure~\ref{fig:intro1}b). The latter approach greatly improves the \emph{interpretability} in prediction. In this regards, our method opens up new opportunities for tensor data analysis in a wider range of possible applications. 
+has an interesting interpretation as a special tensor-on-tensor regression. Nevertheless, our work differs from previous work in scope and application domains. Previous methods~\citep{gahrooei2020multiple,lock2018tensor} mainly focus on Gaussian tensor. The Frobenius norm used in the objective is statistical suboptimal for general exponential family tensors. Maximum likelihood estimator (MLE) is studied in~\cite{raskutti2015convex} and a convex relaxation algorithm is proposed to solve for low-rank tensor coefficients. However, in the tensor case, convex MLE suffers from both computational intractability and statistical suboptimality. We advocate the non-convex approach and provide strong evidence for its success in our setting. Most previous tensor regression focuses on prediction~\citep{lock2018tensor,raskutti2015convex,gahrooei2020multiple}, and we go step further by finding the supervised factors $\mM_k\mX_k$ in order to pinpoint important features for prediction (see Figure~\ref{fig:intro1}b). The latter approach greatly improves the \emph{interpretability} in prediction. In this regards, our method opens up new opportunities for tensor data analysis in a wider range of possible applications. 
 
-The remainder of this paper is organized as follows. Section~\ref{sec:pre} introduces tensor notation and preliminaries. Section~\ref{sec:model} presents the main model and three motivating examples for supervised tensor decomposition. Section~\ref{sec:est} describes a rank-constrained log-likelihood approach for tensor estimation and its statistical properties. We next develop an alternating optimization algorithm in Section~\ref{sec:algorithm} and present the simulation results in Section~\ref{sec:simulation}. In Section~\ref{sec:data}, we apply the method to diffusion tensor imaging data from human connectome project and multi-relational social network data. We conclude in Section~\ref{sec:con} with discussions about our findings and avenues of future work.
+The remainder of this paper is organized as follows. Section~\ref{sec:pre} introduces tensor notation and preliminaries. Section~\ref{sec:model} presents the main model and three motivating examples for supervised tensor decomposition. Section~\ref{sec:est} describes a rank-constrained likelihood-based estimation and associated alternating optimization algorithm. In Section~\ref{sec:simulation}, we present simulation results and performance comparison to alternative methods. In Section~\ref{sec:data}, we apply the method to diffusion tensor imaging data from human connectome project and multi-relational social network data. We conclude in Section~\ref{sec:con} with discussions about our findings and avenues of future work.
 
 \section{Preliminaries}\label{sec:pre}
 
@@ -144,23 +144,21 @@ We introduce the basic tensor properties used in the paper; more details on tens
 \end{equation}
 which results in an order-$K$ $(p_1,\ldots,p_K)$-dimensional tensor. For ease of presentation, we use shorthand notion $\tY\times\{\mX_1,\ldots,\mX_K\}$ to denote the tensor-by-matrix product. For any two tensors $\tY=\entry{y_{i_1,\ldots,i_K}}$, $\tY'=\entry{y'_{i_1,\ldots,i_K}}$ of identical order and dimensions, their inner product is defined as 
 \[
-\langle \tY, \tY'\rangle =\sum_{i_1,\ldots,i_K}y_{i_1,\ldots,i_K}y'_{i_1,\ldots,i_K}.
+\langle \tY,\ \tY'\rangle =\sum_{i_1,\ldots,i_K}y_{i_1,\ldots,i_K}y'_{i_1,\ldots,i_K}.
 \] 
 The Frobenius norm of $\tY$ is defined as 
 \[
 \FnormSize{}{\tY}=\langle \tY,\ \tY \rangle^{1/2}.
 \]
-A higher-order tensor can be reshaped into a lower-order object. We use $\text{vec}(\cdot)$ to denote the operation that reshapes the tensor into a vector, and $\text{Unfold}_k(\cdot)$ the operation that reshapes the tensor along mode-$k$ into a matrix of size $d_k$-by-$\prod_{i\neq k}d_i$. The Tucker rank of an order-$K$ tensor $\tY$ is defined as a length-$K$ vector $\mr=(r_1,\ldots,r_K)$, where $r_k$ is the rank of matrix $\text{Unfold}_k(\tY)$, $k=1,\ldots,K$. We use lower-case letters (e.g.,\ $a,b,c$) for scalars/vectors, upper-case boldface letters (e.g.,\ $\mA,\mB,\mC,$) for matrices, and calligraphy letters (e.g.,\ $\tA, \tB, \tC,$) for tensors of order three or greater. We let $\mI_d$ denote the $d \times d$ identity matrix, $[d]$ denote the $d$-set $\{1,\ldots,d\}$, and allow an $\mathbb{R}\to \mathbb{R}$ function to be applied to tensors in an element-wise manner. 
+A higher-order tensor can be reshaped into a lower-order object. We use $\text{vec}(\cdot)$ to denote the operation that reshapes the tensor into a vector, and $\text{Unfold}_k(\cdot)$ the operation that reshapes the tensor along mode-$k$ into a matrix of size $d_k$-by-$\prod_{i\neq k}d_i$. The multilinear rank of an order-$K$ tensor $\tY$ is defined as a length-$K$ vector $\mr=(r_1,\ldots,r_K)$, where $r_k$ is the rank of matrix $\text{Unfold}_k(\tY)$, $k=1,\ldots,K$. Given a matrix $\mM\in\mathbb{R}^{d\times r}$, we use $\text{Span}(\mM)$ to denote the space spanned by columns of $\mM$. We use lower-case letters (e.g.,\ $a,b,c$) for scalars/vectors, upper-case boldface letters (e.g.,\ $\mA,\ \mB,\ \mC$) for matrices, and calligraphy letters (e.g.,\ $\tA,\ \tB, \ \tC$) for tensors of order three or greater. We let $\mI_d$ denote the $d \times d$ identity matrix and $[d]$ denote the $d$-set $\{1,\ldots,d\}$. For ease of notation, we allow the basic arithmetic operators ($+$, $-$, $\geq $) and functions $f\colon \mathbb{R}\to \mathbb{R}$ to be applied to tensors in an element-wise manner.
 
 \section{Motivation and model}\label{sec:model}
-We begin with general model formulation and then provide motivating examples. Let $\tY=\entry{y_{i_1,\ldots,i_K}}\in\mathbb{R}^{d_1\times \cdots\times d_K}$ denote an order-$K$ data tensor. Suppose we collect side information on some of the $K$ modes. Let $\mX_k=\entry{x_{ij}}\in\mathbb{R}^{d_k\times p_k}$ denote the available feature matrix on the mode $k$, where $x_{ij}$ denotes the value of $j$-th feature for the $i$-th tensor entity, $p_k\leq d_k$. We consider a multilinear structure on the conditional expectation of the tensor. Specifically, 
+\subsection{General framework for supervised tensor decomposition}
+We first present a general framework for supervised tensor decomposition and then discuss its implication in three concrete examples. Let $\tY=\entry{y_{i_1,\ldots,i_K}}\in\mathbb{R}^{d_1\times \cdots\times d_K}$ denote an order-$K$ data tensor. Suppose the side information is available on each of the $K$ modes. Let $\mX_k=\entry{x_{ij}}\in\mathbb{R}^{d_k\times p_k}$ denote the feature matrix on the mode $k\in[K]$, where $x_{ij}$ denotes the $j$-th feature value for the $i$-th tensor entity, for $(i,p)\in[d_k]\times[p_k]$, $p_k\leq d_k$. We model the relationship between the data tensor and feature matrices using an exponential family, multilinear mean model. Specifically, given features $\mX_k$, the entries of tensor $\tY$ are assumed to be independently distributed from an exponential family with conditional mean
 \begin{align}\label{eq:tensormodel}
-&\mathbb{E}(\tY|\mX_1,\ldots,\mX_K)=f(\Theta),\ \text{with}\\
-&\Theta =\tB\times\{\mX_1,\ldots,\mX_K\} ,
+&\mathbb{E}(\tY|\mX_1,\ldots,\mX_K)=f(\Theta),\quad \text{with}\quad \Theta =\tB\times\{\mX_1,\ \ldots,\ \mX_K\} ,
 \end{align}
-where  $\Theta\in\mathbb{R}^{d_1\times \cdots\times d_K}$ is the multilinear predictor, $\tB\in\mathbb{R}^{p_1\times \cdots \times p_K}$ is the parameter tensor of interest, $f(\cdot)$ applied to $\Theta$ entrywise is a known link function in generalized linear model, and $\times$ denotes the tensor Tucker product. The choice of link function depends on the distribution of the response data. Some common choices are identity link for Gaussian tensor, logistic link for binary tensor, and $\exp(\cdot)$ link for Poisson tensor (see Table~\ref{table:link}). 
-
-
+where $\Theta\in\mathbb{R}^{d_1\times \cdots\times d_K}$ is the multilinear predictor, $\tB\in\mathbb{R}^{p_1\times \cdots \times p_K}$ is the unknown parameter tensor, $f(\cdot)$ is a known link function according to the data type of $\tY$, and $\times$ denotes the tensor Tucker product. The choice of link function depends on the assumed distribution family of tensor entries. Table~\ref{table:link} lists common choices of link functions, such as identity link for Gaussian distribution, logistic link for Bernoulli distribution, and $\exp(\cdot)$ link for Poisson distribution. In general, dispersion parameters can also be included in the model. Because our main focus is the tensor decomposition under the mean model, we omit the dispersion parameter for notational simplicity. 
 \begin{table}[htb]
 \centering
 \begin{tabular}{c|ccc}
@@ -174,13 +172,27 @@ Domain $\mathbb{Y}$& $\mathbb{R}$&$\mathbb{N}$&$\{0,1\}$\\
 \end{table}
 
 
-We give three concrete examples of tensor regression that arise in practice. 
+In classical tensor decomposition, tensor factorization is performed on either data tensor $\tY$ or mean tensor $\mathbb{E}(\tY)$. In the context of supervised tensor decomposition, we propose to factorize the latent parameter tensor $\tB$, 
+\begin{equation}\label{eq:factor}
+\tB=\tC\times\{\mM_1,\ \ldots,\ \mM_K\},
+\end{equation}
+where $\tC\in\mathbb{R}^{r_1\times \cdots \times r_K}$ is a full-rank core tensor, and $\mM_k\in\mathbb{R}^{p_k\times r_k}$ are factor matrices with orthonormal columns, for all $k\in[K]$. By the definition of multilinear rank, model~\eqref{eq:factor} implies that the latent tensor $\tB$ has multilinear-rank $\mr=(r_1,\ldots,r_K)\leq (p_1,\ldots,p_K)$. We assume the rank $\mr$ is known in our main analysis; the adaptation to unknown rank will be discussed in Section~\ref{sec:tuning}.
+
+Combining~\eqref{eq:tensormodel} and~\eqref{eq:factor} yields our final tensor decomposition model,
+\begin{equation}\label{eq:decomp}
+\mathbb{E}(\tY|\mX_1,\ldots,\mX_K) = f\left(\tC\times\{\mX_1\mM_1,\ \ldots,\ \mX_K\mM_K\}\right),
+\end{equation}
+where the parameters of interest are $\mM_k$ and $\tC$. As illustrated in Figure~\ref{fig:intro1}b, the columns of $\mX_k\mM_k$ are linear combinations of features that explain the variation in the mean tensor. We will call $\mX_k\mM_k$ the ``supervised tensor factors'' and $\mM_k$ the ``dimension reduction matrix.'' The core tensor $\tC$ collects the interaction effects of supervised tensor factors across multiple modes. Our goal is to find $\mM_k$ and $\tC$. Note that  $\mM_k$ and $\tC$ are identifiable only up to orthonormal transformations. 
+
+
+\subsection{Three examples}
+We give three concrete examples of supervised tensor decomposition model~\eqref{eq:decomp} that arises in practice. 
 \begin{example}[Spatio-temporal growth model]
 Let $\tY=\entry{y_{ijk}}\in\mathbb{R}^{d \times m\times n}$ denote the pH measurements of $d$ lakes at $m$ levels of depth and for $n$ time points. Suppose the sampled lakes belong to $q$ types, with $p$ lakes in each type. Let $\{\ell_j\}_{j\in[m]}$ denote the sampled depth levels and $\{t_k\}_{k\in[n]}$ the time points. Assume that the expected pH trend in depth is a polynomial of order $r$ and that the expected trend in time is a polynomial of order $s$. Then, the spatio-temporal growth model can be represented as
 \begin{equation}\label{eq:time}
-\mathbb{E}(\tY|\mX_1,\mX_2,\mX_3)=\tB\times\{\mX_1,\mX_2,\mX_3\},
+\mathbb{E}(\tY|\mX_1,\mX_2,\mX_3)=\tC\times\{\mX_1\mM_1,\ \mX_2\mM_2,\ \mX_3\mM_3\},
 \end{equation}
-where $\tB\in\mathbb{R}^{p\times (r+1)\times (s+1)}$ is the coefficient tensor of interest, $\mX_1=\text{blockdiag}\{\mathbf{1}_p,\ldots,\mathbf{1}_p\}\in \{0,1\}^{d\times q}$ is the design matrix for lake types, 
+where $\mX_1=\text{blockdiag}\{\mathbf{1}_p,\ldots,\mathbf{1}_p\}\in \{0,1\}^{d\times q}$ is the design matrix for lake types, and
 \[
 \mX_2=
 \begin{pmatrix}
@@ -188,7 +200,7 @@ where $\tB\in\mathbb{R}^{p\times (r+1)\times (s+1)}$ is the coefficient tensor o
 1 & \ell_2&\cdots &\ell^{r}_2\\
 \vdots &\vdots&\ddots&\vdots\\
 1&\ell_{m}&\cdots&\ell^{r}_{m}
-\end{pmatrix},\
+\end{pmatrix},\quad
 \mX_3=
 \begin{pmatrix}
 1 & t_1&\cdots &t^{s}_1\\
@@ -197,7 +209,7 @@ where $\tB\in\mathbb{R}^{p\times (r+1)\times (s+1)}$ is the coefficient tensor o
 1&t_{n}&\cdots&t^{s}_{n}
 \end{pmatrix}
 \]
-are the design matrices for spatial and temporal effects, respectively. The model~\eqref{eq:time} is a higher-order extension of the ``growth curve'' model originally proposed for matrix data~\citep{gabriel1998generalised,potthoff1964generalized,srivastava2008models}. Clearly, the spatial-temporal model is a special case of our tensor regression model, with covariates available on each of the three modes.
+are the design matrices for spatial and temporal effects, respectively, $\tC\in\mathbb{R}^{r_1\times r_2\times r_3}$ is the unknown core tensor, and $\mM_k$ are unknown dimension reduction matrices of coherent sizes. The model~\eqref{eq:time} is a higher-order extension of the bilinear ``growth curve'' model originally proposed for matrix data~\citep{gabriel1998generalised,potthoff1964generalized,srivastava2008models}. Clearly, the spatial-temporal model is a special case of our supervised tensor decomposition model, with features available on each of the three modes.
 \end{example}
 
 
@@ -206,22 +218,22 @@ Network response model is recently developed in the context of neuroimanig analy
 \begin{equation}\label{eq:network}
 \text{logit}(\mathbb{E}(\mY_i|\mx_i))=\tB\times_3\mx_i, \quad \text{for }i=1,\ldots,n
 \end{equation}
-where $\tB\in \mathbb{R}^{d\times d\times p}$ is the coefficient tensor of interest. 
+where $\tB\in \mathbb{R}^{d\times d\times p}$ is the coefficient tensor. {\color{red}One often impose rank structure on $\tB$.... }
 
-The model~\eqref{eq:network} is a special case of our tensor-response model, with covariates on the last mode of the tensor. Specifically, stacking $\{\mY_i\}$ together
-yields an order-3 response tensor $\tY\in\{0,1\}^{d\times d\times n}$, along with covariate matrix $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the model~\eqref{eq:network} can be written as
+The model~\eqref{eq:network} is a special case of our supervised tensor decomposition, with feature matrix on the last mode of the tensor. Specifically, we stack the network observations $\{\mY_i\}$ together and obtain an order-3 response tensor $\tY\in\{0,1\}^{d\times d\times n}$. Define a feature matrix $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the model~\eqref{eq:network} can be written as
 \[
-\text{logit}(\mathbb{E}(\tY|\mX))=\tB\times_3 \mX=\tB\times\{\mI_d, \mI_d, \mX\}.
+\text{logit}(\mathbb{E}(\tY|\mX))=\tB\times\{\mM_1,\ \mM_2,\ \mX\},
 \]
+where we have implicitly $\mM_3=\mI_p$.
  \end{example}
  
  \begin{example}[Dyadic data with node attributes] Dyadic dataset consists of measurements on pairs of objects or under a pair of conditions. Common examples include networks and graphs. Let $\tG=(V,E)$ denote a network, where $V=[d]$ is the node set of the graph, and $E\subset V\times V$ is the edge set. Suppose that we also observe covariate $\mx_i\in\mathbb{R}^p$ associated to each $i\in V$. A probabilistic model on the graph $\tG=(V,E)$ can be described by the following matrix regression. The edge connects the two vertices $i$ and $j$ independently of other pairs, and the probability of connection is modeled as
 \begin{equation}\label{eq:edge}
- \text{logit}(\mathbb{P}((i,j)\in E)=\mx^T_i\mB\mx_j=\langle \mB, \mx^T_i\mx_j\rangle.
+ \text{logit}\left\{\mathbb{P}\left[(i,j)\in E\right]\right\}=\mx^T_i\mB\mx_j=\langle \mB,\ \mx^T_i\mx_j\rangle.
  \end{equation}
 The above model has demonstrated its success in modeling transitivity, balance, and communities in the networks~\citep{hoff2005bilinear}. We show that our tensor regression model~\eqref{eq:tensormodel} also incorporates the graph model as a special case. Let $\tY=\entry{y_{ij}}$ be a binary matrix where $y_{ij}=\mathds{1}_{(i,j)\in E}$. Define $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the graph model~\eqref{eq:edge} can be expressed as
  \[
- \text{logit}(\mathbb{E}(\mY|\mX))=\tB\times\{\mX,\mX\}.
+ \text{logit}(\mathbb{E}(\mY|\mX))=\mC\times\{\mM\mX,\ \mM\mX\}, \quad \text{where}\quad \mC\in\mathbb{R}^{p\times p}.
  \]
 \end{example}
 
@@ -230,17 +242,30 @@ To encourage the sharing among effects, we assume that the coefficient tensor $\
 \begin{equation}\label{eq:rank}
 \small \tP_{r_1,\ldots,r_K}=\{\tB\in\mathbb{R}^{p_1\times \cdots \times p_K}: r_k(\tB)\leq r_k \text{ for all } k\in[K]\},
 \end{equation}
-where $r_k(\tB)\leq p_k$ is the Tucker rank at mode $k$ of the tensor. The low-rank assumption is plausible in many scientific applications. In brain imaging analysis, for instance, it is often believed that the brain nodes can be grouped into fewer communities, and the numbers of communities are much smaller than the number of nodes. The low-rank structure encourages the shared information across tensor entries, thereby greatly improving the estimation stability. When no confusion arises, we drop the subscript $(r_1,\ldots,r_K)$ and write $\tP$ for simplicity.
+where $r_k(\tB)\leq p_k$ is the rank at mode $k$ of the tensor. The low-rank assumption is plausible in many scientific applications. In brain imaging analysis, for instance, it is often believed that the brain nodes can be grouped into fewer communities, and the numbers of communities are much smaller than the number of nodes. The low-rank structure encourages the shared information across tensor entries, thereby greatly improving the estimation stability. When no confusion arises, we drop the subscript $(r_1,\ldots,r_K)$ and write $\tP$ for simplicity.
 
 Our tensor regression model is able to incorporate covariates on any subset of modes, whenever available. Without loss of generality, we denote by $\tX=\{\mX_1,\ldots,\mX_K\}$ the covariates in all modes and treat $\mX_k=\mI_{d_k}$ if the mode-$k$ has no (informative) covariate. Then, the final form of our tensor regression model can be written as:
 \begin{align}\label{eq:tensormodel2}
 &\mathbb{E}(\tY|\tX)=f(\Theta),\quad \Theta =\tB\times\{\mX_1,\ldots,\mX_K\},\notag\\
 &\text{where}\ \text{rank}(\tB)\leq (r_1,\ldots,r_K),
 \end{align}
-where the entries of $\tY$ are independent r.v.'s conditional on $\tX$, and $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$ is the low-rank coefficient tensor of interest. We comment that other forms of tensor low-rankness are also possible, and here we choose Tucker rank just for parsimony. Similar models can be derived using various notions of low-rankness based on CP decomposition~\citep{hitchcock1927expression} and train decomposition~\citep{oseledets2011tensor}. 
+where the entries of $\tY$ are independent r.v.'s conditional on $\tX$, and $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$ is the low-rank coefficient tensor of interest. 
 
+%We comment that other forms of tensor low-rankness are also possible, and here we choose Tucker rank just for parsimony. Similar models can be derived using various notions of low-rankness based on CP decomposition~\citep{hitchcock1927expression} and train decomposition~\citep{oseledets2011tensor}. 
 
-\section{Rank-constrained likelihood-based estimation}\label{sec:est}
+\subsection{A different interpretation as univariate regression in tensor project feature space}
+
+Multiple side information. .. 
+
+Let $\tX=\mX_1\otimes \cdots \otimes \mX_K \in \mathbb{R}^{\prod_k d_k \times \prod_k p_k}$ be the tensor project of feature spaces. Denote $\text{Unfold}(\tX) \in\mathbb{R}^{d_{\text{total}}\times p_{\text{total}}}$, where $d_{\text{total}}=\prod_k d_k$ and $p_{\text{total}}=\prod_k p_k$. 
+\[
+f(\mathbb{E}(y)}) =\beta_{111}\mx^1\my^1\mz^1+\beta_{121}\mx^1\my^2\mz^1+\beta_{112}\mx^1\my^1\mz^2+\cdots+\beta_{222}\mx^2\my^2\mz^2.
+\]
+where each $[\mx^1,\mx^2]=\mM_1\mX$, $[\my^1,\my^2]=\mM_2\mY$, $[\mz^1,\mz^2]=\mM_3\mZ$ are principal features. To single index model, when ....Full interaction model with rank-1 features. 
+
+\section{Estimation}\label{sec:est}
+
+\subsection{Rank-constrained likelihood estimator}
 We develop a likelihood-based procedure to estimate the coefficient tensor $\tB$ in~\eqref{eq:tensormodel2}. We adopt the exponential family as a flexible framework for different data types. In a classical generalized linear model (GLM) with a scalar response $y$ and covariate $\mx$, the density is expressed as:
 \[
 p(y|\mx, \boldsymbol{\beta})=c(y,\phi)\exp\left({y\theta- b(\theta) \over \phi}\right)\ \text{with}\ \theta=\boldsymbol{\beta}^T\mx,
@@ -258,6 +283,66 @@ We assume that we have an additional information on an upper bound $\alpha>0$ su
 	\hat \tB &=\argmax_{\hat \tB \colon \text{rank}(\tB)\leq \mr, \mnormSize{}{\Theta(\tB)}\leq \alpha  } \tL_{\tY}(\tB).
 \end{align}
 In the following theoretical analysis, we assume the rank $\mr=(r_1,\ldots,r_K)$ is known and fixed. The adaptation of unknown $\mr$ will be addressed in Section~\ref{sec:tuning}. 
+
+\subsection{Alternating optimization} \label{subsec:alg}
+In this section, we introduce an efficient algorithm to solve~\eqref{eq:MLE}. The objective function $\tL_{\tY}(\tB)$ is concave in $\tB$ when the link $f$ is the canonical link function. We utilize a Tucker factor representation of the coefficient tensor $\tB$ and turn the optimization into a block-wise convex problem. 
+
+Specifically, write the rank-$\mr$ decomposition of coefficient tensor $\tB$ as
+\begin{equation}\label{eq:tucker}
+\tB=\tC\times \{\mM_1,\ldots,\mM_K\},
+\end{equation}
+where $\tC\in\mathbb{R}^{r_1\times\cdots\times r_K}$ is a full-rank core tensor, $\mM_k\in\mathbb{R}^{p_k\times r_k}$ are factor matrices with orthogonal columns. Estimating $\tB$ amounts to finding both the core tensor $\tC$ and the factor matrices $\mM_k$'s. The optimization~\eqref{eq:MLE} can be written as $(\hat \tC, \{\hat \mM_k\})=\arg\max \tL_{\tY}(\tC, \mM_1,\ldots,\mM_K)$, where
+\begin{align}
+\tL_{\tY}(\tC, \mM_1,\ldots,\mM_K )&=\langle \tY, \Theta\rangle -\sum_{i_1,\ldots,i_K}b(\theta_{i_1,\ldots,i_K}),\\
+\text{with } \Theta&=\tC\times\{\mM_1\mX_1,\ldots,\mM_K\mX_K\}.
+\end{align}
+The decision variables in the above objective function consist of $K+1$ blocks of variables, one for the core tensor $\tC$ and $K$ for the factor matrices $\mM_k$'s. We notice that, if any $K$ out of the $K+1$ blocks of variables are known, then the optimization with respect to the last block of variables reduced to a simple GLM. This observation suggests that we can iteratively update one block at a time while keeping others fixed. After each iteration, we rescale the core tensor $\tC^{(t+1)}$ subject to the maximum norm constraint. This post-processing in principle may not guarantee the monotonic increase of the objective, but we found that in our experiment this simple step appears robust for obtaining a desirable solution. The full algorithm is described in Algorithm~\ref{alg:B}.
+
+
+
+\begin{algorithm}[t]
+\caption{Generalized tensor response regression with covariates on multiple modes}\label{alg:B}
+\begin{algorithmic}[1]
+\INPUT Response tensor $\tY\in \mathbb{R}^{d_1\times \cdots \times d_K}$, covariate matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$ for $k=1,\ldots,K$, target Tucker rank $\mr=(r_1,\ldots,r_K)$, link function $f$, maximum norm bound $\alpha$
+\OUTPUT Low-rank estimation for the coefficient tensor $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$. 
+\State Calculate $\check \tB=\tY\times_1 \left[(\mX_1^T\mX_1)^{-1}\mX^T_1\right] \times_2\cdots\times_K\left[(\mX_K^T\mX_K)^{-1}\mX^T_K\right] $.
+\State Initialize the iteration index $t=0$. Initialize the core tensor $\tC^{(0)}$ and factor matrices $\mM^{(0)}_k\in\mathbb{R}^{p_k\times r_k}$ via rank-$\mr$ Tucker approximation of $\check\tB$, in the least-square sense. 
+  \While {the relative increase in objective function $\tL_\tY(\tB)$ is less than the tolerance}
+\State Update iteration index $t \leftarrow t+1$.
+\For { $k=1$ to $K$}
+\State Obtain the factor matrix $\tilde \mM_k^{(t+1)}\in\mathbb{R}^{p_k\times r_k}$ by a GLM with link function $f$. 
+\State Perform QR factorization on $\tilde \mM_k^{(t+1)}=\mQ\mR$, where $\mQ\in\mathbb{R}^{p_k\times r_k}$ has orthogonal columns. 
+\State Update $\mM_k^{(t+1)}\leftarrow \mQ$ and core tensor $\tC^{(t+1)}\leftarrow \tC^{(t+1)}\times_k \mR$.
+\EndFor
+\State Obtain the core tensor $\tC^{(t+1)}\in\mathbb{R}^{r_1\times\cdots\times r_K}$ by solving a GLM with $\text{vec}(\tY)$ as response, $\otimes_{k=1}^K[ \mX_k\mM^{(t)}_k]$ as covariates, and $f$ as link function. Here $\otimes$ denotes the kronecker product of matrices. 
+\State Rescale the core tensor subject to the maximum norm constraint. 
+\State Update $\tB^{(t+1)}\leftarrow \tC^{(t+1)}\times_1\mM_1^{(t+1)}\times_2\cdots\times_K\mM_K^{(t+1)}$.
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+
+Note that the feasible set $\tP$ is a non-convex set. Therefore, the optimization~\eqref{eq:MLE} is a non-convex problem, and the Algorithm~\ref{alg:B} usually not theoretically possesses the global optimality. However, as mentioned in Section~\ref{subsec:statprob}, the desired convergence rate~\eqref{eq:bound} holds for the valid estimators satisfying $\tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true})$, which indicates the global optimality is not necessarily a serious concern in our context, as long as the convergent objective of local optimums are large enough. Fortunately, we find the  Algorithm~\ref{alg:B}  often gives a satisfactory convergence point $\hat \tB$, when we initialize the parameters via continuous-valued Tucker decomposition. Figure~\ref{fig:loglike} shows the trajectory of the objective function for order-3 tensors under the balanced setting, where $\alpha = 10, d_k = d, p_k = 0.4d, r_k = r$ for $ k = 1,2,3, p \in \{25,30\}$  and $r \in \{3, 6\}$. We consider the inputs with Gaussian, Bernoulli, and Poisson entries. Under all combinations of the dimension $d$, rank $r$, and type of the entries, Algorithm~\ref{alg:B} converges quickly in a few iterations, and the objective value at convergent points are close to or larger than the value at true parameters.  
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=15cm]{new_log.pdf}
+\caption{Trajectory of the objective function with various dimension $d$ and rank $r$ under (a) Gaussian (b) Bernoulli (c) Poisson models. The dashed line represents the objective value at true parameter $\tL_{\tY}(\tB_{true})$. A micro-iteration refers to the update for one of the $K$ blocks. Four micro-iterations consist of a complete ``while'' iteration in Algorithm~\ref{alg:B}.}\label{fig:loglike}
+\end{figure}
+
+
+
+\subsection{Rank selection and time complexity}\label{sec:tuning}
+Algorithm~\ref{alg:B} takes the rank $\mr$ as an input. Estimating an appropriate rank given the data is of practical importance. We propose to use Bayesian information criterion (BIC) and choose the rank that minimizes BIC; i.e.
+\begin{align}\label{eq:BIC}
+\hat \mr&=\argmin_{\mr=(r_1,\ldots,r_K)} \text{BIC}(\mr)\\
+&=\argmin_{\mr=(r_1,\ldots,r_K)}\left[-2\tL_{\tY}(\hat \tB)+p_e(\mr)\log \left(\prod_k d_k\right) \right],
+\end{align}
+where $p_e(\mr)\stackrel{\text{def}}{=}\sum_k (p_k-r_k-1)r_k+\prod_k r_k$ is the effective number of parameters in the model. We choose $\hat \mr$ that minimizes $\text{BIC}(\mr)$ via grid search. Our choice of BIC aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model. We test its empirical performance in Section~\ref{sec:simulation}.  
+
+The computational complexity of our tensor regression model is $O\left(d \sum_k p^3_k\right)$ for each loop of iterations, where $d=\prod_k d_k$ is the total size of the response tensor. More precisely, the update of core tensor costs $O(r^3d)$, where $r=\prod_k r_k$ is the total size of the core tensor. The update of each factor matrix $\mM_k$ involves a GLM with a $d$-length response, and $d$-by-$(r_kp_k)$-covariate matrix. Solving such a GLM requires $O(dr^3_kp^3_k)$, and therefore the cost for updating $K$ factors in total is $O( d\sum_k r^3_k p_k^3)$.
+
 
 
 \subsection{Statistical properties}\label{subsec:statprob}
@@ -315,73 +400,6 @@ Assume the same set-up as in Theorem~\ref{thm:main}. Let $\mathbb{P}_{\tY_{\text
 \]
 where $C_4=C_4(\mr,\alpha, K)>0$ is a constant that do not depend on the dimensions $\{d_k\}$ and $\{p_k\}$.
 \end{thm}
-
-
-
-
-\section{Numerical implementation}\label{sec:algorithm}
-\subsection{Alternating optimization} \label{subsec:alg}
-In this section, we introduce an efficient algorithm to solve~\eqref{eq:MLE}. The objective function $\tL_{\tY}(\tB)$ is concave in $\tB$ when the link $f$ is the canonical link function. We utilize a Tucker factor representation of the coefficient tensor $\tB$ and turn the optimization into a block-wise convex problem. 
-
-Specifically, write the rank-$\mr$ decomposition of coefficient tensor $\tB$ as
-\begin{equation}\label{eq:tucker}
-\tB=\tC\times \{\mM_1,\ldots,\mM_K\},
-\end{equation}
-where $\tC\in\mathbb{R}^{r_1\times\cdots\times r_K}$ is a full-rank core tensor, $\mM_k\in\mathbb{R}^{p_k\times r_k}$ are factor matrices with orthogonal columns. Estimating $\tB$ amounts to finding both the core tensor $\tC$ and the factor matrices $\mM_k$'s. The optimization~\eqref{eq:MLE} can be written as $(\hat \tC, \{\hat \mM_k\})=\arg\max \tL_{\tY}(\tC, \mM_1,\ldots,\mM_K)$, where
-\begin{align}
-\tL_{\tY}(\tC, \mM_1,\ldots,\mM_K )&=\langle \tY, \Theta\rangle -\sum_{i_1,\ldots,i_K}b(\theta_{i_1,\ldots,i_K}),\\
-\text{with } \Theta&=\tC\times\{\mM_1\mX_1,\ldots,\mM_K\mX_K\}.
-\end{align}
-The decision variables in the above objective function consist of $K+1$ blocks of variables, one for the core tensor $\tC$ and $K$ for the factor matrices $\mM_k$'s. We notice that, if any $K$ out of the $K+1$ blocks of variables are known, then the optimization with respect to the last block of variables reduced to a simple GLM. This observation suggests that we can iteratively update one block at a time while keeping others fixed. After each iteration, we rescale the core tensor $\tC^{(t+1)}$ subject to the maximum norm constraint. This post-processing in principle may not guarantee the monotonic increase of the objective, but we found that in our experiment this simple step appears robust for obtaining a desirable solution. The full algorithm is described in Algorithm~\ref{alg:B}.
-
-
-
-\begin{algorithm}[t]
-\caption{Generalized tensor response regression with covariates on multiple modes}\label{alg:B}
-\begin{algorithmic}[1]
-\INPUT Response tensor $\tY\in \mathbb{R}^{d_1\times \cdots \times d_K}$, covariate matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$ for $k=1,\ldots,K$, target Tucker rank $\mr=(r_1,\ldots,r_K)$, link function $f$, maximum norm bound $\alpha$
-\OUTPUT Low-rank estimation for the coefficient tensor $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$. 
-\State Calculate $\check \tB=\tY\times_1 \left[(\mX_1^T\mX_1)^{-1}\mX^T_1\right] \times_2\cdots\times_K\left[(\mX_K^T\mX_K)^{-1}\mX^T_K\right] $.
-\State Initialize the iteration index $t=0$. Initialize the core tensor $\tC^{(0)}$ and factor matrices $\mM^{(0)}_k\in\mathbb{R}^{p_k\times r_k}$ via rank-$\mr$ Tucker approximation of $\check\tB$, in the least-square sense. 
-  \While {the relative increase in objective function $\tL_\tY(\tB)$ is less than the tolerance}
-\State Update iteration index $t \leftarrow t+1$.
-\For { $k=1$ to $K$}
-\State Obtain the factor matrix $\tilde \mM_k^{(t+1)}\in\mathbb{R}^{p_k\times r_k}$ by a GLM with link function $f$. 
-\State Perform QR factorization on $\tilde \mM_k^{(t+1)}=\mQ\mR$, where $\mQ\in\mathbb{R}^{p_k\times r_k}$ has orthogonal columns. 
-\State Update $\mM_k^{(t+1)}\leftarrow \mQ$ and core tensor $\tC^{(t+1)}\leftarrow \tC^{(t+1)}\times_k \mR$.
-\EndFor
-\State Obtain the core tensor $\tC^{(t+1)}\in\mathbb{R}^{r_1\times\cdots\times r_K}$ by solving a GLM with $\text{vec}(\tY)$ as response, $\otimes_{k=1}^K[ \mX_k\mM^{(t)}_k]$ as covariates, and $f$ as link function. Here $\otimes$ denotes the kronecker product of matrices. 
-\State Rescale the core tensor subject to the maximum norm constraint. 
-\State Update $\tB^{(t+1)}\leftarrow \tC^{(t+1)}\times_1\mM_1^{(t+1)}\times_2\cdots\times_K\mM_K^{(t+1)}$.
-\EndWhile
-\end{algorithmic}
-\end{algorithm}
-
-
-Note that the feasible set $\tP$ is a non-convex set. Therefore, the optimization~\eqref{eq:MLE} is a non-convex problem, and the Algorithm~\ref{alg:B} usually not theoretically possesses the global optimality. However, as mentioned in Section~\ref{subsec:statprob}, the desired convergence rate~\eqref{eq:bound} holds for the valid estimators satisfying $\tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true})$, which indicates the global optimality is not necessarily a serious concern in our context, as long as the convergent objective of local optimums are large enough. Fortunately, we find the  Algorithm~\ref{alg:B}  often gives a satisfactory convergence point $\hat \tB$, when we initialize the parameters via continuous-valued Tucker decomposition. Figure~\ref{fig:loglike} shows the trajectory of the objective function for order-3 tensors under the balanced setting, where $\alpha = 10, d_k = d, p_k = 0.4d, r_k = r$ for $ k = 1,2,3, p \in \{25,30\}$  and $r \in \{3, 6\}$. We consider the inputs with Gaussian, Bernoulli, and Poisson entries. Under all combinations of the dimension $d$, rank $r$, and type of the entries, Algorithm~\ref{alg:B} converges quickly in a few iterations, and the objective value at convergent points are close to or larger than the value at true parameters.  
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=15cm]{new_log.pdf}
-\caption{Trajectory of the objective function with various dimension $d$ and rank $r$ under (a) Gaussian (b) Bernoulli (c) Poisson models. The dashed line represents the objective value at true parameter $\tL_{\tY}(\tB_{true})$. A micro-iteration refers to the update for one of the $K$ blocks. Four micro-iterations consist of a complete ``while'' iteration in Algorithm~\ref{alg:B}.}\label{fig:loglike}
-\end{figure}
-
-
-
-\subsection{Rank selection}\label{sec:tuning}
-Algorithm~\ref{alg:B} takes the rank $\mr$ as an input. Estimating an appropriate rank given the data is of practical importance. We propose to use Bayesian information criterion (BIC) and choose the rank that minimizes BIC; i.e.
-\begin{align}\label{eq:BIC}
-\hat \mr&=\argmin_{\mr=(r_1,\ldots,r_K)} \text{BIC}(\mr)\\
-&=\argmin_{\mr=(r_1,\ldots,r_K)}\left[-2\tL_{\tY}(\hat \tB)+p_e(\mr)\log \left(\prod_k d_k\right) \right],
-\end{align}
-where $p_e(\mr)\stackrel{\text{def}}{=}\sum_k (p_k-r_k-1)r_k+\prod_k r_k$ is the effective number of parameters in the model. We choose $\hat \mr$ that minimizes $\text{BIC}(\mr)$ via grid search. Our choice of BIC aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model. We test its empirical performance in Section~\ref{sec:simulation}.  
-
-\subsection{Time complexity}
-The computational complexity of our tensor regression model is $O\left(d \sum_k p^3_k\right)$ for each loop of iterations, where $d=\prod_k d_k$ is the total size of the response tensor. More precisely, the update of core tensor costs $O(r^3d)$, where $r=\prod_k r_k$ is the total size of the core tensor. The update of each factor matrix $\mM_k$ involves a GLM with a $d$-length response, and $d$-by-$(r_kp_k)$-covariate matrix. Solving such a GLM requires $O(dr^3_kp^3_k)$, and therefore the cost for updating $K$ factors in total is $O( d\sum_k r^3_k p_k^3)$.
-
-\subsection{Missing values}
-.....
 
 \section{Simulation}\label{sec:simulation}
 We evaluate the empirical performance of our generalized tensor regression through simulations. We consider order-3 tensors with a range of distribution types. The coefficient tensor $\tB$ is generated using the factorization form~\eqref{eq:tucker} where both the core and factor matrices are drawn i.i.d.\ from Uniform[-1,1]. The linear predictor is then simulated from $\tU=\tB\times\{\mX_1,\mX_2,\mX_3\}$, where $\mX_k$ is either an identity matrix (i.e.\ no covariate available) or Gaussian random matrix with i.i.d.\ entries from $N(0,\sigma_k^2)$. We set $\sigma_k=d_k^{-1/2}$ to ensure the singular values of $\mX_k$ are bounded as $d_k$ increases. The $\tU$ is scaled such that $\mnormSize{}{\tU}=1$. Conditional on the linear predictor $\tU=\entry{u_{ijk}}$, the entries in the tensor $\tY=\entry{y_{ijk}}$ are drawn independently according to one of the following three probabilistic models:
@@ -534,8 +552,14 @@ To investigate the effects of dyadic attributes towards connections, we depicted
 
 \section{Conclusion}\label{sec:con}
 
- We have developed a generalized tensor regression with covariates on multiple modes. A fundamental feature of tensor-valued data is the statistical interdependence among entries. Our proposed rank-constrained estimation achieves high accuracy with sound theoretical guarantees. The estimation accuracy is quantified via deviation in the Frobenius norm and K-L divergence. Other measures of accuracy may also be desirable, such as the spectral norm or the maximum norm of the deviation. Exploiting the properties and benefits of different error quantification warrants future research.
+We have developed a generalized tensor regression with covariates on multiple modes. A fundamental feature of tensor-valued data is the statistical interdependence among entries. Our proposed rank-constrained estimation achieves high accuracy with sound theoretical guarantees. The estimation accuracy is quantified via deviation in the Frobenius norm and K-L divergence. Other measures of accuracy may also be desirable, such as the spectral norm or the maximum norm of the deviation. Exploiting the properties and benefits of different error quantification warrants future research.
  
+Our method leverages on the alternating updating algorithm for the optimization. Although a non-convex optimization procedure such as Algorithm~\ref{alg:binary} has no guarantee on global optimality, our numerical experiments have suggested that, upon random initializations, the convergence point $\hat\Theta$ is often satisfactory, in that the corresponding objective value $\tL_{\tY}(\hat\Theta)$ is close to the objective value $\tL_{\tY}(\trueT)$. When starting from random initializations, there could be multiple estimates, whose objective values are all greater than $\tL_{\tY}(\trueT)$. In theory, any of those choices perform equally well in estimating $\trueT$. In this sense, local optimality is not necessarily a severe concern in our context. On the other hand, characterizing global optimality for non-convex optimization problem of this type is itself of great interest. There has been recent progress investigating the landscape of non-convex optimization involving tensors~\citep{anandkumar2014tensor, richard2014statistical, ge2017optimization}. The problem is challenging, as the geometry can  depend on multiple factors including the tensor rank, dimension, and factorization form. In some special cases such as rank-1 or orthogonally decomposable tensors, one may further obtain the required asymptotical number of initializations, however, at the cost of more stringent assumptions on the target tensor~\citep{anandkumar2014tensor, richard2014statistical}. We leave the pursuit of optimization landscape as future research.
+
+Another an.. is the (conditional) independence assumption on the tensor entries. Instead of glm, we may introduce a more general tensor-variate distribution on the $\tY$. For the case of normal distribution. For random effects.....
+
+Inference. ... uncertainly quantification... bootstrap .... 
+
  \newpage
 
 \bigskip
