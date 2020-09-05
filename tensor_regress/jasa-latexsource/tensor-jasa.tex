@@ -97,11 +97,6 @@
 \bigskip
 \begin{abstract}
 Higher-order tensors have received increased attention across science and engineering. While most tensor decomposition methods are developed for a single tensor observation, scientific studies often collect side information, in the form of node features and interactions thereof, together with the tensor data. Such data problems are common in neuroimaging, network analysis, and spatial-temporal modeling. Identifying the relationship between a high-dimensional tensor and side information is important yet challenging. Here, we develop a tensor decomposition method that incorporates multiple side information as structured covariates, and present case studies to show the benefit of proposed approach. Unlike unsupervised tensor decomposition, our supervised decomposition captures the most effective dimension reduction of the data tensor confined to the feature space on each mode. 
-%supervised tensor decomposition method that incorporates side information on multiple modes. 
-%We consider the problem of decomposing a higher-order tensor with exponential-family entries, given side information on multiple modes. 
-%Such data problems arise frequently in applications such as neuroimaging, network analysis, and spatial-temporal modeling. 
-%We develop a regression approach that incorporates side information as structured covariates along multiple sides. 
-%Unlike unsupervised tensor decomposition, the supervised approach finds the optimal low-rank factor matrices confined to the feature spaces. 
 An efficient alternating updating algorithm is further developed. Our proposal handles a broad range of data types, including continuous, count, and binary observations. We apply the method to diffusion tensor imaging data from human connectome project and multi-relational social network data. We identify the key global connectivity pattern and pinpoints the local regions that are associated with covariates. Our method will help the practitioners efficiently analyze tensor datasets in various areas. Toward this end, the package and data used are available at ~\url{https://CRAN.R-project.org/package=tensorregress}.
 
 \end{abstract}
@@ -139,11 +134,11 @@ The second line of work studies the scalar-to-tensor regression models, in which
 The third line of work studies the tensor-on-tensor regression models, in which both the response and predictor are tensors~\citep{raskutti2015convex, lock2018tensor, gahrooei2020multiple}. Our model shares a common ground but is complementary to earlier approaches. As we show in Section~\ref{subsec:statprob}, the supervised tensor decomposition 
 has an interesting interpretation as a special tensor-on-tensor regression. Nevertheless, our work differs from previous work in scope and application domains. Previous methods~\citep{gahrooei2020multiple,lock2018tensor} mainly focus on Gaussian tensor. The Frobenius norm used in the objective is statistical suboptimal for general exponential family tensors. Maximum likelihood estimator (MLE) is studied in~\cite{raskutti2015convex} and a convex relaxation algorithm is proposed to solve for low-rank tensor coefficients. However, in the tensor case, convex MLE suffers from both computational intractability and statistical suboptimality. We advocate the non-convex approach and provide strong evidence for its success in our setting. Most previous tensor regression focuses on prediction~\citep{lock2018tensor,raskutti2015convex,gahrooei2020multiple}, and we focuses on finding optimal transformation matrices $\mM_k$ in order to pinpoint important feature subspaces towards prediction (see Figure~\ref{fig:intro1}b). The latter approach greatly improves the \emph{interpretability} in prediction. In this regards, our method opens up new opportunities for tensor data analysis in a wider range of possible applications. 
 
-Section~\eqref{}
+The remainder of this paper is organized as follows. Section~\ref{sec:pre} introduces tensor notation and preliminaries. Section~\ref{sec:model} presents the main model and three motivating examples for supervised tensor decomposition. Section~\ref{sec:est} describes a rank-constrained log-likelihood approach for tensor estimation and its statistical properties. We next develop an alternating optimization algorithm in Section~\ref{sec:algorithm} and present the simulation results in Section~\ref{sec:simulation}. In Section~\ref{sec:data}, we apply the method to diffusion tensor imaging data from human connectome project and multi-relational social network data. We conclude in Section~\ref{sec:con} with discussions about our findings and avenues of future work.
 
-\section{Preliminaries}
+\section{Preliminaries}\label{sec:pre}
 
-We introduce the basic tensor properties used in the paper; more details can be found in~\citet{kolda2009tensor}. We use $\tY=\entry{y_{i_1,\ldots,i_K}}\in \mathbb{R}^{d_1\times \cdots\times d_K}$ to denote an order-$K$ $(d_1,\ldots,d_K)$-dimensional tensor, where $K$ corresponds to the number of modes of $\tY$ and is called the order. The multilinear multiplication of a tensor $\tY\in\mathbb{R}^{d_1\times \cdots\times d_K}$ by matrices $\mX_k=\entry{x_{i_k,j_k}^{(k)}}\in\mathbb{R}^{p_k\times d_k}$ is defined as
+We introduce the basic tensor properties used in the paper; more details on tensor notation can be found in~\citet{kolda2009tensor}. We use $\tY=\entry{y_{i_1,\ldots,i_K}}\in \mathbb{R}^{d_1\times \cdots\times d_K}$ to denote an order-$K$ $(d_1,\ldots,d_K)$-dimensional tensor, where $K$ corresponds to the number of modes of $\tY$ and is called the order. The multilinear multiplication of a tensor $\tY\in\mathbb{R}^{d_1\times \cdots\times d_K}$ by matrices $\mX_k=\entry{x_{i_k,j_k}^{(k)}}\in\mathbb{R}^{p_k\times d_k}$ is defined as
 \begin{equation}
 \tY \times_1\mX_1\ldots \times_K \mX_K=\entry{\sum_{i_1,\ldots,i_K}y_{i_1,\ldots,i_K}x_{j_1,i_1}^{(1)}\ldots x_{j_K,i_K}^{(K)}},
 \end{equation}
@@ -245,7 +240,7 @@ Our tensor regression model is able to incorporate covariates on any subset of m
 where the entries of $\tY$ are independent r.v.'s conditional on $\tX$, and $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$ is the low-rank coefficient tensor of interest. We comment that other forms of tensor low-rankness are also possible, and here we choose Tucker rank just for parsimony. Similar models can be derived using various notions of low-rankness based on CP decomposition~\citep{hitchcock1927expression} and train decomposition~\citep{oseledets2011tensor}. 
 
 
-\section{Rank-constrained likelihood-based estimation}
+\section{Rank-constrained likelihood-based estimation}\label{sec:est}
 We develop a likelihood-based procedure to estimate the coefficient tensor $\tB$ in~\eqref{eq:tensormodel2}. We adopt the exponential family as a flexible framework for different data types. In a classical generalized linear model (GLM) with a scalar response $y$ and covariate $\mx$, the density is expressed as:
 \[
 p(y|\mx, \boldsymbol{\beta})=c(y,\phi)\exp\left({y\theta- b(\theta) \over \phi}\right)\ \text{with}\ \theta=\boldsymbol{\beta}^T\mx,
@@ -324,7 +319,7 @@ where $C_4=C_4(\mr,\alpha, K)>0$ is a constant that do not depend on the dimensi
 
 
 
-\section{Numerical implementation}
+\section{Numerical implementation}\label{sec:algorithm}
 \subsection{Alternating optimization} \label{subsec:alg}
 In this section, we introduce an efficient algorithm to solve~\eqref{eq:MLE}. The objective function $\tL_{\tY}(\tB)$ is concave in $\tB$ when the link $f$ is the canonical link function. We utilize a Tucker factor representation of the coefficient tensor $\tB$ and turn the optimization into a block-wise convex problem. 
 
@@ -477,7 +472,7 @@ Figure~\ref{fig:compare2} compares the prediction error with respect to sample s
 
 \end{figure}
 
-\section{Data analysis}
+\section{Data analysis}\label{sec:data}
 We apply our tensor regression model to two datasets. The first application concerns the brain network modeling in response to individual attributes (i.e.\ covariate on one mode), and the second application focuses on multi-relational network analysis with dyadic attributes (i.e.\ covariates on two modes). 
 
 \subsection{Analysis of human brain connection data}
@@ -537,7 +532,7 @@ Cluster IV & Politics &commonbloc0, blockpositionindex\\
 To investigate the effects of dyadic attributes towards connections, we depicted the estimated coefficients $\hat \tB=\entry{\hat b_{ijk}}$ for several relation types (Figure~\ref{fig:est}). Note that entries $\hat b_{ijk}$ can be interpreted as the contribution, at the logit scale, of covariate pair $(i,j)$ ($i$th covariate for the ``sender'' country and $j$th covariate for the ``receiver'' country) towards the connection of relation $k$.  Several interesting findings emerge from the observation. We found that relations belonging to a same cluster tend to have similar covariate effects. For example, the relations \emph{warnings} and \emph{ecnomicaid} are classified into Cluster II, and both exhibit similar covariate pattern (Figure~\ref{fig:est}a-b). Moreover, the majority of the diagonal entries $\hat \tB(i,i,k)$ positively contribute to the connection. This suggests that countries with coherent attributes tend to interact more often than others. We also found that the \emph{constitutional} attribute is an important predictor for the \emph{commonbloc} relation, whereas the effect is weaker for other relations (Figure~\ref{fig:est}d). This is not surprising, as the block partition during Cold War is associated with the \emph{constitutional} attribute. 
 
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:con}
 
  We have developed a generalized tensor regression with covariates on multiple modes. A fundamental feature of tensor-valued data is the statistical interdependence among entries. Our proposed rank-constrained estimation achieves high accuracy with sound theoretical guarantees. The estimation accuracy is quantified via deviation in the Frobenius norm and K-L divergence. Other measures of accuracy may also be desirable, such as the spectral norm or the maximum norm of the deviation. Exploiting the properties and benefits of different error quantification warrants future research.
  
