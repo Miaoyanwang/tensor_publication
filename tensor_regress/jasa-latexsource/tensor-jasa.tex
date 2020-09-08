@@ -210,7 +210,7 @@ Network response model~\citep{rabusseau2016low, zhang2018network} is recently de
 \end{equation}
 where $\tB\in \mathbb{R}^{d\times d\times p}$ is a coefficient tensor of rank $r(\tB)=(r,r,r')$.
 
-The model~\eqref{eq:network} is a special case of our supervised tensor decomposition, with feature matrix on the last mode of the tensor. Specifically, we stack the network observations $\{\mY_i\}$ together and obtain an order-3 response tensor $\tY\in\{0,1\}^{d\times d\times n}$. Define a feature matrix $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the model~\eqref{eq:network} can be written as
+The model~\eqref{eq:network} is a special case of our supervised tensor decomposition, with feature matrix on the last mode of the tensor. Specifically, we stack the network observations $\{\mY_i\}$ together and obtain an order-3 response tensor $\tY\in\{0,1\}^{d\times d\times n}$. Define a feature matrix $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the model~\eqref{eq:network} has the equivalent representation of supervised tensor decomposition,
 \[
 \text{logit}(\mathbb{E}(\tY|\mX))=\tC\times\{\mM,\ \mM,\ \mX\mM'\},
 \]
@@ -254,14 +254,12 @@ y_\omega \ci y_{\omega'} & \ \big|\ \{\mX_k\mM_k\}  \ \ \text{(independence with
 \end{align}
 where the second line holds for all $\omega\neq \omega' \in[d_1]\times\cdots\times[d_K]$, and $\ci$ denotes the independence. The first property highlights the ``decorrelation'' role of $\mM_k$ akin to the sufficient dimension reduction~\citep{adragni2009sufficient} in high-dimensional supervised learning, whereas the second property highlights the tensor dimension reduction in the usual unsupervised sense (consider, for example, $\mX_k=\mathbf{I}_{d_k}$ for all $k\in[K]$).
 
-Our model also has a close connection with tensor-on-tensor regression. Model~\eqref{eq:decomp} can be viewed as a multivariate regression model, where the response is vectorized tensor entries and the covariates are interactions between all sufficient features across modes. We give an Gaussian model on order-3 tensors for illustration. Let $\mX,\mZ,\mW$ denote the feature matrix on mode $k=1, 2, 3$, respectively. Suppose each mode has two-dimensional sufficient features, denoted $\mM_1\mX=[\mx_1,\mx_2]$, $\mM_2\mZ=[\mz_1,\mz_2]$, $\mM_3\mW=[\mw_1,\mw_2]$. Here $\mx_1,\mx_2,\ldots,\mw_1, \mw_2$ are column vectors. Then the model~\eqref{eq:decomp} can be written as
-\[
+Our model also has a close connection with tensor-on-tensor regression. Specifically, model~\eqref{eq:decomp} can be viewed as a multivariate regression model, where the response is vectorized tensor entries and the covariates are interactions between all sufficient features across modes. We take an order-3 tensor under the Gaussian model for illustration. Let $\mX,\mZ,\mW$ denote the feature matrix on mode $k=1, 2, 3$, respectively. Suppose each mode has two-dimensional sufficient features, denoted $\mM_1\mX=[\mx_1,\mx_2]$, $\mM_2\mZ=[\mz_1,\mz_2]$, $\mM_3\mW=[\mw_1,\mw_2]$. Here $\mx_1,\mx_2,\ldots,\mw_1, \mw_2$ are column vectors. Then the model~\eqref{eq:decomp} can be written as a regression model with across-mode interactions,
+\begin{equation}\label{eq:interaction}
 \mathbb{E}(y_{ijk}|\mX,\mZ,\mW)=c_{111}\mx_{1i}\mz_{1j}\mw_{1k}+c_{121}\mx_{i1}\mz_{j2}\mw_{k1}+\cdots+c_{221}\mx_{2i}\mz_{2j}\mw_{1k}+c_{222}\mx_{2i}\mz_{2j}\mw_{2k},
-\]
-where $\entry{c_{ijk}} \in \mathbb{R}^{2\times 2\times 3}$ are unknown regression parameters, and $\mx_{1i}$ denotes the $i$-th entry in the vector $\mx_1$, and similar notation for other covariates. In this perspective, our supervised tensor decomposition is useful for identifying across-mode interactions between sufficient features. 
+\end{equation}
+where $\entry{c_{ijk}} \in \mathbb{R}^{2\times 2\times 3}$ are unknown interaction effects, $\mx_{1i}$ denotes the $i$-th entry in the feature vector $\mx_1$, and similar notations apply to other features. Model~\eqref{eq:interaction} suggests the use of our supervised tensor decomposition for identifying across-mode interactions. Note that lower-order interactions are naturally incorporated in~\eqref{eq:interaction} if we include an intercept column in the sufficient feature matrices.  
 
-%All in all, these two connection interprete. our method from two perspectives, one from the residual structure conditional on $\{\mX_k\mM_k\}$ and the interaction between $\mX_k\mM_k$ across $k\in[K]$. These two perspetive, in total, give rise the predictive prediction in our model.
- 
 
 \section{Estimation}\label{sec:est}
 
