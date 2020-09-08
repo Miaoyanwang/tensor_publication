@@ -254,12 +254,13 @@ y_\omega \ci y_{\omega'} & \ \big|\ \{\mX_k\mM_k\}  \ \ \text{(independence with
 \end{align}
 where the second line holds for all $\omega\neq \omega' \in[d_1]\times\cdots\times[d_K]$, and $\ci$ denotes the independence. The first property highlights the ``decorrelation'' role of $\mM_k$ akin to the sufficient dimension reduction~\citep{adragni2009sufficient} in high-dimensional supervised learning, whereas the second property highlights the tensor dimension reduction in the usual unsupervised sense (consider, for example, $\mX_k=\mathbf{I}_{d_k}$ for all $k\in[K]$).
 
-Our model also has a close connection with tensor-on-tensor regression. Specifically, model~\eqref{eq:decomp} can be viewed as a multivariate regression model, where the response is vectorized tensor entries and the covariates are interactions between all sufficient features across modes. We take an order-3 tensor under the Gaussian model for illustration. Let $\mX,\mZ,\mW$ denote the feature matrix on mode $k=1, 2, 3$, respectively. Suppose each mode has two-dimensional sufficient features, denoted $\mM_1\mX=[\mx_1,\mx_2]$, $\mM_2\mZ=[\mz_1,\mz_2]$, $\mM_3\mW=[\mw_1,\mw_2]$. Here $\mx_1,\mx_2,\ldots,\mw_1, \mw_2$ are column vectors. Then the model~\eqref{eq:decomp} can be written as a regression model with across-mode interactions,
+Our model also has a close connection with tensor-on-tensor regression. Specifically, model~\eqref{eq:decomp} can be viewed as a multivariate regression model, where the response is vectorized tensor entries and the covariates are interactions between all sufficient features across modes. We take an order-3 tensor under the Gaussian model for illustration. Let $\mX,\mZ,\mW$ denote the feature matrix on mode $k=1, 2, 3$, respectively. Suppose that each mode has two-dimensional sufficient features, denoted $\mM_1\mX=[\mx_1,\mx_2]$, $\mM_2\mZ=[\mz_1,\mz_2]$, $\mM_3\mW=[\mw_1,\mw_2]$. Here $\mx_1,\mx_2,\ldots,\mw_1, \mw_2$ are column vectors. Then the model~\eqref{eq:decomp} can be written as a regression model with across-mode interactions,
 \begin{equation}\label{eq:interaction}
 \mathbb{E}(y_{ijk}|\mX,\mZ,\mW)=c_{111}\mx_{1i}\mz_{1j}\mw_{1k}+c_{121}\mx_{i1}\mz_{j2}\mw_{k1}+\cdots+c_{221}\mx_{2i}\mz_{2j}\mw_{1k}+c_{222}\mx_{2i}\mz_{2j}\mw_{2k},
 \end{equation}
 where $\entry{c_{ijk}} \in \mathbb{R}^{2\times 2\times 3}$ are unknown interaction effects, $\mx_{1i}$ denotes the $i$-th entry in the feature vector $\mx_1$, and similar notations apply to other features. Model~\eqref{eq:interaction} suggests the use of our supervised tensor decomposition for identifying across-mode interactions. Note that lower-order interactions are naturally incorporated in~\eqref{eq:interaction} if we include an intercept column in the sufficient feature matrices.  
 
+\fixme{Miaoyan}{do we make use of the above two implications in the real data analysis or simulations?}
 
 \section{Estimation}\label{sec:est}
 
@@ -364,7 +365,7 @@ The computational complexity of our alternating optimization algorithm is $O\lef
 
 
 \subsection{Statistical properties}\label{subsec:statprob}
-We assess the estimation accuracy using the deviation in the Frobenius norm. Add angle deviation in dimension reduction matrices. Add identifiability condition. For the true coefficient tensor $\trueB$ and its estimator $\hat \tB$, define
+We assess the estimation accuracy using the deviation in the Frobenius norm. \fixme{Miaoyan}{needs revision...} For the true coefficient tensor $\trueB$ and its estimator $\hat \tB$, define
 \[
 \text{Loss}(\trueB,\ \hat \tB)=\FnormSize{}{\trueB- \hat \tB}^2.
 \]
@@ -385,7 +386,7 @@ The assumptions are fairly mild. Assumption A1 guarantees the non-singularity of
 
   
 \begin{thm}[Statistical convergence]\label{thm:main}
-Consider an order-$K$ dimensional-$(d_1,\ldots,d_K)$ tensor $\tY$ and multiple feature matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$, for $k\in[K]$. Suppose that, conditional on the features, the entries in $\tY$ are independent realizations from an exponential family distribution with conditional mean model~\eqref{eq:decomp}. Let $r_\text{total}=\prod_k r_k$, $r_{\max}=\max_k r_k$, and $\sigma_{\min}(\mM_k)$ be the minimal non-zero singular value of $\mM_k$. Assume that $\sigma_{\min}(\mM_k)>0$ and $\FnormSize{}{\mX_k} \asymp \Omega(\sqrt{d_k})$, for all $k\in[K]$. Under Assumption~\ref{ass}, there exist two constants $C_1, C_2>0$, such that, with probability at least $1-\exp(-C_1\sum_k p_k)$, 
+Consider an order-$K$ dimensional-$(d_1,\ldots,d_K)$ tensor $\tY$ and multiple feature matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$, for $k\in[K]$. Suppose that, conditional on the features, the entries in $\tY$ are independent realizations from an exponential family distribution with conditional mean model~\eqref{eq:decomp}. Let $r_\text{total}=\prod_k r_k$, $r_{\max}=\max_k r_k$, and $\sigma_{\min}(\mM_k)$ be the minimal non-zero singular value of $\mM_k$. Assume that $\sigma_{\min}(\mM_k)>0$ and $\FnormSize{}{\mX_k} \asymp \Omega(\sqrt{d_k})$ as $d_k\to\infty$, for all $k\in[K]$. Under Assumption~\ref{ass}, there exist two constants $C_1, C_2>0$, such that, with probability at least $1-\exp(-C_1\sum_k p_k)$, 
 \begin{equation}\label{eq:bound}
 \textup{sin}^2 \Theta(\mM_k,\ \hat \mM_k) \leq  \frac{ C_{2}r_{\textup{total}}}{ r_{\max}\lambda_{\min}(\mM_k)}\frac{\sum_k p_k}{\prod_k d_k}, \quad\text{for all }k\in[K],
 \end{equation}
@@ -396,7 +397,7 @@ and
 Here, $C_2=C_2(\mr,\alpha, K)>0$ is a constant independent of the dimensions $\{d_k\}$ and $\{p_k\}$. 
 \end{thm}
 
-Theorem~\ref{thm:main} establishes the statistical convergence for the estimator~\eqref{eq:MLE}. \fixme{Miaoyan}{Wrong statement based on current proof}Actually, the proof in section~\ref{sec:appedix} shows that the statistically optimal rate holds, not only for the MLE~\eqref{eq:MLE},  but also any local estimators $\hat \tB$ in the level set $\{\hat \tB \in \tP \colon \tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true}) \}$ satisfies the upper bound~\ref{thm:main}. In Section~\ref{subsec:alg}, we implement empirical studies to verify the algorithmic stability to find a local optimum.
+Theorem~\ref{thm:main} establishes the statistical convergence for the estimator~\eqref{eq:MLE}. Actually, the proof in section~\ref{sec:appedix} shows that the statistically optimal rate holds, not only for the MLE~\eqref{eq:MLE}, but also any local estimators $\hat \tB$ in the level set $\{\hat \tB \in \tP \colon \tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true}) \}$ satisfies the upper bound~\ref{thm:main}\fixme{Miaoyan}{Wrong statement based on current proof}. In Section~\ref{subsec:alg}, we implement empirical studies to verify the algorithmic stability to find a local optimum.
 
 
 To gain further insight on the bound~\eqref{eq:bound}, we consider a special case when tensor dimensions are equal at each of the modes, i.e., $d_k=d$, $p_k=\gamma d$, $\gamma\in [0,1)$ for all $k\in[K]$, and the feature matrices $\mX_k$ are Gaussian design with i.i.d.\ $N(0,1)$ entries. To put the context in the framework of Theorem~\ref{thm:main}, we rescale the feature matrices into $\check \mX_k={1\over \sqrt{d}}\mX_k$ so that the singular values of $\check \mX_k$ are bounded by $1\pm \sqrt{\gamma}$. The result in~\eqref{eq:bound} implies that the estimated coefficient has a convergence rate $\tO({p\over d^K})$ in the scale of the original feature $\{\mX_k\}$. Therefore, our estimation is consistent as the dimension grows, and the convergence becomes especially favorably as the order of tensor data increases. 
@@ -424,7 +425,7 @@ where $C_4=C_4(\mr,\alpha, K)>0$ is a constant that independent of dimensions $\
 \end{thm}
 
 \section{Numerical experiments}\label{sec:simulation}
-{\color{red} Simulation needs to be re-done, since code has been changed. }
+{\color{red} Simulation/figures needs to be re-run once more, since code has been changed. }
 
 We evaluate the empirical performance of our generalized tensor regression through simulations. We consider order-3 tensors with a range of distribution types. The coefficient tensor $\tB$ is generated using the factorization form~\eqref{eq:tucker} where both the core and factor matrices are drawn i.i.d.\ from Uniform[-1,1]. The linear predictor is then simulated from $\tU=\tB\times\{\mX_1,\mX_2,\mX_3\}$, where $\mX_k$ is either an identity matrix (i.e.\ no feature available) or Gaussian random matrix with i.i.d.\ entries from $N(0,\sigma_k^2)$. We set $\sigma_k=d_k^{-1/2}$ to ensure the singular values of $\mX_k$ are bounded as $d_k$ increases. The $\tU$ is scaled such that $\mnormSize{}{\tU}=1$. Conditional on the linear predictor $\tU=\entry{u_{ijk}}$, the entries in the tensor $\tY=\entry{y_{ijk}}$ are drawn independently according to one of the following three probabilistic models:
 
@@ -514,7 +515,7 @@ Figure~\ref{fig:compare2} compares the prediction error with respect to sample s
 
 \end{figure}
 
-\section{Data analysis}\label{sec:data}
+\section{Data analyses}\label{sec:data}
 We apply our tensor regression model to two datasets. The first application concerns the brain network modeling in response to individual attributes (i.e.\ feature on one mode), and the second application focuses on multi-relational network analysis with dyadic attributes (i.e.\ features on two modes). 
 
 \subsection{Analysis of human brain connection data}
@@ -583,20 +584,16 @@ To investigate the effects of dyadic attributes towards connections, we depicted
 
 
 \section{Conclusion}\label{sec:con}
-
+\fixme{Miaoyan}{No more than 35 pages. Reserve at least 1.5 pages for Conclusion}
 We have developed a generalized tensor regression with features on multiple modes. A fundamental feature of tensor-valued data is the statistical interdependence among entries. Our proposed rank-constrained estimation achieves high accuracy with sound theoretical guarantees. The estimation accuracy is quantified via deviation in the Frobenius norm and K-L divergence. Other measures of accuracy may also be desirable, such as the spectral norm or the maximum norm of the deviation. Exploiting the properties and benefits of different error quantification warrants future research.
  
- Add three more paragraphs: 
  
- 1. Optimization 
-%Our method leverages on the alternating updating algorithm for the optimization. Although a non-convex optimization procedure such as Algorithm~\ref{alg:binary} has no guarantee on global optimality, our numerical experiments have suggested that, upon random initializations, the convergence point $\hat\Theta$ is often satisfactory, in that the corresponding objective value $\tL_{\tY}(\hat\Theta)$ is close to the objective value $\tL_{\tY}(\trueT)$. When starting from random initializations, there could be multiple estimates, whose objective values are all greater than $\tL_{\tY}(\trueT)$. In theory, any of those choices perform equally well in estimating $\trueT$. In this sense, local optimality is not necessarily a severe concern in our context. On the other hand, characterizing global optimality for non-convex optimization problem of this type is itself of great interest. There has been recent progress investigating the landscape of non-convex optimization involving tensors~\citep{anandkumar2014tensor, richard2014statistical, ge2017optimization}. The problem is challenging, as the geometry can  depend on multiple factors including the tensor rank, dimension, and factorization form. In some special cases such as rank-1 or orthogonally decomposable tensors, one may further obtain the required asymptotical number of initializations, however, at the cost of more stringent assumptions on the target tensor~\citep{anandkumar2014tensor, richard2014statistical}. We leave the pursuit of optimization landscape as future research.
-
+ \fixme{Miaoyan}{Add two more paragraphs: 
+ %Our method leverages on the alternating updating algorithm for the optimization. Although a non-convex optimization procedure such as Algorithm~\ref{alg:binary} has no guarantee on global optimality, our numerical experiments have suggested that, upon random initializations, the convergence point $\hat\Theta$ is often satisfactory, in that the corresponding objective value $\tL_{\tY}(\hat\Theta)$ is close to the objective value $\tL_{\tY}(\trueT)$. When starting from random initializations, there could be multiple estimates, whose objective values are all greater than $\tL_{\tY}(\trueT)$. In theory, any of those choices perform equally well in estimating $\trueT$. In this sense, local optimality is not necessarily a severe concern in our context. On the other hand, characterizing global optimality for non-convex optimization problem of this type is itself of great interest. There has been recent progress investigating the landscape of non-convex optimization involving tensors~\citep{anandkumar2014tensor, richard2014statistical, ge2017optimization}. The problem is challenging, as the geometry can  depend on multiple factors including the tensor rank, dimension, and factorization form. In some special cases such as rank-1 or orthogonally decomposable tensors, one may further obtain the required asymptotical number of initializations, however, at the cost of more stringent assumptions on the target tensor~\citep{anandkumar2014tensor, richard2014statistical}. We leave the pursuit of optimization landscape as future research.
 %Another an.. is the (conditional) independence assumption on the tensor entries. Instead of glm, we may introduce a more general tensor-variate distribution on the $\tY$. For the case of normal distribution. For random effects.....
-
-2. Assumption on (conditional) independence assumption on the tensor entries. 
-
+2. Assumption on (conditional) independence assumption on the tensor entries. Mixed effect model, tensor-variate normal distribution..Current approach is to use fixed factor; or a combination of fixed factor + random effects. 
 3. Inference. ... uncertainly quantification... bootstrap ....  Testing for Interaction + main effects. 
-
+}
 
 \section*{Acknowledgements}
 This research was supported by NSF grant DMS-1915978 and the University of Wisconsin-Madison, Office of the Vice Chancellor for Research and Graduate Education with funding from the Wisconsin Alumni Research Foundation. 
