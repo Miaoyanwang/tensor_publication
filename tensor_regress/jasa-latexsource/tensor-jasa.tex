@@ -263,7 +263,7 @@ Our model also has a close connection with tensor-on-tensor regression. Specific
 \end{equation}
 where $\entry{c_{ijk}} \in \mathbb{R}^{2\times 2\times 3}$ are unknown interaction effects, $\mx_{1i}$ denotes the $i$-th entry in the feature vector $\mx_1$, and similar notations apply to other features. Model~\eqref{eq:interaction} suggests the use of our supervised tensor decomposition for identifying across-mode interactions. Note that lower-order interactions are naturally incorporated in~\eqref{eq:interaction} if we include an intercept column in the sufficient feature matrices.  
 
-\fixme{Miaoyan}{do we make use of the above two implications in the real data analysis or simulations?}
+\fixme{Miaoyan}{The above two aspects above two aspects in the simulation and real data analysis.}
 
 \section{Estimation}\label{sec:est}
 
@@ -294,10 +294,7 @@ In our context, we model the the entries in the response tensor $y_{ijk}$ condit
 \text{where}\ \Theta&=\tC\times\{\mM_1\mX_1,\ldots,\mM_K\mX_K\}.
 \end{align}
 
-We propose a constrained maximum likelihood estimator (M-estimator)
-%\begin{align} \label{eq:MLE} 
-%	\hat \tB &=\argmax_{\hat \tB \colon \text{rank}(\tB)\leq \mr, \mnormSize{}{\Theta(\tB)}\leq \alpha  } \tL_{\tY}(\tB).
-%\end{align}
+We consider a constrained maximum likelihood estimator (M-estimator),
 \begin{align} \label{eq:MLE} 
 (\hat \tC, \hat \mM_1,\ldots,\hat \mM_k) &=\argmax_{(\tC,\mM_1,\ldots,\mM_K)\in \tP} \ \tL_{\tY}(\tC,\mM_1,\ldots,\mM_K),
 \end{align}
@@ -325,25 +322,27 @@ The decision variables in the objective function~\eqref{eq:MLE} consist of $K+1$
 \caption{Supervised Tensor Decomposition with Interactive Side Information}\label{alg:B}
 \begin{algorithmic}[1]
 \INPUT Response tensor $\tY\in \mathbb{R}^{d_1\times \cdots \times d_K}$, feature matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$ for $k=1,\ldots,K$, target Tucker rank $\mr=(r_1,\ldots,r_K)$, link function $f$, maximum norm bound $\alpha$
-\OUTPUT Low-rank estimation for the coefficient tensor $\tB\in\mathbb{R}^{p_1\times \cdots\times p_K}$. 
-\State Calculate $\check \tB=\tY\times_1 \left[(\mX_1^T\mX_1)^{-1}\mX^T_1\right] \times_2\cdots\times_K\left[(\mX_K^T\mX_K)^{-1}\mX^T_K\right] $.
-\State Initialize the iteration index $t=0$. Initialize the core tensor $\tC^{(0)}$ and factor matrices $\mM^{(0)}_k\in\mathbb{R}^{p_k\times r_k}$ via rank-$\mr$ Tucker approximation of $\check\tB$, in the least-square sense. 
-  \While {the relative increase in objective function $\tL_\tY(\tB)$ is less than the tolerance}
-\State Update iteration index $t \leftarrow t+1$.
+\OUTPUT Estimated core tensor $\hat \tC\in\mathbb{R}^{r_1\times \cdots \times r_K}$ and factor matrices $\hat \mM_k\in\mathbb{R}^{p_k\times r_k}$. 
+%\State Calculate $\check \tB=\tY\times_1 \left[(\mX_1^T\mX_1)^{-1}\mX^T_1\right] \times_2\cdots\times_K\left[(\mX_K^T\mX_K)^{-1}\mX^T_K\right] $.
+%\State Initialize the iteration index $t=0$. Initialize the core tensor $\tC^{(0)}$ and factor matrices $\mM^{(0)}_k\in\mathbb{R}^{p_k\times r_k}$ via rank-$\mr$ Tucker approximation of $\check\tB$, in the least-square sense. 
+\State Random initialization of the core tensor $\tC$ and factor matrices $\mM_k$. 
+ % \While {the relative increase in objective function $\tL_\tY(\tB)$ is less than the tolerance}
+\While{Do until convergence}
+%\State Update iteration index $t \leftarrow t+1$.
 \For { $k=1$ to $K$}
-\State Obtain the factor matrix $\tilde \mM_k^{(t+1)}\in\mathbb{R}^{p_k\times r_k}$ by a GLM with link function $f$. 
-\State Perform QR factorization on $\tilde \mM_k^{(t+1)}=\mQ\mR$, where $\mQ\in\mathbb{R}^{p_k\times r_k}$ has orthogonal columns. 
-\State Update $\mM_k^{(t+1)}\leftarrow \mQ$ and core tensor $\tC^{(t+1)}\leftarrow \tC^{(t+1)}\times_k \mR$.
+\State Obtain the factor matrix $\tilde \mM_k\in\mathbb{R}^{p_k\times r_k}$ by a GLM with link function $f$. 
+\State Perform QR factorization $\tilde \mM_k=\mQ\mR$, where $\mQ\in\mathbb{R}^{p_k\times r_k}$ consists of orthogonal columns. 
+\State Update $\mM_k\leftarrow \mQ$ and core tensor $\tC\leftarrow \tC\times_k \mR$.
 \EndFor
-\State Obtain the core tensor $\tC^{(t+1)}\in\mathbb{R}^{r_1\times\cdots\times r_K}$ by solving a GLM with $\text{vec}(\tY)$ as response, $\otimes_{k=1}^K[ \mX_k\mM^{(t)}_k]$ as features, and $f$ as link function. Here $\otimes$ denotes the kronecker product of matrices. 
+\State Update the core tensor $\tC$ by solving a GLM with $\text{vec}(\tY)$ as response, $\otimes_{k=1}^K[ \mX_k\mM_k]$ as features, and $f$ as link function. Here $\otimes$ denotes the kronecker product of matrices. 
 \State Rescale the core tensor subject to the maximum norm constraint. 
-\State Update $\tB^{(t+1)}\leftarrow \tC^{(t+1)}\times_1\mM_1^{(t+1)}\times_2\cdots\times_K\mM_K^{(t+1)}$.
+%\State Update $\tB^{(t+1)}\leftarrow \tC^{(t+1)}\times_1\mM_1^{(t+1)}\times_2\cdots\times_K\mM_K^{(t+1)}$.
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
 
 
-The optimization~\eqref{eq:MLE} is a non-convex problem due to the non-convexity in the feasible set $\tP$. Global optimality of non-convex optimization of this type is often challenging to obtain. However, as mentioned in Section~\ref{subsec:statprob}, the desired convergence rate~\eqref{eq:bound} holds for the valid estimators satisfying $\tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true})$, which indicates the global optimality is not necessarily a serious concern in our context, as long as the convergent objective of local optimums are large enough. \fixme{Miaoyan}{This is wrong. Proof of Theorem 4.1 is based on global optimality condition. Please relax the proof.} Fortunately, we find the  Algorithm~\ref{alg:B}  often gives a satisfactory convergence point $\hat \tB$, when we initialize the parameters via continuous-valued Tucker decomposition. Figure~\ref{fig:loglike} shows the trajectory of the objective function for order-3 tensors under the balanced setting, where $\alpha = 10, d_k = d, p_k = 0.4d, r_k = r$ for $ k = 1,2,3, p \in \{25,30\}$  and $r \in \{3, 6\}$. We consider the inputs with Gaussian, Bernoulli, and Poisson entries. Under all combinations of the dimension $d$, rank $r$, and type of the entries, Algorithm~\ref{alg:B} converges quickly in a few iterations, and the objective value at convergent points are close to or larger than the value at true parameters.  
+The optimization~\eqref{eq:MLE} is a non-convex problem due to the non-convexity in the feasible set $\tP$. Global optimality of non-convex optimization of this type is often challenging to obtain. However, as mentioned in Section~\ref{subsec:statprob}, the desired convergence rate~\eqref{eq:bound} holds for the valid estimators satisfying $\tL_{\tY} (\hat \tB) \geq \tL_{\tY} (\tB_{true})$, which indicates the global optimality is not necessarily a serious concern in our context, as long as the convergent objective of local optimums are large enough. \fixme{Miaoyan}{This is wrong. Proof of Theorem 4.1 is based on global optimality condition. Please relax the proof.} Fortunately, we find the Algorithm~\ref{alg:B}  often gives a satisfactory convergence point $\hat \tB$, when we initialize the parameters via continuous-valued Tucker decomposition. Figure~\ref{fig:loglike} shows typical examples of objective trajectories for order-3 tensors under the model~\eqref{eq:decomp}, where $d_k = d \in\{20,30\}$, $p_k = 0.4d$, $r_k = r\in\{3,6\}$ for $ k = 1,2,3$. We consider the inputs with Gaussian, Bernoulli, and Poisson entries. Under all combinations of the dimension $d$, rank $r$, and type of the entries, Algorithm~\ref{alg:B} converges quickly in a few iterations, and the objective value at convergent points are close to or larger than the value at true parameters.  
 
 
 \begin{figure}[t]
@@ -388,9 +387,9 @@ The assumptions are fairly mild. Assumption A1 guarantees the non-singularity of
 
   
 \begin{thm}[Statistical convergence]\label{thm:main}
-Consider an order-$K$ dimensional-$(d_1,\ldots,d_K)$ tensor $\tY$ and multiple feature matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$, for $k\in[K]$. Suppose that, conditional on the features, the entries in $\tY$ are independent realizations from an exponential family distribution with conditional mean model~\eqref{eq:decomp}. Let $r_\text{total}=\prod_k r_k$, $r_{\max}=\max_k r_k$, and $\sigma_{\min}(\mM_k)$ be the minimal non-zero singular value of $\mM_k$. Assume that $\sigma_{\min}(\mM_k)>0$ and $\FnormSize{}{\mX_k} \asymp \Omega(\sqrt{d_k})$ as $d_k\to\infty$, for all $k\in[K]$. Under Assumption~\ref{ass}, there exist two constants $C_1, C_2>0$, such that, with probability at least $1-\exp(-C_1\sum_k p_k)$, 
+Consider an order-$K$ dimensional-$(d_1,\ldots,d_K)$ tensor $\tY$ and multiple feature matrices $\mX_k\in\mathbb{R}^{d_k\times p_k}$, for $k\in[K]$. Suppose that, conditional on the features, the entries in $\tY$ are independent realizations from an exponential family distribution with conditional mean model~\eqref{eq:decomp}. Let $r_\text{total}=\prod_k r_k$, $r_{\max}=\max_k r_k$, and $\sigma_{\min}(\mM_k)$ be the smallest singular value of $\mM_k$. Assume that $\sigma_{\min}(\mM_k)>0$ and $\FnormSize{}{\mX_k} \asymp \Omega(\sqrt{d_k})$ as $d_k\to\infty$, for all $k\in[K]$. Under Assumption~\ref{ass}, there exist two constants $C_1, C_2>0$, such that, with probability at least $1-\exp(-C_1\sum_k p_k)$, 
 \begin{equation}\label{eq:bound}
-\textup{sin}^2 \Theta(\mM_k,\ \hat \mM_k) \leq  \frac{ C_{2}r_{\textup{total}}}{ r_{\max}\lambda_{\min}(\mM_k)}\frac{\sum_k p_k}{\prod_k d_k}, \quad\text{for all }k\in[K],
+\textup{sin}^2 \Theta(\mM_k,\ \hat \mM_k) \leq  \frac{ C_{2}r_{\textup{total}}}{ r_{\max}\sigma^2_{\min}(\mM_k)}\frac{\sum_k p_k}{\prod_k d_k}, \quad\text{for all }k\in[K],
 \end{equation}
 and
 \[
@@ -427,41 +426,38 @@ where $C_4=C_4(\mr,\alpha, K)>0$ is a constant that independent of dimensions $\
 \end{thm}
 
 \section{Numerical experiments}\label{sec:simulation}
-{\color{red} Simulation/figures needs to be re-run once more, since code has been changed. }
-
-We evaluate the empirical performance of our generalized tensor regression through simulations. We consider order-3 tensors with a range of distribution types. The coefficient tensor $\tB$ is generated using the factorization form~\eqref{eq:factor} where both the core and factor matrices are drawn i.i.d.\ from Uniform[-1,1]. The linear predictor is then simulated from $\tU=\tB\times\{\mX_1,\mX_2,\mX_3\}$, where $\mX_k$ is either an identity matrix (i.e.\ no feature available) or Gaussian random matrix with i.i.d.\ entries from $N(0,\sigma_k^2)$. We set $\sigma_k=d_k^{-1/2}$ to ensure the singular values of $\mX_k$ are bounded as $d_k$ increases. The $\tU$ is scaled such that $\mnormSize{}{\tU}=1$. Conditional on the linear predictor $\tU=\entry{u_{ijk}}$, the entries in the tensor $\tY=\entry{y_{ijk}}$ are drawn independently according to one of the following three probabilistic models:
+We evaluate the empirical performance of our generalized tensor regression through simulations. We consider order-3 tensors with a range of distribution types. 
+Unless otherwise specified, the conditional mean tensor is generated form model~\eqref{eq:decomp}, where the core tensor entries are i.i.d.\ drawn from Uniform[-1,1], the factor matrix $\mM_k$ is uniformly sampled (with respect to Haar measure) from matrices with orthonormal columns, and the feature matrix $\mX_k$ is either an identity matrix (i.e.\ no feature available) or Gaussian random matrix with i.i.d.\ entries from $N(0,\sigma_k^2)$. We set $\sigma_k=d_k^{-1/2}$ to ensure the singular values of $\mX_k$ are bounded as $d_k$ increases. The linear predictor $\Theta=\tC\times\{\mM_1\mX_1,\ldots,\mM_3\mX_3\}$ is scaled such that $\mnormSize{}{\Theta}=1$. Conditional on the linear predictor $\Theta=\entry{\theta_{ijk}}$, the entries in the tensor $\tY=\entry{y_{ijk}}$ are drawn independently according to one of the following three probabilistic models:
 
 \begin{enumerate}
-\item[(a)] (Gaussian). Continuous data $y_{ijk}\sim N\left(\alpha u_{ijk}, 1\right)$.
-\item[(b)] (Poisson). Count data $y_{ijk}\sim\text{Poi}\left( e^{\alpha u_{ijk}}\right)$.
-\item[(c)] (Bernoulli). Binary data $y_{ijk}\sim \text{Ber}\left( {e^{\alpha u_{ijk}} \over 1+e^{\alpha u_{ijk}}}\right)$.
+\item[(a)] (Gaussian). Continuous data $y_{ijk}\sim N\left(\alpha \theta_{ijk}, 1\right)$, for all $(i,j,k)\in[d_1]\times[d_2]\times[d_3]$.
+\item[(b)] (Poisson). Count data $y_{ijk}\sim\text{Poi}\left( e^{\alpha \theta_{ijk}}\right)$, for all $(i,j,k)\in[d_1]\times[d_2]\times[d_3]$.
+\item[(c)] (Bernoulli). Binary data $y_{ijk}\sim \text{Ber}\left( {e^{\alpha \theta_{ijk}} \over 1+e^{\alpha \theta_{ijk}}}\right)$, for all $(i,j,k)\in[d_1]\times[d_2]\times[d_3]$.
 \end{enumerate}
-Here $\alpha>0$ is a scalar controlling the magnitude of the effect size. In each simulation study, we report the mean squared error (MSE) for the coefficient tensor averaged across $n_{\text{sim}}=30$ replications. 
+Here $\alpha>0$ is a scalar controlling the magnitude of the effect size. In each simulation study, we report the mean squared error (MSE) for the coefficient tensor averaged across $n_{\text{sim}}=20$ replications. 
 
 \subsection{Finite-sample Performance}
 
-The first experiment assesses the selection accuracy of our BIC criterion~\eqref{eq:BIC}. We consider the balanced situation where $d_k=d$, $p_k=0.4d_k$ for $k=1,2,3$. We set $\alpha=10$ and consider various combinations of dimension $d$ and rank $\mr=(r_1,r_2,r_3)$. For each combination, we simulate tensor data following Gaussian, Bernoulli, and Poisson models. We then minimize BIC using a grid search over three dimensions. The hyper-parameter $\alpha$ is set to infinity in the fitting, which essentially imposes no prior on the coefficient magnitude. Table~\ref{tab:rank} reports the selected rank averaged over $n_{\text{sim}}=30$ replicates for Gaussian and Poisson models. We found that when $d=20$, the selected rank is slightly smaller than the true rank, and the accuracy improves immediately when the dimension increases to $d=40$. This agrees with our expectation, as in tensor regression, the sample size is related to the number of entries. A larger $d$ implies a larger sample size, so the BIC selection becomes more accurate. 
+The first experiment assesses the selection accuracy of our BIC criterion~\eqref{eq:BIC}. We consider the balanced situation where $d_k=d$, $p_k=0.4d_k$ for $k=1,2,3$. We set $\alpha=4$ and consider various combinations of dimension $d$ and rank $\mr=(r_1,r_2,r_3)$. For each combination, we simulate tensor data following Gaussian and Poisson models. We then minimize BIC using a grid search over three dimensions. The hyper-parameter $\alpha$ is set to infinity in the fitting, which essentially imposes no prior on the coefficient magnitude. Table~\ref{tab:rank} reports the selected rank averaged over $n_{\text{sim}}=20$ replicates for Gaussian and Poisson models. We found that when $d=20$, the selected rank is slightly smaller than the true rank, and the accuracy improves immediately when the dimension increases to $d=40$. This agrees with our expectation, as in tensor regression, the sample size is related to the number of entries. A larger $d$ implies a larger sample size, so the BIC selection becomes more accurate. 
 
 
 \begin{table}[tb]
 \centering
-%\resizebox{1\textwidth}{!}{
 \begin{tabular}{|c|cc|cc|}
 \hline
 True Rank &\multicolumn{2}{c|}{Dimension (Gaussian tensors)}&\multicolumn{2}{c|}{Dimension (Poisson tensors)}\\
 $\mr$& $d=20$  &$d=40$&$d=20$ &$d=40$\\
 \hline
-$(3,\ 3,\ 3)$&$(2.1,\ 2.0,\ 2.0)$&$({\bf 3},\ {\bf 3},\ {\bf 3})$&$(2.0,\ 2.2,\ 2.1)$&$({\bf 3},\ {\bf 3},\ {\bf 3})$\\
-$(4,\ 4,\ 6)$&$(3.2,\ 3.1,\ 5.0)$&$({\bf 4},\ {\bf 4},\ {\bf 6})$&$({\bf 4.0},\ {\bf 4.0},\ 5.2)$&$({\bf 4},\ {\bf 4},\ {\bf 6})$\\
-$(6,\ 8,\ 8)$&$(5.1,\ 7.0,\ 6.9)$&$({\bf 6},\ {\bf 8},\ {\bf 8})$&$(5.0,\ 6.1,\ 7.1)$&$({\bf 6},\ {\bf 8},\ {\bf 8})$\\
+$(3,\ 3,\ 3)$&$({\bf 3},\ 3,\ {\bf 3})$&$({\bf 3},\ {\bf 3},\ {\bf 3})$&$(2.0,\ 2.2,\ 2.1)$&$({\bf 3},\ {\bf 3},\ {\bf 3})$\\
+$(4,\ 4,\ 6)$&$(3,\ 3,\ {\bf 6})$&$({\bf 4},\ {\bf 4},\ 5)$&$({\bf 4.0},\ {\bf 4.0},\ 5.2)$&$({\bf 4},\ {\bf 4},\ {\bf 6})$\\
+$(6,\ 8,\ 8)$&$(5,\ 7,\ 7)$&$({\bf 6},\ {\bf 8},\ {\bf 8})$&$(5.0,\ 6.1,\ 7.1)$&$({\bf 6},\ {\bf 8},\ {\bf 8})$\\
 \hline
 \end{tabular}
-%}
 \caption{Rank selection via BIC. Bold number indicates no significant difference between the estimate and the ground truth, based on a $z$-test with a level 0.05.}\label{tab:rank}
 \end{table}
 
 
-The second experiment evaluates the accuracy when features are available on all modes. We set $\alpha=10, d_k=d, p_k=0.4d_k, r_k=r\in\{2,4,6\}$ and increase $d$ from 25 to 50. Our theoretical analysis suggests that $\hat \tB$ has a convergence rate $\tO(d^{-2})$ in this setting. Figure~1 plots the estimation error versus the ``effective sample size'', $d^2$, under three different distribution models. We found that the empirical MSE decreases roughly at the rate of $1/d^2$, which is consistent with our theoretical ascertainment. We also observed that, tensors with higher ranks tend to yield higher estimation errors, as reflected by the upward shift of the curves as $r$ increases. Indeed, a larger $r$ implies a higher model complexity and thus greater difficulty in the estimation. Similar behaviors can be observed in the non-Gaussian data in Figure~\ref{fig:dim}b-c. 
+The second experiment evaluates the accuracy when features are available on all modes. We set $\alpha=10, d_k=d, p_k=0.4d_k, r_k=r\in\{2,4,6\}$ and increase $d$ from 30 to 60. Our theoretical analysis suggests that $\hat \tB$ has a convergence rate $\tO(d^{-2})$ in this setting. Figure~1 plots the estimation error versus the ``effective sample size'', $d^2$, under three different distribution models. We found that the empirical MSE decreases roughly at the rate of $1/d^2$, which is consistent with our theoretical ascertainment. We also observed that, tensors with higher ranks tend to yield higher estimation errors, as reflected by the upward shift of the curves as $r$ increases. Indeed, a larger $r$ implies a higher model complexity and thus greater difficulty in the estimation. Similar behaviors can be observed in the non-Gaussian data in Figure~\ref{fig:dim}b-c. 
 
 \begin{figure}[t]
 \centering
@@ -471,8 +467,6 @@ The second experiment evaluates the accuracy when features are available on all 
 
 The third experiment investigates our model's ability in handling correlation among coefficients. We mimic the scenario of brain imaging analysis. A sample of $d_3=50$ networks are simulated, one for each individual. Each network measures the connections between $d_1=d_2=20$ brain nodes. We simulate $p=5$ features for the each of the 50 individuals. These features may represent, for example, age, gender, cognitive score, etc. Recent study~\citep{robinson2015dynamic} has suggested that brain connectivity networks often exhibit community structure represented as a collection of subnetworks, and each subnetwork is comprised of a set of spatially distributed brain nodes. To accommodate this structure, we utilize the stochastic block model~\citep{abbe2017community} to generate the effect size. Specifically, we partition the nodes into $r$ blocks by assigning each node to a block with uniform probability. Edges within a same block are assumed to share the same feature effects, where the effects are drawn i.i.d.\ from $N(0,1)$. We then apply our tensor regression model to the network data using the BIC-selected rank. Note that in this case, the true model rank is unknown; the rank of a $r$-block matrix is not necessarily equal to~$r$~\citep{zeng2019multiway}. 
 
-
-
 \begin{figure}[tb]
 \centering
 \includegraphics[width=15cm]{comparison.pdf}
@@ -480,11 +474,9 @@ The third experiment investigates our model's ability in handling correlation am
 \end{figure}
 
 
-Figure~\ref{fig:glm} compares the MSE of our method with a classical GLM approach. A classical GLM is to regress the dyadic edges, one at a time, on the features, and this model is repeatedly fitted for each edge. This repeated approach, however, does not account for the correlation among the edges, and may suffer from overfitting. As we can see in Figure~\ref{fig:glm}, out tensor regression method achieves significant error reduction in all three models considered. The outer-performance is significant in the presence of large communities, and even in the less structured case ($\sim 20/15=1.33$ nodes per block), our method still outer-performs GLM. This is because the low-rankness in our modeling automatically identifies the shared information across entries. By selecting the rank in a data-driven way, our method is able to achieve accurate estimation with improved interpretability. 
+Figure~\ref{fig:glm} compares the MSE of our method with a classical GLM approach. A classical GLM is to regress the dyadic edges, one at a time, on the features, and this model is repeatedly fitted for each edge. As we find in Figure~\ref{fig:glm}, out tensor regression method achieves significant error reduction in all three models considered. The outer-performance is significant in the presence of large communities, and even in the less structured case ($\sim 20/15=1.33$ nodes per block), our method still outer-performs GLM. The possible reason is that the massive GLM approach does not account for the correlation among the edges, and suffer from overfitting. In contrast, the low-rankness in our modeling automatically identifies the shared information across entries. By selecting the rank in a data-driven way, our method is able to achieve accurate estimation with improved interpretability. 
 
 \subsection{Comparison with alternative methods}
-
-
 We compare our generalized tensor regression ({\bf GTR}) with three other supervised tensor methods:
 \begin{itemize}
 \item  Higher-order low-rank regression ({\bf HOLRR},~\citep{rabusseau2016low}) is a least-square based tensor regression that allows features on a single mode. 
@@ -495,7 +487,7 @@ These three methods are the closest algorithms to ours, in that they relate a te
 
 The comparison was assessed from three aspects: (a) benefit of incorporating features from multiple modes; (b) prediction error with respect to sample size; (c) sensitivity of accuracy with respect to model complexity. We use similar simulation setups as in our experiment II, but consider combinations of rank ($\mr=(3,3,3)$ vs.\ $(4,5,6)$), noise ($\sigma = 1/2$ vs. $1/4$), and dimension ($d$ ranging from 20 to 100 for modes with features, $d = 20$ for modes without features). 
 
-Figure~\ref{fig:compare} shows the averaged prediction error across 30 replicates. We see that our {\bf GTR} outperforms others, especially in the high-rank high-noise setting. As the number of informative modes (i.e. modes with available features) increases, the {\bf GTR} exhibits a reduction in error whereas others have increased errors. This showcases the benefit toward prediction via incorporation of interactive features. Note that our method {\bf GTR} is most comparable to {\bf HOLRR} when there is only a single informative mode. In such a case, both methods share a same cost function but have different algorithms. {\bf GTR} alternates between informative and non-informative modes, whereas {\bf HOLRR} approximates the non-informative modes via unfolded response alone. The accuracy gain in Figure~\ref{fig:compare} demonstrates the benefit of alternating algorithm -- having informative modes also improves the estimation along non-informative modes. 
+Figure~\ref{fig:compare} shows the averaged prediction error across 20 replicates. We see that our {\bf GTR} outperforms others, especially in the high-rank high-noise setting. As the number of informative modes (i.e. modes with available features) increases, the {\bf GTR} exhibits a reduction in error whereas others have increased errors. This showcases the benefit toward prediction via incorporation of interactive features. Note that our method {\bf GTR} is most comparable to {\bf HOLRR} when there is only a single informative mode. In such a case, both methods share a same cost function but have different algorithms. {\bf GTR} alternates between informative and non-informative modes, whereas {\bf HOLRR} approximates the non-informative modes via unfolded response alone. The accuracy gain in Figure~\ref{fig:compare} demonstrates the benefit of alternating algorithm -- having informative modes also improves the estimation along non-informative modes. 
 
 \begin{figure}[ht]
 \centering
