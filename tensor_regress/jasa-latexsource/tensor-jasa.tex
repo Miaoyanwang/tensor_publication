@@ -636,9 +636,10 @@ where $C_2>0$ is a constant absorbing all factors that do not depend on $\{p_k\}
 
 Next we prove C2. Applying Taylor expansion to $\tL_{\tY}(\tB)$ around $\trueB$ yields
 \begin{equation}\label{eq:logbefore}
-\tL_{\tY}(\tB)=\tL_{\tY}(\trueB)+\Big\langle {\partial\tL_{\tY}(\tB) \over \tB}\big|_{\tB=\trueB},\tB-\trueB \Big\rangle + {1\over 2}\text{vec}(\tB-\trueB)^T \tH(\check \tB)\text{vec}(\tB-\trueB),
+\tL_{\tY}(\tB)=\tL_{\tY}(\trueB)+\Big\langle {\partial\tL_{\tY}(\tB) \over \partial
+\tB}\big|_{\tB=\trueB},\tB-\trueB \Big\rangle + {1\over 2}\text{vec}(\tB-\trueB)^T \tH(\check \tB)\text{vec}(\tB-\trueB),
 \end{equation}
-where $\tH_{\tY}(\check \tB)$ is the (non-random) Hession of ${\partial \tL_{\tY}^2 (\tB)\over\partial^2 \tB}$ evaluated at $\check \tB =\alpha \text{vec}(\alpha \tB+(1-\alpha)\trueB)$ for some $\alpha\in[0,1]$. Note that we have $\mathbb{E}\left({\partial\tL_{\tY}(\tB) \over \partial \tB}\big|_{\tB=\trueB}\right)=0$. We take expectation with respect to $\tY\sim \trueB$ on both sides of~\eqref{eq:log} and obtain
+where $\tH_{\tY}(\check \tB)$ is the (non-random) Hession of ${\partial \tL_{\tY}^2 (\tB)\over\partial^2 \tB}$ evaluated at $\check \tB = \text{vec}(\alpha \tB+(1-\alpha)\trueB)$ for some $\alpha\in[0,1]$. Note that we have $\mathbb{E}\left({\partial\tL_{\tY}(\tB) \over \partial \tB}\big|_{\tB=\trueB}\right)=0$. We take expectation with respect to $\tY\sim \trueB$ on both sides of~\eqref{eq:log} and obtain
 \begin{equation}\label{eq:log}
 \ell(\tB)=\ell(\trueB)+{1\over 2}\text{vec}(\tB-\trueB)^T \tH(\check \tB)\text{vec}(\tB-\trueB).
 \end{equation}
@@ -693,7 +694,7 @@ Define the residual tensor $\tE=\entry{\varepsilon_{i_1,\ldots,i_K}}=\tY-b'(\The
 \end{prop}
 \begin{proof} The proof is similar to Lemma 3 in~\citep{fan2019generalized}. For ease of presentation, we drop the subscript $(i_1,\ldots,i_K)$ and simply write $\varepsilon$ ($=y-b'(\theta)$). For any given $t\in\mathbb{R}$, we have
 \begin{align}
-\mathbb{E}(\exp(t\varepsilon|\theta)&=\int c(x) \exp\left({\theta x - b(\theta)\over \phi}   \right)\exp \left(t(x-b'(\theta))\right)dx\\
+\mathbb{E}(\exp(t\varepsilon|\theta))&=\int c(x) \exp\left({\theta x - b(\theta)\over \phi}   \right)\exp \left(t(x-b'(\theta))\right)dx\\
 &=\int c(x)\exp \left( {(\theta + \phi t)x - b (\theta+\phi t)+b(\theta+\phi t)-b(\theta)-\phi t b'(\theta) \over \phi}\right)dx\\
 &=\exp\left( {b(\theta+\phi t)-b(\theta)-\phi t b'(\theta) \over \phi} \right)\\
 &\leq \exp\left(\phi U t^2\over 2 \right),
