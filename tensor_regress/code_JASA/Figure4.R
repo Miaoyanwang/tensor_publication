@@ -10,15 +10,18 @@ library(ggplot2)
 load("presaved/Figure4_normal.RData")
 mean=c(apply(table,1,mean),apply(table_naive,1,mean))
 sd=c(apply(table,1,sd),apply(table_naive,1,sd))
-data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
+data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(5,10,15,5,10,15))
 data=data.frame(data)
+data[,3]=as.factor(data[,3])
+levels(data[,3])=c("Ours","GLM")
 names(data)=c("MSE","sd","method","rank")
 
-pdf("Figure4_normal.pdf",width=5,height=4)
+
+pdf("Figure4_normal.pdf",width=6,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
-position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="mean sqaured error (MSE)")+coord_cartesian(ylim = c(0, 1.15))
+position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="MSE")+coord_cartesian(ylim = c(0, 1.3))+ theme(text = element_text(size = 15))
 p
 dev.off()
 
@@ -27,31 +30,41 @@ dev.off()
 load("presaved/Figure4_poisson.RData")
 mean=c(apply(table,1,mean),apply(table_naive,1,mean))
 sd=c(apply(table,1,sd),apply(table_naive,1,sd))
-data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
+data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(5,10,15,5,10,15))
 data=data.frame(data)
+data[,3]=as.factor(data[,3])
+levels(data[,3])=c("Ours","GLM")
 names(data)=c("MSE","sd","method","rank")
 
-pdf("Figure4_poisson.pdf",width=5,height=4)
+pdf("Figure4_poisson.pdf",width=6,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
-position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="mean sqaured error (MSE)")+coord_cartesian(ylim = c(0, 1))
+position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="MSE")+coord_cartesian(ylim = c(0, 0.9))+ theme(text = element_text(size = 15))
 p
 dev.off()
 
 #################### plot MSE for binary model ###############
 load("presaved/Figure4_binary.RData")
-mean=c(apply(table,1,mean),apply(table_naive,1,mean))
-sd=c(apply(table,1,sd),apply(table_naive,1,sd))
-data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
+### remove non-convergent solution from GLM; also remove corresponding points from our method for fair comparison
+cutoff=quantile(table_naive)[3]+quantile(table_naive)[4]
+index=which(table_naive>=cutoff,arr.ind=T)
+table[index]=NA
+table_naive[index]=NA
+
+mean=c(apply(table,1,function(x) mean(x,na.rm=TRUE)),apply(table_naive,1,function(x) mean(x,na.rm=TRUE)))
+sd=c(apply(table,1,function(x)sd(x,na.rm=TRUE)),apply(table_naive,1,function(x) sd(x,na.rm=TRUE)))
+data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(5,10,15,5,10,15))
 data=data.frame(data)
+data[,3]=as.factor(data[,3])
+levels(data[,3])=c("Ours","GLM")
 names(data)=c("MSE","sd","method","rank")
 
-pdf("Figure4_binary.pdf",width=5,height=4)
+pdf("Figure4_binary.pdf",width=6,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
-position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="mean sqaured error (MSE)")+coord_cartesian(ylim = c(0, 9))
+position=position_dodge(.9))+scale_fill_manual(values=c('#069AA0','#C0C0C0'))+labs(x="number of blocks",y="MSE")+coord_cartesian(ylim = c(0, 15))+ theme(text = element_text(size = 15))
 p
 dev.off()
 

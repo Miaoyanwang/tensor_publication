@@ -3,6 +3,47 @@ install.packages("tensorregress.tar.gz",repos = NULL, type="source")
 source("simulation.R")
 library(tensorregress)
 
+############# report simulation statistics from prior simulation. If a new run of simulation is desired, please go to line #45 to run the code ##########
+
+#### report rank estimates under the normal model
+load("presaved/Table2_normal.RData")
+## d = 20
+apply(final[1,1,,],2,mean) ## ground truth (3,3,3)
+apply(final[2,1,,],2,mean) ## ground truth (4,4,6)
+apply(final[3,1,,],2,mean) ## ground truth (6,8,8)
+apply(final[1,1,,],2,sd) ## ground truth (3,3,3)
+apply(final[2,1,,],2,sd) ## ground truth (4,4,6)
+apply(final[3,1,,],2,sd) ## ground truth (6,8,8)
+
+## d = 40
+apply(final[1,2,,],2,mean) ## sd for estimate under ground truth (3,3,3)
+apply(final[2,2,,],2,mean) ## sd for estimate under ground truth (4,4,6)
+apply(final[3,2,,],2,mean) ## sd for estimate under ground truth (6,8,8)
+apply(final[1,2,,],2,sd) ## sd for estimate under ground truth (3,3,3)
+apply(final[2,2,,],2,sd) ## sd for estimate under ground truth (4,4,6)
+apply(final[3,2,,],2,sd) ## sd for estimate under ground truth (6,8,8)
+
+### report rank estimates under poisson model
+load("presaved/Table2_poisson.RData")
+## d = 20
+apply(final[1,1,,],2,mean) ## ground truth (3,3,3)
+apply(final[2,1,,],2,mean) ## ground truth (4,4,6)
+apply(final[3,1,,],2,mean) ## ground truth (6,8,8)
+apply(final[1,1,,],2,sd) ## ground truth (3,3,3)
+apply(final[2,1,,],2,sd) ## ground truth (4,4,6)
+apply(final[3,1,,],2,sd) ## ground truth (6,8,8)
+
+## d = 40
+apply(final[1,2,,],2,mean) ## sd for estimate under ground truth (3,3,3)
+apply(final[2,2,,],2,mean) ## sd for estimate under ground truth (4,4,6)
+apply(final[3,2,,],2,mean) ## sd for estimate under ground truth (6,8,8)
+apply(final[1,2,,],2,sd) ## sd for estimate under ground truth (3,3,3)
+apply(final[2,2,,],2,sd) ## sd for estimate under ground truth (4,4,6)
+apply(final[3,2,,],2,sd) ## sd for estimate under ground truth (6,8,8)
+
+############################## end of table  ##############################
+### If a new run of simulation is desired, please run the code from here and save the results as .RData. Then run the above code to generate numbers in table. ###
+
 set.seed(0) ## set seed for this simulation
 seed=0
 
@@ -33,24 +74,7 @@ for(s in 1:3){ ## three possible ranks
     }
 }
 
-save(final,file="normal_rank.RData")
-
-## d = 20
-apply(final[1,1,,],2,mean) ## ground truth (3,3,3)
-apply(final[2,1,,],2,mean) ## ground truth (4,4,6)
-apply(final[3,1,,],2,mean) ## ground truth (6,8,8)
-apply(final[1,1,,],2,sd) ## ground truth (3,3,3)
-apply(final[2,1,,],2,sd) ## ground truth (4,4,6)
-apply(final[3,1,,],2,sd) ## ground truth (6,8,8)
-
-## d = 40
-apply(final[1,2,,],2,mean) ## ground truth (3,3,3)
-apply(final[2,2,,],2,mean) ## ground truth (4,4,6)
-apply(final[3,2,,],2,mean) ## ground truth (6,8,8)
-apply(final[1,2,,],2,sd) ## ground truth (3,3,3)
-apply(final[2,2,,],2,sd) ## ground truth (4,4,6)
-apply(final[3,2,,],2,sd) ## ground truth (6,8,8)
-
+save(final,file="Table2_normal.RData")
 
 
 ########################## poisson model ##########################
@@ -71,20 +95,4 @@ for(s in 1:3){## three possible ranks
         final[s,i,,]=table
     }
 }
-save(final,file="poisson_rank.RData")
-
-## d = 20
-apply(final[1,1,,],2,mean) ## ground truth (3,3,3)
-apply(final[2,1,,],2,mean) ## ground truth (4,4,6)
-apply(final[3,1,,],2,mean) ## ground truth (6,8,8)
-apply(final[1,1,,],2,sd) ## ground truth (3,3,3)
-apply(final[2,1,,],2,sd) ## ground truth (4,4,6)
-apply(final[3,1,,],2,sd) ## ground truth (6,8,8)
-
-## d = 40
-apply(final[1,2,,],2,mean) ## ground truth (3,3,3)
-apply(final[2,2,,],2,mean) ## ground truth (4,4,6)
-apply(final[3,2,,],2,mean) ## ground truth (6,8,8)
-apply(final[1,2,,],2,sd) ## ground truth (3,3,3)
-apply(final[2,2,,],2,sd) ## ground truth (4,4,6)
-apply(final[3,2,,],2,sd) ## ground truth (6,8,8)
+save(final,file="Table2_poisson.RData")
