@@ -1,3 +1,14 @@
+### The provided workflow reproduces:
+1. All numbers provided in text in the paper;
+2. All tables and figures in the paper. 
+
+Formats: text files and R scripts that document workflow
+
+Instruction: .....
+
+
+
+
 1. Nations (Nickel et al., 2011, dnations.mat): This is a 14 × 14 × 56 binary tensor consisting of 56 political relations of 14 countries between 1950 and 1965. The tensor entry indicates the presence or absence of a political action, such as “treaties”, “sends tourists to”, between the nations. Please set the diagonal elements Y(i,i,k) = 0 in the analysis.
 
 I have pre-selected ~10 covariates for each nation. These covariates describe a few important country attributes, e.g. whether a nation is actively involved in medicine NGO, law NGO, or belongs to a catholic nation, etc. 
