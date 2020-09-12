@@ -9,9 +9,9 @@ Instruction: .....
 
 
 
-#### data
-1. Nations (Nickel et al., 2011, dnations.mat): This is a 14 × 14 × 56 binary tensor consisting of 56 political relations of 14 countries between 1950 and 1965. The tensor entry indicates the presence or absence of a political action, such as “treaties”, “sends tourists to”, between the nations. 
-In addition, 6 covariates for each nation. These covariates describe a few important country attributes, e.g. whether a nation is actively involved in medicine NGO, law NGO, or belongs to a catholic nation, etc. 
+1. Nations (Nickel et al., 2011, dnations.mat): This is a 14 × 14 × 56 binary tensor consisting of 56 political relations of 14 countries between 1950 and 1965. The tensor entry indicates the presence or absence of a political action, such as “treaties”, “sends tourists to”, between the nations. Please set the diagonal elements Y(i,i,k) = 0 in the analysis.
+
+I have pre-selected ~10 covariates for each nation. These covariates describe a few important country attributes, e.g. whether a nation is actively involved in medicine NGO, law NGO, or belongs to a catholic nation, etc. 
 
 2. HCP (Wang et al., 2017a, Count_VSPLOT.mat): This is a 68 × 68 × 136 binary tensor consisting of structural connectivity patterns among 68 brain regions for 136 individuals from Human Connectome Project (HCP). All the individual images were preprocessed following a standard pipeline (Zhang et al., 2018), and the brain was parcellated to 68 regions-of-interest following the Desikan atlas (Desikan et al., 2006). The tensor entries encode the presence or absence of fiber connections between those 68 brain regions for each of the 136 individuals.
 
