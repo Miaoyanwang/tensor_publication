@@ -11,36 +11,35 @@ library(ggplot2)
 load("Figure5.RData")
 library(ggplot2)
 library(wesanderson)
+library(patchwork)
 
-signal_range=c(2,5)
+signal_range=c(3,6)
 core_range=rbind(c(3,3,3),c(4,5,6))
-pdf("Figure5.pdf",width=10,height=10)
-for(s in 1:2){
-    for(r in 1:2){
-        data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
-        
-        if((s==1)&(r==1))title="Low Signal, Low Rank"
-        if((s==1)&(r==2))title="Low Signal, High Rank"
-        if((s==2)&(r==1))title="High Signal, Low Rank"
-        if((s==2)&(r==2))title="High Signal, High Rank"
-        
-        p=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method)) +
-        geom_bar(stat="identity", position=position_dodge())+
-        geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,
-        position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE")+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.05)) +  labs(title = title,size = 5) +
-        theme(plot.title = element_text(hjust = 0.5,size = 15))+scale_fill_manual(values=c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0'))+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
-        plot(p)
-        
-    }
-}
-dev.off()
+pdf("Figure5.pdf",width=20,height=3)
+s=r=1;
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "Low Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+scale_fill_manual(values=c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0'))+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+
+s=1;r=2;+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "Low Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+scale_fill_manual(values=c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0'))+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+
+s=2;r=1;
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+p3=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "High Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+scale_fill_manual(values=c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0'))+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+
+s=2;r=2;
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+p4=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "High Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+scale_fill_manual(values=c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0'))+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+
+(p1|p2|p3|p4)
 ##################### end of plotting ##############################
 
 ### If a new run of simulation is desired, please run the code from here and save the results as .RData. Then run the above code to generate figures. ###
 set.seed(0)
 seed=0
 ## combinations of signal and rank
-signal_range=c(2,5)
+signal_range=c(3,6)
 core_range=rbind(c(3,3,3),c(4,5,6))
 ##
 dup=30;

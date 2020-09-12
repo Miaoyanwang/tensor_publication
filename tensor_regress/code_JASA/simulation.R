@@ -30,6 +30,20 @@ massive_glm=function(response,X,dist){
     return(coe)
 }
 
+#### valid rank range for core tensor ## the maximum rank should be no smaller than the product of other.
+## Input: rank_range = expand.grid(...)
+valid_rank=function(rank_range){
+    N=dim(rank_range)[1]
+    output=NULL
+    for(i in 1:N){
+        rank=rank_range[i,]
+        rank=sort(rank)
+        if(rank[1]*rank[2]>=rank[3])
+        output=rbind(output,rank_range[i,])
+    }
+    return(output)
+}
+
 ### compute loglikelihood under different models
 loglike=function(data,linearpre,dist){
     if(dist=="binary"){

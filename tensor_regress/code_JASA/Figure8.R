@@ -1,8 +1,8 @@
 ### Code for Figure 8. Comparison between classical GLM and tensor methods in the HCP data anaysis
 source("simulation.R")
-data=load("HCP.RData")
+data=load("presaved/HCP.RData")
 ############ Method 1: tensor method  ##############
-load("output_HCP.RData")
+load("presaved/output_HCP.RData")
 table(attr[,5])
 ## age group: 22-25 26-30 31+
 ## number of individuals: 35  58    43
