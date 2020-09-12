@@ -7,14 +7,14 @@ library(ggplot2)
 ############# plot figures using saved data from prior simulation. If a new run of simulation is desired, please go to line #60 to run the code ##########
 
 #################### plot MSE for normal model ###############
-load("presaved/comparison_normal.RData")
+load("presaved/Figure4_normal.RData")
 mean=c(apply(table,1,mean),apply(table_naive,1,mean))
 sd=c(apply(table,1,sd),apply(table_naive,1,sd))
 data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
 data=data.frame(data)
 names(data)=c("MSE","sd","method","rank")
 
-pdf("comparison_normal.pdf",width=5,height=4)
+pdf("Figure4_normal.pdf",width=5,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
@@ -24,14 +24,14 @@ dev.off()
 
 
 #################### plot MSE for poisson model ###############
-load("presaved/comparison_poisson.RData")
+load("presaved/Figure4_poisson.RData")
 mean=c(apply(table,1,mean),apply(table_naive,1,mean))
 sd=c(apply(table,1,sd),apply(table_naive,1,sd))
 data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
 data=data.frame(data)
 names(data)=c("MSE","sd","method","rank")
 
-pdf("comparison_poisson.pdf",width=5,height=4)
+pdf("Figure4_poisson.pdf",width=5,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
@@ -40,14 +40,14 @@ p
 dev.off()
 
 #################### plot MSE for binary model ###############
-load("presaved/comparison_binary.RData")
+load("presaved/Figure4_binary.RData")
 mean=c(apply(table,1,mean),apply(table_naive,1,mean))
 sd=c(apply(table,1,sd),apply(table_naive,1,sd))
 data=cbind(round(mean,2),sd,c(1,1,1,2,2,2),c(1,2,3,1,2,3))
 data=data.frame(data)
 names(data)=c("MSE","sd","method","rank")
 
-pdf("comparison_binary.pdf",width=5,height=4)
+pdf("Figure4_binary.pdf",width=5,height=4)
 p=ggplot(data=data, aes(x=as.factor(rank), y=MSE, fill=as.factor(method))) +
 geom_bar(stat="identity", position=position_dodge())+
 geom_errorbar(aes(ymin=MSE-sd, ymax=MSE+sd), width=.2,
@@ -79,7 +79,7 @@ data=sim_data(whole_shape=c(20,20,50),core_shape=c_range[s,],p=c(0,0,5),dist="no
         table_naive[s,i]=mean((naive_C-data$C_ts)^2) ## GLM method
     }
 }
-save(table,table_naive,file="comparison_normal.RData")
+save(table,table_naive,file="Figure4_normal.RData")
 
 ### simulate data from poisson model
 table=table_naive=matrix(0,nrow=3,ncol=dup)
@@ -93,7 +93,7 @@ data=sim_data(whole_shape=c(20,20,50),core_shape=c_range[s,],p=c(0,0,5),dist="po
         table_naive[s,i]=mean((naive_C-data$C_ts)^2)
     }
 }
-save(table,table_naive,file="comparison_poisson.RData")
+save(table,table_naive,file="Figure4_poisson.RData")
 
 
 ### simulate data from binary model
@@ -109,5 +109,5 @@ data=sim_data(whole_shape=c(20,20,50),core_shape=c_range[s,],p=c(0,0,5),dist="bi
     }
 }
 
-save(table,table_naive,file="comparison_binary.RData")
+save(table,table_naive,file="Figure4_binary.RData")
 
