@@ -8,7 +8,7 @@ library(ggplot2)
 ############# plot figures using saved data from prior simulation. If a new run of simulation is desired, please go to line #40 to run the code ##########
 
 ######## plot MSPE for three methods under different (signal, rank) setting #######
-load("Figure5.RData")
+load("presaved/Figure5.RData")
 library(ggplot2)
 library(wesanderson)
 library(patchwork)
