@@ -10,44 +10,51 @@ library(tensorregress)
 load("presaved/Figure6.RData")
 library(ggplot2)
 library(wesanderson)
+library(patchwork)
 d=c(20,40,60,80,100)
 signal_range=c(3,6)
 core_range=rbind(c(3,3,3),c(4,5,6))
 
 
-
+signal_range=c(3,6)
 new_color = c("#069AA0","#CCC591","#BCA455","#D6CFC4")
-#original c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0')
-pdf("Figure6.pdf",width=10,height=10)
+pdf("Figure6.pdf",width=21,height=3)
 s=r=1;
-data = data.frame(d = rep(d,4), Method = c(rep('GTR (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least sqaure)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4]),sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4]))
-p=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.5) + scale_colour_manual(values = new_color) +
-        geom_point(size = 4,aes(shape = Method)) + scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=12))+ xlab('Sample Size') + labs(title="Low Signal, Low Rank") + ylab('Mean Squared Prediction Error (MSPE)')+ theme(plot.title = element_text(hjust = 0.5,size = 12))+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))
+data = data.frame(d = rep(d,4), Method = c(rep('STD (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least square)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4])/signal_range[s],sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4])/signal_range[s])
+data[,2]=factor(data[,2],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p1=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.2) + scale_colour_manual(values = new_color) +
+        geom_point(size = 2,aes(shape = Method)) + scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=10))+ xlab('Sample Size') + labs(title="Low Signal, Low Rank") + ylab('MSPE')+ theme(plot.title = element_text(hjust = 0.5,size = 11))+coord_cartesian(ylim = c(0, max(data[,3])+0.03))
 
-p=p+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
-p
+p1=p1+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
+
+
 
 r=2;
-data = data.frame(d = rep(d,4), Method = c(rep('GTR (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least sqaure)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4]),sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4]))
-p=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.5)  + scale_colour_manual(values = new_color)+
-geom_point(size = 4,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=12))+ xlab('Sample Size') + labs(title="Low Signal, High Rank") + ylab('Mean Squared Prediction Error (MSPE)')+ theme(plot.title = element_text(hjust = 0.5,size = 12))+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.05))
-p=p+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
-p
+data = data.frame(d = rep(d,4), Method = c(rep('STD (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least square)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4])/signal_range[s],sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4])/signal_range[s])
+data[,2]=factor(data[,2],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p2=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.2)  + scale_colour_manual(values = new_color)+
+geom_point(size = 2,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=10))+ xlab('Sample Size') + labs(title="Low Signal, High Rank") + ylab('MSPE')+ theme(plot.title = element_text(hjust = 0.5,size = 11))+coord_cartesian(ylim = c(0,0.12))
+p2=p2+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
+
 
 s=2;r=1;
-data = data.frame(d = rep(d,4), Method = c(rep('GTR (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least sqaure)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4]),sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4]))
-p=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.5) +scale_colour_manual(values = new_color)+
-geom_point(size = 4,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=12))+ xlab('Sample Size') + labs(title="High Signal, Low Rank") + ylab('Mean Squared Prediction Error (MSPE)')+ theme(plot.title = element_text(hjust = 0.5,size = 12))+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.05))
-p=p+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
-p
+data = data.frame(d = rep(d,4), Method = c(rep('STD (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least square)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4])/signal_range[s],sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4])/signal_range[s])
+data[,2]=factor(data[,2],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p3=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.2) +scale_colour_manual(values = new_color)+
+geom_point(size = 2,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=10))+ xlab('Sample Size') + labs(title="High Signal, Low Rank") + ylab('MSPE')+ theme(plot.title = element_text(hjust = 0.5,size = 11))+coord_cartesian(ylim = c(0, 0.12))
+p3=p3+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
+
 
 s=r=2;
-data = data.frame(d = rep(d,4), Method = c(rep('GTR (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least sqaure)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4]),sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4]))
-p=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.5) +scale_colour_manual(values = new_color)+
-geom_point(size = 4,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=12))+ xlab('Sample Size') + labs(title="High Signal, High Rank") + ylab('Mean Squared Prediction Error (MSPE)')+ theme(plot.title = element_text(hjust = 0.5,size = 12))+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.05))
-p=p+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05)) 
-p
+data = data.frame(d = rep(d,4), Method = c(rep('STD (Our method)',length(d)),rep('HOLRR (Low-rank regression)',length(d)),rep('HOPLS (Partial least square)',length(d)),rep('TPG (Projection gradient)',length(d))),PMSE = c(final[s,r,,1],final[s,r,,2],final[s,r,,3],final[s,r,,4])/signal_range[s],sd = c(finalsd[s,r,,1],finalsd[s,r,,2],finalsd[s,r,,3],finalsd[s,r,,4])/signal_range[s])
+data[,2]=factor(data[,2],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p4=ggplot(data, aes(x = d*400, y = PMSE)) + geom_line(aes(color = Method),size = 1.2) +scale_colour_manual(values = new_color)+
+geom_point(size = 2,aes(shape = Method))+ scale_shape_manual(values = c(16,5,17,4)) + theme(axis.text=element_text(size=12), axis.title=element_text(size=10))+ xlab('Sample Size') + labs(title="High Signal, High Rank") + ylab('MSPE')+ theme(plot.title = element_text(hjust = 0.5,size = 11))+coord_cartesian(ylim = c(0, max(data[,3])+0.05))
+p4=p4+geom_errorbar(aes(ymin=PMSE-sd,ymax=PMSE+sd),width=0.5,position=position_dodge(0.05))
+
+(p1|p2|p3|p4)
 dev.off()
+
 ##################### end of plotting ##############################
 
 ### If a new run of simulation is desired, please run the code from here and save the results as .RData. Then run the above code to generate figures. ###

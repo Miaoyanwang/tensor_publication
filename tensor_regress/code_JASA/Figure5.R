@@ -12,31 +12,34 @@ load("presaved/Figure5.RData")
 library(ggplot2)
 library(wesanderson)
 library(patchwork)
-#original  c(rev(wes_palette(n=4, name="Moonrise2"))[1:3],'#C0C0C0')
 new_color = c("#069AA0","#CCC591","#BCA455","#D6CFC4")
 
 signal_range=c(3,6)
 core_range=rbind(c(3,3,3),c(4,5,6))
-pdf("Figure5.pdf",width=20,height=3)
+pdf("Figure5.pdf",width=20.5,height=3)
 s=r=1;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
-p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "Low Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+
-    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,])/signal_range[s],sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/signal_range[s],Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least square)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+data[,3]=factor(data[,3],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE")+coord_cartesian(ylim = c(0, max(data[,1])+0.05))+  labs(title = "Low Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 
 s=1;r=2;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
-p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "Low Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+
-    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,])/signal_range[s],sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/signal_range[s],Method=rep(c('STD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least square)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+data[,3]=factor(data[,3],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "Low Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 
 s=2;r=1;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
-p3=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "High Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+
-    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,])/signal_range[s],sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/signal_range[s],Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least square)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
+data[,3]=factor(data[,3],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p3=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 
 s=2;r=2;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,]),Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(1,4),rep(2,4),rep(3,4)))
-p4=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE"+coord_cartesian(ylim = c(0, max(final[s,r,,])+0.1))) +  labs(title = "High Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 15))+
-    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=12))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,])/signal_range[s],sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/signal_range[s],Method=rep(c('GTD (Our method)','HOLRR (Low-rank regression)','HOPLS (Partial least sqaure)','TPG (Projection gradient)'),3),Category=c(rep(5,4),rep(10,4),rep(15,4)))
+data[,3]=factor(data[,3],levels=c("STD (Our method)","HOLRR (Low-rank regression)","HOPLS (Partial least square)","TPG (Projection gradient)"))
+p4=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Number of modes with available features",y="MSPE")+coord_cartesian(ylim = c(0, max(data[,1])+0.05))+  labs(title = "High Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+    scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 
 (p1|p2|p3|p4)
 dev.off()
