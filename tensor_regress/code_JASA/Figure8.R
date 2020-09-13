@@ -1,43 +1,51 @@
-### Code for Figure 8. Comparison between classical GLM and tensor methods in the HCP data anaysis
+### Code for Figure 9. Nations data analysis
+install.packages("tensorregress.tar.gz",repos = NULL, type="source")
+library(tensorregress)
+library(lattice)
+library(RColorBrewer)
+my.palette <- brewer.pal(n = 12, name = "RdBu")
 source("simulation.R")
-data=load("presaved/HCP.RData")
-############ Method 1: tensor method  ##############
-load("presaved/output_HCP.RData")
-table(attr[,5])
-## age group: 22-25 26-30 31+
-## number of individuals: 35  58    43
-X=attr[,4:5]
-levels(X[,2])=c("22-25","26-30","31+","31+") ## three age groups
-contrasts(X[,1]) <- contr.sum
-contrasts(X[,2]) <- contr.sum
-### intercept, F 1, M,-1; 22-25 [1,0]; 26-30 [0 1]; 30+
-coef=array(0,dim=c(68,68,5))
-coef[,,1:4]=result$C_ts[,,1:4]##intercept, gender, age 22-25, age 26-30
-coef[,,5]=-coef[,,3]-coef[,,4] ## age 30+
+set.seed(0)
+seed=0
+data=load("presaved/nations.RData")
+tsr=R
+tsr[is.na(tsr)]=0
+X=cov
+
+#rank_range=valid_rank(expand.grid(c(3:5),c(3:5),c(3:5)))
+#res=sele_rank(tsr,X_covar1=cov,X_covar2=cov,X_covar3=NULL,rank_range=rank_range,Nsim=10,cons = 'non',dist="binary")
 
 
-############## Method 2: Classical GLM  ##############
-tsr=tensor
-X_covar3=model.matrix(~as.factor(X[,1])+as.factor(X[,2])) ## baseline female and age 22-25
-massive=massive_glm(tsr,X_covar3,"binary")
-mass=array(0,dim=c(68,68,5))
-mass[,,1]=massive[,,1]
-mass[,,2]=massive[,,2]
-mass[,,3]=massive[,,3]
-mass[,,4]=massive[,,4]
-mass[,,5]=-massive[,,4]-massive[,,3]
+core_shape=c(4,4,4)
+result=tensor_regress(tsr,X_covar1=cov,X_covar2=cov,X_covar3=NULL,core_shape,Nsim=10,cons="penalty",lambda=0.1,alpha=10,solver="CG",dist="binary")
+
+save(result,file="output_nations.RData")
+library(lattice)
+clustering=kmeans(result$W[[3]],4,nstart=5)
+relnames=names(tsr[1,1,])
+relnames[clustering$cluster==1]
+relnames[clustering$cluster==2]
+relnames[clustering$cluster==3]
+relnames[clustering$cluster==4]
 
 
-### Plot histogram to compare two methods###
-pdf("compare.pdf",width=15,height=6)
-par(mfrow=c(2,4))
-hist(c(mass[,,1]),nclass=40,xlab="Effect size",main="Intercept (Classical GLM)")
-hist(c(mass[,,2]),nclass=40,xlab="Effect size",main="Gender (Classical GLM)")
-hist(c(mass[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (Classical GLM)")
-hist(c(mass[,,5]),nclass=40,xlab="Effect size",main="Age 31+ (Classical GLM)")
+myPanel <- function(x, y, z,...) {
+    panel.levelplot(x,y,z,...)
+    panel.text(x, y,  round(M[cbind(x,y)],2)) ## use handy matrix indexing
+}
 
-hist(c(coef[,,1]),nclass=40,xlab="Effect size",main="Intercept (Tensor regression)")
-hist(c(coef[,,2]),nclass=40,xlab="Effect size",main="Gender (Tensor regression)")
-hist(c(coef[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (Tensor regression)")
-hist(c(coef[,,5]),xlab="Effect size",nclass=40,main="Age 31+ (Tensor regression)")
+pdf("Figure9.pdf",width=10,height=10)
+M=result$C_ts[,,which(relnames=="warning")]
+levelplot(M,panel=myPanel,col.regions =my.palette ,at=seq(-1.6, 1.6, length.out=12),main="Relation: Warning")
+
+M=result$C_ts[,,which(relnames=="aidenemy")]
+levelplot(M,panel=myPanel,col.regions =my.palette ,at=seq(-1.6, 1.6, length.out=12),main="Relation: Aidenemy")
+
+M=result$C_ts[,,which(relnames=="economicaid")]
+levelplot(M,panel=myPanel,col.regions =my.palette ,at=seq(-1.6, 1.6, length.out=12),main="Relation: Economicaid")
+
+
+M=result$C_ts[,,which(relnames=="treaties")]
+levelplot(M,panel=myPanel,col.regions =my.palette ,at=seq(-1.6, 1.6, length.out=12),main="Relation: Treaties")
 dev.off()
+
