@@ -20,7 +20,7 @@ The full list of covariates can be found at:
 https://wiki.humanconnectome.org/display/PublicData/HCP+Data+Dictionary+Public-+Updated+for+the+1200+Subject+Release?preview=/53444663/113377285/HCP_S1200_DataDictionary_April_20_2018.xlsx#HCPDataDictionaryPublic-Updatedforthe1200SubjectRelease-Excelversion:
 
 
-Below is the dictinary for the important covariates:
+Below is the dictionary for the important covariates:
 Gender: binary, M or F
 Age: categorical, 22-25, 26-30, 31-35, >35
 MMSE_Score: numerical, Mini Mental Status Exam Total Score
