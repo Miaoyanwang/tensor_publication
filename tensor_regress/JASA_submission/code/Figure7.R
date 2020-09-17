@@ -29,15 +29,15 @@ mass[,,5]=-massive[,,4]-massive[,,3]
 
 
 ### Plot histogram to compare two methods###
-pdf("compare.pdf",width=15,height=6)
+pdf("compare.pdf",width=15,height=5.5)
 par(mfrow=c(2,4))
-hist(c(mass[,,1]),nclass=40,xlab="Effect size",main="Intercept (Classical GLM)")
-hist(c(mass[,,2]),nclass=40,xlab="Effect size",main="Gender (Classical GLM)")
-hist(c(mass[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (Classical GLM)")
-hist(c(mass[,,5]),nclass=40,xlab="Effect size",main="Age 31+ (Classical GLM)")
+hist(c(mass[,,1]),nclass=40,xlab="Effect size",main="Intercept (multi-response GLM)")
+hist(c(mass[,,2]),nclass=40,xlab="Effect size",main="Gender (multi-response GLM)")
+hist(c(mass[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (multi-response GLM)")
+hist(c(mass[,,5]),nclass=40,xlab="Effect size",main="Age 31+ (multi-response GLM)")
 
-hist(c(coef[,,1]),nclass=40,xlab="Effect size",main="Intercept (Tensor regression)")
-hist(c(coef[,,2]),nclass=40,xlab="Effect size",main="Gender (Tensor regression)")
-hist(c(coef[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (Tensor regression)")
-hist(c(coef[,,5]),xlab="Effect size",nclass=40,main="Age 31+ (Tensor regression)")
+hist(c(coef[,,1]),nclass=40,xlab="Effect size",main="Intercept (STD)")
+hist(c(coef[,,2]),nclass=40,xlab="Effect size",main="Gender (STD)")
+hist(c(coef[,,4]),nclass=40,xlab="Effect size",main="Age 26-30 (STD)")
+hist(c(coef[,,5]),xlab="Effect size",nclass=40,main="Age 31+ (STD)")
 dev.off()

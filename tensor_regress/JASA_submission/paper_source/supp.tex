@@ -90,21 +90,21 @@
 
 \usepackage[compact]{titlesec}
 
-\usepackage{sectsty}
-\sectionfont{\fontsize{12}{10}\selectfont}
+
+
 
 \begin{document}
 
 
 
 \def\spacingset#1{\renewcommand{\baselinestretch}%
-{#1}\small\normalsize} \spacingset{1}
+{#1}\small\normalsize} \spacingset{1.5}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{center}
-{\large\bf Supplementary Notes to ``Supervised Tensor Decomposition \\
+{\Large\bf Supplementary Notes to ``Supervised Tensor Decomposition
 with Interactive Side Information''}
 \end{center}
 
@@ -113,6 +113,19 @@ with Interactive Side Information''}
 \setcounter{figure}{0}   
 
 \section{Proofs}\label{sec:appedix}
+We restate the Theorem 4.1 from the main text. 
+ \begin{thm}[Statistical convergence]\label{thm:main}
+Consider a data tensor generated from model~\eqref{eq:decomp}, where the entries are conditionally independent realizations from an exponential family. Let $(\hat \tC, \hat \mM_1,\ldots,\hat \mM_K)$ be the M-estimator in~\eqref{eq:MLE} and $\hat \tB=\hat \tC\times \hat \mM_1\times\cdots \times \hat \mM_K$. Define $r_\textup{total}=\prod_k r_k$ and $r_{\max}=\max_k r_k$. Under Assumptions A1 and A2 with scaled feature matrices $\check \mX_k= \sqrt{d_k}\mX_k$, or under Assumptions A1' and A2 with original feature matrices, there exist two positive constants $C_1=C_1(\alpha,K), C_2=C_2(\alpha, K)>0$ independent of dimensions $\{d_k\}$ and $\{p_k\}$, such that, with probability at least $1-\exp(-C_1\sum_k p_k)$, 
+\begin{equation}\label{eq:bound}
+    \FnormSize{}{\trueB- \hat \tB}^2\leq \frac{ C_{2} r_{\textup{total}}}{r_{\max}}\frac{\sum_k p_k}{\prod_k d_k}.
+\end{equation}
+Furthermore, if the unfolded core tensor has non-degenerate singular values at mode $k\in[K]$, i.e., $\sigma_{\min}(\textup{Unfold}_k(\tC_\textup{true})) \geq c>0$ for some constant $c$, then
+\begin{equation}\label{eq:sinebound}
+\textup{sin}^2 \Theta(\trueM,\ \hat \mM_k) \leq  \frac{ C_{2}r_{\textup{total}}}{ r_{\max}\sigma^2_{\min}(\textup{Unfold}_k(\tC_\textup{true}))}\frac{\sum_k p_k}{\prod_k d_k}.
+\end{equation}
+\end{thm}
+
+
 \begin{proof}[Proof of Theorem~\ref{thm:main}]
 Let $\sigma_{\text{min}}^{(k)} = \sigma_{\text{min}}(\mX_k)$ and  $\sigma_{\text{max}}^{(k)} = \sigma_{\text{max}}(\mX_k)$. First we prove \eqref{eq:bound}. 
 Define $\ell(\tB)=\mathbb{E}(\tL_{\tY}(\tB))$, where the expectation is taken with respect to $\tY\sim \trueB$ under the model with true parameter $\trueB$. We prove the following two conclusions:
@@ -164,13 +177,15 @@ holds for all $\tB\in\tP$, provided that $\min_{|\theta|\leq \alpha}|b''(\theta)
 \begin{equation}\label{upper}
 \ell(\hat \tB)-\ell(\trueB)\leq -{L \over 2}\FnormSize{}{\hat \Theta-\trueT}^2.
 \end{equation}
-Now we have proved both C1 and C2. Note that $\tL_{\tY}(\hat \tB)- \tL_{\tY}(\trueB)\geq 0$ by the definition of $\hat \tB$, This implies that
-\begin{align}
+Now we have proved both C1 and C2. Note that $\tL_{\tY}(\hat \tB)- \tL_{\tY}(\trueB)\geq 0$ by the definition of $\hat \tB$. This implies that
+\begin{align}\label{eq:F-norm}
 0&\leq \tL_{\tY}(\hat \tB)- \tL_{\tY}(\trueB) \\
 &\leq \left(\tL_{\tY}(\hat \tB)-\ell(\hat \tB)\right)-\left( \tL_{\tY}(\trueB)-\ell(\trueB)\right)+\left(\ell(\hat \tB)-\ell(\trueB)\right)\\
 &\leq \langle\tE,\ \Theta-\trueT    \rangle -{L\over 2}\FnormSize{}{\hat \Theta-\trueT}^2,
 \end{align}
-where the second line follows from~\eqref{upper}. Therefore,
+where the second line follows from~\eqref{upper}. 
+
+The inequality~\eqref{eq:F-norm} can be rewritten as
 \begin{align}\label{eq:1}
 \FnormSize{}{\hat \Theta-\trueT}&\leq {2\over L}\big\langle \tE,\ {\hat \Theta -\trueT \over \FnormSize{}{\hat \Theta-\trueT}} \big\rangle\notag \\
 &\leq {2\over L}\sup_{\Theta: \FnormSize{}{\Theta}=1, \Theta=\tB\times_1\mX_1\times_2\cdots\times_K \mX_K}\langle \tE,\ \Theta \rangle\notag \\
@@ -190,7 +205,7 @@ We now consider the two cases of assumptions on the feature matrices.
 \begin{equation}\label{eq:case1}
 \frac{\prod_k \sigma_{\max}^{(k)}}{\left(\prod_k \sigma_{\min}^{(k)}\right)^2} = {\prod_k c_2\sqrt{d_k}\over \left(\prod_k c_1\sqrt{d_k}\right)^2}.
 \end{equation}
-\item[] [Case 2] Under Assumption A1', we have asymptotic behavior of extreme singular values  \citep{rudelson2010non} as 
+\item[] [Case 2] Under Assumption A1', we have asymptotic behavior of extreme singular values \citep{rudelson2010non} as 
 \[
 \sigma_{\text{min}}^{(k)} \sim \sqrt{d_k}-\sqrt{p_k} \text{ and  } \sigma_{\text{max}}^{(k)} \sim \sqrt{d_k}+\sqrt{p_k}.
 \]
@@ -205,16 +220,16 @@ Combining~\eqref{eq:Bbound} with either~\eqref{eq:case1} or~\eqref{eq:case2}, we
 \]
 where $C_2=C_2(\alpha,K,c_1, c_2)>0$ in the first case and $C_2=C_2(\alpha,K,\gamma)>0$ in the second case, both of which are constants that do not depend on the dimensions $\{d_k\}$ and $\{p_k\}$. 
 
-Now we prove \eqref{eq:sinebound}.
+Now we prove bound for sin$\Theta$ distance. 
 We unfold tensors $\trueB$ and $\hat\tB$ along the mode $k$ and obtain $\text{Unfold}_k(\trueB)$ and $\text{Unfold}_k(\hat\tB)$. Notice that 
 \begin{align}
     \text{Unfold}_k(\trueB) &= \mM_k \text{Unfold}_k(\trueC)\left(\mM_{k+1}\otimes\mM_{k+2}\otimes \cdots\otimes \mM_1\otimes \cdots\mM_{k-1}\right)^T,\\
     \text{Unfold}_k(\hat\tB) &= \hat\mM_k \text{Unfold}_k(\hat\tC)\left(\hat\mM_{k+1}\otimes\hat\mM_{k+2}\otimes \cdots\otimes \hat\mM_1\otimes \cdots\hat\mM_{k-1}\right)^T,
 \end{align} where $\otimes$ denotes the Kronecker product of matrices.
 Notice that $\mM_k$ and $\hat\mM_k$ have the same image of left singular matrices of $\text{Unfold}_k(\trueB)$ and $\text{Unfold}_k(\hat\tB)$ respectively.  Applying Proposition \ref{prop:sinebound}, we have
-\begin{align}
-    \text{sin}\Theta^2(\mM_k,\hat\mM_k)\leq \frac{\FnormSize{}{\text{Unfold}_k(\hat\tB)-\text{Unfold}_k(\trueB)}}{\sigma_{\text{min}}(\text{Unfold}_k(\trueB))}= \frac{\FnormSize{}{\hat\tB-\trueB}}{\sigma_{\text{min}}(\text{Unfold}_k(\trueC))},
-\end{align} where $\sigma_{\text{min}}(\text{Unfold}_k(\trueB)) = \sigma_{\text{min}}(\text{Unfold}_k(\trueC))$ holds based on the orthonormality of factor matrices. We finally prove \eqref{eq:sinebound} combining \eqref{eq:bound}.
+\begin{align}\label{eq:sintheta}
+    \text{sin}^2\Theta(\mM_k,\hat\mM_k)\leq \frac{\FnormSize{}{\text{Unfold}_k(\hat\tB)-\text{Unfold}_k(\trueB)}}{\sigma_{\text{min}}(\text{Unfold}_k(\trueB))}= \frac{\FnormSize{}{\hat\tB-\trueB}}{\sigma_{\text{min}}(\text{Unfold}_k(\trueC))},
+\end{align} where $\sigma_{\text{min}}(\text{Unfold}_k(\trueB)) = \sigma_{\text{min}}(\text{Unfold}_k(\trueC))$ holds based on the orthonormality of factor matrices. We finally prove the sin$\Theta$ distance by combining~\eqref{eq:sintheta} and \eqref{eq:bound}.
 \end{proof}
 
 
@@ -250,9 +265,9 @@ Therefore, $\varepsilon$ is sub-Gaussian-$(\phi U)$. \end{proof}
 \begin{prop}[Wedin's $\sin\Theta$ Theorem]\label{prop:sinebound}
 Let $\mB$ and $\hat\mB$ be two $m\times n$ real or complex with SVDs $\mB = \mU\Sigma\mV^T$ and $\hat\mB = \hat\mU\hat\mSigma\hat\mV^T.$ If $\sigma_{\text{min}}(\mB)>0$ and $\FnormSize{}{\hat\mB-\mB}\ll \sigma_{\text{min}}(\mB)$, then
 \begin{align}\label{eq:sine}
-    \text{sin}\Theta(\mU,\hat\mU) \leq \frac{C\FnormSize{}{\hat\mB-\mB}}{\sigma_{\text{min}}(\mB)},
+    \text{sin} \Theta(\mU,\hat\mU) \leq \frac{\FnormSize{}{\hat\mB-\mB}}{\sigma_{\text{min}}(\mB)}.
 \end{align}
-for some constant $C>0$.
+
 \end{prop}
 \begin{proof}
 From Theorem 6.1 in \cite{wang2017tensor}, we  obtain the following bound 
@@ -264,7 +279,7 @@ Notice that
     \snormSize{}{\hat\mB\mV-\mU\mSigma} &= \snormSize{}{\hat\mB\mV-\mB\mV} = \snormSize{}{\hat\mB-\mB} \leq \FnormSize{}{\hat\mB-\mB},\\
     \snormSize{}{\hat\mB^T\mU-\mV\mSigma} &= \snormSize{}{\hat\mB^T\mU-\mB^T\mU} = \snormSize{}{\hat\mB-\mB} \leq \FnormSize{}{\hat\mB-\mB}.
 \end{align}
-Therefore,we prove \eqref{eq:sine}.
+Therefore, we prove \eqref{eq:sine}.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:KL}]
@@ -316,27 +331,27 @@ The enlarged set $\tE_S$ satisfies the two properties below:
  \end{enumerate}
 Now, note that the isolation of stationary points and Property 1 imply that $\tE_S$ contains only finite number of equivalent classes. Otherwise, there is a subsequence of non-equivalent stationary points whose limit is not isolated, which contradicts the isolation assumption. Combining the finiteness with Property 2, we conclude that $\tE_S$ contains only a single equivalent class; i.e. $\tE_S = \tE_{\{\tA^*\}}$, where $\tA^*$ is a stationary point of $\tL(\tA)$. Therefore, all the convergent sub-sequences of $\tA^{(t)}$ converge to one stationary point $\tA^*$ up to equivalence. We conclude that, any iterate $\tA^{(t)}$ generated by Algorithm 1 converges to a stationary point of $\tL(\tA)$ up to equivalence.
  \end{proof}
+ 
+\section{Computational complexity}
+The computational complexity of our Algorithm~\eqref{alg:B} is $O\left(d \sum_k p^3_k\right)$ for each loop of iterations, where $d=\prod_k d_k$ is the total size of the data tensor. More precisely, the update of core tensor costs $O(r^3d)$, where $r=\prod_k r_k$ is the total size of the core tensor. The update of each factor matrix $\mM_k$ involves a GLM with a $d$-length response, and $d$-by-$(r_kp_k)$ feature matrix. Solving such a GLM requires $O(dr^3_kp^3_k)$, and therefore the cost for updating $K$ factors in total is $O( d\sum_k r^3_k p_k^3)$. This complexity in tensor dimension matches with the classical tensor decomposition~\citep{kolda2009tensor}. 
 
 
-\newpage
 \section{Additional simulation results}
 Section~\ref{sec:simulation} in the main text has provided simulation results for two settings: low-signal, high-rank setting and high-signal, low-rank setting. Here, we perform the simulations for the full combinations of rank $\mr=(3,3,3), (4,5,6)$ and signal $\alpha=3, 6$. Figures~\ref{fig:S1} and~\ref{fig:S2} confirm the outperformance of the supervised tensor method in a range of model complexities.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{Supp_Figure1.pdf} 
+\includegraphics[width=15cm]{Supp_Figure1.pdf} 
 \caption{Comparison of MSPE versus the number of modes with features. We consider full combinations of rank $\mr=(3,3,3)$ (low), $\mr=(4,5,6)$ (high), and signal $\alpha=3$ (low), $\alpha=6$ (high).}~\label{fig:S1}
 \end{figure}
 
-
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{Supp_Figure2.pdf} 
+\includegraphics[width=15cm]{Supp_Figure2.pdf} 
 \caption{Comparison of MSPE versus effective sample size. We consider full combinations rank $\mr=(3,3,3)$ (low), $\mr=(4,5,6)$ (high), and signal $\alpha=3$ (low), $\alpha=6$ (high). }~\label{fig:S2}
 \end{figure}
 
-
-
+\newpage
 \bibliography{tensor_wang}
 \bibliographystyle{apalike}
 
