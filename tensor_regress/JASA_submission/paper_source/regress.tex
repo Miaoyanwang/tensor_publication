@@ -134,7 +134,7 @@ Higher-order tensors have received increased attention across science and engine
 
 Multi-dimensional arrays, known as tensors, are often collected with side information on multiple modes in modern scientific and engineering studies. A popular example is in neuroimaging~\citep{zhou2013tensor}. The brain connectivity networks are collected from a sample of individuals, accompanied by individual characteristics such as age, gender, and diseases status (see Figure~\ref{fig:intro1}a). Another example is in network analysis~\citep{pmlr-v108-berthet20a,hoff2005bilinear}. A typical social network consists of nodes that represent people and edges that represent  friendships. Side information such as people’s demographic information and friendship types are often available. In both examples, it is of keen scientific interest to identify the variation in the data tensor (e.g., brain connectivities, social community patterns) that is affected by available features. These seemingly different scenarios pose a common yet challenging problem for tensor data modeling. 
 
-In addition to the aforementioned challenges, many tensor datasets consist of non-Gaussian measurements. Examples include the political interaction dataset \citep{nickel2011three} which measures action counts between countries under various relations, and the brain connectivity network dataset \citep{zhang2018mapping} which is a collection of binary adjacency matrices. Classical tensor decomposition methods are based on minimizing the Frobenious norm of deviation, leading to suboptimal predictions for binary- or count-valued response variables. A number of supervised tensor methods have been proposed \citep{narita2012tensor, zhao2012higher, yu2016learning,lock2018supervised} to address the tensor regression problem in various forms, such as scalar-to-tensor regression and tensor-response regression. These methods often assume Gaussian distribution for the tensor entries, or impose random designs for the feature matrices, both of which are less suitable for applications of our interest. The gap between theory and practice means a great opportunity to modeling paradigms and better capture the complexity in tensor data. 
+In addition to the aforementioned challenges, many tensor datasets consist of non-Gaussian measurements. Examples include the political interaction dataset \citep{nickel2011three} which measures action counts between countries under various relations, and the brain connectivity network dataset \citep{zhang2018mapping} which is a collection of binary adjacency matrices. Classical tensor decomposition methods are based on minimizing the Frobenius norm of deviation, leading to suboptimal predictions for binary- or count-valued response variables. A number of supervised tensor methods have been proposed \citep{narita2012tensor, zhao2012higher, yu2016learning,lock2018supervised} to address the tensor regression problem in various forms, such as scalar-to-tensor regression and tensor-response regression. These methods often assume Gaussian distribution for the tensor entries, or impose random designs for the feature matrices, both of which are less suitable for applications of our interest. The gap between theory and practice means a great opportunity to modeling paradigms and better capture the complexity in tensor data. 
 
 \begin{figure*}[t]
 \begin{center}
@@ -183,7 +183,7 @@ In classical tensor decomposition, tensor factorization is performed on either d
 \end{equation}
 where $\tC\in\mathbb{R}^{r_1\times \cdots \times r_K}$ is a full-rank core tensor, and $\mM_k\in\mathbb{R}^{p_k\times r_k}$ are factor matrices consisting of orthonormal columns, where $r_k\leq p_k$ for all $k\in[K]$. By the definition of multilinear rank, model equations~\eqref{eq:tensormodel} and~\eqref{eq:factor} imply the low-rankness $\mr=(r_1,\ldots,r_K)$ of the conditional mean tensor under the link function. We now reach our final model for supervised tensor decomposition,
 \begin{align}\label{eq:decomp}
-\mathbb{E}(\tY|\mX_1,\ldots,\mX_K) &= f\left(\tC\times\{\mX_1\mM_1,\ \ldots,\ \mX_K\mM_K\}\right),\notag\\
+\mathbb{E}(\tY|\mX_1,\ldots,\mX_K) &= f\left(\tC\times\{\mX_1\mM_1, \ldots, \mX_K\mM_K\}\right),\notag\\
 \text{with} \ &\ \mM_k^T\mM_k = \mI_{r_k},\ \mM_k\in\mathbb{R}^{p_k\times r_k}\quad \text{for all }k=1,\ldots,K,
 \end{align}
 where the parameters of interest are $\mM_k$ and $\tC$. Note that model~\eqref{eq:decomp} assumes a fixed, known rank $\mr=(r_1,\ldots,r_K)$; the adaptation to unknown rank will be addressed in Section~\ref{sec:tuning}. Figure~\ref{fig:intro1}b provides a schematic illustration of our model. The features $\mX_k$ affect the distribution of tensor entries in $\tY$ through the form $\mX_k\mM_k$, which are $r_k$ linear combinations of features on mode $k$. We call $\mX_k\mM_k$ the ``supervised tensor factors'' or ``sufficient features''~\citep{adragni2009sufficient}, and call $\mM_k$ the ``dimension reduction matrix.'' The core tensor $\tC$ collects the interaction effects between sufficient features across $K$ modes. Our goal is to find $\mM_k$ and the corresponding $\tC$. Note that $\mM_k$ and $\tC$ are identifiable only up to orthonormal transformations.  
@@ -219,7 +219,7 @@ are the design matrices for spatial and temporal effects, respectively, $\tC\in\
 
 
 \begin{example}[Network population model]\label{example:brain}
-Network response model~\citep{rabusseau2016low} is recently developed for neuroimanig analysis. The goal is to study the relationship between brain network connectivity pattern and features of individuals. Suppose we have a sample of $n$ observations, $\{(\mY_i, \mx_i)\colon i=1,\ldots,n\}$, where for each individual $i\in[n]$, $\mY_i\in\{0,1\}^{d\times d}$ is the undirected adjacency matrix whose entries indicate presences/absences of connectivities between $d$ brain nodes, and $\mx_i\in\mathbb{R}^p$ is the individual's feature such as age, gender, cognition score, etc. The network-response model  has the conditional mean
+Network response model~\citep{rabusseau2016low} is recently developed for neuroimaging analysis. The goal is to study the relationship between brain network connectivity pattern and features of individuals. Suppose we have a sample of $n$ observations, $\{(\mY_i, \mx_i)\colon i=1,\ldots,n\}$, where for each individual $i\in[n]$, $\mY_i\in\{0,1\}^{d\times d}$ is the undirected adjacency matrix whose entries indicate presences/absences of connectivities between $d$ brain nodes, and $\mx_i\in\mathbb{R}^p$ is the individual's feature such as age, gender, cognition score, etc. The network-response model  has the conditional mean
 \begin{equation}\label{eq:network}
 \textup{logit}(\mathbb{E}(\mY_i|\mx_i))=\tB\times_3\mx_i, \quad \text{for }i=1,\ldots,n,
 \end{equation}
@@ -235,7 +235,7 @@ where $\tC\in\mathbb{R}^{r_1\times r_1\times r_2}$ is the core tensor, $\mM\in\m
 \begin{equation}\label{eq:edge}
  \textup{logit}\left(\mathbb{P}\left((i,j)\in E\right)\right)=\mx^T_i\mB\mx_j=\langle \mB,\ \mx^T_i\mx_j\rangle,
  \end{equation}
- where $\mB\in\mathbb{R}^{p\times p}$ is a symmetric rank-$r$ matrix. The low-rankness in $\mB$ has demonstrated its success in modeling transitivity, balance, and communities in  networks~\citep{hoff2005bilinear}. We show that our supervised tensor decompostiion~\eqref{eq:decomp} also incorporates the graph model as a special case. Let $\tY=\entry{y_{ij}}$ be a binary matrix where $y_{ij}=\mathds{1}_{(i,j)\in E}$. Define $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the graph model~\eqref{eq:edge} can be expressed as
+ where $\mB\in\mathbb{R}^{p\times p}$ is a symmetric rank-$r$ matrix. The low-rankness in $\mB$ has demonstrated its success in modeling transitivity, balance, and communities in  networks~\citep{hoff2005bilinear}. We show that our supervised tensor decompostion~\eqref{eq:decomp} also incorporates the graph model as a special case. Let $\tY=\entry{y_{ij}}$ be a binary matrix where $y_{ij}=\mathds{1}_{(i,j)\in E}$. Define $\mX=[\mx_1,\ldots,\mx_n]^T\in\mathbb{R}^{n\times p}$. Then, the graph model~\eqref{eq:edge} can be expressed as
  \[
  \textup{logit}(\mathbb{E}(\mY|\mX))=\mC\times\{\mX\mM,\ \mX\mM\}, 
   \]
@@ -532,7 +532,7 @@ We perform the supervised tensor decomposition and obtain the dimension reductio
 \begin{figure}[!h]
 \centering
 \includegraphics[width=16cm]{coef.pdf}
-\caption{Estimated feature effects in the \emph{Nations} data analysis. Panels (a)-(d) represent the estimated effects of country-level attributes towards the connection probability, for relations \emph{warnning}, \emph{violentactions}, \emph{treaties}, and \emph{aidenemy}, respectively. }\label{fig:est}
+\caption{Estimated feature effects in the \emph{Nations} data analysis. Panels (a)-(d) represent the estimated effects of country-level attributes towards the connection probability, for relations \emph{warning}, \emph{violentactions}, \emph{treaties}, and \emph{aidenemy}, respectively. }\label{fig:est}
 \vspace{-.4cm}
 \end{figure}
 
@@ -578,7 +578,7 @@ One assumption made by our method is that tensor entries are conditionally indep
 \begin{align}\label{eq:extention}
 \mathbb{E}(\tY|\mX_1,\ldots,\mX_K)&=\tC\times\mM_1\times \cdots \times \mM_K\ \ \text{and}\ \ \text{Var}(\tY|\mX_1,\ldots,\mX_K)=\mPhi_1\otimes \cdots \otimes \mPhi_K,
 \end{align}
-where $\mPhi_k\in\mathbb{R}^{d_k\times d_k}$ is the unknown covariance matrix on the mode $k\in[K]$. For general exponential family, an additional mean-variance relationship should also be considered. The joint estimation of mean model $\Theta$ and variance model $\mPhi_k$ will lead to more efficient estimation in the presence of unmeasured confounding effects. However, the introduction of unknown covariance matrices $\mPhi_k$ dramatically increases the number of parameters in the problem. Suitable regularizatiosn such as graphical lasso or specially-structured covariance assumptions should be considered. The extension of tensor modeling with heterogeneous mixed-effects will be an important future direction. 
+where $\mPhi_k\in\mathbb{R}^{d_k\times d_k}$ is the unknown covariance matrix on the mode $k\in[K]$. For general exponential family, an additional mean-variance relationship should also be considered. The joint estimation of mean model $\Theta$ and variance model $\mPhi_k$ will lead to more efficient estimation in the presence of unmeasured confounding effects. However, the introduction of unknown covariance matrices $\mPhi_k$ dramatically increases the number of parameters in the problem. Suitable regularization such as graphical lasso or specially-structured covariance assumptions should be considered. The extension of tensor modeling with heterogeneous mixed-effects will be an important future direction. 
 
 Although we have presented the supervised tensor decomposition in the context of order-3 data tensors, the framework applies to more general multi-way datasets. One possible extension is the integrative analysis of omics data, in which multiple types of omics measurements (gene expression, DNA methylation, microRNA) are collected in the same set of individuals~\citep{lock2013joint}. In such a case, the observation is a stack of data matrices, which may not be of the same dimension. 
 %One possible extension is to impose linked dimension reduction among different data matrices, and incorporate side information as features in the joint decomposition. 
@@ -596,7 +596,7 @@ Other applications include time-series tensor data with multiple side informatio
 \begin{description}
 %\item[Supplementary notes:]  technical proofs and additional simulation results.
 \item[Data and software:] %R-package \texttt{tensorregress} performs our supervised tensor decomposition method. 
-The simulation code, R-package \texttt{tensorregress}, and datasets used in the paper are available at \url{https://CRAN.R-project.org/package=tensorregress} 
+Our simulation code, R-package \texttt{tensorregress}, and datasets used in the paper are available at \url{https://CRAN.R-project.org/package=tensorregress} 
 %We also provide R scripts for reproducing all numbers in Figures 2-8 and Tables 2-3 in the paper.
 \end{description}
 
