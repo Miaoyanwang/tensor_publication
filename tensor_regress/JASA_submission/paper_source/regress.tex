@@ -355,7 +355,7 @@ Here, $p_e(\mr)\stackrel{\textup{def}}{=}\sum_k (p_k-r_k-1)r_k+\prod_k r_k$ is t
 \subsection{Statistical properties}\label{subsec:statprob}
 In this section, we provide the accuracy guarantee for the proposed M-estimator~\eqref{eq:MLE}. Note that the factor matrices $\mM_k$ are identifiable only up to orthogonal transformation. Therefore, we use angle distance to assess the accuracy in estimating the column space, $\textup{Span}(\mM_k)$. For any two matrices $\mA,\mB$ with orthonormal columns of same dimension, the angle distance is defined as
 \[
-\sin \Theta(\mA,\mB)=\snormSize{}{\mA^T \mB^{\perp}}=\max\left\{ \frac{\langle \mx, \my\rangle}{\vnormSize{}{\mx}\vnormSize{}{\my}}\colon \ \mx\in \textup{Span}(\mA),\ \my\in \textup{Span}(\mB)\right\}.
+\sin \Theta(\mA,\mB)=\snormSize{}{\mA^T \mB^{\perp}}=\max\left\{ \frac{\langle \mx, \my\rangle}{\vnormSize{}{\mx}\vnormSize{}{\my}}\colon \ \mx\in \textup{Span}(\mA),\ \my\in \textup{Span}(\mB^\perp)\right\}.
 \]
 
 In modern applications, the tensor data and features are often large-scale. We are particularly interested in the high-dimensional regime in which both $d_k$ and $p_k$ diverge; i.e.\ $d_k\to \infty$ and $p_k\to\infty$, while $p_k/d_k \to \gamma_k \in[0,1)$. As the size of problem grows, and so does the number of unknown parameters. The classical MLE theory does not directly apply. We leverage the recent development in random tensor theory and high-dimensional statistics to establish the error bounds of the estimation. 
