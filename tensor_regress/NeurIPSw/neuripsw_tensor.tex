@@ -7,6 +7,7 @@
 % ready for submission
  \usepackage{neurips_2020}
 
+
 % to compile a preprint version, e.g., for submission to arXiv, add add the
 % [preprint] option:
 %     \usepackage[preprint]{neurips_2020}
@@ -139,7 +140,7 @@ where $\tC\in\mathbb{R}^{r_1\times \cdots \times r_K}$ is a full-rank core tenso
 \mathbb{E}(\tY|\mX_1,\ldots,\mX_K) &= f\left(\tC\times\{\mX_1\mM_1, \ldots, \mX_K\mM_K\}\right),\notag\\
 \text{with} \ &\ \mM_k^T\mM_k = \mI_{r_k},\ \mM_k\in\mathbb{R}^{p_k\times r_k}\quad \text{for all }k=1,\ldots,K,
 \end{align}
-where the parameters of interest are $\mM_k$ and $\tC$. Note that model~\eqref{eq:decomp} assumes a fixed, known rank $\mr=(r_1,\ldots,r_K)$. Figure~\ref{fig:intro1}b provides a schematic illustration of our model. The features $\mX_k$ affect the distribution of tensor entries in $\tY$ through the form $\mX_k\mM_k$, which are $r_k$ linear combinations of features on mode $k$. We call $\mX_k\mM_k$ the ``supervised tensor factors'' or ``sufficient features''~\citep{adragni2009sufficient}, and call $\mM_k$ the ``dimension reduction matrix.'' The core tensor $\tC$ collects the interaction effects between sufficient features across $K$ modes, which links the conditional mean to the feature spaces, and thereby allows the identification of variations in the tensor data attributable to the side information. Our goal is to find $\mM_k$ and the corresponding $\tC$,thereby allowing us to reveal the relationship between side information $\mX$ and the observed tensor $\tY$. Note that $\mM_k$ and $\tC$ are identifiable only up to orthonormal transformations.  
+where the parameters of interest are $\mM_k$ and $\tC$. Note that model~\eqref{eq:decomp} assumes a fixed, known rank $\mr=(r_1,\ldots,r_K)$. Figure~\ref{fig:intro1}b provides a schematic illustration of our model. The features $\mX_k$ affect the distribution of tensor entries in $\tY$ through the form $\mX_k\mM_k$, which are $r_k$ linear combinations of features on mode $k$. We call $\mX_k\mM_k$ the ``supervised tensor factors'' or ``sufficient features''~\citep{adragni2009sufficient}, and call $\mM_k$ the ``dimension reduction matrix.'' The core tensor $\tC$ collects the interaction effects between sufficient features across $K$ modes, which links the conditional mean to the feature spaces, and thereby allows the identification of variations in the tensor data attributable to the side information. Our goal is to find $\mM_k$ and the corresponding $\tC$,thereby allowing us to reveal the relationship between side information $\mX_k$ and the observed tensor $\tY$. Note that $\mM_k$ and $\tC$ are identifiable only up to orthonormal transformations.  
 
 \vspace{-.3cm}
 \section{Estimation}
