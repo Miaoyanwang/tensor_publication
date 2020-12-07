@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{extarrows}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\mathtoolsset{showonlyrefs=true}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+
+\newcommand{\of}[1]{\left(#1\right)}
+\newcommand{\off}[1]{\left[#1\right]}
+\newcommand{\offf}[1]{\left\{#1\right\}}
+\newcommand{\aabs}[1]{\left|#1\right|}
+
+
+
+%%%For Code
+\usepackage{listings}
+\usepackage{color}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\scriptsize,        % the size of the fonts that are used for the code
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=t,                    % sets the caption-position to bottom
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  commentstyle=\color{mygreen},
+  stringstyle=\color{mymauve},
+}
+%%%
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{Review for NeurIPS 2020}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+\section{Day 1: EXPO Day}
+EXPO presentations give us an opportunity to know more about the practical application of machining learning in the industry. I attend several talks of my interest.
+\begin{enumerate}
+	\item \textbf{Accelerating Deep Learning for Entertainment with Sony's Neural Network Libraries and Console.}  
+	
+	\vspace{0.2cm}
+	This talk mainly introduces the application of Deep Learning (DL) techniques used in the Sony Entertainment with their own tool package and platform: Sony's Neural Network Libraries and Console. The presenter takes three examples related to the content creation. 
+	
+	First one is the reference-based image colorization. The initial challenge is the temporal incoherence issue. Colorizing the video frame by frame may lead to color inconsistence when playing the whole video. To address this issue, the proposed approach predicts the input frame with the correspondence in the reference images. However, the correspondence may also lead incorrect colorization when multiple objects of the same class are present. To overcome this limitation, the team incorporate masking skills, instance tracking and dense tracking, to restrict the correspondence region. The proposed method outperforms the state-of-arts.
+	
+	Second one is the music source separation. The task is to separate the music from different sources, such as voice, string instruments, and drums. A new proposed CNN, named D3Net is proposed for the task. In addition, adversarial attacks is an important topic in audio separation. The adversarial noise can be unnoticeable but interfere the separation severely, which may lead to separator malfunction or be used in content protection.
+	
+	Third one is the CPU-GPU memory swapping for large-scale data training. The key idea is using CPU to expand the memory usage on GPU.
+\end{enumerate}
+
+
+\end{document}
