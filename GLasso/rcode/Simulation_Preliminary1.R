@@ -209,7 +209,7 @@ for (p_iter in 1:length(p_seq)) {
   cat("Finish m-nearest network setting, p = ",p,"\n")
   
   ## Scale-free network setting
-  # 10 % edges are connected
+  # 20 % edges are connected
   
   dup_FN = rep(0,duplicate)
   dup_FP = rep(0,duplicate)
