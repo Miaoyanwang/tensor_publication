@@ -78,8 +78,6 @@ heatmap(Theta3);
 
 
 
-
-
 % true Theta tensor
 trueTheta={Theta1,Theta2,Theta3};
 trueTTheta=zeros(r,p,p);
@@ -88,10 +86,41 @@ for k=1:r
 end
 
 
+U=normalize([[1,-1,zeros(1,K-2)]',[0,0,1,-1,zeros(1,K-4)]',[0,0,0,0,1,-1,zeros(1,K-6)]'],'norm'); % orthogonal
+Omega=cell(1,K); % precision matrix (desired output)
+TOmega=zeros(K,p,p);
+SS=cell(1,K); % covariance matrix (observed, input, no noise)
+for k=1:K
+    Omega{k}=Theta0+U(k,1)*Theta1+U(k,2)*Theta2+U(k,3)*Theta3;
+    if min(eig(Omega{k}))<0
+    error([num2str(k),'th Precision matrix not positive definite!'])
+             end
+    SS{k}=inv(Omega{k});
+    SS{k}=(SS{k}+SS{k}')/2;
+    TOmega(k,:,:)=Omega{k};
+end
 
-
+                    
+% now we have U, Theta0/Theta1/Theta2/Theta3/trueTheta/trueTTheta, Omega/TOmega, SS
+           
+%% simulate raw data from SS
+sSS=cell(1,K); % sample covariance cell
+for k=1:K
+    X=mvnrnd(zeros(1,p),SS{k},n(k));
+    sSS{k}=cov(X);
+end
+% % check
+figure(1);clf;
+subplot(1,2,1)
+mesh(SS{3}) % nearest neighbor network
+subplot(1,2,2)
+mesh(sSS{3})
+[~,out]=cov2corr(SS{4});
+out(1:15,1:15) % we hope the nonzeros are distinct from 0 (what we call, high signal)
+           
+           
 % noisy case
-k=3;
+k=2; %% try k =1, 2, 3,
 Omega_glasso = GLasso(sSS{k}, n(k)); 
 % check
 figure(4);clf;
@@ -101,7 +130,9 @@ title(['sparsity=',num2str(1-sum(sum(triu(Omega{k})~=0))/(p*(p+1)/2))]);
 subplot(1,2,2)
 heatmap(double(Omega_glasso~=0))
 title(['sparsity=',num2str(1-sum(sum(triu(Omega_glasso)~=0))/(p*(p+1)/2))]);
-
+%  why the estimation is so bad compared to the truth?? can I conclude this is because of matlab GLasso? 
+           
+           
 %% Evaluation of Results
 % clustering results
 U_est
