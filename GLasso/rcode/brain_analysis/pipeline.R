@@ -7,11 +7,11 @@
 # Remember to revise these paths!
 
 # under each of the following path, we need two folders: ss_data, and ss_figure
-pre_pro = # path for pre-processed data
-gtex_pre = # path for gtex data with pre-selected genes
-gtex_top = # path for gtex data with top variance genes
-gtex_varvar = # path for gtex data with top var-var genes
-gtex_meanvar = # path for gtex data with top mean-var genes
+pre_pro = "./pre_pro"# path for pre-processed data
+gtex_pre = "./gtex_pre"# path for gtex data with pre-selected genes
+gtex_top = "./gtex_top"# path for gtex data with top variance genes
+gtex_varvar = "./gtex_varvar" # path for gtex data with top var-var genes
+gtex_meanvar = "./gtex_meanvar"# path for gtex data with top mean-var genes
 
 
 library(plot.matrix)
@@ -61,7 +61,7 @@ for (i in 1:13) {
 
 generate_ss_figure(sample_list,select_gene = 1:(dim(sample[,,1])[1]), pre_pro)
 
-test = "/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test"
+
 ### 2. gtex data with pre-selected genes 
 brain_tissue_index = c(14,33,39:49)
 pre_brain_gene = rownames(sample[,,1])
@@ -95,7 +95,7 @@ for (i in 1:13) {
 }
 
 brain_gene_var_var = apply(brain_gene_tissue_var,1,var)
-brain_top_var_var_index = order(brain_gene_var_var)[1:300]
+brain_top_var_var_index = order(brain_gene_var_var,decreasing = T)[1:300]
 
 generate_ss_figure(gtex_brain,brain_top_var_var_index,gtex_varvar)
 
@@ -107,7 +107,7 @@ for (i in 1:13) {
 }
 
 brain_gene_mean_var = apply(brain_gene_tissue_mean,1,var)
-brain_top_mean_var_index = order(brain_gene_mean_var)[1:300]
+brain_top_mean_var_index = order(brain_gene_mean_var, decreasing = T)[1:300]
 
 generate_ss_figure(gtex_brain,brain_top_mean_var_index,gtex_meanvar)
 
