@@ -1,6 +1,8 @@
 #### Functions to generate ss data and ss figures ####
 
-### Jiaxin Hu 03/07021 ###
+### Jiaxin Hu 03/07/21 ###
+
+# lastest update: 03/11/21
 
 library(rmatio)
 library(plot.matrix)
@@ -34,10 +36,8 @@ generate_ss_data = function(exp_data, select_gene, path){
     ss_list[[i]] = cov(t(cut_exp))
   }
   
-  names(ss_list) = names(exp_data)
-  
   # write ss_list as a single .mat file
-  output_list = list(ss_data = ss_list, gene_name = gene_name)
+  output_list = list(ss_data = ss_list, gene_name = gene_name, tissue_name = names(exp_data))
   #output_list[[1]] = ss_list # then matlab recognize the mat as a single cell
   #names(output_list) = "ss_data"
   
@@ -72,9 +72,7 @@ generate_ss_figure = function(ss_data,path){
 #   gtex_brain[[i]] = corrected_expression_list[[brain_tissue_index[i]]]
 # }
 # brain_tissue_name = colnames(sample[1,,]) 
-# brain_tissue_name_sub = gsub(" - ", "",brain_tissue_name)
-# brain_tissue_name_sub = gsub(" ", "", brain_tissue_name_sub)
-# names(gtex_brain) = brain_tissue_name_sub
+#names(gtex_brain) = brain_tissue_name
 # 
 # write.csv(brain_tissue_name,"/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname/tissue_name.csv")
 
@@ -90,4 +88,4 @@ generate_ss_figure = function(ss_data,path){
 # brain_gene_var_var = apply(brain_gene_tissue_var,1,var)
 # brain_top_var_var_index = order(brain_gene_var_var,decreasing = T)[1:300]
 # 
-# generate_ss_data(gtex_brain,brain_top_var_var_index,"/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname")
+#generate_ss_data(gtex_brain,brain_top_var_var_index,"/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname")
