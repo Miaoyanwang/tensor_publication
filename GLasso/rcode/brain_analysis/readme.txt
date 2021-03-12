@@ -35,7 +35,7 @@ ensembldb::select(EnsDb.Hsapiens.v79, keys= geneid, keytype = "GENEID", columns 
 Some ensembl ID can not be translated, and thus keep their original ensembl ID in gene_name.csv. 
 
 
-(following three are now in old_code since bad performance in clustering)
+(following three are now in old_code due to the bad performance in clustering)
 
  - gtex_pre: ss data/figures from original gtex data with same genes in pre_pro
  - gtex_top: ss data/figures from original gtex data with genes who have top 300 variance across all the sample
