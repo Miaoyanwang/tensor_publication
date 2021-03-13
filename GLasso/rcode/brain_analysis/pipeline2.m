@@ -12,7 +12,7 @@ userpath(func_path); % REVISED!
 
 % Read ss data 
 load("/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname/ss_data.mat");
-gss = struct2cell(ss_data);  
+gss = ss_data;
 
 % read n_vector(sample size vector)
 gnn = readtable("/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/gene_cov/gtex_brain/pre_gene/nvector.csv");% REVISED!
