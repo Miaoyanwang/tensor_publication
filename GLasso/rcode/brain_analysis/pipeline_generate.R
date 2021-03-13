@@ -35,7 +35,7 @@ gtex_meanvar = "./gtex_meanvar"# path for gtex data with top mean-var genes
 
 
 num01 = c(rep(0,9),rep("",4)) # the files should be named with index 01,02 ....,09,10,11
-brain_tissue_name = colnames(sample[1,,]) 
+brain_tissue_name = names(corrected_expression_list)[c(14,33,39:49)]
 
 
 ### 1. pre-processed data
