@@ -54,7 +54,7 @@ names(gtex_brain)=brain_tissue_name
 
 brain_gene_var_var = apply(brain_gene_tissue_var,1,var)
 
-brain_top_var_var_index = order(brain_gene_var_var,decreasing = T)[1:1000]
+brain_top_var_var_index = order(brain_gene_var_var,decreasing = T)[1:500]
 
 # generate sample covariance data
 generate_ss_data(gtex_brain,brain_top_var_var_index,"input/")
@@ -62,7 +62,7 @@ generate_ss_data(gtex_brain,brain_top_var_var_index,"input/")
 # graphical check
 gtex_varvar_ss = read.mat(paste0("input/", "/ss_data.mat"))[[1]]
 names(gtex_varvar_ss) = brain_tissue_name
-generate_ss_figure(gtex_varvar_ss, paste0("","Figure1/"))
+generate_ss_figure(gtex_varvar_ss, paste0("","Figure/"))
 
 
 ############# end of code

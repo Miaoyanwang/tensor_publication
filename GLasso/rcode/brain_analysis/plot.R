@@ -95,6 +95,22 @@ Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
 rownames(Theta3)=Theta3[,1]
 Theta3=Theta3[,-1]
 
-which(Theta2!=0,arr.ind=T)
+index1=which(Theta1!=0,arr.ind=T)
+index2=which(Theta2!=0,arr.ind=T)
+index3=which(Theta3!=0,arr.ind=T)
+
+index=rbind(index1,index2)
+index=index[index[,1]-index[,2]!=0,]
+
+gene_name=row.names(Theta1)
+network=NULL
+for(i in 1:28){
+    for(j in 1:i){
+        network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"TRUE"))
+    }
+}
+
+write.csv(network,"networ.csv")
+
 
 

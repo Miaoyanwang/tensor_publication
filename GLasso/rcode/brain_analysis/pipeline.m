@@ -1,6 +1,6 @@
 %%% Brain tissue analysis %%%
 
-% lastest update 03/11/21
+% lastest update. Miaoyan Wang 03/13/21
 
 % Here is the pipeline to use the SCENT_tucker1_v6_2.m function.
 % Remember to revise the paths!
@@ -10,12 +10,12 @@
 % func_path should be the path involves the main function and the logdet.m
 
 % Read ss data 
-load("ss_data.mat");
+load("input/ss_data.mat");
 gss = ss_data;
 
 
 % read n_vector(sample size vector)
-gnn = readtable("nvector.csv");% REVISED!
+gnn = readtable("input/nvector.csv");% REVISED!
 % nvec_path should be the path of the sample size vector
 % nvec_path should be different with ss_data_path, 
 % unless sample size vector is not stored as .csv
@@ -30,7 +30,7 @@ gnn=gnn';
 
 % step up parameters
 option.initial = 1; % HOSVD, relatively quick
-option.Niter = 50;
+option.Niter = 30;
 option.tol =  1;
 option.fig = 1;
 option.TOL = 1;
@@ -45,7 +45,7 @@ gene_name=strrep(gene_name,'-','_');
 
 
 % result_path should be the path you store the results
-result_path = "";
+result_path = "output_r3rho1500/";
 col = cell(1,length(gene_name)+1);
 col(:,2:end) = gene_name;
 col(:,1) = {'name'};
@@ -57,7 +57,6 @@ for i = 1:r % if the rank degenerates, change r to the degenerated rank.
 
 
     A(:,1)=gene_name;
-    %A(1,2:end)=gene_name; 
     
     T = cell2table(A);
     T.Properties.VariableNames= col;
