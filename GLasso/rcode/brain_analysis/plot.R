@@ -1,5 +1,6 @@
-##### vertical barplots #####
-### 03/12/21 ###
+##### vertical barplots & preparation for network #####
+
+# Origin:  03/12/21, Lastest update: Jiaxin Hu 03/14/21
 
 ## Here is the example to make barplot for membership matrix U
 ## The code is originally used to plot a gene enrichment plot for the final project of BMI 826
@@ -87,34 +88,52 @@ dev.off()
 ########### prepare node file for network plotting
 Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
 rownames(Theta1)=Theta1[,1]
-Theta1=Theta1[,-1]
+Theta1=as.matrix(Theta1[,-1])
 Theta2=read.csv("output_r3rho1500/Theta_2_r3_rho1500.csv")
 rownames(Theta2)=Theta2[,1]
-Theta2=Theta2[,-1]
+Theta2=as.matrix(Theta2[,-1])
 Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
 rownames(Theta3)=Theta3[,1]
-Theta3=Theta3[,-1]
+Theta3=as.matrix(Theta3[,-1])
 
-index1=which(Theta1!=0,arr.ind=T)
-index2=which(Theta2!=0,arr.ind=T)
-index3=which(Theta3!=0,arr.ind=T)
+index1=which((Theta1 - diag(diag(Theta1)))!=0,arr.ind=T)
+index2=which((Theta2 - diag(diag(Theta2)))!=0,arr.ind=T)
+index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
 
-index=rbind(index1,index2)
-index=index[index[,1]-index[,2]!=0,]
+# index=rbind(index1,index2)
+# index=index[index[,1]-index[,2]!=0,]
 
-gene_name=row.names(Theta1)
-network=NULL
-for(i in 1:28){
-    for(j in 1:i){
-        if(abs(Theta1[index[i,1],index[j,1]])!=0)
-        network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"TRUE"))
-        else
-        network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"FALSE"))
-    }
+index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2]))
+gene_name=row.names(Theta1) 
+
+Theta = Theta1
+network = NULL
+for (i in 2:length(index)) {
+  for (j in 1:(i-1)) {
+    network = rbind(network, c(gene_name[index[i]], gene_name[index[j]], abs(Theta[index[i],index[j]]), 
+                               sign(Theta[index[i],index[j]]), Theta[index[i],index[j]]!= 0 ))
+  }
 }
-colnames(network)=c("source","target","value","sign","exists")
 
+colnames(network)=c("source","target","value","sign","exists")  
 write.table(network,"network.txt",row.names=F,quote=F)
+
+# network=NULL
+# for(i in 1:28){
+#     for(j in 1:i){
+#         if(abs(Theta1[index[i,1],index[j,1]])!=0)
+#         network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"TRUE"))
+#         else
+#         network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"FALSE"))
+#     }
+# }
+# colnames(network)=c("source","target","value","sign","exists")
+
+
+
+
+
+
 
 
 

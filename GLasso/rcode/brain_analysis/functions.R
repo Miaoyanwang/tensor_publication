@@ -2,7 +2,7 @@
 
 ### Jiaxin Hu 03/07/21 ###
 
-# lastest update: Miaoyan Wang 03/13/21
+# lastest update: Jiaxin Hu 03/14/21
 
 
 library(rmatio)
@@ -48,7 +48,7 @@ generate_ss_data = function(exp_data, select_gene, path){
 generate_ss_figure = function(ss_data,path){
   # ss_data should be a list of covariance matrices and the list name should be the tissue name
   # path is the folder where we store the figures
-  
+  num01= c(rep(0,9),rep("",(length(ss_data)- 9)))
   list_name = names(ss_data)
   for (i in 1:length(list_name)) {
     g_filename = paste0(path,"/ss_f",num01[i],i,".jpeg")
@@ -61,31 +61,3 @@ generate_ss_figure = function(ss_data,path){
 }
 
 
-## 03/11/21 update
-
-# Code to generate varvar data
-# load("/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/gene_full/corrected_expression_list_noY.RData")
-# brain_tissue_index = c(14,33,39:49)
-# 
-# gtex_brain = list()
-# for (i in 1:13) {
-#   gtex_brain[[i]] = corrected_expression_list[[brain_tissue_index[i]]]
-# }
-# brain_tissue_name = colnames(sample[1,,]) 
-#names(gtex_brain) = brain_tissue_name
-# 
-# write.csv(brain_tissue_name,"/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname/tissue_name.csv")
-
-# a = c("Brain - Cortex")
-# gsub(" - ", "",a)
-# 
-# brain_gene_tissue_var = matrix(0,ncol = 13,nrow = dim(corrected_expression_list[[1]])[1])
-# for (i in 1:13) {
-#   t_exp = gtex_brain[[i]]
-#   brain_gene_tissue_var[,i] = apply(t_exp, 1, var)
-# }
-# 
-# brain_gene_var_var = apply(brain_gene_tissue_var,1,var)
-# brain_top_var_var_index = order(brain_gene_var_var,decreasing = T)[1:300]
-# 
-#generate_ss_data(gtex_brain,brain_top_var_var_index,"/Users/March/Desktop/myresearch/graphical_lasso/data_analysis/multi_layer/test1/varvar_withname")
