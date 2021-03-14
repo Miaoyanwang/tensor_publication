@@ -96,9 +96,13 @@ Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
 rownames(Theta3)=Theta3[,1]
 Theta3=as.matrix(Theta3[,-1])
 
+Theta0=read.csv("output_r3rho1500/Theta0_r3_rho1500.csv")
+rownames(Theta0)=Theta0[,1]
+Theta0=as.matrix(Theta0[,-1])
+
 index1=which((Theta1 - diag(diag(Theta1)))!=0,arr.ind=T)
 index2=which((Theta2 - diag(diag(Theta2)))!=0,arr.ind=T)
-index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
+#index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
 
 # index=rbind(index1,index2)
 # index=index[index[,1]-index[,2]!=0,]
@@ -106,7 +110,7 @@ index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
 index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2]))
 gene_name=row.names(Theta1) 
 
-Theta = Theta1
+Theta = Theta0
 network = NULL
 for (i in 2:length(index)) {
   for (j in 1:(i-1)) {
@@ -116,7 +120,7 @@ for (i in 2:length(index)) {
 }
 
 colnames(network)=c("source","target","value","sign","exists")  
-write.table(network,"network.txt",row.names=F,quote=F)
+write.table(network,"Figure/network_input/network0.txt",row.names=F,quote=F)
 
 # network=NULL
 # for(i in 1:28){
