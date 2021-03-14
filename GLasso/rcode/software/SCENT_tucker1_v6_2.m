@@ -68,13 +68,12 @@ function [Omega,U,Theta0,Theta,convg,rec_obj]=SCENT_tucker1_v6_2(SS,nn,r,option)
 %   convg   an indicator of whether convergence is achieved in the end
 %           1=converging, 0=not converging
 %
-% By Gen Li, 9/29/2020
-% 
+%
+%
 % updated BIC for more accurate selection for subsequent ranks
-% on 1/4/2021 by GL
 % Modified stopping criterion (from primal res<1E-3 to relative primal res<1E-4) 
 % 
-% Add 1U=0 constraint (3/12/2021 GL)
+% Add 1U=0 constraint (3/12/2021)
 
 % default parameters
 K=length(SS); % number of populations
@@ -256,7 +255,7 @@ while niter<Niter  && abs(diff)>Tol
                 % BIC
 %                 BIC(ind_u,ind_v)=log(norm(curr_mat-curr_u*curr_Theta(:)','fro')^2/numel(curr_mat))+log(numel(curr_mat))*(ind_u*sum(curr_Theta(:)~=0))/numel(curr_mat);
 
-                % modified BIC (GL 1/4/2021)
+                % modified BIC
                 BIC(ind_u,ind_v)=log(norm(curr_mat-curr_u*curr_Theta(:)','fro')^2/numel(curr_mat))+log(K*p^2)*(ind_u*sum(curr_Theta(:)~=0))/(K*p^2); % i.e. keep totalSampleSize unchanged over ranks; or equiv, treating fitted part as zero
             end
         end     
@@ -335,7 +334,7 @@ while niter<Niter  && abs(diff)>Tol
     rec_obj=[rec_obj,obj];
     
     % stopping rule
-    diff=relprimal; % relative diff -- GL 1/6/2021
+    diff=relprimal; % relative diff
 %     diff=reldual;
 %     diff=rec_obj(1,end-1)-rec_obj(1,end);
 

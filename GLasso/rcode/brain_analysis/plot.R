@@ -88,13 +88,13 @@ dev.off()
 Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
 rownames(Theta1)=Theta1[,1]
 Theta1=Theta1[,-1]
-Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
-rownames(Theta1)=Theta1[,1]
-Theta1=Theta1[,-1]
-Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
-rownames(Theta1)=Theta1[,1]
-Theta1=Theta1[,-1]
+Theta2=read.csv("output_r3rho1500/Theta_2_r3_rho1500.csv")
+rownames(Theta2)=Theta2[,1]
+Theta2=Theta2[,-1]
+Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
+rownames(Theta3)=Theta3[,1]
+Theta3=Theta3[,-1]
 
-
+which(Theta2!=0,arr.ind=T)
 
 
