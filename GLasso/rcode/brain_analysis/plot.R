@@ -106,11 +106,15 @@ gene_name=row.names(Theta1)
 network=NULL
 for(i in 1:28){
     for(j in 1:i){
+        if(abs(Theta1[index[i,1],index[j,1]])!=0)
         network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"TRUE"))
+        else
+        network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"FALSE"))
     }
 }
+colnames(network)=c("source","target","value","sign","exists")
 
-write.csv(network,"networ.csv")
+write.table(network,"network.txt",row.names=F,quote=F)
 
 
 
