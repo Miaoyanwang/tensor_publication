@@ -2,12 +2,13 @@
 
 # Origin:  03/12/21, Lastest update: Jiaxin Hu 03/14/21
 
-## Here is the example to make barplot for membership matrix U
-## The code is originally used to plot a gene enrichment plot for the final project of BMI 826
+## Here is the example to make barplot for membership matrix U and networks for precision matrix
+
+## The code for barplot is originally used to plot a gene enrichment plot for the final project of BMI 826
 ## The original figure is an error bar figure using  geom_errorbar()
 
 library(ggplot2)
-
+library(igraph)
 
 # check the clustering result quickly
 U = read.csv("output_r3rho1500/U_r3_rho1500.csv",header = TRUE)
@@ -56,9 +57,9 @@ for (i in 1:length(levels(U_df$Tissues))) {
   U_df$color[ U_df$Tissues %in% levels(U_df$Tissues)[i]  ] = selected_color[i]
 }
 
-# for group 1
-pdf("Figure/bar1.pdf",width=6,height=10)
-gg1 = ggplot(U_df, aes(x = tissue_name, y = U4, fill = Tissues)) +
+# for group 0
+pdf("Figure/bar3.pdf",width=6,height=10)
+gg1 = ggplot(U_df, aes(x = tissue_name, y = U3, fill = Tissues)) +
   geom_bar(stat="identity", width=0.75)+
   scale_fill_manual(values = selected_color) +
   #scale_colour_manual(values = c("#6F9B3C","#F2AB1D","#214EB8","#43ABE4","#7776BC","#C76AB2")) +
@@ -77,7 +78,7 @@ gg1 = ggplot(U_df, aes(x = tissue_name, y = U4, fill = Tissues)) +
   ylim(-1,1) +
   ylab("Membership Loadings")+
   geom_hline(yintercept = 0, lty = "dotted", alpha = 0.8)+
-  ggtitle(label = "Global") +
+  ggtitle(label = "Group 3") +
   coord_flip()
 
 gg1
@@ -85,7 +86,8 @@ dev.off()
 
 
 
-########### prepare node file for network plotting
+########### network plotting using igraph
+# read data
 Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
 rownames(Theta1)=Theta1[,1]
 Theta1=as.matrix(Theta1[,-1])
@@ -95,43 +97,56 @@ Theta2=as.matrix(Theta2[,-1])
 Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
 rownames(Theta3)=Theta3[,1]
 Theta3=as.matrix(Theta3[,-1])
-
 Theta0=read.csv("output_r3rho1500/Theta0_r3_rho1500.csv")
 rownames(Theta0)=Theta0[,1]
 Theta0=as.matrix(Theta0[,-1])
 
+
+# get strong genes
 index1=which((Theta1 - diag(diag(Theta1)))!=0,arr.ind=T)
 index2=which((Theta2 - diag(diag(Theta2)))!=0,arr.ind=T)
-#index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
+index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
+index3=index3[order(abs(Theta3[index3]),decreasing = T)[1:20],] # first 15 strong connections in Theta3
 
-# index=rbind(index1,index2)
-# index=index[index[,1]-index[,2]!=0,]
+index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2],index3[,1], index3[,2]))
 
-index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2]))
+# get vertices
 gene_name=row.names(Theta1) 
+gene_name= gsub("\\_.*","",gene_name)
+gene = as.data.frame(sort(gene_name[index]))
 
+# get node-edge file
 Theta = Theta0
 network = NULL
 for (i in 2:length(index)) {
   for (j in 1:(i-1)) {
-    network = rbind(network, c(gene_name[index[i]], gene_name[index[j]], abs(Theta[index[i],index[j]]), 
-                               sign(Theta[index[i],index[j]]), Theta[index[i],index[j]]!= 0 ))
+    if( abs(Theta[index[i],index[j]])!=0){
+      network = rbind(network, c(gene_name[index[i]], gene_name[index[j]], 
+                                 abs(Theta[index[i],index[j]]), sign(Theta[index[i],index[j]])))
+    }
   }
 }
+colnames(network) = c("from","to","value","sign")
+network = as.data.frame(network)
 
-colnames(network)=c("source","target","value","sign","exists")  
-write.table(network,"Figure/network_input/network0.txt",row.names=F,quote=F)
+# For Theta 0, cut off weak connecitons for better visualization
+# For Theta_l, l = 1,2,3, ignore this step
+network = network[abs(as.numeric(network$value)) > 0.05,]
 
-# network=NULL
-# for(i in 1:28){
-#     for(j in 1:i){
-#         if(abs(Theta1[index[i,1],index[j,1]])!=0)
-#         network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"TRUE"))
-#         else
-#         network=rbind(network,c(gene_name[index[i,1]],gene_name[index[j,1]],abs(Theta1[index[i,1],index[j,1]]),sign(Theta1[index[i,1],index[j,1]]),"FALSE"))
-#     }
-# }
-# colnames(network)=c("source","target","value","sign","exists")
+
+# plot
+g1 = graph_from_data_frame(network, directed = F, vertices = gene)
+width = as.numeric(network$value)*5
+color = rep("#D4613E",length(network$sign)) # negative red
+color[network$sign == 1] = "#466CA6" #positive blue
+
+pdf("Figure/Theta0.pdf",width=10, height=10)
+plot(g1, layout = layout.circle(g1),
+     edge.width = width,
+     edge.color = color,
+     vertex.color = 'white',
+     vertex.frame.color = "black")
+dev.off()
 
 
 
