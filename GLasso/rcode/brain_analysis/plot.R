@@ -106,7 +106,7 @@ Theta0=as.matrix(Theta0[,-1])
 index1=which((Theta1 - diag(diag(Theta1)))!=0,arr.ind=T)
 index2=which((Theta2 - diag(diag(Theta2)))!=0,arr.ind=T)
 index3=which((Theta3 - diag(diag(Theta3)))!=0,arr.ind=T)
-index3=index3[order(abs(Theta3[index3]),decreasing = T)[1:20],] # first 15 strong connections in Theta3
+index3=index3[order(abs(Theta3[index3]),decreasing = T)[1:20],] # first 10 strong connections in Theta3
 
 index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2],index3[,1], index3[,2]))
 
@@ -116,6 +116,7 @@ gene_name= gsub("\\_.*","",gene_name)
 gene = as.data.frame(sort(gene_name[index]))
 
 # get node-edge file
+# for group 2
 Theta = Theta2
 network = NULL
 for (i in 2:length(index)) {
