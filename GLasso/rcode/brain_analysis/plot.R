@@ -116,7 +116,7 @@ gene_name= gsub("\\_.*","",gene_name)
 gene = as.data.frame(sort(gene_name[index]))
 
 # get node-edge file
-Theta = Theta0
+Theta = Theta2
 network = NULL
 for (i in 2:length(index)) {
   for (j in 1:(i-1)) {
@@ -131,12 +131,13 @@ network = as.data.frame(network)
 
 # For Theta 0, cut off weak connecitons for better visualization
 # For Theta_l, l = 1,2,3, ignore this step
-network = network[abs(as.numeric(network$value)) > 0.05,]
+# network = network[abs(as.numeric(network$value)) > 0.05,]
+
 
 
 # plot
 g1 = graph_from_data_frame(network, directed = F, vertices = gene)
-width = as.numeric(network$value)*5
+width = as.numeric(network$value)*20 # For Theta0, change to *5
 color = rep("#D4613E",length(network$sign)) # negative red
 color[network$sign == 1] = "#466CA6" #positive blue
 
