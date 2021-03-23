@@ -1,6 +1,6 @@
 ##### vertical barplots & preparation for network #####
 
-# Origin:  03/12/21, Lastest update: Jiaxin Hu 03/14/21
+# Origin:  03/12/21, Lastest update: Jiaxin Hu 03/21/21
 
 ## Here is the example to make barplot for membership matrix U and networks for precision matrix
 
@@ -9,13 +9,17 @@
 
 library(ggplot2)
 library(igraph)
+library(rmatio)
+
+# load result data
+result = read.mat("output_r3rho1500/result.mat")
+brain_tissue_name = unlist(result$tissue_name)
 
 # check the clustering result quickly
-U = read.csv("output_r3rho1500/U_r3_rho1500.csv",header = TRUE)
-rownames(U)=U[,1]
-U=U[,-1]
+U = result$U
+rownames(U) = brain_tissue_name
 
-brain_tissue_name=rownames(as.matrix(U))
+
 r = 3
 cluster_result =list()
 for (i in 1:r) {
@@ -88,19 +92,19 @@ dev.off()
 
 ########### network plotting using igraph
 # read data
-Theta1=read.csv("output_r3rho1500/Theta_1_r3_rho1500.csv")
-rownames(Theta1)=Theta1[,1]
-Theta1=as.matrix(Theta1[,-1])
-Theta2=read.csv("output_r3rho1500/Theta_2_r3_rho1500.csv")
-rownames(Theta2)=Theta2[,1]
-Theta2=as.matrix(Theta2[,-1])
-Theta3=read.csv("output_r3rho1500/Theta_3_r3_rho1500.csv")
-rownames(Theta3)=Theta3[,1]
-Theta3=as.matrix(Theta3[,-1])
-Theta0=read.csv("output_r3rho1500/Theta0_r3_rho1500.csv")
-rownames(Theta0)=Theta0[,1]
-Theta0=as.matrix(Theta0[,-1])
+gene_name = unlist(result$gene_name)
 
+Theta0 = result$Theta0
+rownames(Theta0) = gene_name; colnames(Theta0) = gene_name
+
+Theta1 = result$T[[1]][[1]]
+rownames(Theta1) = gene_name; colnames(Theta1) = gene_name
+
+Theta2 = result$T[[2]][[1]]
+rownames(Theta2) = gene_name; colnames(Theta2) = gene_name
+
+Theta3 = result$T[[3]][[1]]
+rownames(Theta3) = gene_name; colnames(Theta3) = gene_name
 
 # get strong genes
 index1=which((Theta1 - diag(diag(Theta1)))!=0,arr.ind=T)
@@ -111,7 +115,6 @@ index3=index3[order(abs(Theta3[index3]),decreasing = T)[1:20],] # first 10 stron
 index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2],index3[,1], index3[,2]))
 
 # get vertices
-gene_name=row.names(Theta1) 
 gene_name= gsub("\\_.*","",gene_name)
 gene = as.data.frame(sort(gene_name[index]))
 

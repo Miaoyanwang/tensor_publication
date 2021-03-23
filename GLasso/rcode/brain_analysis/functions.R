@@ -2,7 +2,7 @@
 
 ### Jiaxin Hu 03/07/21 ###
 
-# lastest update: Jiaxin Hu 03/14/21
+# lastest update: Jiaxin Hu 03/21/21
 
 
 library(rmatio)
@@ -10,7 +10,7 @@ library(plot.matrix)
 library(RColorBrewer)
 library("EnsDb.Hsapiens.v79")
 
-generate_ss_data = function(exp_data, select_gene, path){
+generate_ss_data = function(exp_data, select_gene,nvector, path){
   # exp_data should be a list of gene expression data with tissue name
   # selec_genes is the index for the selected genes
   # path is where we store the .mat file
@@ -37,7 +37,8 @@ generate_ss_data = function(exp_data, select_gene, path){
   }
   
   # write ss_list as a single .mat file
-  output_list = list(ss_data = ss_list, gene_name = gene_name, tissue_name = names(exp_data))
+  output_list = list(ss_data = ss_list, gene_name = gene_name, 
+                     tissue_name = names(exp_data), nvector = nvector)
   #output_list[[1]] = ss_list # then matlab recognize the mat as a single cell
   #names(output_list) = "ss_data"
   
