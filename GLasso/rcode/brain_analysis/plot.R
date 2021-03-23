@@ -115,6 +115,8 @@ index3=index3[order(abs(Theta3[index3]),decreasing = T)[1:20],] # first 10 stron
 index = unique(c(index1[,1], index1[,2], index2[,1], index2[,2],index3[,1], index3[,2]))
 
 # get vertices
+gene_name= gsub("\\.","_", gene_name)
+gene_name= gsub("\\-","_", gene_name)
 gene_name= gsub("\\_.*","",gene_name)
 gene = as.data.frame(sort(gene_name[index]))
 
