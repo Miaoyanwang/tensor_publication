@@ -1,0 +1,150 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{enumitem}
+
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{algorithm}
+\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={black},citecolor={black},urlcolor={black}}
+
+
+\newcommand{\blind}{1}
+
+
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.5in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1in}%
+\addtolength{\topmargin}{-.8in}%
+
+\theoremstyle{definition}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{cor}{Corollary}[section]
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{defn}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\newtheorem{innercustomgeneric}{\customgenericname}
+\providecommand{\customgenericname}{}
+\newcommand{\newcustomtheorem}[2]{%
+  \newenvironment{#1}[1]
+  {%
+   \renewcommand\customgenericname{#2}%
+   \renewcommand\theinnercustomgeneric{##1}%
+   \innercustomgeneric
+  }
+  {\endinnercustomgeneric}
+}
+
+\newcustomtheorem{customexample}{Example}
+
+\usepackage{appendix}
+\usepackage{wrapfig}
+\mathtoolsset{showonlyrefs}
+
+\input macros.tex
+
+
+
+\usepackage[english]{babel}
+
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\def\ci{\perp\!\!\!\perp}
+
+\def\fixme#1#2{\textbf{\color{red}[FIXME (#1): #2]}}
+\usepackage{booktabs}
+\newcommand\doubleRule{\toprule\toprule}
+\allowdisplaybreaks
+
+\usepackage{xr}
+\externaldocument{supp}
+
+\begin{document}
+
+
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if1\blind
+{
+  \title{\bf Supervised Tensor Decomposition with Interactive Side Information}
+  % blind version
+ \author{
+    Jiaxin Hu\\
+   \texttt{jhu267@wisc.edu}\\
+   \texttt{Tel:6089600989}
+  \and
+    Chanwoo Lee\\
+   \texttt{chanwoo.lee@wisc.edu}\\
+   \texttt{Tel:6085569906}
+    \and
+    Miaoyan Wang\\
+    \texttt{miaoyan.wang@wisc.edu}\\
+    \texttt{Tel:6082653990}\\
+    \\
+    Department of Statistics, University of Wisconsin-Madison\\
+    \texttt{1300 University Ave,Madison,WI 53706,USA}
+    
+}
+
+  %\author{Jiaxin Hu, Chanwoo Lee, and Miaoyan Wang\\
+   % Department of Statistics, University of Wisconsin-Madison}
+   \date{}
+  \maketitle
+} \fi
+
+\if0\blind
+{
+  \bigskip
+  \bigskip
+  \bigskip
+  \begin{center}
+    {\LARGE\bf Supervised Tensor Decomposition with Interactive Side Information}
+\end{center}
+  \medskip
+} \fi
+
+
+\begin{abstract}
+Higher-order tensors have received increased attention across science and engineering. While most tensor decomposition methods are developed for a single tensor observation, scientific studies often collect side information, in the form of node features and interactions thereof, together with the tensor data. Such data problems are common in neuroimaging, network analysis, and spatial-temporal modeling. Identifying the relationship between a high-dimensional tensor and side information is important yet challenging. Here, we develop a tensor decomposition method that incorporates multiple side information as interactive features. Unlike unsupervised tensor decomposition, our supervised decomposition captures the effective dimension reduction of the data tensor confined to feature space on each mode. An efficient alternating optimization algorithm is further developed. Our proposal handles a broad range of data types, including continuous, count, and binary observations. We apply the method to diffusion tensor imaging data from human connectome project and multi-relational political network data. We identify the key global connectivity pattern and pinpoint the local regions that are associated with available features. Our method will help the practitioners efficiently analyze tensor datasets in various areas. Toward this end, the package and data used are available at~\url{https://CRAN.R-project.org/package=tensorregress}.
+
+\end{abstract}
+
+\noindent%
+{\it Keywords:} Applications and case studies, Tensor data analysis, Supervised dimension reduction, Exponential family distribution, Generalized multilinear model
+\vfill
+
+
+\end{document}
