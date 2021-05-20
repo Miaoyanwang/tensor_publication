@@ -7,4 +7,4 @@ Date: 5/20/2021 Last edition: 5/20/2021 (Jiaxin)
 - Add an option to the algorithm, @param alg. alg = "alter" for the original alternative optimization, alg = "unsup" for the one step estimation using the unsupervised tucker decomposition, which is only suitable for normal data.
 
 
-The folder has not been complied to a package yet. Just changed the function file in tensor regress/R. 
+The folder has not been complied to a package yet. Just changed the function file in tensorregress/R/tensor_regress.R. 
