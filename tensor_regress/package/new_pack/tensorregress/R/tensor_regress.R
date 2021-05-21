@@ -101,18 +101,18 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
   if(dist=="binary"){
     tsr.transform=as.tensor(2*tsr@data-1)
   }else if(dist=="poisson"){
-    tsr.transform=as.tensor(log(tsr@data+0.1))
+      tsr.transform=as.tensor(log(tsr@data+0.1)) ## ?0.5?
   }else if (dist=="normal"){
     tsr.transform=tsr
   }
 
-  C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))
+  C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))### change
   
   if(initial == "random"){
     W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
     G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
   }else if(initial == "tucker"){
-    tckr = tucker(C_ts, ranks = core_shape)
+    tckr = tucker(C_ts, ranks = core_shape)### change
     W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
     G = tckr$Z
   }
