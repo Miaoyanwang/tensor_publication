@@ -72,19 +72,38 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
   if(is.null(X_covar3)|(identical(X_covar3,diag(d3)))) {X_covar3 = diag(d3) ; un_m3 = TRUE}
   p1 = dim(X_covar1)[2] ; p2 = dim(X_covar2)[2] ; p3 = dim(X_covar3)[2]
   
-  ### if data is normal, we can use unsupervised tucker directly
-  ### if data is non-Gaussian, we always use alternating optimization
-  if(dist == "normal"){
-    if(alg == "unsup"){
-      qr1 = qr(X_covar1); qr2 = qr(X_covar2); qr3 = qr(X_covar3)
-      Q1 = qr.Q(qr1); Q2 = qr.Q(qr2); Q3 = qr.Q(qr3)
-      R1 = qr.R(qr1); R2 = qr.R(qr2); R3 = qr.R(qr3)
-      
-      new_y = ttl(tsr, list_mat = list(t(Q1), t(Q2),t(Q3)), c(1,2,3))
-      res_un = tucker(new_y,ranks = core_shape)
-      
-      G = res_un$Z
-      W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
+
+  if(dist=="binary"){
+    tsr.transform=as.tensor(2*tsr@data-1)
+  }else if(dist=="poisson"){
+    tsr.transform=as.tensor(log(tsr@data+0.5)) # change from 0.1 to 0.5
+  }else if (dist=="normal"){
+    tsr.transform=tsr
+  }
+
+  
+  if(initial == "random"){
+    C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))
+    
+    W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
+    G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
+  }else if(initial == "tucker"){
+    # tckr = tucker(C_ts, ranks = core_shape)
+    # W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
+    # G = tckr$Z
+    
+    # use new QR generalization
+    qr1 = qr(X_covar1); qr2 = qr(X_covar2); qr3 = qr(X_covar3)
+    Q1 = qr.Q(qr1); Q2 = qr.Q(qr2); Q3 = qr.Q(qr3)
+    R1 = qr.R(qr1); R2 = qr.R(qr2); R3 = qr.R(qr3)
+    
+    new_y = ttl(tsr.transform, list_mat = list(t(Q1), t(Q2),t(Q3)), c(1,2,3)) # Y \times Q^T = B \times R
+    res_un = tucker(new_y,ranks = core_shape) # HOOI, not random
+    
+    G = res_un$Z
+    W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
+    
+    if(alg == "unsup"){ # if use unsup, then return the values after pre-process
       C_ts=ttl(G,list(W1,W2,W3),ms = c(1,2,3))
       U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
       
@@ -94,27 +113,6 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
       violate = 0
       return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
     }
-  }
-  
-
-
-  if(dist=="binary"){
-    tsr.transform=as.tensor(2*tsr@data-1)
-  }else if(dist=="poisson"){
-      tsr.transform=as.tensor(log(tsr@data+0.1)) ## ?0.5?
-  }else if (dist=="normal"){
-    tsr.transform=tsr
-  }
-
-  C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))### change
-  
-  if(initial == "random"){
-    W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
-    G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
-  }else if(initial == "tucker"){
-    tckr = tucker(C_ts, ranks = core_shape)### change
-    W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
-    G = tckr$Z
   }
 
 
