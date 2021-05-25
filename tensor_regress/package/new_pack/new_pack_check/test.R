@@ -8,19 +8,19 @@ library(ggplot2)
 library(patchwork)
 
 ### data 
-set.seed(2311)
+set.seed(0054)
 dup = 10; d=20; whole_shape = rep(d,3); dist = "normal"
 r_range = rbind(c(3,3,3), c(4,5,6))
 signal_range = c(3,6)
 
-err0 = err1 = err2 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
-final_err = final_sd_err = array(0, dim = c(2,2,3)) # signal, rank, method
+err0 = err1 = err2 = err3 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
+final_err = final_sd_err = array(0, dim = c(2,2,4)) # signal, rank, method
 
-cor0 = cor1 = cor2 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
-final_cor = final_sd_cor = array(0, dim = c(2,2,3)) # signal, rank, method
+cor0 = cor1 = cor2 = cor3 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
+final_cor = final_sd_cor = array(0, dim = c(2,2,4)) # signal, rank, method
 
-times0 = times1 = times2 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
-final_time = final_sd_time = array(0, dim = c(2,2,3)) # signal, rank, method
+times0 = times1 = times2 =times3 = array(0,dim = c(2,2,dup)) # signal, rank, metric, dup. metric: mse, 1 - cor, time 
+final_time = final_sd_time = array(0, dim = c(2,2,4)) # signal, rank, method
 
 for (i in 1:2) {  # signal
   for (j in 1:2) {  # rank
@@ -47,7 +47,7 @@ for (i in 1:2) {  # signal
       ptm = proc.time()
       res1 = tensor_regress1(data$tsr[[n]],X_covar3 = data$X_covar3,
                              core_shape=core_shape,Nsim=10, cons = 'non', dist = dist,
-                             initial = "tucker", alg = "alter")
+                             initial = "de_tucker", alg = "alter")
       ptime = proc.time() - ptm
       times1[i,j,n] = ptime[2]
       err1[i,j,n] = mean((res1$U - data$U)^2)
@@ -56,21 +56,31 @@ for (i in 1:2) {  # signal
       ptm = proc.time()
       res2 = tensor_regress1(data$tsr[[n]],X_covar3 = data$X_covar3,
                              core_shape=core_shape,Nsim=10, cons = 'non', dist = dist,
-                             initial = "tucker", alg = "unsup")
+                             initial = "de_tucker", alg = "unsup")
       ptime = proc.time() - ptm
       times2[i,j,n] = ptime[2]
       err2[i,j,n] = mean((res2$U - data$U)^2)
       cor2[i,j,n] = cor(as.vector(res2$U), as.vector(data$U))
+      
+      ptm = proc.time()
+      res3 = tensor_regress1(data$tsr[[n]],X_covar3 = data$X_covar3,
+                             core_shape=core_shape,Nsim=10, cons = 'non', dist = dist,
+                             initial = "tucker", alg = "unsup")
+      ptime = proc.time() - ptm
+      times3[i,j,n] = ptime[2]
+      err3[i,j,n] = mean((res3$U - data$U)^2)
+      cor3[i,j,n] = cor(as.vector(res3$U), as.vector(data$U))
+      
     }
     
-    final_err[i,j,1] = mean(err0[i,j,]); final_err[i,j,2] = mean(err1[i,j,]); final_err[i,j,3] = mean(err2[i,j,])
-    final_sd_err[i,j,1] = sd(err0[i,j,]); final_sd_err[i,j,2] = sd(err1[i,j,]); final_sd_err[i,j,3] = sd(err2[i,j,])
+    final_err[i,j,1] = mean(err0[i,j,]); final_err[i,j,2] = mean(err1[i,j,]); final_err[i,j,3] = mean(err2[i,j,]); final_err[i,j,4] = mean(err3[i,j,])
+    final_sd_err[i,j,1] = sd(err0[i,j,]); final_sd_err[i,j,2] = sd(err1[i,j,]); final_sd_err[i,j,3] = sd(err2[i,j,]); final_sd_err[i,j,4] = sd(err3[i,j,])
     
-    final_cor[i,j,1] = mean(cor0[i,j,]); final_cor[i,j,2] = mean(cor1[i,j,]); final_cor[i,j,3] = mean(cor2[i,j,])
-    final_sd_cor[i,j,1] = sd(cor0[i,j,]); final_sd_cor[i,j,2] = sd(cor1[i,j,]); final_sd_cor[i,j,3] = sd(cor2[i,j,])
+    final_cor[i,j,1] = mean(cor0[i,j,]); final_cor[i,j,2] = mean(cor1[i,j,]); final_cor[i,j,3] = mean(cor2[i,j,]);final_cor[i,j,4] = mean(cor3[i,j,])
+    final_sd_cor[i,j,1] = sd(cor0[i,j,]); final_sd_cor[i,j,2] = sd(cor1[i,j,]); final_sd_cor[i,j,3] = sd(cor2[i,j,]); final_sd_cor[i,j,4] = sd(cor3[i,j,])
     
-    final_time[i,j,1] = mean(times0[i,j,]); final_time[i,j,2] = mean(times1[i,j,]); final_time[i,j,3] = mean(times2[i,j,])
-    final_sd_time[i,j,1] = sd(times0[i,j,]); final_sd_time[i,j,2] = sd(times1[i,j,]); final_sd_time[i,j,3] = sd(times2[i,j,])
+    final_time[i,j,1] = mean(times0[i,j,]); final_time[i,j,2] = mean(times1[i,j,]); final_time[i,j,3] = mean(times2[i,j,]); final_time[i,j,4] = mean(times3[i,j,])
+    final_sd_time[i,j,1] = sd(times0[i,j,]); final_sd_time[i,j,2] = sd(times1[i,j,]); final_sd_time[i,j,3] = sd(times2[i,j,]); final_sd_time[i,j,4] = sd(times3[i,j,])
   }
 }
 
@@ -78,23 +88,23 @@ for (i in 1:2) {  # signal
 save(final_err,final_sd_err, final_cor, final_sd_cor, final_time, final_sd_time, file = "new_pack_check.RData")
 
 
-new_color = c("#069AA0","#CCC591","#BCA455")
+new_color = c("#069AA0","#CCC591","#BCA455","#D6CFC4")
 
 #### rank vs mse
 final = final_err
 finalsd = final_sd_err
 
 s=1;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
-p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="MSE")+coord_cartesian(ylim = c(0, 0.05)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
+p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="MSE")+coord_cartesian(ylim = c(0, 0.06)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p1
 
 s=2;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
-p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="MSE")+coord_cartesian(ylim = c(0, 0.05)) +  labs(title = "High Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
+p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="MSE")+coord_cartesian(ylim = c(0, 0.06)) +  labs(title = "High Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p2
 
@@ -108,15 +118,15 @@ final = 1- final_cor
 finalsd = final_sd_cor
 
 s=1;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
 p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="1 - Correlation")+coord_cartesian(ylim = c(0, 0.3)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p1
 
 s=2;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
 p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="1 - Correlation")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p2
@@ -131,15 +141,15 @@ final = final_time
 finalsd = final_sd_time
 
 s=1;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
-p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="time")+coord_cartesian(ylim = c(0, 0.35)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
+p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="time")+coord_cartesian(ylim = c(0, 0.4)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p1
 
 s=2;
-data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"Tucker","Unsup"),2),Category=c(rep("low",3),rep("high",3)))
-data[,3]=factor(data[,3],levels=c('Origin',"Tucker","Unsup"))
+data=data.frame(PMSE=c(final[s,1,],final[s,2,]),sd=c(finalsd[s,1,],finalsd[s,2,]),Method=rep(c('Origin',"de_Tucker","de_Tucker_un", "Tucker"),2),Category=c(rep("low",4),rep("high",4)))
+data[,3]=factor(data[,3],levels=c('Origin',"de_Tucker","de_Tucker_un", "Tucker"))
 p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Rank",y="time")+coord_cartesian(ylim = c(0, 0.35)) +  labs(title = "High Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p2

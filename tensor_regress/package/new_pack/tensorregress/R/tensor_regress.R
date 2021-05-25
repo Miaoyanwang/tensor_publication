@@ -55,7 +55,7 @@
 tensor_regress1 = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, core_shape, Nsim=20, cons = c("non","vanilla","penalty"), lambda = 0.1, alpha = 1, 
                           solver ="CG",dist = c("binary", "poisson","normal"),traj_long=FALSE, initial = "random", alg = "alter"){
   
-  # deterministic initial: initial = "tucker"
+  # deterministic initial: initial = "tucker", "de_tucker"
   # unsupervsied algorithm: alg = "unsup"
   
   tsr = as.tensor(tsr)
