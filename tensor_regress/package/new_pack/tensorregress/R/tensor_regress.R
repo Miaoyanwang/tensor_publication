@@ -52,7 +52,7 @@
 #' re = tensor_regress(data$tsr[[1]],data$X_covar1,data$X_covar2,data$X_covar3,
 #' core_shape=c(3,3,3),Nsim=10, cons = 'non', dist = dist)
 
-tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, core_shape, Nsim=20, cons = c("non","vanilla","penalty"), lambda = 0.1, alpha = 1, 
+tensor_regress1 = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, core_shape, Nsim=20, cons = c("non","vanilla","penalty"), lambda = 0.1, alpha = 1, 
                           solver ="CG",dist = c("binary", "poisson","normal"),traj_long=FALSE, initial = "random", alg = "alter"){
   
   # deterministic initial: initial = "tucker"
@@ -87,7 +87,7 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     
     W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
     G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
-  }else if(initial == "tucker"){
+  }else if(initial == "de_tucker"){
     # tckr = tucker(C_ts, ranks = core_shape)
     # W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
     # G = tckr$Z
@@ -113,6 +113,12 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
       violate = 0
       return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
     }
+  }else if(initial == "tucker"){
+    C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))
+    
+    tckr = tucker(C_ts, ranks = core_shape)
+    W1 = tckr$U[[1]] ; W2 = tckr$U[[2]] ; W3 = tckr$U[[3]] ## tucker factors
+    G = tckr$Z
   }
 
 
