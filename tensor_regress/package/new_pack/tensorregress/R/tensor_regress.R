@@ -41,8 +41,7 @@
 #'
 #'            \code{dist} specifies three distributions of response tensor: binary, poisson and normal distribution.
 #'            
-#'            If \code{dist} is set to ``normal``, \code{initial} is set to ``QR_tucker``, and all side information is identity matrix or NULL, 
-#'            then the function returns the results after initialization.
+#'            If \code{dist} is set to ``normal`` and \code{initial} is set to ``QR_tucker``, then the function returns the results after initialization.
 #'
 #'
 #' @export
@@ -103,21 +102,31 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     new_y = ttl(tsr.transform, list_mat = list(t(Q1), t(Q2),t(Q3)), c(1,2,3)) # Y \times Q^T = B \times R
     res_un = tucker(new_y,ranks = core_shape) # HOOI, not random
     
-    G = res_un$Z
+    G = res_un$Z@data
+    
+    G[G <= 1e-10] = 0
+    mr1 = qr(unfold(as.tensor(G),row_idx = 1, col_idx = c(2,3))@data)$rank
+    mr2 = qr(unfold(as.tensor(G),row_idx = 2, col_idx = c(1,3))@data)$rank
+    mr3 = qr(unfold(as.tensor(G),row_idx = 3, col_idx = c(1,2))@data)$rank
+    
+    if(mr1 < r1|mr2 < r2|mr3 < r3){
+      warning("the input rank is higher than the data could fit.
+              Estimated factors are not reliable because of infinitely many solutions. 
+              Estimated coefficient tensor is still reliable.",immediate. = T)
+    }
+    
     W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
 
-    if(dist == "normal"&un_m1&un_m2&un_m3){ # unsueprvised and normal
-      C_ts=ttl(G,list(W1,W2,W3),ms = c(1,2,3))
+    if(dist == "normal"){ # normal
+      C_ts=ttl(as.tensor(G),list(W1,W2,W3),ms = c(1,2,3))
       
-      #U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
-      # unsupervised model U = C_ts since X1 = X2 = X3 = I
-      U = C_ts
+      U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
       
       lglk = loglike(tsr@data,U@data,dist)
       
       sigma_est=mean((tsr@data-U_to_mean(U@data,dist))^2)
       violate = 0
-      return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
+      return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
     }
   }
 

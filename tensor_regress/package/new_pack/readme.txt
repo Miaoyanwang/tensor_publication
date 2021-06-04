@@ -6,11 +6,13 @@ Date: 5/20/2021 Last edition: 06/03/2021 (Jiaxin)
 
 - Add an option to the initialization, @param initial. initial = "random" for random initialization, initial = "QR_tucker" for deterministic initialization using QR-based tucker initialization. 
 
-- If dist == "normal", initial ==  "QR_tucker", and all side information is identity matrix or NULL, then the function returns the results after initialization.
+- If dist == "normal", initial ==  "QR_tucker", then the function returns the results after initialization.
 
 - Option @Nsim is changed to @niter
 
 - Add warnings if updated W1, W2, W3 have a NA. Change the NA to 0 and continue the iteration. 
+
+- With initial == "QR_tucker", add warnings if obtained core tensor G is not full rank. Note that numbers smaller than 1e-10 is set to 0. 
 
 - Change glm_modify for normal case, in line 77 of bricks.R. If fit1 = speedlm() returns negative RSS, try fit1 = lm(). 
 
