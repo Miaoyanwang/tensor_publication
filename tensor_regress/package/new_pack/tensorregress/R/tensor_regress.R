@@ -85,6 +85,15 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
   if(initial == "random"){ # random initialization
     
     C_ts=ttl(tsr.transform,list(ginv(X_covar1),ginv(X_covar2),ginv(X_covar3)),ms=c(1,2,3))
+    
+    mr1 = qr(unfold(C_ts,row_idx = 1, col_idx = c(2,3))@data)$rank
+    mr2 = qr(unfold(C_ts,row_idx = 2, col_idx = c(1,3))@data)$rank
+    mr3 = qr(unfold(C_ts,row_idx = 3, col_idx = c(1,2))@data)$rank
+    
+    if(mr1 < r1|mr2 < r2|mr3 < r3){
+      warning("The input rank is higher than the data could fit. Estimated factors are not reliable because of infinitely many solutions. Estimated coefficient tensor is still reliable.",immediate. = T)
+    }
+    
     W1=randortho(p1)[,1:core_shape[1]];W2=randortho(p2)[,1:core_shape[2]];W3=randortho(p3)[,1:core_shape[3]]
     G=ttl(C_ts,list(t(W1),t(W2),t(W3)),ms=1:3)
     
@@ -103,17 +112,6 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     res_un = tucker(new_y,ranks = core_shape) # HOOI, not random
     
     G = res_un$Z@data
-    
-    G[G <= 1e-10] = 0
-    mr1 = qr(unfold(as.tensor(G),row_idx = 1, col_idx = c(2,3))@data)$rank
-    mr2 = qr(unfold(as.tensor(G),row_idx = 2, col_idx = c(1,3))@data)$rank
-    mr3 = qr(unfold(as.tensor(G),row_idx = 3, col_idx = c(1,2))@data)$rank
-    
-    if(mr1 < r1|mr2 < r2|mr3 < r3){
-      warning("the input rank is higher than the data could fit.
-              Estimated factors are not reliable because of infinitely many solutions. 
-              Estimated coefficient tensor is still reliable.",immediate. = T)
-    }
     
     W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
 
@@ -154,13 +152,9 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     if(dim(re[[1]])[1]==1) W1=t(re[[1]]) else W1 = as.matrix(re[[1]])
     lglk = c(lglk,re[[2]])
     
-    # replace NA -> 0, and send warning
-    if(sum(is.na(W1)) > 0){
-      warning("the input rank is higher than the data could fit.
-              Estimated factors are not reliable because of infinitely many solutions. 
-              Estimated coefficient tensor is still reliable.",immediate. = T)
-      W1[is.na(W1)] = 0
-    }
+    # replace NA -> 0
+    W1[is.na(W1)] = 0
+
 
     ## orthogonal W1*
     qr_res=qr(W1)
@@ -181,13 +175,9 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     if(dim(re[[1]])[1]==1) W2=t(re[[1]]) else W2 = as.matrix(re[[1]])
     lglk = c(lglk,re[[2]])
     
-    # replace NA -> 0, and send warning
-    if(sum(is.na(W2)) > 0){
-      warning("the input rank is higher than the data could fit.
-              Estimated factors are not reliable because of infinitely many solutions. 
-              Estimated coefficient tensor is still reliable.",immediate. = T)
-      W2[is.na(W2)] = 0
-    }
+    # replace NA -> 0
+    W2[is.na(W2)] = 0
+    
 
     ## orthogonal W2*
     qr_res=qr(W2)
@@ -209,13 +199,8 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     if(dim(re[[1]])[1]==1) W3=t(re[[1]]) else W3 = as.matrix(re[[1]])
     lglk = c(lglk,re[[2]])
     
-    # replace NA -> 0, and send warning
-    if(sum(is.na(W3)) > 0){
-      warning("the input rank is higher than the data could fit.
-              Estimated factors are not reliable because of infinitely many solutions. 
-              Estimated coefficient tensor is still reliable.",immediate. = T)
-      W3[is.na(W3)] = 0
-    }
+    # replace NA -> 0
+    W3[is.na(W3)] = 0
 
     ## orthogonal W3*
     qr_res=qr(W3)
