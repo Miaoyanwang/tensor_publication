@@ -41,7 +41,7 @@
 #'
 #'            \code{dist} specifies three distributions of response tensor: binary, poisson and normal distribution.
 #'            
-#'            If \code{dist} is set to ``normal`` and \code{initial} is set to ``QR_tucker``, then the function returns the results after initialization.
+#'            If \code{dist} is set to "normal" and \code{initial} is set to "QR_tucker", then the function returns the results after initialization.
 #'
 #'
 #' @export

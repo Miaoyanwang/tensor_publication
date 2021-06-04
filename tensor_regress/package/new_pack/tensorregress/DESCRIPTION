@@ -1,8 +1,7 @@
 Package: tensorregress
-Title: Supervised Tensor Decomposition with Interactive Side
-        Information
-Version: 3.0
-Date: 2020-09-15
+Title: Supervised Tensor Decomposition with Side Information
+Version: 4.0
+Date: 2021-06-03
 Description: Implement the alternating algorithm for supervised tensor decomposition with interactive side information.
 Imports: pracma,speedglm,MASS,methods
 Authors@R: c(person("Jiaxin", "Hu", role = c("aut","cre", "cph"),email = "jhu267@wisc.edu"), person("Zhuoyan", "Xu", role = c("aut", "cph"),email = "zxu444@stat.wisc.edu"),person("Chanwoo", "Lee", role = c("aut", "cph"),email = "chanwoo.lee@wisc.edu"),person("Miaoyan", "Wang", role = c("aut", "cph"),email = "miaoyan.wang@wisc.edu"))
