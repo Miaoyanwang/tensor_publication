@@ -35,7 +35,7 @@ Y = U + array(rnorm(d^3, sd = 0), dim = c(d,d,d))
 
 ### unsupervised
 un_res = tensor_regress(Y, X_covar1=NULL,X_covar2=NULL,X_covar3=NULL,c(1,1,1),cons="non",dist="normal", initial = "QR_tucker")
-
+mean((un_res$U - Y)^2)
 angle_mat(un_res$W$W1, diag(10)[,-c(1,2,3,4)])
 angle_mat(un_res$W$W1, diag(10)[,-c(2,3,4)])
 
@@ -73,7 +73,7 @@ X = X0[,1:2]
 
 B = ttl(as.tensor(core), list(W1,W2,W3), c(1,2,3))
 U = ttm(B, X, 3)@data
-Y = U + array(rnorm(d^3, sd = 0.1), dim = c(d,d,d))
+Y = U + array(rnorm(d^3, sd = 0), dim = c(d,d,d))
 
 # regular
 res = tensor_regress(Y, X_covar1 = NULL,X_covar2=NULL,X_covar3=X,c(2,2,2),niter = 10,cons="non",dist="normal", initial = "QR_tucker")
@@ -85,3 +85,41 @@ plot(res1$C_ts[,,1], col=brewer.pal(n = 11, name = "RdBu"), breaks = seq(-2, 2, 
 
 mean((res$C_ts[,,1] - res1$C_ts[,,1])^2, na.rm=FALSE)
 
+
+set.seed(0)
+d = 10; alpha = 3
+
+core = array(runif(2^3,-alpha,alpha), dim = c(2,2,2))
+W1 = randortho(d)[,1:2]
+W2 = randortho(d)[,1:2]
+W3 = randortho(3)[,1:2] # p > r
+
+
+X0 = randortho(d)
+X = X0[,1:3]
+
+B = ttl(as.tensor(core), list(W1,W2,W3), c(1,2,3))
+U = ttm(B, X, 3)@data
+Y = U + array(rnorm(d^3, sd = 0), dim = c(d,d,d))
+
+# regular
+res = tensor_regress(Y, X_covar1 = NULL,X_covar2=NULL,X_covar3=X,c(2,2,1),niter = 10,cons="non",dist="normal", initial = "QR_tucker")
+plot(res$C_ts[,,1], col=brewer.pal(n = 11, name = "RdBu"), breaks = seq(-2, 2, length.out=12),border = NA)
+#plot(res$G, col=brewer.pal(n = 11, name = "RdBu"), breaks = seq(-2, 2, length.out=12),border = NA)
+# overparameterizaiton
+X1 = X0[,1:4]
+res1 = tensor_regress(Y, X_covar1=NULL,X_covar2=NULL,X_covar3=X1,c(2,2,1),niter = 10,cons="non",dist="normal", initial = "QR_tucker")
+plot(res1$C_ts[,,1], col=brewer.pal(n = 11, name = "RdBu"), breaks = seq(-2, 2, length.out=12),border = NA)
+res1$G
+mean((res$C_ts[,,1] - res1$C_ts[,,1])^2, na.rm=FALSE)
+
+# overparameterizaiton
+X2 = X0[,1:2]
+res2 = tensor_regress(Y, X_covar1=NULL,X_covar2=NULL,X_covar3=X2,c(2,2,2),niter = 10,cons="non",dist="normal", initial = "QR_tucker")
+plot(res2$C_ts[,,1], col=brewer.pal(n = 11, name = "RdBu"), breaks = seq(-2, 2, length.out=12),border = NA)
+res2$G
+
+Y_tu = tucker(as.tensor(Y), ranks = c(2,2,2))
+Y_tu1 = tucker(as.tensor(Y), ranks = c(2,2,3))
+
+mean((Y_tu$est@data - Y_tu1$est@data)^2)
