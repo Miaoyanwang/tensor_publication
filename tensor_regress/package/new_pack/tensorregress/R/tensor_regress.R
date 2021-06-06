@@ -261,6 +261,7 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
 #' @param dup          number of simulated tensors from the same linear predictor
 #' @param signal       a scalar controlling the max norm of the linear predictor
 #' @param block        a vector containing boolean variables, see "details"
+#' @param ortho        if "TRUE", generate side information matrices with orthogonal columns; if "FLASE" (default), generate side information matrices with gaussian entries
 #' @return     a list containing the following:
 #'
 #' \code{tsr} {a list of simulated tensors, with the number of replicates specified by \code{dup}}
@@ -298,7 +299,7 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
 #####---- This is the function used for generating data through different distribution
 #         of core tensor in  semi-supervised setting
 ## p is the dimension of the covaraite. p = 0 represents the case without covaraites
-sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=c(3,3,0),dist, dup, signal,block=rep(FALSE,3)){
+sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=c(3,3,0),dist, dup, signal,block=rep(FALSE,3), ortho = FALSE){
 
   d1 = whole_shape[1] ; d2 = whole_shape[2] ; d3 = whole_shape[3]
   r1 = core_shape[1] ; r2 = core_shape[2] ; r3 = core_shape[3]
@@ -329,14 +330,22 @@ sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=
     X_covar1=diag(1,d1)
     p1=d1
   }else{
-    X_covar1 = matrix(rnorm(d1*p1,mean = 0, sd = 1/sqrt(d1)),d1,p1)
+    if(ortho){ # generate X with orthogonal columns
+      X_covar1 = randortho(d1)[,1:p1]
+    }else{
+      X_covar1 = matrix(rnorm(d1*p1,mean = 0, sd = 1/sqrt(d1)),d1,p1)
+    }
   }
 
   if(p2<=0){
     X_covar2=diag(1,d2)
     p2=d2
   }else{
-    X_covar2 = matrix(rnorm(d2*p2,mean = 0, sd =1/sqrt(d2)),d2,p2)
+    if(ortho){ # generate X with orthogonal columns
+      X_covar2 = randortho(d2)[,1:p2]
+    }else{
+      X_covar2 = matrix(rnorm(d2*p2,mean = 0, sd =1/sqrt(d2)),d2,p2)
+    }
   }
 
 
@@ -344,7 +353,11 @@ sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=
     X_covar3=diag(1,d3)
     p3=d3
   }else{
-    X_covar3 = matrix(rnorm(d3*p3,mean = 0, sd = 1/sqrt(d3)),d3,p3)
+    if(ortho){ # generate X with orthogonal columns
+      X_covar3 = randortho(d3)[,1:p3]
+    }else{
+      X_covar3 = matrix(rnorm(d3*p3,mean = 0, sd = 1/sqrt(d3)),d3,p3)
+    }
   }
 
   #### if use block, p and r should larger than 1 of smaller than 0
