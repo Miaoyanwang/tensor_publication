@@ -15,7 +15,8 @@ sele_rank(
   lambda = 0.1,
   alpha = 1,
   solver = "CG",
-  dist
+  dist,
+  initial = c("random", "QR_tucker")
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ sele_rank(
 \item{solver}{solver for solving object function when using "penalty" constraint, see "details"}
 
 \item{dist}{distribution of response tensor, see "details"}
+
+\item{initial}{initialization of the alternating optimiation, "random" for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition}
 }
 \value{
 a list containing the following:

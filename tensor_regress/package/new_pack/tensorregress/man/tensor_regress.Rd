@@ -45,7 +45,7 @@ tensor_regress(
 
 \item{traj_long}{if "TRUE", set the minimal iteration number to 8; if "FALSE", set the minimal iteration number to 0}
 
-\item{initial}{initialization of the alternating optimiation, "random" (default) for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition}
+\item{initial}{initialization of the alternating optimiation, "random" for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition}
 }
 \value{
 a list containing the following:

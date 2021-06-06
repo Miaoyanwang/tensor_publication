@@ -16,7 +16,7 @@
 #' @param solver      solver for solving object function when using "penalty" constraint, see "details"
 #' @param dist        distribution of the response tensor, see "details"
 #' @param traj_long   if "TRUE", set the minimal iteration number to 8; if "FALSE", set the minimal iteration number to 0
-#' @param initial     initialization of the alternating optimiation, "random" (default) for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition
+#' @param initial     initialization of the alternating optimiation, "random" for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition
 #' @return     a list containing the following:
 #'
 #'                  \code{W} {a list of orthogonal factor matrices - one for each mode, with the number of columns given by \code{core_shape}}
@@ -111,12 +111,12 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     new_y = ttl(tsr.transform, list_mat = list(t(Q1), t(Q2),t(Q3)), c(1,2,3)) # Y \times Q^T = B \times R
     res_un = tucker(new_y,ranks = core_shape) # HOOI, not random
     
-    G = res_un$Z@data
+    G = res_un$Z
     
     W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
 
     if(dist == "normal"){ # normal
-      C_ts=ttl(as.tensor(G),list(W1,W2,W3),ms = c(1,2,3))
+      C_ts=ttl(G,list(W1,W2,W3),ms = c(1,2,3))
       
       U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
       
@@ -124,7 +124,7 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
       
       sigma_est=mean((tsr@data-U_to_mean(U@data,dist))^2)
       violate = 0
-      return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
+      return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
     }
   }
 
@@ -437,6 +437,7 @@ sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=
 #' @param alpha       max norm constraint on linear predictor
 #' @param solver      solver for solving object function when using "penalty" constraint, see "details"
 #' @param dist        distribution of response tensor, see "details"
+#' @param initial     initialization of the alternating optimiation, "random" for random initialization, "QR_tucker" for deterministic initialization using tucker decomposition
 #' @return     a list containing the following:
 #'
 #'                    \code{rank} a vector with selected rank with minimal BIC
@@ -467,7 +468,7 @@ sim_data = function(seed=NA, whole_shape = c(20,20,20), core_shape = c(3,3,3),p=
 
 
 
-sele_rank = function(tsr, X_covar1 = NULL, X_covar2 = NULL, X_covar3 = NULL,rank_range,niter=10,cons = 'non', lambda = 0.1, alpha = 1, solver ='CG',dist){
+sele_rank = function(tsr, X_covar1 = NULL, X_covar2 = NULL, X_covar3 = NULL,rank_range,niter=10,cons = 'non', lambda = 0.1, alpha = 1, solver ='CG',dist, initial = c("random","QR_tucker")){
   whole_shape=dim(tsr)
   p=rep(0,3)
   if(is.null(X_covar1)) p[1]=whole_shape[1] else p[1]=dim(X_covar1)[2]
@@ -480,7 +481,7 @@ sele_rank = function(tsr, X_covar1 = NULL, X_covar2 = NULL, X_covar3 = NULL,rank
 
   whole_shape = dim(tsr)
   rank = lapply(1:dim(rank)[1], function(x) rank[x,]) ## turn rank to a list
-  upp = lapply(rank, FUN= tensor_regress,tsr = tsr,X_covar1 = X_covar1,X_covar2 = X_covar2,X_covar3 = X_covar3, niter = niter, cons = cons,lambda = lambda, alpha = alpha, solver = solver,dist=dist)
+  upp = lapply(rank, FUN= tensor_regress,tsr = tsr,X_covar1 = X_covar1,X_covar2 = X_covar2,X_covar3 = X_covar3, niter = niter, cons = cons,lambda = lambda, alpha = alpha, solver = solver,dist=dist, initial = initial)
 
   lglk= unlist(lapply(seq(length(upp)), function(x) tail(upp[[x]]$lglk,1)))
   BIC = unlist(lapply(seq(length(rank)), function(x) (prod(rank[[x]]) + sum((p-rank[[x]])*rank[[x]])) * log(prod(whole_shape))))
