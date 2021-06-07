@@ -57,6 +57,7 @@ print(ip, row.names=FALSE)
 - tar -czf packages.tar.gz packages/
 - exit
 
+######### submit job
 5. create script
 
 - chmod +x run_R.sh
@@ -91,5 +92,28 @@ Rscript my_script.R
 - condor_rm $USER
 
 # below is run_R.sub # 
+
+########## merge file in interactive session
+
+1. compress the folder with output 
+- tar -czvf ###.tar.gz path with output
+
+2. transfer the compressed output to the interactive session in .sub
+- condor_submit -i merge.sub
+transfer_input_files = .... , ###.tar.gz
+
+3. unzip the compressed output after unzip R and packages.tar.gz
+- tar -xzf R402.tar.gz
+- tar -xzf packages.tar.gz
+
+- export PATH=$PWD/R/bin:$PATH
+- export RHOME=$PWD/R
+- export R_LIBS=$PWD/packages
+
+-  tar -xvzf fig4_mode.tar.gz
+
+
+
+
 
 
