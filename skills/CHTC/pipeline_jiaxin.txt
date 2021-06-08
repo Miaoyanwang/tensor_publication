@@ -96,21 +96,21 @@ Rscript my_script.R
 ########## merge file in interactive session
 
 1. compress the folder with output 
-- tar -czvf ###.tar.gz path with output
+tar -czvf ###.tar.gz path
 
 2. transfer the compressed output to the interactive session in .sub
-- condor_submit -i merge.sub
+condor_submit -i merge.sub
 transfer_input_files = .... , ###.tar.gz
 
 3. unzip the compressed output after unzip R and packages.tar.gz
-- tar -xzf R402.tar.gz
-- tar -xzf packages.tar.gz
+tar -xzf R402.tar.gz
+tar -xzf packages.tar.gz
+export PATH=$PWD/R/bin:$PATH
+export RHOME=$PWD/R
+export R_LIBS=$PWD/packages
 
-- export PATH=$PWD/R/bin:$PATH
-- export RHOME=$PWD/R
-- export R_LIBS=$PWD/packages
+tar -xvzf fig4_mode_v1.tar.gz
 
--  tar -xvzf fig4_mode.tar.gz
 
 
 
