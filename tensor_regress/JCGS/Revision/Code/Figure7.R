@@ -13,35 +13,36 @@ final = 1 - final_s_cor
 finalsd = final_sd_s_cor
 
 s=1;r=1; # signal, rank
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0,2),rep(0.1,2),rep(0.9,2)))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0.1,2),rep(0.5,2),rep(0.9,2)))
 data[,3]=factor(data[,3],levels=c('STD (Our method)',"GLSNet"))
-p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "Low Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+p1=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))+theme(legend.position = "none")
 p1
 
 s=1;r=2;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0,2),rep(0.1,2),rep(0.9,2)))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0.1,2),rep(0.5,2),rep(0.9,2)))
 data[,3]=factor(data[,3],levels=c('STD (Our method)',"GLSNet"))
-p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.15)) +  labs(title = "Low Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
-  scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10)) +theme(legend.position = "none")
+p2=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+  scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10)) 
 p2
 
 s=2;r=1;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0,2),rep(0.1,2),rep(0.9,2)))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0.1,2),rep(0.5,2),rep(0.9,2)))
 data[,3]=factor(data[,3],levels=c('STD (Our method)',"GLSNet"))
-p3=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Signal",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
-  scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
+p3=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Signal, Low Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+  scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))+theme(legend.position = "none")
 p3
 
 s=2;r=2;
-data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0,2),rep(0.1,2),rep(0.9,2)))
+data=data.frame(PMSE=c(final[s,r,1,],final[s,r,2,],final[s,r,3,]),sd=c(finalsd[s,r,1,],finalsd[s,r,2,],finalsd[s,r,3,])/sqrt(30),Method=rep(c('STD (Our method)',"GLSNet"),3),Category=c(rep(0.1,2),rep(0.5,2),rep(0.9,2)))
 data[,3]=factor(data[,3],levels=c('STD (Our method)',"GLSNet"))
-p4=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.15)) +  labs(title = "High Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
+p4=ggplot(data=data, aes(x=as.factor(Category),y=PMSE, fill=Method))+geom_bar(stat="identity", position=position_dodge())+geom_errorbar(aes(ymin=PMSE-sd, ymax=PMSE+sd), width=.2,position=position_dodge(.9))+labs(x="Sparsity level",y="Misallignment error")+coord_cartesian(ylim = c(0, 0.1)) +  labs(title = "High Signal, High Rank",size = 5) +theme(plot.title = element_text(hjust = 0.5,size = 11))+
   scale_fill_manual(values=new_color)+theme(axis.text=element_text(size=12),axis.title=element_text(size=10))
 p4
 
+
 pdf("Figures/Figure7.pdf", width = 8, height = 3)
-(p1|p3)
+(p1|p2)
 dev.off()
 
 ############# loading packages for a new run of simulation #############
