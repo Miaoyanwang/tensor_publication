@@ -110,14 +110,19 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
     
     new_y = ttl(tsr.transform, list_mat = list(t(Q1), t(Q2),t(Q3)), c(1,2,3)) # Y \times Q^T = B \times R
     res_un = tucker(new_y,ranks = core_shape) # HOOI, not random
-    
-    G = res_un$Z
-    
-    W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
 
-    if(dist == "normal"){ # normal
-      C_ts=ttl(G,list(W1,W2,W3),ms = c(1,2,3))
-      
+    C_ts = ttl(res_un$est, list(solve(R1),solve(R2), solve(R3)), c(1,2,3))
+    
+    # output factors need to be orthogonal
+    ortho_decomp = tucker(C_ts, ranks = core_shape)
+    
+    W1 = ortho_decomp$U[[1]]
+    W2 = ortho_decomp$U[[2]]
+    W3 = ortho_decomp$U[[3]]
+    
+    G = ortho_decomp$Z
+    
+    if(dist == "normal"){
       U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
       
       lglk = loglike(tsr@data,U@data,dist)
@@ -125,7 +130,24 @@ tensor_regress = function(tsr,X_covar1 = NULL, X_covar2 = NULL,X_covar3 = NULL, 
       sigma_est=mean((tsr@data-U_to_mean(U@data,dist))^2)
       violate = 0
       return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
+      
     }
+  
+    # G = res_un$Z
+    # 
+    # W1 = solve(R1)%*%res_un$U[[1]]; W2 = solve(R2)%*%res_un$U[[2]]; W3 = solve(R3)%*%res_un$U[[3]]
+    # 
+    # if(dist == "normal"){ # normal
+    #   C_ts=ttl(G,list(W1,W2,W3),ms = c(1,2,3))
+    #   
+    #   U = ttl(C_ts, list(X_covar1, X_covar2, X_covar3),c(1,2,3))
+    #   
+    #   lglk = loglike(tsr@data,U@data,dist)
+    #   
+    #   sigma_est=mean((tsr@data-U_to_mean(U@data,dist))^2)
+    #   violate = 0
+    #   return(list(W = list(W1 = W1,W2 = W2,W3 = W3),G = G@data,U=U@data, C_ts = C_ts@data,lglk = lglk, sigma=sigma_est,violate = violate))
+    # }
   }
 
   A = X_covar1%*%W1
