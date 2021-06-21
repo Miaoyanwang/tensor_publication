@@ -228,7 +228,7 @@ p6 <- ggplot(data = plotdata, aes(x = iter, y = lglk / 10000)) +
 p6
 
 
-pdf("Figure2.pdf", width = 12, height = 6)
+pdf("Figures/Figure2.pdf", width = 12, height = 6)
 (p2 | p4 | p6) /
   (p1 | p3 | p5)
 dev.off()
