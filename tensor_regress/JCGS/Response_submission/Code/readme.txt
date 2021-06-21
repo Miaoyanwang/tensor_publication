@@ -9,6 +9,7 @@ This folder includes:
 - 1 folder named ``rawdata" which stores the data for real data analyses;
 - 1 folder named ``software" which stores the softwares of different tensor methods;
 - 2 folders named ``mat_output" and ``presaved" which store the outputs from Matlab scripts and the simulation results from prior simulations, respectively.
+- 1 folder named ``Figures" which collects the figures.
 
 ** IMPORTANT: The software for GLSNet (Zhang et. al. 2018), named ``netglm_code_adjust.R", is NOT PUBLIC yet, and the version we submit is modified from personal correspondence with the author. **
 

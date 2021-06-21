@@ -38,7 +38,7 @@ colnames(res) <- c("d", "p", "r", "MSE", "sd")
 
 fun.1 <- function(x) max(1.2 * res[, 4] * res[, 1]^2) / x
 
-pdf("Figure3_normal.pdf", width = 5, height = 4)
+pdf("Figures/Figure3_normal.pdf", width = 5, height = 4)
 figure <- ggplot(res, aes(x = d^3 / d, y = MSE)) +
   geom_line(aes(color = as.factor(r)), size = 1) +
   geom_point(size = 1) +
@@ -65,7 +65,7 @@ colnames(res) <- c("d", "p", "r", "MSE", "sd")
 
 fun.1 <- function(x) max(1.2 * res[, 4] * res[, 1]^2) / x
 
-pdf("Figure3_binary.pdf", width = 5, height = 4)
+pdf("Figures/Figure3_binary.pdf", width = 5, height = 4)
 figure <- ggplot(res, aes(x = d^3 / d, y = MSE)) +
   geom_line(aes(color = as.factor(r)), size = 1) +
   geom_point(size = 1) +
@@ -92,7 +92,7 @@ colnames(res) <- c("d", "p", "r", "MSE", "sd")
 
 fun.1 <- function(x) max(1.2 * res[, 4] * res[, 1]^2) / x
 
-pdf("Figure3_poisson.pdf", width = 5, height = 4)
+pdf("Figures/Figure3_poisson.pdf", width = 5, height = 4)
 figure <- ggplot(res, aes(x = d^3 / d, y = MSE)) +
   geom_line(aes(color = as.factor(r)), size = 1) +
   geom_point(size = 1) +

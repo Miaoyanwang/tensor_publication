@@ -45,22 +45,22 @@ myPanel <- function(x, y, z, ...) {
   panel.text(x, y, round(M[cbind(x, y)], 2)) 
 }
 
-pdf("Figure8_1.pdf", width = 6, height = 6)
+pdf("Figures/Figure8_1.pdf", width = 6, height = 6)
 M <- result$C_ts[, , which(relnames == "warning")]
 levelplot(M, panel = myPanel, col.regions = my.palette, at = seq(-1.6, 1.6, length.out = 12), main = "Relation: warning")
 dev.off()
 
-pdf("Figure8_2.pdf", width = 6, height = 6)
+pdf("Figures/Figure8_2.pdf", width = 6, height = 6)
 M <- result$C_ts[, , which(relnames == "violentactions")]
 levelplot(M, panel = myPanel, col.regions = my.palette, at = seq(-1.6, 1.6, length.out = 12), main = "Relation: violentactions")
 dev.off()
 
-pdf("Figure8_3.pdf", width = 6, height = 6)
+pdf("Figures/Figure8_3.pdf", width = 6, height = 6)
 M <- result$C_ts[, , which(relnames == "treaties")]
 levelplot(M, panel = myPanel, col.regions = my.palette, at = seq(-1.6, 1.6, length.out = 12), main = "Relation: treaties")
 dev.off()
 
-pdf("Figure8_4.pdf", width = 6, height = 6)
+pdf("Figures/Figure8_4.pdf", width = 6, height = 6)
 M <- result$C_ts[, , which(relnames == "aidenemy")]
 levelplot(M, panel = myPanel, col.regions = my.palette, at = seq(-1.6, 1.6, length.out = 12), main = "Relation: aidenemy")
 dev.off()

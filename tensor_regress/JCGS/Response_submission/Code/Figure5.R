@@ -188,7 +188,7 @@ p8 <- ggplot(data, aes(x = d * 400, y = PMSE)) +
 p8 <- p8 + geom_errorbar(aes(ymin = PMSE - sd, ymax = PMSE + sd), width = 0.5, position = position_dodge(0.05))
 # p8
 
-pdf("Figure5.pdf", width = 9, height = 6)
+pdf("Figures/Figure5.pdf", width = 9, height = 6)
 (p2 | p3) /
   (p6 | p7)
 dev.off()

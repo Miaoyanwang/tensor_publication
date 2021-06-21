@@ -97,7 +97,7 @@ p4 <- ggplot(data = data, aes(x = as.factor(Category), y = PMSE, fill = Method))
 # p4
 
 
-pdf("Figure6_noniid.pdf", width = 8, height = 3)
+pdf("Figures/Figure6_noniid.pdf", width = 8, height = 3)
 (p1 | p3)
 dev.off()
 
@@ -174,7 +174,7 @@ p4 <- ggplot(data = data, aes(x = as.factor(Category), y = PMSE, fill = Method))
   theme(axis.text = element_text(size = 12), axis.title = element_text(size = 10))
 # p4
 
-pdf("Figure6_sparse.pdf", width = 8, height = 3)
+pdf("Figures/Figure6_sparse.pdf", width = 8, height = 3)
 (p1 | p2)
 dev.off()
 
