@@ -1,0 +1,19 @@
+universe = vanilla
+log = /home/jhu267/jcgs-code/Figure4/fig4_log/fig4_s$(s)_r$(r)_i$(i)_n$(n).log
+error = /home/jhu267/jcgs-code/Figure4/fig4_err/fig4_s$(s)_r$(r)_i$(i)_n$(n).err
+
+executable = /home/jhu267/jcgs-code/Figure4/fig4_mode.sh
+arguments = $(s) $(r) $(i) $(n)
+output = /home/jhu267/jcgs-code/Figure4/fig4_out/fig4_s$(s)_r$(r)_i$(i)_n$(n).out
+stream_output=True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+transfer_input_files = http://proxy.chtc.wisc.edu/SQUID/chtc/R402.tar.gz, /home/jhu267/packages.tar.gz, /home/jhu267/jcgs-code/Figure4/Figure4_chtc_mode.R, /home/jhu267/jcgs-code/function/netglm_code_adjust.R, /home/jhu267/jcgs-code/function/funcs.R, /home/jhu267/jcgs-code/function/tensorregress_4.0.tar.gz
+
+request_cpus = 1
+request_memory = 10GB
+request_disk = 2GB
+
+queue s,r,i,n from /home/jhu267/jcgs-code/Figure4/fig4_mode_queue.txt
