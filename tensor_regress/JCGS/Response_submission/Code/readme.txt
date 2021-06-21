@@ -1,8 +1,8 @@
-##### Code for figures in the main text of ``Supervised tensor decomposition with features on multiple modes" ######
+##### Our software and reproducing codes for ``Supervised tensor decomposition with features on multiple modes" ######
 
-# Components # 
+### Our software: /software/tensorregress.tar.gz, also available in https://CRAN.R-project.org/package=tensorregress.
 
-This folder includes:
+### Simulation Procedure: 
 
 - 9 R scripts and 3 Matlab scripts to implement the simulations and plot the figures in the main text; 
 
@@ -12,7 +12,7 @@ This folder includes:
 
 ** IMPORTANT: The software for GLSNet (Zhang et. al. 2018), named ``netglm_code_adjust.R", is NOT PUBLIC yet, and the version we submit is modified from personal correspondence with the author. **
 
-# Dependencies #
+# Simulation Dependencies:
 
 1. R version 4.0.2 or higher.
 2. Matlab version R2020b or higher. 
@@ -20,7 +20,7 @@ This folder includes:
 
 ** Note that ``rTensor" and ``TRES" are not available in RCRAN currently. Try install_version() in package ``remotes" to install the previous version of these two packages.  **
 
-# Pipeline #
+# Simulation Pipeline #
 
 1. To reproduce the Figures 3, 4, 5, 6, and Table 3 with prior simulation results, run the first part in scripts Figure3.R, Figure4.R, Figure5.R, and Table3.R.
 
