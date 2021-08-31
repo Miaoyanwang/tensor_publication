@@ -1,4 +1,4 @@
-##### Our software and reproducing codes for ``Supervised tensor decomposition with features on multiple modes" ######
+##### Our software and reproducing codes for ``Generalized tensor decomposition with features on multiple modes" ######
 
 ### Our software: /software/tensorregress.tar.gz, also available in https://CRAN.R-project.org/package=tensorregress.
 
