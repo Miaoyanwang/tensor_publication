@@ -1,0 +1,231 @@
+\begin{thebibliography}{}
+
+\bibitem[Adragni and Cook, 2009]{adragni2009sufficient}
+Adragni, K.~P. and Cook, R.~D. (2009).
+\newblock Sufficient dimension reduction and prediction in regression.
+\newblock {\em Philosophical Transactions of the Royal Society A: Mathematical,
+  Physical and Engineering Sciences}, 367(1906):4385--4405.
+
+\bibitem[Berthet and Baldin, 2020]{pmlr-v108-berthet20a}
+Berthet, Q. and Baldin, N. (2020).
+\newblock Statistical and computational rates in graph logistic regression.
+\newblock {\em Proceedings of the 23th International Conference on Artificial
+  Intelligence and Statistics}, 108:2719--2730.
+
+\bibitem[Chen et~al., 2019]{chen2019inference}
+Chen, Y., Fan, J., Ma, C., and Yan, Y. (2019).
+\newblock Inference and uncertainty quantification for noisy matrix completion.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  116(46):22931--22937.
+
+\bibitem[Chi and Kolda, 2012]{chi2012tensors}
+Chi, E.~C. and Kolda, T.~G. (2012).
+\newblock On tensors, sparsity, and nonnegative factorizations.
+\newblock {\em SIAM Journal on Matrix Analysis and Applications},
+  33(4):1272--1299.
+
+\bibitem[De~Lathauwer et~al., 2000]{de2000multilinear}
+De~Lathauwer, L., De~Moor, B., and Vandewalle, J. (2000).
+\newblock A multilinear singular value decomposition.
+\newblock {\em SIAM Journal on Matrix Analysis and Applications},
+  21(4):1253--1278.
+
+\bibitem[Desikan et~al., 2006]{desikan2006automated}
+Desikan, R.~S., Ségonne, F., Fischl, B., Quinn, B.~T., Dickerson, B.~C.,
+  Blacker, D., Buckner, R.~L., Dale, A.~M., Maguire, R.~P., Hyman, B.~T.,
+  Albert, M.~S., and Killiany, R.~J. (2006).
+\newblock An automated labeling system for subdividing the human cerebral
+  cortex on {MRI} scans into gyral based regions of interest.
+\newblock {\em Neuroimage}, 31(3):968--980.
+
+\bibitem[Efron and Tibshirani, 1994]{efron1994introduction}
+Efron, B. and Tibshirani, R.~J. (1994).
+\newblock {\em An introduction to the bootstrap}.
+\newblock CRC Monographs on Statistics and Applied Probability Series. Chapman
+  and Hall.
+
+\bibitem[Farias and Li, 2019]{farias2019learning}
+Farias, V.~F. and Li, A.~A. (2019).
+\newblock Learning preferences with side information.
+\newblock {\em Management Science}, 65(7):3131--3149.
+
+\bibitem[Gabriel, 1998]{gabriel1998generalised}
+Gabriel, K.~R. (1998).
+\newblock Generalised bilinear regression.
+\newblock {\em Biometrika}, 85(3):689--700.
+
+\bibitem[Gahrooei et~al., 2020]{gahrooei2020multiple}
+Gahrooei, M.~R., Yan, H., Paynabar, K., and Shi, J. (2020).
+\newblock Multiple tensor-on-tensor regression: An approach for modeling
+  processes with heterogeneous sources of data.
+\newblock {\em Technometrics}, 63(2):1--23.
+
+\bibitem[Han et~al., 2020]{han2020optimal}
+Han, R., Willett, R., and Zhang, A. (2020).
+\newblock An optimal statistical and computational framework for generalized
+  tensor estimation.
+\newblock {\em The Annals of Statistics, In press. arXiv preprint
+  arXiv:2002.11255}.
+
+\bibitem[Hao et~al., 2021]{hao2019sparse}
+Hao, B., Wang, B., Wang, P., Zhang, J., Yang, J., and Sun, W.~W. (2021).
+\newblock Sparse tensor additive regression.
+\newblock {\em Journal of Machine Learning Research}, 22(64):1--43.
+
+\bibitem[Hao et~al., 2020]{hao2020sparse}
+Hao, B., Zhang, A., and Cheng, G. (2020).
+\newblock Sparse and low-rank tensor estimation via cubic sketchings.
+\newblock {\em IEEE Transactions on Information Theory}, 66(9):5927--5964.
+
+\bibitem[Hoff, 2005]{hoff2005bilinear}
+Hoff, P.~D. (2005).
+\newblock Bilinear mixed-effects models for dyadic data.
+\newblock {\em Journal of the American Statistical Association},
+  100(469):286--295.
+
+\bibitem[Hong et~al., 2020]{hong2020generalized}
+Hong, D., Kolda, T.~G., and Duersch, J.~A. (2020).
+\newblock Generalized canonical polyadic tensor decomposition.
+\newblock {\em SIAM Review}, 62(1):133--163.
+
+\bibitem[Ingalhalikar et~al., 2014]{ingalhalikar2014sex}
+Ingalhalikar, M., Smith, A., Parker, D., Satterthwaite, T.~D., Elliott, M.~A.,
+  Ruparel, K., Hakonarson, H., Gur, R.~E., Gur, R.~C., and Verma, R. (2014).
+\newblock Sex differences in the structural connectome of the human brain.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  111(2):823--828.
+
+\bibitem[Kolda and Bader, 2009]{kolda2009tensor}
+Kolda, T.~G. and Bader, B.~W. (2009).
+\newblock Tensor decompositions and applications.
+\newblock {\em SIAM Review}, 51(3):455--500.
+
+\bibitem[Lee and Wang, 2021]{lee2021beyond}
+Lee, C. and Wang, M. (2021).
+\newblock Beyond the signs: Nonparametric tensor completion via sign series.
+\newblock {\em arXiv preprint arXiv:2102.00384}.
+
+\bibitem[Li, 2020]{li2020generalized}
+Li, G. (2020).
+\newblock Generalized co-clustering analysis via regularized alternating least
+  squares.
+\newblock {\em Computational Statistics \& Data Analysis}, 150:106989.
+
+\bibitem[Li and Zhang, 2017]{li2017parsimonious}
+Li, L. and Zhang, X. (2017).
+\newblock Parsimonious tensor response regression.
+\newblock {\em Journal of the American Statistical Association},
+  112(519):1131--1146.
+
+\bibitem[Lock, 2018]{lock2018tensor}
+Lock, E.~F. (2018).
+\newblock Tensor-on-tensor regression.
+\newblock {\em Journal of Computational and Graphical Statistics},
+  27(3):638--647.
+
+\bibitem[Lock et~al., 2013]{lock2013joint}
+Lock, E.~F., Hoadley, K.~A., Marron, J.~S., and Nobel, A.~B. (2013).
+\newblock Joint and individual variation explained {(JIVE)} for integrated
+  analysis of multiple data types.
+\newblock {\em The Annals of Applied Statistics}, 7(1):523.
+
+\bibitem[Lock and Li, 2018]{lock2018supervised}
+Lock, E.~F. and Li, G. (2018).
+\newblock Supervised multiway factorization.
+\newblock {\em Electronic Journal of Statistics}, 12(1):1150.
+
+\bibitem[Luo et~al., 2018]{luo2018leveraging}
+Luo, C., Liang, J., Li, G., Wang, F., Zhang, C., Dey, D.~K., and Chen, K.
+  (2018).
+\newblock Leveraging mixed and incomplete outcomes via reduced-rank modeling.
+\newblock {\em Journal of Multivariate Analysis}, 167:378--394.
+
+\bibitem[Luo and Zhang, 2021]{luo2021low}
+Luo, Y. and Zhang, A.~R. (2021).
+\newblock Low-rank tensor estimation via riemannian gauss-newton: Statistical
+  optimality and second-order convergence.
+\newblock {\em arXiv preprint arXiv:2104.12031}.
+
+\bibitem[McCullagh and Nelder, 1989]{mccullagh1989generalized}
+McCullagh, P. and Nelder, J. (1989).
+\newblock {\em Generalized Linear Models, Second Edition}.
+\newblock CRC Monographs on Statistics and Applied Probability Series. Chapman
+  and Hall.
+
+\bibitem[Nickel et~al., 2011]{nickel2011three}
+Nickel, M., Tresp, V., and Kriegel, H.-P. (2011).
+\newblock A three-way model for collective learning on multi-relational data.
+\newblock {\em Proceedings of the 28th International Conference on Machine
+  Learning}, pages 809--816.
+
+\bibitem[Rabusseau and Kadri, 2016]{rabusseau2016low}
+Rabusseau, G. and Kadri, H. (2016).
+\newblock Low-rank regression with tensor responses.
+\newblock {\em Proceedings of the 30th International Conference on Neural
+  Information Processing Systems}, 29:1875–1883.
+
+\bibitem[Raskutti et~al., 2019]{raskutti2019convex}
+Raskutti, G., Yuan, M., and Chen, H. (2019).
+\newblock Convex regularization for high-dimensional multiresponse tensor
+  regression.
+\newblock {\em The Annals of Statistics}, 47(3):1554--1584.
+
+\bibitem[Song et~al., 2019]{song2019tensor}
+Song, Q., Ge, H., Caverlee, J., and Hu, X. (2019).
+\newblock Tensor completion algorithms in big data analytics.
+\newblock {\em ACM Transactions on Knowledge Discovery from Data (TKDD)},
+  13(1):1--48.
+
+\bibitem[Srivastava et~al., 2008]{srivastava2008models}
+Srivastava, M.~S., von Rosen, T., and Von~Rosen, D. (2008).
+\newblock Models with a kronecker product covariance structure: Estimation and
+  testing.
+\newblock {\em Mathematical Methods of Statistics}, 17(4):357--370.
+
+\bibitem[Sun and Li, 2017]{sun2017store}
+Sun, W.~W. and Li, L. (2017).
+\newblock {STORE}: sparse tensor response regression and neuroimaging analysis.
+\newblock {\em The Journal of Machine Learning Research}, 18(1):4908--4944.
+
+\bibitem[Tarzanagh and Michailidis, 2019]{tarzanagh2019regularized}
+Tarzanagh, D.~A. and Michailidis, G. (2019).
+\newblock Regularized and smooth double core tensor factorization for
+  heterogeneous data.
+\newblock {\em arXiv preprint arXiv:1911.10454}.
+
+\bibitem[Van~Essen et~al., 2013]{van2013wu}
+Van~Essen, D.~C., Smith, S.~M., Barch, D.~M., Behrens, T.~E., Yacoub, E.,
+  Ugurbil, K., and {WU-Minn HCP Consortium} (2013).
+\newblock The {WU-M}inn human connectome project: An overview.
+\newblock {\em Neuroimage}, 80:62--79.
+
+\bibitem[Wang et~al., 2019]{wang2019three}
+Wang, M., Fischer, J., and Song, Y.~S. (2019).
+\newblock Three-way clustering of multi-tissue multi-individual gene expression
+  data using semi-nonnegative tensor decomposition.
+\newblock {\em The Annals of Applied Statistics}, 13(2):1103--1127.
+
+\bibitem[Wang and Li, 2020]{wang2020learning}
+Wang, M. and Li, L. (2020).
+\newblock Learning from binary multiway data: Probabilistic tensor
+  decomposition and its statistical optimality.
+\newblock {\em Journal of Machine Learning Research}, 21(154):1--38.
+
+\bibitem[Zhang and Xia, 2018]{zhang2018tensor}
+Zhang, A. and Xia, D. (2018).
+\newblock Tensor {SVD}: Statistical and computational limits.
+\newblock {\em IEEE Transactions on Information Theory}, 64(11):7311--7338.
+
+\bibitem[Zhang et~al., 2018]{zhang2018network}
+Zhang, J., Sun, W.~W., and Li, L. (2018).
+\newblock Network response regression for modeling population of networks with
+  covariates.
+\newblock {\em arXiv preprint arXiv:1810.03192}.
+
+\bibitem[Zhou et~al., 2013]{zhou2013tensor}
+Zhou, H., Li, L., and Zhu, H. (2013).
+\newblock Tensor regression with applications in neuroimaging data analysis.
+\newblock {\em Journal of the American Statistical Association},
+  108(502):540--552.
+
+\end{thebibliography}
