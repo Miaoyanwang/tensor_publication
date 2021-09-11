@@ -1,6 +1,8 @@
 ############### Experiment 1: gap between stats and comp limits ###########
 library(RSKC)
+library(LICORS)
 source("functions.R")
+source("HOLloyd.R")
 
 
 ########## simulation #########
@@ -28,6 +30,8 @@ for (g in 1:length(delta.candidate)) {
   delta =  200*p^(-delta.candidate[g])
   comp_err <- c()
   stat_err <- c()
+  Lloyd_err <- c()
+  oracle_error <- c()
   for (n in 1:dup) {
     #g = 1; n = 1
     cat("delta = ", delta, "dup = ", n, "\n")
@@ -42,10 +46,23 @@ for (g in 1:length(delta.candidate)) {
     # stats
     or_result <- hALloyd(dat$Y, dat$z, max_iter = 20)
     stat_err <- c(stat_err, CER(or_result, dat$z))
+    
+    # han HSC + HLloyd
+    HSC = HO.SC(as.tensor(dat$Y), rep(r,3))
+    Lloyd = HO.Lloyd(as.tensor(dat$Y), HSC)
+    
+    Lloyd_err = c(Lloyd_err, CER(Lloyd[[1]],dat$z))
+    
+    # oracle
+    
+    oracle = HO.Lloyd(as.tensor(dat$Y), list(dat$z,dat$z,dat$z))
+    oracle_error = c(oracle_error, CER(oracle[[1]],dat$z))
   }
   
   mis[1, g] <- mean(comp_err)
   mis[2, g] <- mean(stat_err)
+  mis[3, g] <- mean(Lloyd_err)
+  mis[4, g] <- mean(oracle_error)
 }
 
 
@@ -53,6 +70,8 @@ mis
 
 plot(delta.candidate, mis[1, ] * 2, type = "b", xlab = "-gamma", ylab = "MCR")
 lines(delta.candidate, mis[2, ] * 2, type = "b", col = 2)
-legend("topleft", c("wkmedian+hALloyd", "Oracle"), col = c(1,2), lty = c(1,1))
-
+lines(delta.candidate, mis[3, ] * 2, type = "b", col = 1, lty = 3)
+lines(delta.candidate, mis[4, ] * 2, type = "b", col = 2, lty = 3)
+legend("topleft", c("wkmedian+hALloyd", "true+hALloyd", "HSC+hLloyd", "true+hLloyd"), 
+       col = c(1,2, 1,2), lty = c(1,1,3,3))
 
