@@ -1,0 +1,122 @@
+
+
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{extarrows}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\mathtoolsset{showonlyrefs=true}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+
+\newcommand{\of}[1]{\left(#1\right)}
+\newcommand{\off}[1]{\left[#1\right]}
+\newcommand{\offf}[1]{\left\{#1\right\}}
+\newcommand{\aabs}[1]{\left|#1\right|}
+
+
+
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+
+
+\input macros.tex
+
+\setlength{\parskip}{0.8em}
+
+\title{IFDS 2021 Spring RA research proposal}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+Multiway arrays are collected in many fields including social networks \citep{anandkumar2014tensor} and computer science \citep{koniusz2016sparse}, and tensors represent the multiway data efficiently. One example is \emph{hypergraph} network~\citep{ghoshdastidar2017uniform,ghoshdastidar2017consistency,ahn2019community,ke2019community} in social science. A $K$-uniform hypergraph can be naturally represented as an order-$K$ tensor, in which each entry indicates the presence of $K$-way hyperedge among nodes. Identifying the similarity among nodes is of scientific interests.  We refer such clustering as \emph{higher-order clustering}. A huge amounts methods have been developed for matrix clustering while applying matrix methods to tensors results in sub-optimal performances. Unsupervised tensor models and tools for higher-order clustering have arisen recently~\citep{ wang2019multiway,chi2020provable,han2020exact}. 
+
+Meanwhile, semi-supervised learning has been widely applied to clustering problems~\citep{zhu2003semi,yang2014unified}. The potential useful prior information such as a small proportion of labeled data and auxiliary features are well-incorporated in the learning tasks, which is believed to improve clustering performance than unsupervised methods. Semi-supervised learning are also used in tensor decomposition~\citep{cao2016semi,hu2021generalized}. However, applying semi-supervised techniques in higher-order clustering is still new to the field. Several questions such as how to incorporate prior information in tensor models and how the prior information affects the clustering performance are waiting to be answered. 
+
+Therefore, this project will focus on the application of semi-supervised learning in higher-order clustering problem. The work will enrich the methodology in higher-order clustering literature and deepen the understanding of semi-supervised learning in higher-order regime, which tackles the main theme of IFDS. 
+
+
+\textbf{Bio:} 
+
+Jiaxin Hu is a second-year Ph.D.\ student in Statistics at the University of Wisconsin-Madison, advised by Prof. Miaoyan Wang. Her research mainly focuses on the statistical machine learning methods for matrix/tensor data analysis. She actively attended the weekly IFDS seminars and the summer school and workshop at IFDS in August, 2021. During the workshop, she gave a five minute lightening talk with title ``Supervised tensor decomposition with features on multiple modes". 
+
+\bibliography{tensor_wang.bib}
+\bibliographystyle{apalike}
+
+
+\end{document}
+
