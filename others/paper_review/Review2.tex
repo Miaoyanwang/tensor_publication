@@ -1,0 +1,172 @@
+
+% Created by Bonita Graham
+% Last update: December 2019 By Kestutis Bendinskas
+
+% Authors: 
+% Please do not make changes to the preamble until after the solid line of %s.
+
+\documentclass[11pt]{article}
+\usepackage[explicit]{titlesec}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\usepackage{hyphenat}
+\usepackage{ragged2e}
+\RaggedRight
+
+% These commands change the font. If you do not have Garamond on your computer, you will need to install it.
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+
+% This adjusts the underline to be in keeping with word processors.
+\usepackage{soul}
+\setul{.6pt}{.4pt}
+
+
+% The following sets margins to 1 in. on top and bottom and .75 in on left and right, and remove page numbers.
+\usepackage{geometry}
+\geometry{vmargin={1in,1in}, hmargin={.85in, .85in}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{gobble}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% These Commands create the label style for tables, figures and equations.
+\usepackage[labelfont={footnotesize,bf} , textfont=footnotesize]{caption}
+\captionsetup{labelformat=simple, labelsep=period}
+\newcommand\num{\addtocounter{equation}{1}\tag{\theequation}}
+\renewcommand{\theequation}{\arabic{equation}}
+\makeatletter
+
+\makeatother
+\setlength{\intextsep}{10pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{-10pt}
+
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\floatpagefraction}{0.90}
+
+% These commands set the paragraph and line spacing
+\titleformat{\section}
+  {\normalfont}{\thesection}{1em}{\MakeUppercase{\textbf{#1}}}
+\titlespacing\section{0pt}{0pt}{-10pt}
+\titleformat{\subsection}
+  {\normalfont}{\thesubsection}{1em}{\textbf{\textit{#1}}}
+\titlespacing\subsection{0pt}{0pt}{-8pt}
+\renewcommand{\baselinestretch}{1.15}
+
+\titleformat{\subsubsection}
+  {\normalfont}{\thesubsubsection}{0.5em}{\textbf{#1}}
+\titlespacing\subsubsection{0pt}{0pt}{-8pt}
+
+% This designs the title display style for the maketitle command
+\makeatletter
+\newcommand\sixteen{\@setfontsize\sixteen{17pt}{6}}
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
+\begin{flushleft}
+\sixteen\bfseries \@title
+\medskip
+\end{flushleft}
+\textit{\@author}
+\egroup}
+\makeatother
+
+% This styles the bibliography and citations.
+%\usepackage[biblabel]{cite}
+\usepackage[sort&compress]{natbib}
+\setlength\bibindent{2em}
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}\hfill}
+\makeatother
+\renewcommand{\citenumfont}[1]{\textbf{#1}}
+\bibpunct{}{}{,~}{s}{,}{,}
+\setlength{\bibsep}{0pt plus 0.3ex}
+
+%math
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\usepackage{amsfonts}
+\usepackage{amsmath}%
+\usepackage{MnSymbol}%
+\usepackage{wasysym}%
+\usepackage{stmaryrd} 
+
+\input macros.tex
+
+
+%%% track the change 
+ %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%% %%%
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\DIFaddtex{#1}}} %DIF PREAMBLE
+%\texorpdfstring
+\providecommand{\DIFdel}[1]{{\DIFdeltex{#1}}} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: Add additional packages and new commands here.  
+% Limit your use of new commands and special formatting.
+
+% Place your title below. Use Title Capitalization.
+
+\title{
+\centering 
+\normalsize{Referee's comments: \\Low-rank, Orthogonally Decomposable Tensor Regression \\ with Application to Visual Stimulus Decoding of fMRI Data}}
+
+% Add author information below. Communicating author is indicated by an asterisk, the affiliation is shown by superscripted lower case letter if several affiliations need to be noted.
+
+\author{ \centering 
+Jiaxin Hu\quad \medskip \today \\ 
+}
+
+\pagestyle{empty}
+\begin{document}
+
+% Makes the title and author information appear.
+\vspace*{.01 in}
+\maketitle
+\vspace{.12 in}
+
+% Abstracts are required.
+This paper proposes a generalized scalar-to-tensor regression model with applications for fMRI data. The authors reduce the number of parameters by assuming the coefficient tensor is orthogonally decomposable (odeco) and adding a sparsity penalty that controls the CP rank of the tensor. In general,
+
+\begin{enumerate}
+	\item  Using penalization to relax the fixed-rank assumption is an interesting idea. However, the theoretical properties of the penalized tensor regression model and the comparison with fixed-rank models are unclear. For example, the convexity of PODTR should be discussed. Since the penalized matrix model (2) deduces a convex problem, the convexity of PODTR may be a strong advantage over fixed-rank models. On the other hand, the criterion for selecting the tuning parameter $\lambda$ should also be involved. Though the PODTR avoids the priori specification of the rank, the newly introduced parameter $\lambda$ needs to be priorly specified in practice. Since the tuning parameter is more flexible than rank, the difficulties in selecting a proper $\lambda$ may be the disadvantage of PODTR. More discussions on the theoretical properties of the penalization would make the model more convincing.  Besides, making a clear statement about when we use the PODTR versus the fixed-rank models may strengthen the paper.
+	\item The numerical performance of the penalized model also needs more discussions to support. In the algorithm for PODTR, the projection step implements a higher-order HOSVD with a rank that is equal to the dimension of the coefficient tensor. The high rankness may lead to a larger computational complexity than the algorithms for fixed-rank models. Discussions about the algorithm complexity, running time, and local convergence would be helpful. In simulations, the results imply that LODTR performs better than PODTR in all cases, which discourages the practical usage of the penalized model. Moreover, as the paper mentions, the superior performances of LODTR and PODTR over CPD may attribute to the algorithms. The comparison between PODTR and CPD does not verify the benefits from the penalization, either. Therefore, more experiments showing the advantages of using penalization should be imposed.
+	\item The simulations settings should be more comparable. In simulations, the authors compare the rank-4 non-odeco case and the rank-9 odeco case. This experiment mixes the effects of orthogonality and effects of the high rankness. An experiment distinguishing the effects of each factor would be more favorable.
+\end{enumerate}
+
+Given these limitations, I would be hesitant to decide that this paper is suitable for the venue.
+
+
+
+\end{document}

@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\mathtoolsset{showonlyrefs=true}
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{Matrix Norm}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+
+% Abstracts are required.
+\section{Frobenius Norm}
+\begin{lem}[Frobenius norm of product of matrices] For arbitrary two matrices, $\mA \in \mathbb{R}^{m \times r}$ and $\mB \in \mathbb{R}^{r \times n}$, we have
+\[ \Fnorm{\mA\mB} \leq \norm{\mA} \Fnorm{\mB} , \]
+	where $\norm{\cdot}$ is the spectral norm of matrix and $\Fnorm{\cdot}$ is Frobenius norm of matrix.
+\end{lem}
+
+\begin{proof}
+	First, let $\onorm{\cdot}$ denote the $l_2$ norm of vector. The spectral norm of matrix $\mA \in \mathbb{R}^{m \times r}$ is defined as:
+	\[ \norm{\mA} = \max_{x \in \mathbb{R}^r, \onorm{x} \leq 1} \onorm{\mA x}.  \]
+	Therefore, we have $\onorm{\mA x} \leq \norm{\mA} \onorm{x}$ for $\forall x \in \mathbb{R}^r $. Let $\mB = [b_1,\dots, b_n] \in \mathbb{R}^{r \times n}$, where $b_j \in \mathbb{R}^{r}, j \in [n]$ are the columns of $\mB$. Then we have
+	\[ \Fnorm{\mA\mB}^2 = \sum_{j = 1}^n \onorm{\mA b_j}^2 \leq  \norm{\mA}^2\sum_{j = 1}^n \onorm{b_j}^2 = \norm{\mA}^2 \Fnorm{\mB}^2 . \]
+	That implies 
+	\[\Fnorm{\mA\mB} \leq  \norm{\mA} \Fnorm{\mB}. \]
+\end{proof}
+
+
+\end{document}

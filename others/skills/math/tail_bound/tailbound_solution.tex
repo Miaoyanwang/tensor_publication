@@ -1,0 +1,1442 @@
+\documentclass[11pt]{article}
+
+\usepackage{fancybox}
+
+
+\usepackage{color}
+\usepackage{url}
+\usepackage[margin=1in]{geometry}
+
+\setlength\parindent{0pt}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+%\renewcommand{\textfloatsep}{5mm}
+
+\usepackage{comment}
+% Definitions of handy macros can go here
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{multirow}
+\usepackage{extarrows}
+\usepackage{dsfont,multirow,hyperref,setspace,natbib,enumerate}
+%\usepackage{dsfont,multirow,hyperref,setspace,enumerate}
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}} 
+\usepackage{algpseudocode,algorithm}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+\usepackage{dsfont}
+\usepackage{colonequals}
+
+\mathtoolsset{showonlyrefs=true}
+
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\subG}{subG}
+\DeclareMathOperator{\tr}{Trace}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\of}[1]{\left(#1\right)}
+\newcommand{\off}[1]{\left[#1\right]}
+\newcommand{\offf}[1]{\left\{#1\right\}}
+\newcommand{\aabs}[1]{\left|#1\right|}
+
+
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{pro}{Property}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\setcounter{figure}{0}   
+\setcounter{table}{0}  
+
+
+\newcommand{\cmt}[1]{{\leavevmode\color{red}{#1}}}
+
+\usepackage{dsfont}
+\usepackage{multirow}
+
+\DeclareMathOperator*{\minimize}{minimize}
+
+
+
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\newcommand*{\KeepStyleUnderBrace}[1]{%f
+  \mathop{%
+    \mathchoice
+    {\underbrace{\displaystyle#1}}%
+    {\underbrace{\textstyle#1}}%
+    {\underbrace{\scriptstyle#1}}%
+    {\underbrace{\scriptscriptstyle#1}}%
+  }\limits
+}
+\usepackage{xr}
+
+\input macros.tex
+
+
+
+\title{Solution to ``Chapter 2: Basic tail and concentration bounds"}
+
+\date{\today}
+\author{%
+Jiaxin Hu
+}
+
+
+
+\begin{document}
+
+% Makes the title and author information appear.
+
+\maketitle
+
+\section{Summary}
+\begin{thm}[Markov's inequality]\label{thm:markov}
+	Let $X \geq 0$ be a random variable  with a finite mean. We have
+	\begin{equation}\label{eq:thmmarkov}
+		\bbP(X\geq t) \leq \frac{\bbE[X]}{t},\quad \text{ for all } \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Chebyshev's inequality]\label{thm:cheb}
+	Let $X \geq 0$ be a random variable  with a finite mean $\mu$ and a finite variance. We have
+	\begin{equation}\label{eq:cheby}
+		\bbP(|X - \mu |\geq t) \leq \frac{\var(X)}{t^2},\quad \text{ for all } \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Markov's inequality for polynomial moments]\label{thm:polymoment}
+	Let $X$ be a random variable. Suppose that the order $k$ central moment of $X$ exists. Applying Markov's inequality to the random variable $|X - \mu|^k$ yields
+	\begin{equation}\label{eq:poly}
+		\bbP(|X - \mu |\geq t) \leq \frac{\bbE\left[|X-\mu|^k\right]}{t^k},\quad \text{ for all } \ t > 0.
+	\end{equation}  
+\end{thm}
+
+\begin{thm}[Chernoff bound]\label{thm:chernoff}
+ Let $X$ be a random variable. Suppose that the moment generating function of $X$, denoted $\varphi_X(\lambda)$, exists in the neighborhood of 0; i.e., $\varphi_X(\lambda) = \bbE[e^{\lambda X}] < +\infty,$ for all $\lambda \in (-b,b)$ with some $b>0$. Applying Markov's inequality to the random variable $Y = e^{\lambda(X- \mu)}$ yields
+	\begin{equation}\label{eq:chernoff1}
+		\bbP((X - \mu) \geq t) \leq \frac{\bbE\left[e^{\lambda (X-\mu)}\right]}{e^{\lambda t}}, \quad \text{ for all } \lambda\in (0,b).
+	\end{equation}
+	Optimizing the choice of $\lambda$ for the tightest bound, we obtain the Chernoff bound
+	\begin{equation}\label{eq:chernoff2}
+		\bbP((X - \mu) \geq t) \leq \inf_{\lambda \in [0,b)} \frac{\bbE\left[e^{\lambda (X-\mu)}\right]}{e^{\lambda t}}.
+	\end{equation}
+\end{thm}
+
+
+\begin{thm}[Hoeffding bound for bounded variable]\label{thm:boundvar}
+Let $X$ be a random variable with $\mu = \bbE(X)$. Suppose that $X \in [a,b]$ almost surely, where $a\leq b\in\bbR$ are two constants. Then, we have
+\begin{equation}
+	\bbE[e^{\lambda X}] \leq e^{\frac{s(b-a)^2}{8}}, \quad \text{for all } \lambda \in \bbR.
+\end{equation}
+Consequently, the variable $X \sim \subG\left(\frac{(b-a)^2}{4}\right)$.
+\end{thm}
+
+\begin{proof}
+	See Exercise~\ref{pro:boundvar}.
+\end{proof}
+
+
+
+\begin{thm}[Moment of sub-Gaussian variable]\label{thm:momsubg}
+Let $X \sim \subG(\sigma^2)$. For all integer $k \geq 1$, we have
+\begin{equation}\label{eq:thmmomsubg}
+	\bbE[|X|^k] \leq  k 2^{k/2} \sigma^k \Gamma(\frac{k}{2} ),
+\end{equation} 
+where the Gamma function is defined as $\Gamma(x) = \int_{0}^{+\infty} t^{x -1} e^{-t} dt$. 
+\end{thm}
+
+
+\begin{thm}[One-sided Bernstein’s inequality]\label{thm:oneber}
+ Let $X$ be a random variable. Suppose $X \leq b$ almost surely. We have 
+\begin{equation}\label{eq:thmoneber1}
+	\bbE\left[e^{\lambda (X-\bbE[X])}\right] \leq exp\left\{ \frac{\lambda^2 \bbE[X^2]/2}{1 - b\lambda /3}  \right\}, \quad \text{for all } \lambda \in [0, 3/b).
+\end{equation}
+Consequently, let $X_i$ be independent variables, and $X_i \leq b$ almost surely, for all $i \in [n]$. We have
+\begin{equation}\label{eq:thmoneber2}
+	\bbP\left[\sum_{i = 1}^n (X_i - \bbE[X_i] ) \geq n\delta \right] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[X_i^2] /n + b \delta /3} \right\},\quad \text{ for all } \delta \geq 0.
+\end{equation}  
+Particularly, let $X_i$ be independent nonnegative variables, for all $i \in [n]$. The equation~\eqref{eq:thmoneber2} becomes
+\begin{equation}\label{eq:thmonber0}
+	\bbP\left[\sum_{i = 1}^n (Y_i - \bbE[Y_i] ) \leq n\delta \right] \leq exp\left\{ - \frac{n\delta^2}{\sum_{i = 1}^n \bbE[Y_i^2] /n} \right\},\quad \text{ for all } \delta \geq 0.
+\end{equation} 
+\end{thm}
+
+\begin{defn}[Bernstein's condition]
+Let $X$ be a random variable with mean $\mu = \bbE[X]$ and variance $ \sigma^2 = \var(X)$. We say $X$ satisfies the Bernstein's condition with parameter $b$ if
+\begin{equation}\label{eq:berncond}
+	\left| \bbE [(X -\mu)^k ]\right| \leq \frac{1}{2} k! \sigma^2 b^{k-2}, \quad \text{for } k =3, 4,....
+\end{equation} 
+\end{defn}
+Note that bounded random variables satisfy the Bernstein's condition.
+
+\begin{thm}[Bernstein-type bound] For any variable $X$ satisfying the Bernstein's condition, we have
+\begin{equation}
+	\bbE\left[e^{\lambda (X-\mu)}\right] \leq \exp\left\{ \frac{\lambda^2 \sigma^2}{2(1 - b |\lambda|)} \right\},\quad \text{for all } |\lambda| \leq \frac{1}{b}, 
+\end{equation}
+and the concentration inequality
+\begin{equation}\label{eq:thmbernconc}
+	\bbP\left[|X - \mu| \geq t\right] \leq 2 \exp \left\{ -\frac{t^2}{2(\sigma^2 + bt)} \right\}, \quad \text{for all }t \geq 0.
+\end{equation}
+	
+\end{thm}
+
+\begin{defn}[Bounded difference property] Let $f\colon \bbR^n \mapsto \bbR$ be a function. The function $f$ satisfies the bounded difference property with parameter $(L_1,...,L_n)$ if we have
+	\begin{equation}\label{eq:defbounded}
+		\aabs{f(x^{(k)}) - f(x^{'(k)})} \leq L_k,
+	\end{equation}
+	 for all $k \in [n]$ and for all $x^{(k)} = (x_1,...,x_k,...,x_n), x^{'(k)} = (x_1,...,x'_k,...,x_n)\in\bbR^n$.
+\end{defn}
+
+
+
+\begin{thm}[Bounded differences inequality] \label{thm:bounddiff}
+Let $f\colon \bbR^n \mapsto \bbR$ be a function satisfies the bounded difference property~\eqref{eq:defbounded}, and the random variable $X = (X_1,...,X_n)$ has independent components. Then,
+\begin{equation}
+	\bbP\off{\aabs{f(X) -\bbE[f(X)] } \geq t} \leq 2 e^{-\frac{2t^2}{\sum_{i=1}^n L_i^2}}, \quad \text{for all }t \geq 0.
+\end{equation}
+
+	
+\end{thm}
+
+
+\section{Exercises}
+
+\subsection{Exercise 2.1} (Tightness of inequalities.) The Markov's and Chebyshev's inequalities are not able to be improved in general. 
+\begin{enumerate}
+	\item[(a)] Provide a random variable $X \geq 0$ that attains the equality in Markov's inequality~\eqref{eq:thmmarkov}.  
+	\item[(b)] Provide a random variable $Y$ that attains the equality in Chebyshev's inequality~\eqref{eq:cheby}.  
+\end{enumerate}
+
+\paragraph{Solution:} 
+\begin{enumerate}
+
+\item[(a)] For a given constant $t >0$, we define a variable $Y_{t} = X - t \mathds{1}{[X\geq t]}$, where $\mathds{1}$ is the indicator function. Note that $Y_{t}$ is a nonnegative variable. The Markov's inequality follows by taking the expectation to $Y_t$,
+\begin{equation}
+	\bbE[Y_t] = \bbE[X] - t \bbP[X \geq t] \geq 0.
+\end{equation}
+Therefore, Markov's inequality meets the equality if and only if the expectation $\bbE[Y_t] = 0$. Since $Y_t$ is nonnegative, we have $\bbP(Y_t = 0) = 1$. Note that $Y_t = 0$ if and only if $X = 0$ or $X =t$.
+
+Hence, for the given constant $t >0$, the nonnegative variable $X$ with distribution $\bbP(X \in \{ 0,t\}) = 1$ attains the equality of Markov's inequality.
+
+\item[(b)]  Chebyshev's inequality follows by applying Markov's inequality to the nonnegative random variable $Z = {(X - \bbE[X])^2}$. Simialrly as in part (a), given a constant $t > 0$, the variable $Z = {(X - \bbE[X])^2}$ with distribution $\bbP(Z \in \{ 0,t^2 \}) = 1$ attains the equality of the Markov's inequality for $Z$. Consequently, the variable $X$ attains the equality of the Chebyshev's inequality for $X$. By transformation, the distribution of $X$ satisfies the followings formula,
+\begin{align}
+\bbP(X = x) = 
+	\begin{cases}
+		\quad p & \text{if } x = c,\\
+		\quad \frac{1-p}{2} & \text{if } x = c-t \text{ or } x = c+t, \\
+		\quad 0 & \text{ otherwise },
+	\end{cases}
+	\end{align}
+where $c \in \bbR$ is a constant and $p \in [0,1]$.
+
+\iffalse
+	\item[(a)] Recall the proof of Markov's inequality. For any $t >0$,
+	\begin{equation}\label{eq:markov}
+		\bbE[X] = \int_{0}^t x f_X(x) dx + \int_{t}^{+\infty} x f_X(x) dx \geq \int_{t}^{+\infty} x f_X(x)\geq t \int_{t}^{+\infty} f_X(x) = t \bbP( X \geq t).
+	\end{equation}
+	Below, given a constant $t > 0$, we construct a random variable that attains the equality in each line of equation~\eqref{eq:markov}.
+	 
+	 Consider a variable $X$ with distribution $P(X = t) = 1$. The variable $X$ satisfies 
+	 \[ \int_{0}^t x f_X(x) dx = 0 \text{ and } \int_{t}^{+\infty} x f_X(x) dx =\int_{t}^{+\infty} t f_X(x) dx. \]
+	 Therefore, for given $t$, the variable $X$ attains the equality of Markov's inequality.
+	 
+	 \item[(b)] Chebyshev's inequality follows by applying Markov's inequality to the non-negative random variable $Y = {(X - \bbE[X])^2}$. Let the distribution of $Y$ be $\bbP(Y = t^2) = 1$. Then the Markov's inequality for $Y$ and the Chebyshev's inequality for $X$ meet the equalities. Consider the variable $Z$ with distribution $\bbP(Z = c+t) = \bbP(Z = c-t)  = 1/2 $ for any $ c \in \bbR$. For $Z$, the transformation probability satisfies $\bbP((Z - \bbE[Z])^2= t^2) = 1$. Therefore, the variable $Z$ attains the equality of Chebyshev's inequality.
+	 
+\fi
+	 
+	 
+\end{enumerate}
+
+\begin{rmk}[Tightness of Markov's inequality]
+	Only a few variables attain the equalities in Markov's and Chebyshev's inequalities. In research, we should pay attention to the concentration bounds tighter than Markov's inequality.
+\end{rmk}
+
+
+\subsection{Exercise 2.2}
+\begin{lem}[Standard normal distribution]\label{lem:n01}
+	Let $\phi(z)$ be the density function of a standard normal variable $Z \sim N(0,1)$. Then, 
+	\begin{equation}\label{eq:e22a}
+		\phi'(z) + z \phi(z) = 0,
+	\end{equation}
+	and \begin{equation}\label{eq:e22b}
+		\phi(z)\left(\frac{1}{z} - \frac{1}{z^3} \right) \leq \bbP(Z \geq z) \leq \phi(z)\left(\frac{1}{z} - \frac{1}{z^3}+ \frac{3}{z^5} \right), \quad \text{for all }z>0.
+	\end{equation}
+\end{lem}
+\begin{proof}First, we prove the equation~\eqref{eq:e22a}. 
+
+The pdf of the standard normal distribution is
+\[  \phi(z) = \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2}  \right).\]
+
+The equation~\eqref{eq:e22a} follows by taking the derivative of $\phi(z)$. Specifically,
+\[\quad \phi'(z) = -z \frac{1}{\sqrt{2\pi}} \exp\left(-\frac{z^2}{2} \right) = -z \phi(z). \] 
+	Next, we prove the equation~\eqref{eq:e22b}. 
+	
+	We write the upper tail probability of the standard normal variable as
+	\begin{equation}\label{eq:e22pro1}
+		\bbP(Z \geq z) = \int_{z}^{+\infty} \phi(t) dt = \int_{z}^{+\infty} - \frac{1}{t} \phi'(t) dt = \frac{1}{z} \phi(z) - \int_{z}^{+\infty} \frac{1}{t^2} \phi(t) dt,  
+	\end{equation}
+	where the second equality follows by the equation~\eqref{eq:e22a}. Applying the equation~\eqref{eq:e22a} to the last term in equation~\eqref{eq:e22pro1} yields
+	\begin{equation}\label{eq:e22pro2}
+	\int_{z}^{+\infty} \frac{1}{t^2} \phi(t) dt = \int_{z}^{+\infty} \frac{1}{t^3} \phi'(t) dt = - \frac{1}{z^3} \phi(z) + \int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt \geq  - \frac{1}{z^3} \phi(z)
+	\end{equation}
+	Plugging the equation~\eqref{eq:e22pro2} into the equation~\eqref{eq:e22pro1}, we obtain $\bbP(Z \geq z) \geq \phi(z)\left(\frac{1}{z}  - \frac{1}{z^3} \right)$. Applying the equation~\eqref{eq:e22a} again to the equation~\eqref{eq:e22pro2} yields
+	\begin{equation}\label{eq:e22pro3}
+		\int_{z}^{+\infty} \frac{3}{t^4} \phi(t) dt = \int_{z}^{+\infty} - \frac{3}{t^5} \phi'(t) dt =\frac{3}{ z^5} \phi(z) -  \int_{z}^{+\infty} \frac{15}{t^6} \phi(t) dt \leq \frac{3}{ z^5} \phi(z).
+	\end{equation}
+	
+	Combing equations~\eqref{eq:e22pro1}, \eqref{eq:e22pro2} and  \eqref{eq:e22pro3}, we obtain $\bbP(Z \geq z) \leq \phi(z)\left(\frac{1}{z}  - \frac{1}{z^3} + \frac{3}{z^5} \right).$
+\end{proof}
+
+\begin{rmk}
+	Direct calculation of tail probability for a univariate normal variable is hard. Equation~\eqref{eq:e22b} provides a numerical approximation to the tail probability. Particularly, the tail probability decays at the rate of $z^{-1}e^{-z^2/2}$ as $z \rightarrow +\infty$. The decay rate is faster than polynomial rate $\tO(z^{-\alpha})$, for any $\alpha \geq 1$.
+\end{rmk}
+
+\subsection{Exercise 2.3}
+
+\begin{lem}[Polynomial bound and Chernoff bound]\label{lem:momcher}
+	Let $X \geq 0$ be a nonnegative variable. Suppose that the moment generating function of $X$, denoted $\varphi_{X}(\lambda)$, exists in the neighborhood of $\lambda = 0$. Given some $\delta > 0$, we have
+	\begin{equation}\label{eq:lempoly}
+		\inf_{k \in \mathbb{Z_+} } \frac{\bbE[|X|^k]}{\delta^k} \leq \inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}}. 
+	\end{equation}
+	  
+	Consequently, an optimized bound based on polynomial moments is always at least as good as the Chernoff upper bound.
+\end{lem}
+
+\begin{proof}
+	By power series, we have
+	\begin{equation}\label{eq:power}
+		 e^{\lambda X} = \sum_{k = 0}^{+\infty } \frac{X^k \lambda^k }{k!}, \quad \text{ for all } \lambda \in \bbR.
+	\end{equation}
+	Since the moment generating function $\varphi_X(\lambda)$ exists in the neighborhood of $\lambda = 0$, there exists a constant $b > 0$ such that 
+		\[   \bbE [e^{\lambda X} ]= \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} < +\infty,\quad \text{ for all } \lambda \in (0,b). \]
+	 Hence, the moment  $\bbE[|X|^k]$ exists, for all $ k \in \mathbb{Z_+}$. Applying power series~\eqref{eq:power} to the right hand side of equation~\eqref{eq:lempoly} yields
+	\begin{equation}\label{eq:powertopoly}
+		\inf_{\lambda >0} \frac{\bbE[e^{\lambda X}]}{e^{\lambda \delta}} = \frac{ \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} }{ \sum_{k = 0}^{+\infty } \frac{\lambda^k \delta^k }{k!}  }.	\end{equation}
+	By Cauchy's third inequality, we have
+	\begin{equation}\label{eq:cauchy3}
+		\frac{ \sum_{k = 0}^{+\infty } \frac{ \bbE[|X|^k]  \lambda^k }{k!} }{ \sum_{k = 0}^{+\infty } \frac{\lambda^k \delta^k }{k!}  } \geq \inf_{k \in \mathbb{Z}_{+} } \frac{\bbE[|X|^k]}{\delta^k}  
+	\end{equation}
+	Therefore, we obtain the equation~\eqref{eq:lempoly} by combining the equation~\eqref{eq:powertopoly} with equation~\eqref{eq:cauchy3}.	
+\end{proof}
+
+\begin{rmk}
+	Applying different functions $g(X)$ to the Markov's inequality leads to different bounds for the tail probability of variable $X$. Equation~\eqref{eq:lempoly} implies that the optimized polynomial bound is at least as tight as the Chernoff bound, provided that the moment generating function of $X$ exsits in the neighborhood of 0.  
+\end{rmk}
+
+\subsection{Exercise 2.4}\label{pro:boundvar}
+In Exercise~\ref{pro:boundvar}, we prove Theorem~\ref{thm:boundvar},  the Hoeffding bound for a bounded variable. 
+
+\begin{proof}
+	
+Let $X$ be a bounded random variable, and $X \in [a,b]$ almost surely, where $a 
+\leq b \in \bbR$ are two constants. Let $\mu = \bbE[X]$. Define the function 
+\[ g(\lambda) = \log \bbE[e^{\lambda X }], \quad  \text{ for all } \lambda \in \bbR. \]
+Applying Taylor Expansion to $g(\lambda)$ at 0, we have
+\begin{equation}\label{eq:taylor}
+	g(\lambda) =  g(0) + g'(0) \lambda  + \frac{g''(\lambda_0) }{2} \lambda^2, \quad \text{where } \lambda_0 = t \lambda, \text{ for some } t \in [0,1]. 
+\end{equation}
+
+In equation~\eqref{eq:taylor}, the term $g(0) =\log \bbE[e^{0}] = 0$. By power series \eqref{eq:power}, we obtain the first derivative $g'(\lambda)$ as follows,
+\begin{align}
+	g'(\lambda ) & = \left( \log \sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]  \right)' \\
+	&= {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]}  \label{eq:firstde} \\
+	&= \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]}.
+\end{align}
+Therefore, $g'(0) = \bbE[X] = \mu$. Taking the derivative to equation~\eqref{eq:firstde}, we obtain the second-order derivative $g''(\lambda)$ as follows,
+\begin{align}
+	g''(\lambda)
+	&= {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+2)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]} - \left( {\sum_{k = 0}^n \frac{ \lambda^k }{k!} \bbE[X^{(k+1)}] }\Bigg/{\sum_{k = 0}^n \frac{\lambda^k }{k!} \bbE[X^k]}  \right)^2\\
+	&= \frac{\bbE[X^2 e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} - \left( \frac{\bbE[X e^{\lambda X} ]}{\bbE[ e^{\lambda X} ]} \right)^2.\\
+	%& \overset{\Delta}{=} \bbE_{\lambda} [X^2] - (\bbE_{\lambda} [X])^2
+\end{align}
+We interpret the second-order derivative $g''(\lambda)$ as the variance of $X$ with the re-weighted distribution $d P' = {e^{\lambda X}}/{\bbE[ e^{\lambda X} ]} d P_X $, where $P_X$ is the distribution of $X$. Taking the integral of 1 with respect to $dP'$, we have
+\begin{equation}
+	\int_{-\infty}^{+\infty} d P' = \int_{-\infty}^{+\infty}  \frac{e^{\lambda X}}{\bbE[ e^{\lambda X} ]} d P_X = 1,
+\end{equation} 
+which implies that the function $P'$ is a valid probability distribution. Under all possible re-weighted distributions, the variance of $X$ is upper bounded as follows,
+\[ \var(X) = \var(X - \frac{a+b}{2}) \leq \bbE[(X - \frac{a+b}{2} )^2] \leq \frac{(b-a)^2}{4}, \]
+where the term $\frac{(b-a)^2}{4}$ follows by letting $X$ supported on the boundaries $a$ and $b$ only. Hence, the second-order derivative $g''(\lambda) \leq \frac{(b-a)^2}{4}$. We plug the results of $g'$ and $g''$ into the equation~\eqref{eq:taylor}. Then,
+\begin{equation}\label{eq:e24}
+	g(\lambda) =  g(0) + g'(0) \lambda  + \frac{g''(\lambda_0) }{2} \lambda^2 \leq 0 + \lambda \mu+ \frac{(b-a)^2}{8} \lambda^2. 
+\end{equation}
+Taking the exponentiation on both sides of the inequality~\eqref{eq:e24}, we have
+\begin{equation}\label{eq:boundvar}
+	\bbE[e^{\lambda X}] = \exp(g( \lambda)) \leq e^{\mu \lambda + \frac{(b-a)^2}{8} \lambda^2}.
+\end{equation}
+The equation~\eqref{eq:boundvar} implies that $X$ is a sub-Gaussian variable with at most $\sigma = \frac{(b-a)}{2}$.
+\end{proof}
+
+\begin{rmk}
+	For any bounded random variable $X$ supported on $[a,b]$, $X$ is a sub-gaussian variable with parameter at most $\sigma^2 = (b-a)^2/4$. All the properties for sub-Gaussian variables apply to the bounded variables. 
+\end{rmk}
+
+
+\subsection{Exercise 2.5}
+\begin{lem}[Sub-Gaussian bounds and means/variance] Let $X$ be a random variable  such that
+\begin{equation}\label{eq:subg}
+	 \bbE[e^{\lambda X}] \leq e^{\frac{\lambda^2 \sigma^2}{2} + \mu \lambda}, \quad \text{ for all } \lambda \in \bbR. 
+\end{equation}
+	Then, $\bbE[X] = \mu$ and $\var(X) \leq \sigma^2$.
+\end{lem}
+
+\begin{proof} By equation~\eqref{eq:subg}, the moment generating function of $X$, denoted $\varphi_X(\lambda)$, exists in the neighborhood of $\lambda = 0$.  Hence, the mean and variance of $X$ exist. For all $\lambda$ in the neighborhood of $\lambda = 0$, applying power series on both sides of equation~\eqref{eq:subg} yields 
+\begin{equation}\label{eq:taylor2}
+	 \lambda \bbE[X] + \frac{\lambda^2}{2} \bbE[X^2] + o(\lambda^2) \leq  \mu \lambda + \frac{\lambda^2 \sigma^2 + \lambda^2 \mu^2}{2} + o(\lambda^2). 
+\end{equation}
+Dividing by $\lambda >0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{+}$, we have $\bbE(X) \leq \mu$. Dividing by $\lambda <0$ on both sides of equation~\eqref{eq:taylor2} and letting $\lambda \rightarrow 0^{-}$, we have $\bbE(X) \geq \mu$. Therefore, we obtain the mean $\bbE[X] = \mu$. Then, we divide ${2}/{\lambda^2}$ on both sides of equation~\eqref{eq:taylor2}, for $\lambda \neq 0$. The term $\bbE[X]\lambda$ and  $\mu \lambda$ are cancelled. We have $ \bbE[X^2] \leq \sigma^2 + \mu^2$, and thus the $\var(X) \leq \bbE[X^2]  - (\bbE[X])^2 = \sigma^2$.
+\end{proof}
+
+\paragraph{Question:} Let $\sigma^2_{min}$ denote the smallest possible $\sigma$ satisfying the inequality~\eqref{eq:subg}. Is it true that $\var(X) = \sigma_{min}^2$?
+
+\paragraph{Solution:} The statement that $\var(X) = \sigma_{min}^2$ is not necessarily true. Recall the function $g(\lambda)$ in Exercise~\ref{pro:boundvar}. By the results in Exercise~\ref{pro:boundvar},  the equation~\eqref{eq:subg} is equal to 
+\begin{equation}\label{eq:question}
+	g''(\lambda) \leq  \sigma^2, \quad \text{ for all } \lambda \in \bbR,
+\end{equation}
+where $g'' (\lambda)$ is the variance of $X$ with the re-weighted distribution defined in Exercise~\ref{pro:boundvar}. Therefore, we have $\max_{\lambda}g''(\lambda) = \sigma_{min}^2$. Note that $g''(0) = \var(X)$. To let the equality $\var(X) = \sigma_{min}^2$ hold, we need to show that $\max_{\lambda}g''(\lambda) = g''(0)$ holds for $X$. 
+
+\vspace{0.2cm}
+However, the statement $\max_{\lambda}g''(\lambda) = g''(0)$ is not necessarily true.  A counter example is below. 
+Consider a random variable $Y \sim Ber(1/3)$. The variance of $Y$ is $\var(Y) = 2/9$. Let $\lambda = 1$. The re-weighted distribution $dP'$ is
+\[ P'(Y = 0) = \frac{2}{3\bbE[ e^{Y} ]}\quad  \text{and}\quad  P'(Y = 1) = \frac{e}{3 \bbE[ e^{ Y } ]}, \quad \text{where } \bbE[ e^{Y} ] = \frac{2}{3} + \frac{e}{3}.  \]
+The variance of $Y$ with $dP'$ is ${2}/{3\bbE[ e^{Y} ]} \times  {e}/{3\bbE[ e^{Y} ]} = 0.2442 > 2/9$. Therefore, we have $\var(Y) <  g''(1) \leq \max_{\lambda}g''(\lambda) = \sigma^2_{min}$. The statement $\max_{\lambda}g''(\lambda) = g''(0)$ is not true for this variable $Y$.
+\begin{rmk}
+	Parameters of a sub-Gaussian distribution provide the exact value of the mean and an upper bound of the variance; i.e., $ \bbE[X] = \mu$ and $\var(X) \leq \sigma^2$. Suppose the moment generating function of variable  $X$ exists over the entire real interval. Then, the tail distribution of $X$ is bounded by a sub-Gaussian distribution with a proper choice of $\sigma^2$.
+\end{rmk}
+
+
+
+\subsection{Exercise 2.6}
+
+
+\begin{lem}[Lower bounds on squared sub-Gaussians]\label{lem:lowersquare} Let $\{ X_i \}_{i=1}^n$ be an i.i.d.\ sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. The normalized sum $Z_n = \frac{1}{n} \sum_{i=1}^n X_i^2$ satisfies
+\begin{equation}\label{eq:lowersquare}
+	\bbP[Z_n - \bbE[Z_n] \leq \sigma^2 \delta ] \leq e^{-n\delta^2 /16}, \quad \text{ for all } \delta \geq 0.
+\end{equation}
+	The equation~\eqref{eq:lowersquare} implies that the lower tail of the sum of squared sub-Gaussian variables behaves in a sub-Gaussian way.
+\end{lem}
+
+\begin{proof}
+	Since $X_i^2$ are i.i.d.\ nonnegative variables, we apply the equation~\eqref{eq:thmonber0} to the variables $\{X_i^2\}_{i=1}^n$. Then, we have
+	\begin{equation}\label{eq:e26a}
+		\bbP\left[\sum_{i=1}^n (X_i^2 -\bbE[X_i^2]) \leq n \sigma^2 \delta\right] \leq \exp\left\{ - \frac{n\delta^2 \sigma^4}{ \bbE[X_1^4]} \right\},  \quad \text{for all }\delta \geq 0.
+	\end{equation}
+	By equation~\eqref{eq:thmmomsubg}, we have
+	\begin{equation}\label{eq:e26x4}
+		\bbE[X_1^4] \leq 16 \sigma^4. 
+	\end{equation}
+	Combing equations~\eqref{eq:e26a}, \eqref{eq:e26x4} and the definition of $Z_n$, we obtain 
+	\begin{equation}
+		\bbP[Z_n - \bbE[Z_n] \leq \sigma^2 \delta ]  \leq \exp\left\{ - \frac{n\delta^2}{16} \right\},  \quad \text{for all }\delta \geq 0.
+	\end{equation}
+\end{proof}
+
+\begin{rmk}
+	Equation~\eqref{eq:lowersquare} implies that the lower tail of the sum of squared sub-Gaussian variables behaves in a sub-Gaussian way. In following sections, we will show that the variable $Z_n - \bbE[Z_n]$ in Lemma~\ref{lem:lowersquare} is a sub-exponential variable.
+\end{rmk}
+
+\subsection{Exercise 2.7}
+\begin{lem}[Bennett’s inequality]\label{lem:bennett}
+	Let $X_1,...,X_n$ be a sequence of independent zero-mean random variables with $|X_i| \leq b$ and $\var(X_i) = \sigma_i^2$, for all $i \in [n]$. Then, we have the Bennett's inequality
+	\begin{equation}\label{eq:bennett}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] \leq \exp \left\{-\frac{n \sigma^{2}}{b^{2}} h\left(\frac{b \delta}{\sigma^{2}}\right)\right\}, \quad \text{for all }\delta \geq 0,
+	\end{equation} 
+	where $\sigma^2 = \frac{1}{n} \sum_{i=1}^n \sigma_i^2$ and $h(t) \colonequals (1+t)\log (1+t) - t$ for $t \geq 0$.
+\end{lem}
+
+\begin{proof}
+	First, we consider the moment generating function of $X_i$, for all $i \in [n]$.
+	
+	\vspace{0.2cm}
+	By power series, for all $i \in [n]$, we have
+	\begin{align}\label{eq:e27power}
+		\bbE\left[e^{\lambda X_i}\right] = \sum_{k = 0}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} 
+		= 1 + 0 + \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \leq \exp\left\{ \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!} \right\},
+	\end{align}
+	where the 0 comes from the fact that $\bbE[X_i] = 0$, and the last inequality follows from $1 + x \leq e^x$. By $|X_i|<b$, we bound the last term in equation~\eqref{eq:e27power} as follows
+	\begin{equation}\label{eq:e27upper}
+		\sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^k]}{k!}  \leq \sum_{k = 2}^{+\infty} \frac{\lambda^k \bbE[X_i^2 |X_i|^{k-2}] }{k!} \leq  \sum_{k = 2}^{+\infty} \frac{\lambda^k \sigma^2_i b^{k-2}}{k!} = \sigma_i^2  \left(  \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right).
+	\end{equation}
+	Combing the equation~\eqref{eq:e27power} with equation~\eqref{eq:e27upper}, we obtain the following upper bound of the moment generating function of $\sum_{i=1}^n X_i$.
+	\begin{equation}\label{eq:e27uppert}
+		\bbE\left[e^{\lambda \sum_{i = 1}^n X_i }\right] = \prod_{i = 1}^n \bbE\left[e^{\lambda X_i}\right] \leq \exp\left\{ n \sigma^2 \left( \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right)  \right\},
+	\end{equation}
+	where $\sigma^2 = \frac{1}{n} \sum_{i=1}^n \sigma_i^2$. Combing the Chernoff bound with equation~\eqref{eq:e27uppert}, the upper tail of $\sum_{i=1}^n X_i$ follows 
+	\begin{align}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] &\leq  \exp\left\{  n \sigma^2 \left(  \frac{e^{\lambda b} - 1 -\lambda b}{b^2}   \right)  - 
+		\lambda n \delta \right\} \\
+		&= \exp \left\{ \frac{n\sigma^2}{b^2} \left( e^{\lambda b} - \lambda b- \lambda \frac{\delta b^2}{\sigma^2} - 1 \right)  \right\}, \quad \text{for all } \delta \geq 0. \label{eq:e27exp}
+	\end{align} 
+	The upper bound \eqref{eq:e27exp} achieves the minimum when $\lambda = b^{-1}\log\left(1 + \frac{\delta b}{\sigma^2} \right)$ by the first-order condition of minimization. Plugging $\lambda =b^{-1} \log\left(1 + \frac{\delta b}{\sigma^2} \right)$ into the equation~\eqref{eq:e27exp}, we obtain the Bennett's inequality 
+	\begin{equation}\label{eq:e27bennett}
+		\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta\right] \leq  \exp \left\{-\frac{n \sigma^{2}}{b^{2}} h\left(\frac{b \delta}{\sigma^{2}}\right)\right\}, \quad \text{for all }\delta \geq 0,
+	\end{equation}
+	where $h(t) \colonequals (1+t)\log (1+t) - t$ for $t \geq 0$.
+	
+	\vspace{0.2cm}
+	Further, we show that the Bennett's inequality is at least as good as the Bernstein’s inequality.
+	
+	\vspace{0.2cm}
+	The Bernstein's inequality for $\sum_{i=1}^n X_i$ is
+	\begin{align}\label{eq:e27bern}
+			\mathbb{P}\left[\sum_{i=1}^{n} X_{i} \geq n \delta \right] \leq \exp \left\{ \frac{-3n\delta^2}{(2 b \delta + 6 \sigma^2)} \right\}  %=\exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} \frac{3b^2\delta^2}{2\sigma^2(b\delta + 6 \sigma^2)} \right\} 
+			= \exp \left\{ -\frac{n \sigma^{2}}{ b^{2}} g\left(\frac{b\delta}{\sigma^2}\right) \right\}, \quad \text{for all } \delta \geq 0,
+	\end{align}
+	where $g(t) \colonequals  \frac{3t^2}{2t + 6} $ for $ t \geq 0$. Since $g(t)\leq h(t)$ holds for all $t \geq 0$, we conclude that the Bennett's inequality~\eqref{eq:e27bennett} is at least as good as Bernstein's inequality~\eqref{eq:e27bern}. 
+\end{proof}
+
+\begin{rmk} 
+	So far, we have three inequalities controlling the tail of bounded variables: Hoeffding's inequality, Bernstein's inequality, and Bennett's inequality. Particularly, Hoeffding's inequality implies the sub-Gaussianity of bounded variables. As the proof for Lemma~\ref{lem:bennett} shows, Bennett's inequality is at least as good as the Bernstein's inequality, for bounded random variables.
+\end{rmk}
+
+\subsection{Exercise 2.8}
+\begin{lem}[Bernstein and expectation] Let $Z$ be a nonnegative random variable satisfying the following concentration inequality
+\begin{equation}\label{eq:berncond1}
+	\bbP[Z \geq t] \leq C e^{- \frac{t^2}{2(\nu^2 +B t)}}, \quad \text{for all } t \geq 0,
+\end{equation}
+	where $(\nu, B)$ are two positive constants and $C \geq 1$. Then, the expectation of $Z$ satisfies 
+	\begin{equation}\label{eq:bernexpec}
+		\bbE[Z] \leq 2 \nu (\sqrt{\pi} + \sqrt{\log C}) + 4B (1 + \log C).
+	\end{equation}
+	Further, let $\{ X_i\}_{i=1}^n$ be a sequence of i.i.d.\ zero-mean variables satisfying the Bernstein condition \eqref{eq:berncond}. The sample mean of $\{ X_i\}_{i=1}^n$  satisfies
+	\begin{equation}\label{eq:e28sample}
+		\bbE \off{ \aabs{\frac{1}{n} \sum_{i=1}^n X_i }} \leq 2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+\end{lem}
+
+\begin{proof}
+	First, we prove the equation~\eqref{eq:bernexpec}. 
+	
+	\vspace{0.2cm}
+	By equation~\eqref{eq:berncond1}, we have
+	\begin{align}
+		\bbP[Z \geq t] &\leq C \max \offf{\exp \of{-\frac{t^2}{4 \nu^2}}, \exp \of{-\frac{t^2}{4 Bt}} }\\
+		&\leq C \exp \of{-\frac{t^2}{4 \nu^2}} + C \exp \of{-\frac{t^2}{4 Bt}}.\label{eq:e28tail}
+	\end{align}
+	
+	Plugging the inequality~\eqref{eq:e28tail} to $\bbE[Z] = \int_{0}^{+\infty} \bbP[Z \geq t] dt$, we have
+	\begin{equation}
+		\bbE[Z] = \int_{0}^{+ \infty} \min \offf{1, C \exp \of{-\frac{t^2}{4 \nu^2}}} dt + \int_{0}^{+ \infty} \min\offf{1, C \exp \of{-\frac{t^2}{4 Bt}}} dt   \equalscolon I_1 + I_2.
+	\end{equation}
+	
+	To evaluate $I_1$, we solve $1 = C \exp \of{-\frac{t^2}{4 \nu^2}} $, and the minimization term becomes
+	\begin{align}
+		\min \offf{1, C \exp \of{-\frac{t^2}{4 \nu^2}}} = \begin{cases}
+			\quad 1 & \text{when } t < 2\nu \sqrt{\log C},\\
+			\quad C \exp \of{-\frac{t^2}{4 \nu^2}} & \text{when } t \geq 2\nu \sqrt{\log C}.
+		\end{cases}
+	\end{align}
+	Therefore, let $ y = \frac{t}{2\nu} - \sqrt{\log C}$, we have 
+	\begin{align}
+		I_1 &= \int_{0}^{ 2\nu \sqrt{\log C}} 1 dt + \int_{2\nu \sqrt{\log C}}^{+\infty} C \exp \of{-\frac{t^2}{4 \nu^2}} dt\\
+		&=  2\nu \sqrt{\log C} + 2\nu\int_{0}^{+\infty} \exp \of{-y^2 - 2y \sqrt{\log C}} dy\\
+		&\leq  2\nu \sqrt{\log C} + 2\nu\int_{0}^{+\infty} \exp \of{-y^2} dy.
+	\end{align}
+	By Gaussian integral $\int_{0}^{+\infty} e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$, we obtain $I_1 \leq 2\nu (\sqrt{\pi} + \sqrt{\log C})$. Similarly, we evaluate $I_2$ as follows 
+	\begin{align}
+		I_2 &= \int_{0}^{4B \log C} 1 dt + \int_{4B \log C}^{+\infty} C \exp \of{-\frac{t}{4B}} dt\\
+		 &= 4B (\log C + 1).
+	\end{align}
+	Hence, we obtain the expectation of $Z$,
+	\begin{equation}
+		\bbE[Z] = I_1 + I_2 \leq  2\nu (\sqrt{\pi} + \sqrt{\log C}) + 4B (\log C + 1).
+	\end{equation}
+	
+	\vspace{0.2cm}
+	Next, we prove the equation~\eqref{eq:e28sample}.
+	
+	\vspace{0.2cm}
+	For all $i \in [n]$, since $X_i$ satisfies the Bernstein condition with parameter $(\sigma,b)$, the variable $X_i$ satisfies the concentration bound~\eqref{eq:thmbernconc},
+	\begin{equation}
+		\bbP[|X_i| \geq t] \leq 2 \exp \offf{- \frac{t^2}{2(\sigma^2 + bt)}}, \quad \text{for all }t \geq 0. 
+	\end{equation}
+	By equation~\eqref{eq:bernexpec}, we have
+	\begin{equation}
+		\bbE[|X_i|] \leq  2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+	
+	Therefore, the expectation of the sample mean satisfies
+	\begin{equation}
+		\bbE \off{ \aabs{\frac{1}{n} \sum_{i=1}^n X_i }} \leq \frac{1}{n} \sum_{i=1}^n \bbE[|X_i|] \leq 2 \sigma (\sqrt{\pi} + \sqrt{\log 2}) + 4b (1 + \log 2).
+	\end{equation}
+	
+\end{proof}
+
+\begin{rmk}
+	For a nonnegative random variables satisfying the Bernstein-type inequality \eqref{eq:berncond1}, the expectation of the variable is upper bounded by a function of the parameter $(\nu,B,C)$. Particularly, for a zero-mean random variable $X$ satisfying the Bernstein condition with parameter $b$, $|X|$ satisfies the inequality \eqref{eq:berncond1} with parameters $(\sigma,b,2)$, where $\sigma^2 = \var(X)$.  Then, the expectation of the absolute variable $|X|$ is upper bounded by a function of $(\sigma^2, b)$. 
+\end{rmk}
+
+\subsection{Exercise 2.9}\label{exe:29}
+\begin{lem}[Sharp upper bounds on binomial tails]\label{lem:sharpbin}
+	Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in (0,1/2]$. Consider the binomial random variable $Z_n = \sum_{i=1}^n X_i$. The left tail probability of $Z_n$ is upper bounded as
+	\begin{equation}\label{eq:lembinupper}
+		\bbP\off{Z_n \leq \delta n} \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (0,\alpha),
+	\end{equation}
+	where the quantity 
+	\begin{equation}\label{eq:kldiv}
+		D(\delta \Vert \alpha) \colonequals \delta \log \frac{\delta}{\alpha} + (1-\delta) \log \frac{1-\delta}{1-\alpha}
+	\end{equation}
+	is the KL divergence between the Bernoulli distributions with parameters $\delta$ and $\alpha$, respectively.
+	
+	Further, the upper bound~\eqref{eq:lembinupper} is strictly tighter than the Hoeffding bound for all $\delta \in (0,\alpha)$.
+\end{lem}
+
+\begin{proof}
+    Applying the Chernoff inequality to the random variable $-Z_n$, we have
+    
+    \begin{equation}
+    	\bbP[-Z_n \geq -\delta n] =  \bbP[Z_n \leq \delta n]  \leq  \frac{\bbE\off{e^{-\lambda Z_n}}}{e^{-\lambda \delta n}}, \quad \text{for all } \lambda >0.
+    \end{equation}
+    Therefore, the left tail probability of random variable $Z_n$ satisfies
+    \begin{equation}\label{eq:e29upper}
+    	\bbP[Z_n \leq \delta n] \leq \frac{\bbE\off{e^{-\lambda Z_n}}}{e^{-\lambda \delta n}} = \offf {\exp \offf{\log \of{1 - \alpha + \alpha e^{-\lambda})}+ \lambda \delta }}^n,\quad \text{for all } \lambda >0,
+    \end{equation}
+    where the second equality follows from the moment generating function of $Z_n$,
+    \[\bbE\off{e^{-\lambda Z_n}} = \of{1 - \alpha + \alpha e^{-\lambda}}^n. \]
+    The upper bound~\eqref{eq:e29upper} achieves the minimum when $\lambda = -\log {\frac{\delta(1-\alpha)}{\alpha(1 - \delta)}}$ by the first-order condition. Plugging the minimizer into equation~\eqref{eq:e29upper}, we obtain the result
+    \[ \bbP\off{Z_n \leq \delta n}  \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (0,\alpha).  \]
+    
+    \vspace{0.2cm}
+    Next, we show that equation~\eqref{eq:lembinupper} is strictly tighter than the Hoeffding bound of $Z_n$, for all $\delta \in (0,\alpha)$.
+    
+    \vspace{0.2cm}
+    Hoeffding bound of random variable $Z_n$ is 
+    \begin{equation}\label{eq:e29hoeff}
+    	\bbP\off{Z_n \leq \delta n} \leq e^{ {-2n(\delta - \alpha)^2}}, \quad \text{for all }\delta \in (0,\alpha).
+    \end{equation}
+    Note that parameter $\alpha$ is fixed. Consider the function $g(\delta) = 2(\delta - \alpha)^2 - D\of{\delta \Vert \alpha}$ for $\delta \in (0,\alpha)$. The first-order derivative and  second-order derivative of $g$ are
+    \[ g'(\delta) = 4(\delta - \alpha) - \log \frac{\delta}{\alpha} + \log \frac{1-\delta}{1-\alpha} \quad \text{and} \quad g''(\delta) = 4 - \frac{1}{\delta} - \frac{1}{1-\delta}. \] 
+    Note that $ g(\alpha) = g'(\alpha) = 0$, and $g''(\delta) < 0$ for all $0 < \delta < 1/2$. Then, we have $g(\delta) < 0$, for all $\delta \in (0,\alpha)$. Hence, the upper bound~\eqref{eq:lembinupper} is strictly tighter than Hoeffding bound~\eqref{eq:e29hoeff}.
+    
+\end{proof}
+
+\begin{cor}[Sharp upper bounds on binomial right tails] Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in [1/2,1)$. Consider the binomial random variable $Z_n = \sum_{i=1}^n X_i$. The left tail probability of $Z_n$ is upper bounded as
+	\begin{equation}\label{eq:lembinupper}
+		\bbP\off{Z_n \geq \delta n} \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (\alpha,1),
+	\end{equation}
+	where $ D\of{\delta \Vert \alpha}$ is the KL divergence defined in Lemma~\ref{lem:sharpbin}.
+\end{cor}
+
+\begin{proof}
+	Applying the Chernoff inequality directly to the random variable $Z_n$, we have
+	 \begin{equation}
+    	\bbP[Z_n \geq \delta n] \leq \frac{\bbE\off{e^{\lambda Z_n}}}{e^{\lambda \delta n}} = \offf {\exp \offf{\log \of{1 - \alpha + \alpha e^{\lambda})}- \lambda \delta }}^n,\quad \text{for all } \lambda >0.
+    \end{equation}
+    
+    Plugging the minimizer $\lambda = \log {\frac{\delta(1-\alpha)}{\alpha(1 - \delta)}}$ into the above inequality, we obtain the results
+    \[ \bbP[Z_n \geq \delta n]  \leq e^{-n D\of{\delta \Vert \alpha}}, \quad \text{for all }\delta \in (\alpha,1).\]
+
+\end{proof}
+
+\begin{rmk}
+	The upper bound on a binomial tail is a function of the KL divergence between Bernoulli distributions with distinct parameters. The bound using KL divergence is strictly tighter than the Hoeffding bound. The underperformance of Hoeffding bound may attribute to the utilization of the sub-Gaussian parameter $\sigma^2$. The sub-Gaussian parameter $\sigma^2$ is not necessarily the optimal choice to describe the tail performance of a random variable with good properties. 
+\end{rmk}
+
+
+\subsection{Exercise 2.10}\label{exe:210}
+\begin{lem}[Lower bounds on binomial tails]
+	Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ Bernoulli variables with parameter $\alpha \in (0,1/2]$. Consider the binomial random variable $Z_n \colonequals \sum_{i=1}^n X_i$. For some fixed $\delta \in (0,\alpha)$, let $m = \floor{n\delta}$; i.e., $m$ is the largest integer less or equal to $n \delta$. Let $ \tilde \delta = {m}/{n}$. We have
+	\begin{equation}\label{eq:e2101}
+		\frac{1}{n} \log \bbP \off{Z_n \leq n\delta} \geq \frac{1}{n} \log \begin{pmatrix}
+			n \\ m	\end{pmatrix} + \tilde \delta \log \alpha + (1 - \tilde \delta ) \log (1-\alpha).
+	\end{equation}
+	
+	Further, the binomial coefficient satisfies
+	\begin{equation}\label{eq:e2102}
+		\frac{1}{n} \log \begin{pmatrix}
+			n \\ m	\end{pmatrix} \geq \phi(\tilde \delta ) - \frac{\log (n+1)}{n}.
+	\end{equation}
+	
+	Consequently, the lower tail of binomial variable $Z_n$ satisfies
+	\begin{equation}\label{eq:e2103}
+		\bbP[Z_n \leq n \delta]  \geq \frac{1}{n+1} e^{-nD(\delta \Vert \alpha)},
+	\end{equation}
+	where $D(\delta \Vert \alpha)$ is the KL divergence defined in equation~\eqref{eq:kldiv}.
+\end{lem}
+
+\begin{proof}
+	First, we prove equation~\eqref{eq:e2101}.
+	
+	\vspace{0.2cm}
+	Since $Z_n$ is a binomial variable with size $n$ and probability $\alpha$, we have
+	\begin{align}
+		\bbP[Z_n \leq n\delta ] &= \sum_{k = 1}^m \begin{pmatrix}
+			n \\ k
+		\end{pmatrix} \alpha^k (1-\alpha)^{n - k}\\
+		& \geq \begin{pmatrix}
+			n \\ m
+		\end{pmatrix} \alpha^m (1-\alpha)^{n - m}. \label{eq:e210pro1}
+	\end{align}
+	Taking the log and dividing by $n$ on the both sides of the inequality~\eqref{eq:e210pro1}, we obtain
+	\[ \frac{1}{n} \log \bbP[Z_n \leq n\delta ] \geq \frac{1}{n} \log \begin{pmatrix}
+			n \\ m		\end{pmatrix} + \tilde \delta \log \alpha + (1 - \tilde \delta ) \log (1-\alpha). \]
+			
+	\vspace{0.2cm}
+	Next, we prove equation~\eqref{eq:e2102}.
+	
+	\vspace{0.2cm}
+	Consider a binomial variable $Y \sim Bin(n,\tilde \delta)$. For all $k = 0,1,...,(n-1)$, the ratio between $\bbP[Y = k]$ and $\bbP[Y = k+1]$ is
+	\begin{equation}
+		\frac{\bbP[Y = k+1]}{\bbP[Y = k]} = \frac{\begin{pmatrix}
+			n \\ k+1
+		\end{pmatrix} \tilde \delta^{k+1} (1-\tilde \delta)^{n - k -1} }{\begin{pmatrix}
+			n \\ k
+		\end{pmatrix} \tilde \delta^{k} (1-\tilde \delta)^{n - k }} = \frac{(n-k) \tilde \delta}{(k+1) (1- \tilde \delta)  }.
+	\end{equation}
+	To let the ratio $	\frac{\bbP[Y = k+1]}{\bbP[Y = k]} \geq 1$, we need $(k+1)\leq (n+1) \tilde \delta $. Thus, the probability $\bbP[Y = l]$ achieves the maximum when $l = n \tilde \delta$. Consequently, we have
+	\begin{equation}\label{eq:e210pro2}
+		(n+1) \bbP[Y = n \tilde \delta] \geq 1 \quad \Leftrightarrow \quad  \bbP[Y = n \tilde \delta] \geq \frac{1}{n+1}.
+	\end{equation}
+	Taking the log and dividing by $n$ on the both sides of the inequality~\eqref{eq:e210pro2}, we obtain
+	\begin{equation}
+		 \frac{1}{n} \log \begin{pmatrix}
+			n \\ m		\end{pmatrix} \geq \tilde \delta \log(\alpha) - (1 - \tilde \delta)\log(1 - \alpha) - \frac{\log(n+1)}{n} = \phi(\tilde \delta)  - \frac{\log(n+1)}{n}.
+	\end{equation}
+	
+	\vspace{0.2cm}
+	Last, we prove the lower bound equation~\eqref{eq:e2103}.
+	
+	\vspace{0.2cm}
+	Plugging equation~\eqref{eq:e2102} into equation~\eqref{eq:e2101}, we have
+	\begin{equation}\label{eq:e210pro3}
+		\frac{1}{n} \log \bbP \off{Z_n \leq n\delta} \geq \phi(\tilde \delta) + \tilde \delta \log \alpha + (1 - \tilde \delta ) \log (1-\alpha) - \frac{\log(n+1)}{n} \geq -D(\delta \Vert \alpha ) - \frac{\log(n+1)}{n}.
+	\end{equation}
+	Multiplying by $n$ and take exponential on both sides of the inequality~\eqref{eq:e210pro3}, we obtain the result
+	\begin{equation}
+		\bbP \off{Z_n \leq n\delta} \geq \frac{1}{n+1} e^{-nD(\delta \Vert \alpha)}.
+	\end{equation}
+\end{proof}
+
+\begin{rmk}
+	The lower bound on a binomial tail is also a function of the KL divergence between Bernoulli distributions with distinct parameters. Combining the upper bound \eqref{eq:lembinupper} and lower bound \eqref{eq:e2103}, we conclude that the binomial tail is (upper and lower) bounded by the functions of  KL divergence between Bernoulli distributions.
+\end{rmk}
+
+
+\subsection{Exercise 2.11}\label{Gausmax}
+\begin{lem}[Gaussian maxima]
+Let $\{X_i\}_{i=1}^n$ be a sequence of i.i.d.\ normal random variables following $N(0,\sigma^2)$. Consider the random variable $Z_n \colonequals \max_{i\in[n]} |X_i|$. The expectation of $Z_n$ is upper bounded as follows
+\begin{equation}\label{eq:e2111}
+	\bbE[Z_n] \leq \sqrt{2 \sigma^2 \log n} + \frac{4\sigma}{\sqrt{2 \log n}}, \quad \text{for all } n\geq 2.
+\end{equation}
+
+The lower bound of $\bbE[Z_n] $ is
+\begin{equation}\label{eq:e2112}
+	\bbE[Z_n] \geq (1- 1/e) \sqrt{\sigma^2 \log n} , \quad \text{for all }n \geq 6.
+\end{equation}
+
+Moreover, we have
+\begin{equation}\label{eq:e2113}
+	\frac{\bbE[Z_n]}{\sqrt{2 \sigma^2 \log n}} \rightarrow 1, \quad \text{as $n \rightarrow +\infty$}.
+\end{equation}
+
+\end{lem}
+
+The lower bound~\eqref{eq:e2112} is different to the original Exercise up to the constant.
+
+\begin{proof}
+	First, we prove the equation~\eqref{eq:e2111}.
+	
+	\vspace{0.2cm}
+	Consider the tail probability of $Z_n$. We have
+	\begin{equation}
+		\bbP[Z_n \geq t] = \bbP[\max_{i \in [n]} |X_i| \geq t] = 1 - \bbP[\max_{i \in [n]} |X_i| < t] = 1 - (1- \bbP[|X_1| \geq t])^n,
+	\end{equation}
+	where the last equality follows from the independence of $\{X_i\}_{i=1}^n$. By Bernoulli's inequality, we have
+	\begin{equation}
+		(1- \bbP[|X_1| \geq t])^n \geq 1 - n \bbP[|X_1| \geq t], \quad \text{for all } t >0.
+	\end{equation} 
+	Therefore, the expectation of $Z_n$ follows
+	\begin{equation}\label{eq:e211pro1}
+		\bbE[Z_n] = \int_{0}^{+\infty} \bbP[Z_n \geq t] dt \leq  c +  \int_{c}^{+\infty} n\bbP[|X_1| \geq t] dt, \quad \text{for all } c > 0.
+	\end{equation}
+	 Since the tail bound $\bbP[U \geq t] \leq \sqrt{\frac{2}{\pi}} \frac{1}{t} e^{-t^2 /2}$ holds for all standard normal random variable $U$, the tail bound of $|X_1|$ satisfies
+	 \begin{equation}\label{eq:e211proupper}
+	 	\bbP[|X_1| \geq t] \leq 2 \sqrt{\frac{2}{\pi}} \frac{\sigma}{t} e^{-\frac{t^2}{2\sigma^2}}.
+	 \end{equation}
+	Let $ u = \frac{ t}{\sigma}$. Hence, for $c > \sigma$, the last integral in equation~\eqref{eq:e211pro1} is upper bounded as
+	 \begin{align}
+	 	 \int_{c}^{+\infty} n\bbP[|X_1| \geq t] dt &\leq \frac{2n \sigma}{c} \sqrt{\frac{2}{\pi}} \int_{c}^{+\infty} e^{-\frac{t^2}{2\sigma^2} }dt \\  
+	 	 %& = \frac{2n \sigma^2}{c} \sqrt{\frac{2}{\pi}}   \int_{\frac{c}{\sigma}}^{+\infty} e^{-\frac{u^2}{2}} dt \\
+	 	 & \leq \frac{2n \sigma^2}{c} \sqrt{\frac{2}{\pi}}   \int_{\frac{c}{\sigma}}^{+\infty} u e^{-\frac{u^2}{2}} dt \\
+	 	 & = \frac{2n \sigma^2}{c} \sqrt{\frac{2}{\pi}}  e^{-\frac{c^2}{2\sigma^2}}. \label{eq:e211pro2}
+	 \end{align}
+	 For all $n \geq 2$, let $c = \sqrt{2\sigma^2 \log n}$ and plug the $c$ into equations~\eqref{eq:e211pro1} and \eqref{eq:e211pro2}. Then, we obtain the result
+	 \begin{equation}
+	 	\bbE[Z_n] \leq \sqrt{2\sigma^2 \log n} + \frac{2\sigma}{\sqrt{2\log n}}   \sqrt{\frac{2}{\pi}}  \leq \sqrt{2\sigma^2 \log n} + \frac{4\sigma}{\sqrt{2\log n}}, \quad \text{for all }n \geq 2.
+	 \end{equation}
+	 
+	 
+	 \textbf{Alternative Way:} An alternative proof for equation~\eqref{eq:e2111} is below.
+	 
+	 Since $\{X_i\}_{i=1}^n$ are i.i.d.\ random normal variables following $N(0, \sigma^2)$, by Exercise~\ref{ex:12}, we have 
+	 \begin{equation}
+	 	\bbE[\max_{i \in [n]} X_i] \leq \sqrt{2 \sigma^2 \log n}, \quad \text{for all } n \geq 1.
+	 \end{equation}
+	 Note that $\max_{i \in [n]} |X_i| = \max_{i \in [2n]} X_i$, where $X_{n + i} = - X_i $, for all $i\in[n]$. Then, we have $\max_{i \in [n]}|X_i| \leq \sqrt{2 \sigma^2 \log(2n)}$. Note that
+	 \begin{equation}
+	 	 \of{\sqrt{2 \sigma^2 \log n} + \frac{4\sigma}{\sqrt{2 \log n}}}^2 = 2 \sigma^2 \log n + 8\sigma^2 \of{1 + \frac{1}{\log n}} \geq 2 \sigma^2 \log n + 2 \sigma^2 \log 2 = (\sqrt{2 \sigma^2 \log 2n} )^2.
+ 	 \end{equation}
+ 	 Therefore, we obtain the upper bound
+ 	 \begin{equation}
+ 	 	\bbE[Z_n] \leq \sqrt{2 \sigma^2 \log(2n)} \leq \sqrt{2 \sigma^2 \log n} + \frac{4\sigma}{\sqrt{2 \log n}}.
+ 	 \end{equation}
+	 
+	 
+	 \vspace{0.2cm}
+	 Next, we prove the equation~\eqref{eq:e2112}.
+	 
+	 \vspace{0.2cm}
+	 
+	 The expectation of $Z_n$ is lower bounded as
+	 \begin{equation}
+	 	\bbE \off{Z_n} \geq \sigma \sqrt{\log n} \bbP \off{Z_n > \sigma \sqrt{\log n}}  = \sigma \sqrt{\log n} \off{1 - \of{1 - \bbP \off{|X_i| > \sigma \sqrt{\log n}}   }^n}.
+	 \end{equation}
+	 
+	 Since $|X_i|$ follows the half-normal distribution, the upper tail probability of $|X_i|$ is
+	 \begin{equation}
+	 	\bbP \off{ |X_i| > \sigma \sqrt{\log n}} = 1 - \text{erf}\of{\frac{\sqrt{\log n}}{\sqrt{2} } } \geq 1 - \sqrt{1 - n^{-\frac{2}{\pi}}},
+	 \end{equation} 
+	 where $\text{erf}(\cdot)$ is the CDF function of half-normal distribution, and the last inequality follows from the fact that $\text{erf}(x) \leq \sqrt{1 - \exp \of{\frac{4}{\pi} x^2 }}$. When $n \geq 6$, we have $1 - \sqrt{1 - n^{-\frac{2}{\pi}}} \geq \frac{1}{n}$, and thus the expectation satisfies
+	 \begin{equation}
+	 	\bbE \off{Z_n} \geq \sigma \sqrt{\log n} \off{1 - \of{1 - \frac{1}{n}   }^n} \geq \of{1 - \frac{1}{e}} \sigma \sqrt{\log n}, \quad \text{for all }n \geq 6.
+	 \end{equation}
+	 
+	 \vspace{0.2cm}
+	 Last, we prove the convergence property~\eqref{eq:e2113}.
+	 
+	\textbf{My thoughts:} To prove $\lim_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}}  = 1$, we need to prove $\limsup_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}}  = \liminf_{n \rightarrow +\infty}\frac{ \bbE[Z_n]}{\sqrt{2\sigma^2 \log n}} = 1$. The $\limsup$ part is easy because of the upper bound~\eqref{eq:e2111}. Then, we only need to prove the $\liminf$ part.
+	
+	Note that 
+	\[\bbE[Z_n] \geq \sqrt{2 \sigma^2 \log n}  \bbP \off{Z_n > \sigma \sqrt{2 \log n}} =  \sigma \sqrt{2\log n} \off{1 - \of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n}. \]
+	
+	If I can prove that $\lim_{n \rightarrow +\infty}\of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n = 0 $, the problem is done.
+	
+	Note that $\bbP \off{|X_i| > \sigma \sqrt{2\log n}}  = 2 \bbP \off{X_i > \sigma \sqrt{2\log n}} \leq 2 \sqrt{\frac{2}{\pi}} \frac{\sigma}{\sqrt{2 \sigma^2 \log n}} e^{-\log n} = \frac{2}{\pi n \sqrt{\log n}}$. Then, the limit is upper bounded
+	 \[\lim_{n \rightarrow +\infty}\of{1 - \bbP \off{|X_i| > \sigma \sqrt{2\log n}}   }^n \geq \lim_{n \rightarrow +\infty} \of{1 -  \frac{2}{\pi n \sqrt{\log n}} }^n = 1. \]
+	 
+	 I can not get the result I want.
+	 
+	 \iffalse
+	 By Markov's inequality, the expectation of $Z_n$ satisfies
+	 \begin{equation}
+	 	\bbE[Z_n] \geq t \bbP[Z_n \geq t],\quad \text{for all }t \geq 0.
+	 \end{equation}
+	 By the independence of $\{X_i\}_{i=1}^n$, the tail probability of $Z_n$ is
+	 \begin{equation}
+	 	\bbP[Z_n \geq t] = 1 - (1 - \bbP(|X_1| \geq t))^n.
+	 \end{equation}
+	 
+	 Let $t = \sqrt{2\sigma^2 \log n}$. By equation~\eqref{eq:e211proupper}, the tail probability of $X_1$ satisfies
+	 \begin{equation}
+	 	\bbP(|X_1| \geq \sqrt{2\sigma^2 \log n}) \leq \frac{2}{\sqrt{ \pi \log n}} \frac{1}{n} \leq \frac{1}{n},\quad \text{for all } n \geq 5.
+	 \end{equation}	 
+	 Hence, the tail probability of $Z_n$ with $t = \sqrt{2\sigma^2 \log n} $satisfies
+	 \begin{equation}
+	 	\bbP[Z_n \geq t] \geq 1 - 
+	 \end{equation}
+	 \fi
+\end{proof}
+
+
+
+\begin{rmk}
+	The absolute Gaussian maxima $Z_n$ concentrates around $\sigma \sqrt{\log n}$ for large $n$. Standard Gaussian variables concentrate around 0, while the maxima of the $n$ standard Gaussian variables is no longer a Gaussian variable. The scale of Gaussian maxima scales as $\sqrt{n}$, however, the sum of $n$ i.i.d.\ Gaussian variables scales as $n$.
+\end{rmk}
+
+\subsection{Exercise 2.12}\label{ex:12}
+\begin{lem}[Sharp upper bounds for sub-Gaussian maxima]
+	Let $\{X_i\}_{i = 1}^n$ be a sequence of zero-mean sub-Gaussian variables with parameter $\sigma$. Then, we have
+	\begin{equation}
+		\bbE \off{\max_{i \in [n]} X_i} \leq \sqrt{2\sigma^2 \log n}, \quad \text{for all } n \geq 1.
+	\end{equation}
+	Note that independence assumptions are unnecessary.
+\end{lem}
+
+\begin{proof}
+	For all $t >0$, the function $f(x) = \exp \of{tx}$ is a convex function. Apply the function $f(x)$ to $\bbE \off{\max_{i \in [n]} X_i} $. By Jensen's inequality, we have
+	\begin{equation}\label{eq:e212}
+		\exp \offf{t \bbE \off{\max_{i \in [n]} X_i} } \leq \bbE\off{\exp \of{t \max_{i \in [n]} X_i }} \leq \sum_{i= 1}^n \bbE\off{\exp \of{t X_i }} \leq n e^{\frac{t^2 \sigma^2}{2}}, \quad \text{for all }t > 0,
+	\end{equation}
+	where the last inequality follows from the sub-Gaussianity of $X_i$s. Take the log of both sides of equation~\eqref{eq:e212}. We have
+	\begin{equation}\label{eq:e212b}
+		\bbE \off{\max_{i \in [n]} X_i}  \leq \frac{\log n}{t} + \frac{t\sigma^2}{2}.
+	\end{equation}
+	Plugging $t = \frac{\sqrt{2\log n} }{\sigma}$ into the equation~\eqref{eq:e212b}, we obtain
+	\[ \bbE \off{\max_{i \in [n]} X_i}  \leq \sqrt{2 \sigma^2 \log n}.\]
+\end{proof}
+
+\begin{rmk}
+	The maxima for $n$ i.i.d.\ sub-Gaussian variables is upper bounded by $\sigma \sqrt{\log n}$. The independence assumption is not necessary for the upper bound of sub-Gaussian maxima.
+\end{rmk}
+
+\subsection{Exercise 2.13}
+\begin{lem}[Operations on sub-Gaussian variables]
+	Let $X_1$ and $X_2$ be two zero-mean sub-Gaussian variables with parameters $\sigma_1$ and $\sigma_2$ respectively. 
+	\begin{enumerate}
+		\item[(a).] If $X_1$ and $X_2$ are independent, then random variable $X_1 + X_2$ is sub-Gaussian with parameter $\sqrt{\sigma_1^2 + \sigma_2^2}$.
+		\item[(b).] Without independence assumptions, then random variable $X_1 + X_2$ is sub-Gaussian with parameter at most 
+		%$2 \sqrt{\sigma_1^2 +\sigma_2^2 }$.
+		$\sigma_1 + \sigma_2$.
+		\item[(c).] If $X_1$ and $X_2$ are independent, then random variable $X_1 X_2$ is sub-exponential with parameter $(\nu, b) = \of{\sqrt{2}\sigma_1 \sigma_2, \frac{1}{\sqrt{2}\sigma_1 \sigma_2}}$.
+	\end{enumerate}
+\end{lem}
+
+\begin{proof}
+	First, we prove $(a)$.
+	
+	\vspace{0.2cm}
+	Since $X_1\sim \subG(\sigma_1)$ and $X_2 \sim \subG(\sigma_2)$ are independent, we have
+	\begin{equation}
+		\bbE\off{e^{t(X_1 + X_2)}} = \bbE\off{e^{tX_1}} \bbE\off{e^{tX_2}} \leq e^{\frac{t^2(\sigma_1^2 + \sigma_2^2)}{2}},\quad \text{for all }t \in \bbR.
+	\end{equation}
+	Therefore, $X_1 +X_2$ is sub-Gaussian with parameter $\sqrt{\sigma_1^2 + \sigma_2^2}$.
+	
+	\vspace{0.2cm}
+Next, we prove $(b)$.
+
+\vspace{0.2cm}
+For all $t \in \bbR$, we have
+\begin{equation}\label{eq:e213b}
+	\bbE\off{e^{t(X_1 + X_2)}} = \bbE \off{e^{t X_1} e^{t X_2}}.
+\end{equation}
+Introduce $p,q \geq 1$ such that $\frac{1}{p} + \frac{1}{q} = 1$. By Holder's inequality, the equation~\eqref{eq:e213b} becomes
+\begin{equation}\label{eq:e213b2}
+	\bbE\off{e^{t(X_1 + X_2)}} \leq \of{\bbE \off{e^{ p t X_1}  } }^{\frac{1}{p}}
+	 \of{\bbE \off{e^{ pt X_2}  }}^{\frac{1}{q}} \leq e^{  \frac{pt^2 \sigma_1^2 + qt^2 \sigma_2^2}{2} },
+\end{equation}
+where the last inequality follows from the sub-Gaussianity of $X_1$ and $X_2$. The inequality~\eqref{eq:e213b2} achieves its minimum when $p = \sigma_2/\sigma_1 +1$. Plugging the minimizer to inequality~\eqref{eq:e213b2}, we obtain
+\begin{equation}
+	\bbE\off{e^{t(X_1 + X_2)}} \leq e^{\frac{t^2(\sigma_1 + \sigma_2
+	)^2}{2}}.
+\end{equation}
+Therefore, the random variable $X_1 + X_2$ is sub-Gaussian with parameter at most $\sigma_1 + \sigma_2$.
+
+\vspace{0.2cm}
+
+Last, we prove $(c)$.
+
+\vspace{0.2cm}
+\textbf{My thoughts:} Note that $X_1 X_2 = \frac{1}{4}\of{(X_1 + X_2)^2 - (X_1 - X_2)^2}$. By part $(a)$, we have $X_1 + X_2$ and $X_1 - X_2$ are sub-Gaussian with the parameter $\sqrt{\sigma_1^2 + \sigma^2_2}$. Note that for a variable $X \sim \subG(\sigma^2)$, the variable $Z = X^2 - \bbE[X^2] \sim \text{subE}(16\sigma^2, 16\sigma^2)$. 
+\vspace{0.2cm}
+
+The characteristic function of $X_1 X_2$ is 
+\begin{equation}\label{eq:e13c1}
+	\bbE[e^{t X_1 X_2}] = \bbE[e^{\frac{t}{4} \of{(X_1 + X_2)^2 - (X_1 - X_2)^2} }] = \bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ], \quad \text{for all } t \in \bbR.
+\end{equation} 
+By Cauchy-Schwartz inequality, the expectation~\eqref{eq:e13c1} satisfies
+\begin{equation}\label{eq:e13c2}
+	\bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ] \leq \of{\bbE[ e^{\frac{t}{2} (X_1 +X_2 )^2} ]}^{1/2} \of{\bbE[ e^{-\frac{t}{2} (X_1 -X_2 )^2} ]}^{1/2}.
+\end{equation}
+
+Let $Z_1 = (X_1 + X_2)^2 - \bbE[(X_1 + X_2)^2]$. Note that $\bbE[X^2_i] = \var{(X_i)} \leq \sigma^2_i $, for $ i = 1,2$, and the variable $Z_1 \sim \text{subE}(16(\sigma^2_1 + \sigma^2_2), 16(\sigma^2_1 + \sigma^2_2))$. We have
+\begin{equation}\label{eq:e13c3}
+	\bbE[ e^{\frac{t}{2} (X_1 +X_2 )^2} ] = \bbE[e^{\frac{t}{2} Z_1 + \frac{t}{2} \bbE[(X_1 + X_2)^2] }] \leq \bbE[e^{\frac{t}{2} Z_1}] e^{ \frac{t}{2} (\sigma_1^2 + \sigma_2^2) } \leq e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2 + \frac{t}{2} (\sigma^2_1 + \sigma_2^2) },
+\end{equation}
+for all  $|t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}$. Similarly, we have
+\begin{equation}\label{eq:e13c4}
+	\bbE[ e^{-\frac{t}{2} (X_1 -X_2 )^2} ]  \leq  e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2 - \frac{t}{2} (\sigma^2_1 + \sigma_2^2) },
+\end{equation}
+for all  $|t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}$. Plug the inequalities \eqref{eq:e13c3} and \eqref{eq:e13c4} into the inequality~\eqref{eq:e13c2}. We have
+\begin{equation}
+		\bbE[ e^{\frac{t}{4} (X_1 +X_2 )^2} e^{-\frac{t}{4} (X_1 - X_2)^2 } ]  \leq  e^{32 t^2 (\sigma^2_1 + \sigma_2^2)^2}, \quad \text{for all } |t| \leq \frac{1}{8 (\sigma^2_1 + \sigma_2^2)}.
+\end{equation}
+Therefore, the variable $X_1 X_2 \sim \text{subE}(8(\sigma^2_1 + \sigma^2_2),8(\sigma^2_1 + \sigma^2_2) )$.
+
+
+\end{proof}
+
+\begin{rmk}
+	Without the independence assumption, the sum of sub-Gaussian variables is still a sub-Gaussian variable. Under the independence assumption, the product of two sub-Gaussian variables is a sub-exponential variable.
+\end{rmk}
+
+\subsection{Exercise 2.14}
+\begin{lem}
+	Let $X$ be a scalar random variable. Suppose there exist two positive constant $c_1, c_2$ such that
+	\begin{equation}\label{eq:leme214}
+		\bbP \off{|X - \bbE[X]| \geq t} \leq c_1 e^{-c_2 t^2},\quad \text{for all }t\geq 0.
+	\end{equation}
+	Then, the variance $\var(X) \leq {c_1}/{c_2}$. 
+	
+	\vspace{0.2cm}
+	Let $m_X$ be the median of $X$; i.e., $\bbP[X \geq m_X] \geq 1/2$ and  $\bbP[X \leq m_X] \geq 1/2$. Note that the median $m_X$ is not necessarily unique. Given mean concentration~\eqref{eq:leme214}, for all median $m_X$, we have
+	\begin{equation}\label{eq:leme214b}
+		\bbP[|X - m_X| \geq t] \leq c_3 e^{-c_4t^2}, \quad \text{for all }t \geq 0,
+	\end{equation} 
+	where $c_3 \colonequals 4c_1$ and $c_4 \colonequals c_2/8$.
+	
+	 Conversely, if the equation~\eqref{eq:leme214b} holds, the mean concentration~\eqref{eq:leme214} also holds with parameter $c_1 = 2c_3$ and $c_2 = c_4/4$.
+\end{lem}
+
+\begin{proof}
+	First, we show the variance  $\var(X) \leq {c_1}/{c_2}$.
+	
+	\vspace{0.2cm}
+	
+	By the definition of variance, we have
+	\begin{equation}\label{eq:e2141}
+		\var(X) = \bbE[(X-\bbE[X])^2] = \int_{0}^{+\infty} \bbP \off{|X - \bbE[X]| \geq \sqrt{t} }dt.
+	\end{equation}
+	Since $X$ satisfies the mean concentration equation~\eqref{eq:leme214}, for all $t > 0$, we have
+	\begin{equation}\label{eq:e2142}
+		\bbP \off{|X - \bbE[X]| \geq \sqrt{t} } \leq c_1 e^{-c_2 t}.
+	\end{equation}
+	Plugging the equation~\eqref{eq:e2142} into equation~\eqref{eq:e2141}, we obtain
+	\[ \var(X) \leq \frac{c_1}{c_2}. \]
+	
+	\vspace{0.2cm}
+	
+	Next, we show by an example that the median of $X$, $m_X$, is not necessarily unique.
+	
+	\vspace{0.2cm}
+	Consider a random variable $Y \sim Bin(5,1/2)$. Then, we have $\bbP[Y \geq 3] = 1/2$ and $\bbP[Y \leq 3] > 1/2$. Meanwhile, we also have $\bbP[Y \geq 2] > 1/2$ and $\bbP[Y \leq 2] = 1/2$. By the definition of median, the number $2$ and $3$ both are the median of $Y$. Therefore, the median of a random variable is not necessarily unique.
+	
+	\vspace{0.2cm}
+	
+	Then, we prove the median concentration~\eqref{eq:leme214b}, provided that random variable $X$ satisfies the mean concentration~\eqref{eq:leme214}.
+	
+	\vspace{0.2cm}
+	
+	Let $\Delta = |\bbE[X] - m_X|$. Consider the following two cases.
+	\begin{enumerate}
+		\item[1.] Case 1: Suppose $t \geq 2\Delta$. 
+		
+		\vspace{0.2cm}
+		Note the triangle inequality $|X - \bbE[X]| \geq |X - m_X| - \Delta$ and the assumption $\frac{t}{2} \geq \Delta$. We have
+		\begin{equation}
+			\bbP[|X - m_X| \geq t] \leq \bbP \off{|X - m_X| \geq \frac{t}{2} + \Delta} \leq   \bbP \off{|X - \bbE[X]|  \geq \frac{t}{2}}.
+		\end{equation}
+		By equation~\eqref{eq:leme214}, we obtain
+		\begin{equation}\label{eq:e214case1}
+			\bbP[|X - m_X| \geq t] \leq c_1 e^{-\frac{c_2t^2}{4}}.
+		\end{equation}
+		
+		\item[2.] Case 2:   Suppose $t < 2\Delta$. 
+		
+		\vspace{0.2cm}
+		By the definition of median, we have
+		\begin{equation}\label{eq:e214ca2a}
+			\bbP[|X - \bbE[X]| \geq \Delta] \geq \bbP[X \geq m_X] \geq \frac{1}{2}.
+		\end{equation}
+		Meanwhile, by equation~\eqref{eq:leme214}, we have
+		\begin{equation}\label{eq:e214ca2b}
+			\bbP[|X - \bbE[X]| \geq \Delta] \leq c_1 e^{-c_2 \Delta^2}.
+		\end{equation}
+		
+		Combing the assumption $\Delta > \frac{t}{2}$  and inequalities~\eqref{eq:e214ca2a} \eqref{eq:e214ca2b}, we obtain
+		\begin{equation}\label{eq:e214case2}
+			\bbP[|X - m_X| \geq t]\leq 1\leq 2c_1  e^{-c_2 \Delta^2} \leq 2c_1  e^{-\frac{c_2 t^2}{4}}. 
+		\end{equation}
+		
+	\end{enumerate}
+	
+	Hence, combing the inequality~\eqref{eq:e214case1} and inequality~\eqref{eq:e214case2}, we conclude that
+	\begin{equation}
+		\bbP[|X - m_X| \geq t] \leq c_3 e^{-c_4 t^2}, 
+	\end{equation}
+	where $c_3 = 2c_1$ and $c_4 = c_2/4$. The upper bound also holds when $c_3 = 4 c_1$ and $c_4 = c_2/8$.
+	
+	\vspace{0.2cm}
+	
+	Last, we prove the mean concentration~\eqref{eq:leme214}, provided that the random variable $X$ satisfies the median concentration~\eqref{eq:leme214b}. 
+	
+	\iffalse
+	\vspace{0.2cm}
+	
+	As the proof for median concentration~\eqref{eq:leme214b}, we also consider the following two cases.
+	\begin{enumerate}
+		\item[1.] Case 1: Suppose $t \geq 2\Delta$.
+		
+		\vspace{0.2cm}
+		Note the triangle inequality $|X - m_X| + \Delta \geq |X - \bbE[X]|$ and the assumption $\frac{t}{2} \geq \Delta$. We have
+		\begin{equation}
+			\bbP[|X - \bbE[X]| \geq t ] \leq \bbP \off{|X - m_X| \geq \frac{t}{2}} \leq c_3 e^{-\frac{c_4 t^2}{4}},
+		\end{equation}
+		where the last inequality follows from the median concentration~\eqref{eq:leme214b}.
+		
+		\item[2.] Case 2: Suppose $t < 2\Delta$.
+	\end{enumerate}
+	
+	\fi
+	\end{proof}
+	
+	\begin{rmk}
+	If a variable concentrates around mean, the variable also concentrates around the median, vice versa.
+	\end{rmk}
+	
+	
+	\subsection{Exercise 2.15}
+	\begin{lem}
+		Let $\{X_i\}_{i=1}^n$ be i.i.d.\ sample of random variables with density $f$ on the real line. A standard estimate of $f$ is the kernel density estimate 
+		\begin{equation}
+			\hat f_n (x) = \frac{1}{nh} \sum_{i=1}^n  K\of{ \frac{x- X_i}{h} },
+		\end{equation}
+		where $K \colon \bbR \mapsto [0,+\infty )$ is a kernel function satisfying $\int_{-\infty}^{+\infty} K(x) dx = 1$, and $h > 0$ is a bandwidth parameter. Suppose we assess the estimate $\hat f_n (x)$ using the $L^1$ norm; i.e.,
+		\[ \onorm{\hat f_n - f}_1 = \int_{-\infty}^{+\infty} |\hat f_n(t) - f(t)|dt. \]
+		The upper tail probability of the $L^1$ norm satisfies
+		\begin{equation}
+			\bbP\off{\onorm{\hat f_n - f}_1 - \bbE \off{\onorm{\hat f_n - f}_1}\geq \delta} \leq e^{-\frac{n\delta^2}{8}},\quad \text{for all } \delta \geq 0.
+		\end{equation}
+	\end{lem}
+	
+	\begin{proof}
+		Note that $\onorm{\hat f_n - f}_1$ is a function of $X = (X_1,...,X_n)$, denoted $g(X) = g(X_1,...,X_n) = \onorm{\hat f_n - f}_1$ and $g\colon \bbR^n \mapsto \bbR$. Let $x^{(k)} = (x_1,...,x_k,...,x_n) \in \bbR^n$ and $x^{'(k)} = (x_1,...,x'_k,...,x_n)\in \bbR^n$ be two vectors. The absolute difference between the $g(x^{(k)})$ and $g(x^{'(k)})$ is
+		\begin{align}
+			|g(x^{(k)}) - g(x^{'(k)})|
+			&= \aabs{\int_{-\infty}^{+\infty} \aabs{ \frac{1}{nh} \sum_{i = 1}^n K \of{\frac{t-x_i}{h}} -f(t)  } -\aabs{ \frac{1}{nh} \sum_{i \neq k}^n K \of{\frac{t-x_i}{h}} -f(t) + \frac{1}{nh} K\of{\frac{t-x'_k}{h}}   } dt} \\
+			&\leq \int_{-\infty}^{+\infty} \aabs{\frac{1}{nh} \of{K\of{\frac{t-x_k}{h}} - K\of{\frac{t-x'_k}{h}}  } }dt\\
+			&\leq \frac{1}{nh} \of{ \int_{-\infty}^{+\infty} K\of{\frac{t-x_k}{h}}dt + \int_{-\infty}^{+\infty} K\of{\frac{t-x'_k}{h}}dt }.  \label{eq:e215int}
+		\end{align}
+		
+		Let $t_1 = \frac{t-x_k}{h}$. By the definition of $K$, the first integral in equation~\eqref{eq:e215int} are
+		\begin{equation}
+			\int_{-\infty}^{+\infty} K\of{\frac{t-x_k}{h}}dt = h\int_{-\infty}^{+\infty} K\of{t_1}dt_1 = h.
+		\end{equation}
+		Similarly, the second integral $\int_{-\infty}^{+\infty} K\of{\frac{t-x'_k}{h}}dt = h$. Then, we conclude the function $g$ satisfies
+		\begin{equation}\label{eq:e215diff}
+			|g(x^{(k)}) - g(x^{'(k)})|  \leq \frac{2}{n}.
+		\end{equation}
+		The inequality~\eqref{eq:e215diff} also holds for all $k \in [n]$ and for all $x^{(k)},x^{'(k)} \in \bbR^n$. Therefore, $g(X)$ satisfies the bounded difference property~\eqref{eq:defbounded} with parameters $(\frac{2}{n},..., \frac{2}{n})$. By Theorem~\ref{thm:bounddiff}, we obtain
+		\begin{equation}
+			\bbP\off{\onorm{\hat f_n - f}_1 - \bbE \off{\onorm{\hat f_n - f}_1} \geq \delta} \leq e^{-\frac{n\delta^2}{2}} \leq e^{-\frac{n\delta^2}{8}} .
+		\end{equation}
+		
+	\end{proof}
+	
+	\begin{rmk}
+		Kernel density estimator satisfies the bounded difference property and possesses a concentration property. Kernel density estimator converges to its mean in probability at the speed of $e^{-n}$ when $n$ goes to infinity.
+	\end{rmk}
+	
+	
+    \subsection{Exercise 2.16}
+    \begin{lem}
+    	Let $\{X_i\}_{i=1}^n$ be a sequence of independent variables taking values in a Hilbert space $\mathbb{H}$. Suppose that $\onorm{X_i}_{\mathbb{H}} \leq b_i$ almost surely, for all $i \in [n]$. Consider the real valued random variable $S_n = \onorm{\sum_{i=1}^n X_i}_{\mathbb{H}}$. The concentration bound of $S_n$ is
+    	\begin{equation}\label{eq:e216a}
+    		\bbP\off{|S_n - \bbE[S_n]| \geq n\delta} \leq 2e^{-\frac{n\delta^2}{8b^2}}, \quad \text{for all } \delta \geq 0,
+    	\end{equation}
+    	where $b^2 = \frac{1}{n} \sum_{i=1}^n b_i^2$. The upper tail probability bound of $S_n$ is
+    	\begin{equation}\label{eq:e216b}
+    		\bbP \off{\frac{S_n}{n} \geq a + \delta} \leq e^{-\frac{n\delta^2}{8b^2}}, \quad \text{for all }\delta \geq 0,
+    	\end{equation}
+    	where $a = \sqrt{\frac{1}{n^2} \sum_{i=1}^n \bbE \off{\onorm{X_i}^2_{\mathbb{H}}} }$.
+    \end{lem} 
+    
+    \begin{proof} First, we prove the concentration bound~\eqref{eq:e216a}.
+    
+    \vspace{0.2cm}
+    	Note that $S_n$ is a function of $X=(X_1,...,X_n)$, denoted $S_n(X) = S_n(X_1,...,X_n)$, and $S_n(X) \colon \bbR^n \mapsto \bbR$.  Let $x^{(k)} = (x_1,...,x_k,...,x_n) \in \bbR^n$ and $x^{'(k)} = (x_1,...,x'_k,...,x_n)\in \bbR^n$ be two vectors. The absolute difference between $S_n(x^{(k)})$ and $S_n(x^{'(k)})$ is
+    	\begin{align}
+    		\aabs{S_n(x^{(k)}) - S_n(x^{'(k)})} &= \aabs{\onorm{x_1 + \cdots +x_k + \cdots + x_n}_{\mathbb{H}} - \onorm{x_1 + \cdots +x'_k + \cdots + x_n}_{\mathbb{H}} }\\
+    		& \leq \onorm{x_k - x'_k}_{\mathbb{H}}\\
+    		& \leq 2b_k, \label{eq:e216diff}
+    	\end{align}
+    	where the last inequality follows by the boundedness $\onorm{X_k}_{\mathbb{H}} \leq b_k$, for all $k \in [n]$. The inequality~\eqref{eq:e216diff} also holds for all $k \in [n]$ and for all $x^{(k)},x^{'(k)} \in \bbR^n$. Therefore, $S_n(X)$ satisfies the bounded property~\eqref{eq:defbounded} with parameters $(2b_1,...,2b_n)$. By Theorem~\ref{thm:bounddiff}, we obtain
+    	\begin{equation}
+    		\bbP\off{|S_n - \bbE[S_n]| \geq n\delta} \leq 2 e^{- \frac{n \delta^2}{2b^2}} \leq 2 e^{- \frac{n \delta^2}{8b^2}}, \quad \text{for all }\delta \geq 0.
+    	\end{equation}
+    	
+    	\vspace{0.2cm}
+    	Next, we prove the upper tail probability bound~\eqref{eq:e216b}.
+    	
+    	\vspace{0.2cm}
+    	The expectation of $S_n(X) = \bbE \off{ \sum_{i=1}^n  \onorm{X_i}_{\mathbb{H}}}$ satisfies
+    	\begin{equation}\label{eq:e216ineq}
+    		 \bbE \off{ \onorm{ \sum_{i=1}^n  X_i}_{\mathbb{H}} } \leq \sqrt{ \bbE \off{ \onorm{\sum_{i=1}^n X_i }_{\mathbb{H}}^2  }} = \sqrt{ \sum_{i=1}^n \bbE \off{ \onorm{X_i}^2_{\mathbb{H}} } } = na,
+    	\end{equation}
+    	where the first inequality follows by the fact that $\bbE[X^2] \geq (\bbE[X] )^2$ and the second equation follows by the independence of $\{X_i\}_{i=1}^n$. Therefore, combing the inequality~\eqref{eq:e216ineq} with the concentration bound~\eqref{eq:e216a}, we obtain
+    	\begin{equation}
+    		\bbP \off{\frac{S_n}{n} \geq a + \delta} = \bbP \off{S_n - na \geq n\delta} \leq \bbP \off{S_n - \bbE[S_n] \geq n\delta } \leq e^{-\frac{n\delta^2}{8 b^2}}.
+    	\end{equation}
+    \end{proof}
+    
+    \begin{rmk}
+    	The sample mean also for $n$ variables in a Hilbert space converge to its expectation in probability at the speed of $e^{-n}$.
+    \end{rmk}
+    
+    \subsection{Exercise 2.17}
+    \begin{lem}[Hanson-Wright Inequality]
+   Let $\mQ = \entry{\mQ_{ij}}  \in \bbR^{n \times n} $ be a positive semi-definite matrix, and $\{X_i\}_{i = 1}^n$ be i.i.d.\ random variables with mean zero, variance 1 and $\sigma-$sub-Gaussian. Consider the random variable $Z = \sum_{i= 1}^n \sum_{j = 1}^n \mQ_{ij} X_i X_j$. The Hanson-Wright inequality for $Z$ is
+   \begin{equation}
+   	\bbP \off{Z \geq \tr (\mQ) + \sigma t } \leq 2 e^{- \min \offf{\frac{c_1 t}{\onorm{\mQ}_{op}  } , \frac{c_2 t^2}{\onorm{\mQ}^2_F} }}, \quad \text{for all } t \geq 0,
+   \end{equation}
+   where $\onorm{\mQ}_{op}$ is the operator norm of matrix $\mQ$, $\onorm{\mQ}_F$ is the Frobenius norm of matrix $\mQ$, and $c_1,c_2$ are two universal constants independent with $n$ and $t$.
+    \end{lem}
+    
+    The proof for Hanson-Wright Inequality under the special case  $X_i \stackrel{i.i.d.}{\sim} N(0,1)$ is below. Let $\sigma  = 1$.
+    
+    \begin{proof}
+    	Since the random variables $\{X_i\}_{i=1}^n$ are independent and $\var(X_i) = 1$ for all $i \in [n]$, the expectation $\bbE[Z] = \sum_{i = 1}^{n} \mQ_{ii} = \tr(\mQ)$. Then, the upper tail probability of $Z$ becomes
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } = \bbP \off{ \of{  \sum_{i = 1}^{n} \mQ_{ii} (X^2_i - 1) + \sum_{i \neq j} \mQ_{ij} X_i X_j }\geq t   }
+    	\end{equation}
+    	For two random variables $X,Y$ and a constant $t$, we have the inequality $ \bbP[X+Y \geq t] \leq \bbP[X \geq t/2] + \bbP[Y \geq t/2]$. Hence, the tail probability is upper bounded as
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } \leq \bbP\off{ \sum_{i =1 }^n \mQ_{ii}(X_i^2 - 1) \geq \frac{t}{2}  } + \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \equalscolon p_1 + p_2.
+    	\end{equation} 
+    	
+    	Consider $p_1$. For a standard normal variable $X$,  the squared variable $X^2 \sim \chi^2_1$ and thus $X^2$ is sub-exponential with parameter $(\nu, b) = (2,4)$. Given a constant $c$, $cX^2$ is still sub-exponential with parameters $(2 c, 4 c^2)$. Hence, for all $i \in [n]$, the variable $\mQ_{ii} X_i^2$ is sub-exponential with parameters $(2 \mQ_{ii}, 4 \mQ^2_{ii} )$. By the Bernstein-type inequalities (see Step 1 in reference), the probability $p_1$ is upper bounded as following,
+    	\begin{equation}
+    		p_1 = \bbP \off{\sum_{i=1}^n { \of{ \mQ_{ii}X^2_i - \mQ_{ii}\bbE[X^2_i]   } \geq \frac{t}{2} }} \leq \exp \of{ - \min \offf{  \frac{c t^2}{\sum_{i}^n \mQ^2_{ii} }, \frac{c't}{\max_{i \in [n]  }|\mQ_{ii}| } }},
+    	\end{equation}
+    	where $c$ and $c'$ are two constants independent with $n$ and $t$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Consider $p_2$. For two i.i.d.\ standard normal variables $X,Y$, the product $XY = \frac{1}{4}(X+Y)^2 - \frac{1}{4}(X-Y )^2$, where $ \frac{1}{2} (X+Y)^2$ and $\frac{1}{2} (X-Y)^2$ follow the chi-square distribution $\chi^2_1$ independently. Then, $XY$ is the subtraction of two independent sub-exponential variables. Let $D_1$ and $D_2$ be two identical and independent sub-exponential variables with parameters $(\nu, b)$. We have
+    	\[ \bbE[e^{\lambda (D_1-D_2)}] = \bbE[e^{\lambda D_1}] \bbE[e^{-\lambda D_2}] \leq e^{2v^2 \lambda^2}, \quad \text{for all } |\lambda | < \frac{1}{b}.  \]
+    	Therefore, the subtraction of two identical and independent sub-exponential variables $D_1 -D_2$ is still sub-exponential with parameters $(\sqrt{2}\nu, b)$.
+    	
+    	\vspace{0.2cm}
+    	Back to $\mQ_{ij} X_i X_j$. By the discussion above, for all $i\neq j$, the variable $\mQ_{ij} X_i X_j$ is sub-exponential with parameters $(\sqrt{2} \mQ_{ij}, \mQ_{ij}^2)$. By the Bernstein-type inequalities, the probability $p_2$ is upper bounded as following,
+    	\begin{equation}
+    		p_2 = \bbP \off{ \sum_{i \neq j} \mQ_{ii} X_i X_j  \geq \frac{t}{2}} \leq \exp \of{ - \min \offf{  \frac{c'' t^2}{\sum_{i\neq j} \mQ^2_{ij} }, \frac{c'''t}{\max_{i\neq j   }|\mQ_{ij}| } }},
+    	\end{equation}
+    	where $c''$ and $c'''$ are two constants independent with $n$ and $t$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Therefore, by the definition of Frobenius norm and the fact that $\max_{i,j\in[n]}|\mQ_{ij}| \leq \onorm{\mQ}_{op} $, we obtain the goal inequality
+    	\begin{equation}
+    		\bbP \off{ Z \geq \tr(\mQ) +  t } \leq p_1 + p_2 \leq 2\exp \of{ - \min \offf{  \frac{c_2 t^2}{\onorm{\mQ}^2_F}, \frac{c_1t}{\onorm{\mQ}_{op} }} },
+    	\end{equation}
+    	for some universal constants $c_1,c_2$ independent with $n$ and $t$.
+    \end{proof}
+    
+    Reference: http://www-personal.umich.edu/~rudelson/papers/rv-Hanson-Wright.pdf.
+    
+    \begin{rmk}
+    	For a random vector $X$, Hanson-Wright Inequality implies the tail probability of matrix product $X^T \mQ X$ is upper bounded at the leve of $e^{-\min\{ \onorm{\mQ}^{-2}_F, \onorm{\mQ}^{-1}_{op} \}}$, where $\mQ$ is a positive semi-definite matrix. 
+    \end{rmk}
+    
+    
+    \subsection{Exercise 2.18}
+    
+    \begin{defn}[Orlicz Norms]\label{def:orlicz}
+     Let $\psi \colon \bbR_+ \mapsto \bbR_+$ be a strictly increasing convex function satisfying $\psi(0) = 0$. The $\psi$-Orlicz norm of a random variable $X$ is defined as
+    \begin{equation}
+    	\onorm{X}_{\psi} \colonequals \inf \offf{t > 0\colon \bbE\off{\psi \of{t^{-1} |X| } } \leq 1  }.
+    \end{equation}
+    The norm $\onorm{X}_{\psi}$ is infinite if there is no finite $t$ such that the expectation $ \bbE\off{\psi \of{t^{-1} |X| } }$ exists.
+    \end{defn}
+    
+     Given the function $\psi_q(u) = u^{q}$ for some $q \in [1,+\infty)$, the Orlicz norm is simply the $l_q$-norm $\onorm{X}_q = \of{ \bbE[|X|^q] }^{1/q}$.
+
+    \begin{lem}
+    Let $\psi_q(u) = \exp(u^q) - 1$ be a function for $u \in \bbR_+$ with positive parameter $q \in [1,+\infty)$, and $\onorm{\cdot}_{\psi_q}$ denote the $\psi_q$-Orlicz norm. Then,
+    \begin{enumerate}
+    	\item[(a.)] if $\onorm{X}_{\psi_q} < +\infty$, there exist two positive constants $c_1,c_2$ such that
+    	\begin{equation}\label{eq:lemorlicztail}
+    		\bbP[|X| > t] \leq c_1 \exp \of{-c_2 t^q},\quad \text{for all } t > 0.
+    	\end{equation}
+    	In particular, the constants $c_1 = 2$ and $c_2 = \onorm{X}_{\psi_q}$.
+    	
+    	\item[(b.)] if the random variable $X$ satisfies the tail bound~\eqref{eq:lemorlicztail}, the Orlicz norm $\onorm{X}_{\psi_q} < +\infty$.
+    \end{enumerate}
+    \end{lem}
+    \begin{proof}
+    	First, we prove $(a)$.
+    	
+    	\vspace{0.2cm}
+    	
+    	Let $t_0$ denote the Orlicz norm $\onorm{X}_{\psi_q}$. Since $t_0 < +\infty$, the expectation $ \bbE \off{ \exp \of{\lambda |X|^q} }$ exists for $\lambda \in  [0,t^{-q}_0]$. Applying Chernoff's bound to $|X|^q$, the upper tail bound of $|X|$ is
+    	\begin{equation}\label{eq:e218tailbound}
+    		\bbP [|X|>t] = \bbP \off{\frac{|X|^q}{t^q_0} > \frac{t^q}{t^q_0}} \leq e^{-\lambda t^q} \bbE \off{ \exp \of{\lambda |X|^q} }, \quad \text{for all } t\geq 0, \lambda\in [0,t^{-q}_0].
+    	\end{equation}
+    	 By the definition of Orlicz norm, the expectation satisfies
+    	\begin{equation}\label{eq:e218ep}
+    		\bbE \off{ \exp \of{ t^{-q}_0|X|^q} } = \bbE \off{ \psi( t^{-1}_0 |X| )} + 1 \leq 2.
+    	\end{equation}
+    	Let $\lambda = t^{-q}_0$ and plug the expectation~\eqref{eq:e218ep} to the inequality~\eqref{eq:e218tailbound}. Then, we obtain the tail bound
+    	\begin{equation}
+    		\bbP [|X|>t] \leq 2 e^{- \onorm{X}^{-q}_{\psi_q} t^q },\quad 
+    		\text{for all }  t \geq 0.
+    	\end{equation}
+    	
+    	\vspace{0.2cm}
+    	Next, we prove $(b)$.
+    	
+    	\vspace{0.2cm}
+     Let $t_1$ be a positive constant. 	Note the fact that $\bbE[X] = \int_{-\infty}^{+\infty} \bbP(X >t) dt  $. The expectation of $\bbE[ \exp(t^{-q}_1 |X| )  ]$ is
+    	\begin{align}
+    		\bbE[ \exp(t^{-q}_1 |X|^q )  ] &= \int_{0}^{+\infty} \bbP \off{ \exp \of{\frac{|X|^q}{t^q_1}} > \exp \of{\frac{t^q}{t^q_1}} } dt \\
+    		& = \int_{0}^{+\infty} \bbP \off{ |X| > t } dt \\
+    		& \leq  \int_{0}^{+\infty} c_1 \exp(-c_2 t^q) dt\label{eq:e218integral},
+       	\end{align}
+       	where the last inequality follows from the tail bound~\eqref{eq:lemorlicztail}. Let $u = c_2 t^q$. The integral in equation~\eqref{eq:e218integral} becomes
+       	\[  \int_{0}^{+\infty} c_1 \exp(-c_2 t^q) dt = \frac{c_1}{q c_2^{1/q}} \int_{0}^{+\infty} u^{1/q-1}e^{-u} du =  \frac{c_1}{q c_2^{1/q}} \Gamma(1/q) < +\infty.  \]
+       	Therefore, the expectation 
+       	\begin{equation}
+       		\bbE \off{ \psi(t_1^{-1} |X| )} =  \bbE[ \exp(t^{-q}_1 |X|^q )  ] - 1 < +\infty, \quad \text{for all } t_1 > 0,
+       	\end{equation}
+       	which implies the Orlicz norm $\onorm{X}_{\psi_q}$ is definite.
+    \end{proof}
+    
+    \begin{rmk}
+    	For a random variable $X$, the existence of $X$'s Orlicz norm implies the tail probability of $X$ is upper bounded at the level of $e^{-\onorm{X}^{-q}_{\varphi} }$. 
+    \end{rmk}
+    
+\subsection{Exercise 2.19}
+\begin{lem}[Maxima of Orlicz variables] Recall the definition of Orlicz norm~\ref{def:orlicz}. Let $\{X\}_{i=1}^n$ be a sequence of i.i.d.\ zero-mean random variables. Given a positive, increasing and convex function $\psi \colon \bbR_+ \mapsto \bbR_+$, the random variable $X_i$ has a finite Orlicz norm $\sigma = \onorm{X_i}_{\psi}$, for all $i \in [n]$. Then, the maxima of $X_i$ satisfies
+\begin{equation}
+	\bbE \off{ \max_{i\in[n]} |X_i| } < \sigma \psi^{-1}(n).
+\end{equation}
+	
+\end{lem}
+
+\begin{proof}
+	Since $\psi$ is a convex function, by Jensen's inequality, we have
+	\begin{equation}\label{eq:e219max}
+		\psi \of{\bbE \off{\max_{i \in [n]} \frac{|X_i|}{\sigma}  } } \leq \bbE \off{ \max_{i\in[n]} \psi \of{\frac{|X_i|}{\sigma}}   } \leq n \bbE \off{ \psi \of{\frac{|X_1|}{\sigma}} }.
+	\end{equation}
+	By the definition of Orlicz norm, we have $\bbE \off{ \psi \of{\frac{|X_1|}{\sigma}} } \leq 1$. Therefore, taking the inverse function $\psi^{-1}$ on both sides of inequality~\eqref{eq:e219max}, we obtain
+	\[  \bbE \off{\max_{i \in [n]} {|X_i|} } \leq \sigma \psi^{-1}(n).  \]
+\end{proof}
+
+\begin{rmk}
+	The maxima of Orlicz variables is upper bounded by the Orlicz norm $\sigma$ and scales as $\psi^{-1}(n)$. In previous exercises, the maxima of sub-Gaussian variables concentrates around the sub-Gaussian variable $\sigma$ and scales at $\log (n)$. 
+\end{rmk}
+    
+\subsection{Exercise 2.20}
+
+\begin{lem}
+	Let $\{X_i\}_{i=1}^n$ be a sequence of independent zero-mean random variables. Suppose that for some fixed integer $m \geq 1$ the random variables satisfy the following moment bound,
+\begin{equation}\label{eq:e220mom}
+	\onorm{X_i}_{2m} \colonequals \of{\bbE[X^{2m}_i] }^{\frac{1}{2m}} \leq C_m, \quad \text{for all } i \in [n].
+\end{equation}
+Then, we have the tail bound
+\begin{equation}
+	\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } \leq B_m \of{\frac{1}{\sqrt{n} \delta}}^{2m}, \quad \text{for all } \delta >0,
+\end{equation}
+where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
+\end{lem}
+
+\textit{Hint:} Let $\{X_i\}_{i=1}^n$ be a sequence of independent zero-mean random variables. The Rosenthal’s inequality is
+\begin{equation}\label{eq:rosenthal}
+	\bbE \off{\of{\sum_{i=1}^n X_i}^{2m}} \leq R_m \offf{\sum_{i=1}^n \bbE \off{X^{2m}_i} + \of{\sum_{i=1}^n \bbE [X^2_i]}^m },
+\end{equation}
+ where $R_m$ is a universal constant depending on $m$ only.
+ 
+ \begin{proof}
+ 	Applying the $2m$-order central moment version of the Markov's inequality to $\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } $, we have the tail bound
+ 	\begin{equation}\label{eq:e220tail}
+ 		\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } = \bbP \off{\aabs{  \sum_{i=1}^n X_i } \geq n \delta } \leq (n\delta)^{-2m} \bbE \off{ \of{\sum_{i=1}^n X_i}^{2m} }.
+ 	\end{equation}
+ 	
+ 	By the moment bound, for all $i\in [n]$, we have
+ 	\begin{equation}\label{eq:e220inequ}
+ 		\bbE \off{X^2_i}  \leq \bbE \off{X^{2m}_i} \leq C^{2m}_m.
+ 	\end{equation}
+ 	Plugging the inequality~\eqref{eq:e220inequ} to the Rosenthal's inequality~\eqref{eq:rosenthal}, we obtain
+ 	\begin{equation}\label{eq:e220exp}
+ 		\bbE \off{\of{\sum_{i=1}^n X_i}^{2m}} \leq R_m\of{nC^{2m}_m  + n^m C^{2m^2}_m  }. 
+ 	\end{equation}
+ 	Combining the inequality~\eqref{eq:e220exp} with tai bound~\eqref{eq:e220tail}, we have
+ 	\begin{equation}
+ 		\bbP \off{\aabs{ \frac{1}{n}  \sum_{i=1}^n X_i } \geq \delta } \leq \frac{R_m\of{nC^{2m}_m  + n^m C^{2m^2}_m  } }{n^{2m} \delta^{2m}} = B_m\of{ \frac{1}{\sqrt{n} \delta}}^{2m}, \quad \text{for all }\delta > 0,
+ 	\end{equation}
+ 	where $B_m$ is a universal constant depending on $C_m$ and $m$ only.
+ \end{proof}
+ 
+ \begin{rmk}
+ 	For $n$ independent zero-mean variables $X_i$, the order $2m$ moment condition for $X_i$ implies that the sample mean $\frac{1}{n} \sum_{i=1}^n X_i$ converges to 0 at the speed of $n^{-m}$.
+ \end{rmk}
+ 
+ \subsection{Exercise 2.21}
+ \begin{defn}
+ 	Let $X=(X_1,...,X_n)$ be a sequence of i.i.d.\ Bernoulli variables with parameter $1/2$. Represent X using a codebook of $N$ binary vectors, denoted $\{z^1,...,z^N\}$, where $z^j = \entry{z^j_i} \in \bbR^n$ is a vector, for all $j \in [N]$. The rescaled Hamming distortion is defined as
+ 	\begin{equation}
+ 		\delta \colonequals \bbE \off{ \min_{j \in [N]} \rho_H(X, z^j) } = \bbE \off{ \min_{j \in [N]} \frac{1}{n} \sum_{i = 1}^n  \mathds{1} \off{X_i \neq z^j_i} }. 
+ 	\end{equation}
+ \end{defn}
+ 
+ The goal of lossy data compression is to find a representation of $X$ with rescaled Hamming distortion as small as possible. When we use a codebook with $N = 2^n$ codewords, we always achieve the 0 distortion. However, obtaining the distortion with $N = 2^n$ codewords is computationally expensive. Our goal is to find a proper rate  $R < 1$ such that using a codebook with $N = 2^{Rn}$ codewords achieves a good compression performance. 
+ 
+ \begin{lem}
+ 	
+ 	Let $X=(X_1,...,X_n)$ be a sequence of i.i.d.\ Bernoulli variables with parameter $1/2$. Let $\delta \in (0,1)$. Suppose that the rate $R$ is upper bounded as
+ 	\begin{equation}
+ 		R < D_2(\delta || 1/2 ) = \delta \log_2 \frac{\delta}{1/2} + (1-\delta) \log_2 \frac{1-\delta}{1/2}.
+ 	\end{equation}
+ 	
+ 	Let  $\Delta_R \colonequals R - D_2(\delta || 1/2 )$. If $\Delta_R < 0$, 
+ 	then the probability of achieving distortion $\delta$ goes to 0 as $n$ goes to the infinity, for all codebook $\{z^1,...,z^N\}$. If $\Delta_R > 0$, the probability of achieving distortion $\delta$ goes to 1 as $n$ goes to the infinity, for all codebook $\{z^1,...,z^N\}$.
+ 	
+ \end{lem}
+ 
+ \begin{proof} First, we prove the probability of achieving the distortion under $\Delta_R < 0$.
+ 
+ \vspace{0.2cm}
+ 
+ 	Consider the random variables $V^j = \mathds{1}\off{\rho_H(X,z^j) \leq \delta}  $, for all $j \in [N]$. Given the codeword $z^j$, the variable $\mathds{1} \off{X_i - z^j_i}$ is still a Bernoulli random variable. Recalling the tail bound~\eqref{eq:lembinupper} in Exercise \ref{exe:29}, we have
+ 	\begin{equation}
+ 		\bbP \off{V^j = 1} = \bbP \off{\sum_{i=1}^n \mathds{1} \off{X_i - z^j_i} \leq n\delta} \leq e^{-nD(\delta || 1/2)}, \quad \text{for all }j\in [N].
+ 	\end{equation}
+ 	Since the sum of $V^j$, denoted $V = \sum_{j=1}^N V^j$, follows the Binomial distribution $Bin(N, \bbP \off{V^j = 1} )$, the probability of not achieving the distortion $\delta$ is
+ 	\begin{equation}\label{eq:e221av0}
+ 		\bbP[V = 0] \geq \of{1 - e^{-nD(\delta || 1/2)}}^N.
+ 	\end{equation}
+  Let $R_0 = D_2(\delta || 1/2)$ and $N_0 = 2^{R_0 n} = (2\delta)^{n\delta}(2(1-\delta))^{n(1-\delta)}$. By the definition of KL divergence, we have $e^{-nD(\delta || 1/2)} = N^{-1}_0$. Note that the ratio $\frac{N}{N_0} = 2^{(\Delta_R)n}$ goes to 0 as $n$ goes to the infinity. Hence, the limit of the probability~\eqref{eq:e221av0} is
+  \begin{equation}
+  	\lim_{n \rightarrow +\infty} \bbP[V = 0] \geq \lim_{n \rightarrow +\infty} \of{\of{1 - \frac{1}{N_0}}^{N_0} }^{\frac{N}{N_0}} = 1.
+  \end{equation}
+  
+  Therefore, when $\Delta_R < 0$, the probability of achieving distortion $\delta$ goes to 0 as $n$ goes to the infinity.
+ 	
+ 	
+ 	\vspace{0.2cm}
+ 	Next,  we prove the probability of achieving the distortion under $\Delta_R > 0$. 
+ 	
+ 	\vspace{0.2cm}
+ 	Recall the tail bound~\eqref{eq:e2103} in Exercise~\ref{exe:210}. We have the upper bound of $\bbP \off{V^j = 1}$, where
+ 	\begin{equation}\label{eq:e221prob}
+ 		\bbP \off{V^j = 1} = \bbP \off{\sum_{i=1}^n \mathds{1} \off{X_i - z^j_i} \leq n\delta} \geq \frac{1}{n+1}e^{-nD(\delta || 1/2)}, \quad \text{for all }j\in [N].
+ 	\end{equation}
+ 	Then the probability of not achieving the distortion $\delta$ is
+ 	\begin{equation}
+ 		\bbP[V = 0] \leq \of{1 - \frac{1}{n+1} e^{-nD(\delta || 1/2)}}^N.
+ 	\end{equation}
+ 	
+ 	Since the difference $\Delta_R > 0$, then the ratio $\frac{N}{N_0(n+1)} = \frac{2^{(\Delta_R) n} }{n+1}$ goes to infinity as $n$ goes to infinity. 
+ 	
+ 	 Hence, the limit of the probability of not achieving the distortion $\delta$ is
+ 	 \begin{equation}
+ 	 	\lim_{n \rightarrow +\infty} \bbP[V = 0] \leq \lim_{n \rightarrow +\infty} \of{1 - \frac{1}{n+1} e^{-nD(\delta || 1/2)}}^N = \lim_{n \rightarrow +\infty}\of{ \of{1 - \frac{1}{(n+1)N_0}}^{(n+1)N_0}}^{\frac{N}{(n+1)N_0}} = 0.
+ 	 \end{equation}
+ 	 
+ 	 Therefore, when $\Delta_R > 0$, the probability of achieving distortion $\delta$ goes to 1 as $n$ goes to the infinity. 
+ 	 
+ 	 \vspace{0.2cm}
+ 	 
+ 	 An alternative version of the proof under $\Delta_R > 0$ is below.
+ 	 
+ 	 \vspace{0.2cm}
+ 	 Let $p = \bbP \off{V^j = 1}$. By the Bernoulli's inequality, the probability of not achieving the distortion $\delta$ satisfies
+ 	 \begin{equation}
+ 	 	\bbP \off{V = 0} = \of{1 - p}^N \leq \frac{1}{1 - Np} 
+ 	 	%= \frac{Np(1-p)}{Np(1-p) + N^2 p^2} = \frac{(\bbE[V])^2}{\bbE \off{V^2}}.
+ 	 \end{equation}
+ 	  Therefore, by inequality~\eqref{eq:e221prob}, the limit of the probability of achieving the distortion $\delta$ is
+ 	  \begin{equation}
+ 	  	\lim_{n \rightarrow +\infty}  \bbP \off{V \geq 1} \geq \lim_{n \rightarrow +\infty}   1- \frac{1}{1- N p} \geq \lim_{n \rightarrow +\infty}  1 - \frac{N_0(n+1)}{N_0(n+1) - N } = 1.
+ 	  \end{equation}
+ \end{proof}
+ 
+ \begin{rmk}
+ 	To compress a random vector with Bernoulli entries and achieve a desired rescaled Hamming distortion $\delta$, the number of necessary codewords, $N$, should be larger than  $2^{D(\delta ||1/2) n}$, where $D(\delta ||1/2)$ is the KL divergence between the two Bernoulli distributions with parameter $\delta$ and $1/2$ and $n$ is the size of the random vector. 
+ \end{rmk}
+ 
+    
+\end{document}
