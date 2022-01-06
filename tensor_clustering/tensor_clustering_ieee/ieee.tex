@@ -401,9 +401,9 @@ where $\tS \in \bbR^{r \times \cdots \times r}$ is an order-$K$ tensor collectin
  \mathbb{E}\tY = \tS \times_1 \mTheta \mM \times_2 \cdots \times_K  \mTheta \mM,
 \end{equation}
 where $\mTheta = \text{diag}(\theta(1),...,\theta(p)) \in \bbR^{p \times p}$ is a diagonal matrix, $\mM \in \offf{0,1}^{p \times r}$ is the membership matrix associated with community assignment $z$ such that $\mM(i,j)=\ind\{z(i)=j\}$. By definition, each row of $\mM$ has one copy of 1's and 0's elsewhere. Note that the discrete nature of $\mM$ renders our model~\eqref{eq:model_tensor} more challenging than Tucker decomposition. %The Tucker rank of the signal tensor $\bbE \tY$ is bounded by, but not necessarily equal to, $(r,...,r)$~\citep{wang2019multiway}. 
-We call a tensor $\tX$ an $r$-block tensor with degree $\mtheta$
+We call a tensor $\tY$ an $r$-block tensor with degree $\mtheta$
 %with the core tensor $\tS$ 
-if $\tX$ admits dTBM~\eqref{eq:model_tensor}. Here, we give two special cases of dTBM.
+if $\tY$ admits dTBM~\eqref{eq:model_tensor}. Here, we give two special cases of dTBM.
 
 {
 \color{blue}
@@ -714,15 +714,15 @@ Note that, the assumption~\eqref{eq:degree} does not preclude degree heterogenei
 \tX_{\text{pre}} = \tY \times_1  \mU_{\text{pre}}^T \times_2 \cdots \times_{K-1} \mU_{\text{pre}}^T.$
 \State Compute factor matrix $\hat \mU = \text{SVD}_{r}(\text{Mat}(\tX_{\text{pre}}))$ and denoised tensor
 $\hat \tX = \tY \times_1 \hat \mU \hat \mU^T \times_2 \cdots \times_K \hat \mU \hat \mU^T.$
-\State {Let $\hat \mX = \text{Mat}(\hat \tX)$ and $I_0=\{i \in [p]: \onormSize{}{\hat \mX_{i:}} = 0\}$. Set $\hat z(i)$ randomly in $[r]$ for $i \in I_0$.}
-\State{For all $i\in I_0^c$, compute normalized rows
+\State {Let $\hat \mX = \text{Mat}(\hat \tX)$ and $S_0=\{i \in [p]: \onormSize{}{\hat \mX_{i:}} = 0\}$. Set $\hat z(i)$ randomly in $[r]$ for $i \in S_0$.}
+\State{For all $i\in S_0^c$, compute normalized rows
 $\hat \mX_{i:}^s :=\onormSize{}{\hat \mX_{i:}}^{-1} \hat \mX_{i:}.$
 }
 \State {Solve the clustering $\hat z\colon [p]\to[r]$ and centroids $ (\hat \mx_j)_{j\in[r_k]}$ using weighted $k$-means, such that}
 \begin{align}
-    &\sum_{i \in I_0^c }  \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{\hat z(i)} }^2 
+    &\sum_{i \in S_0^c }  \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{\hat z(i)} }^2 
     \leq 
-    \eta \min_{\substack{\bar \mx_j, j\in[r], \bar z(i),i\in I_0^{c}}} \sum_{i \in S^c } \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{ \hat \mX_{i:}^s -   \bar \mx_{\bar z(i)}}^2.
+    \eta \min_{\substack{\bar \mx_j, j\in[r], \bar z(i),i\in S_0^{c}}} \sum_{i \in S^c } \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{ \hat \mX_{i:}^s -   \bar \mx_{\bar z(i)}}^2.
 \end{align}
 \OUTPUT Initial clustering $z^{(0)} \leftarrow \hat z$.
 
@@ -772,7 +772,7 @@ Assume $\mtheta$ is balanced and $\min_{i\in[p]}\theta(i) \geq c$ for some const
 \end{equation}
 \end{thm}
 
-\begin{rmk}[Comparison to previous results] For fixed SNR, our initialization error rate with $K=2$ agrees with the initialization error rate $\tO(p)$ in matrix models~\citep{gao2018community}. Furthermore, in the special case of non-degree TBMs, we achieve the same initial misclassification error $\tO(p^{-K/2})$ as in non-degree models~\citep{han2020exact}. Theorem~\ref{thm:initial} implies the advantage of our algorithm in achieving both accuracy and model flexibility. 
+\begin{rmk}[Comparison to previous results] For fixed SNR, our initialization error rate with $K=2$ agrees with the initialization error rate $\tO(p)$ in matrix models~\citep{gao2018community}. Furthermore, in the special case of non-degree TBMs, we achieve the same initial misclustering error $\tO(p^{-K/2})$ as in non-degree models~\citep{han2020exact}. Theorem~\ref{thm:initial} implies the advantage of our algorithm in achieving both accuracy and model flexibility. 
 %The result demonstrates the advantage of our algorithm in achieving both accuracy and model flexibility. 
 \end{rmk}
 
@@ -827,7 +827,7 @@ Full procedures for our angle-based iteration are described in Sub-algorithm~\hy
 We then establish the misclustering error rate of iterations 
 { \color{blue} under the stability assumption.
 
-\begin{defn}[Locally linear stability] 
+\begin{defn}[Locally linear stability] \label{def:stable}
 Define the $\varepsilon$-neighborhood of $z$ by $\tN(z,\epsilon)=\{\bar z\colon \ell(\bar z, z)\leq \epsilon\}$. We define two cluster-size vectors for $\bar z$,
 \begin{align}
     &\mp(\bar z)=(|\bar z^{-1}(1)|, \ldots,|\bar z^{-1}(r)|)^T, \quad \mp_{\mtheta}(\bar z)=(\onormSize{}{\mtheta_{\bar z^{-1}(1)}}_1,\ldots,\onormSize{}{\mtheta_{\bar z^{-1}(r)}}_1)^T.
@@ -930,7 +930,17 @@ and choose the number of cluster that minimizes BIC, i.e., under dTBM~\eqref{eq:
 \begin{equation}
     \hat r = \argmin_{r \in \mathbb{Z}_+ } \of{ -p^K \tL_{\tY}(\hat z(r), \hat \tS(r), \hat \mtheta(r)) + p_e(r) K \log p},
 \end{equation}
-where the triplet $(\hat z(r), \hat \tS(r), \hat \mtheta(r))$ are estimated parameters with given number of cluster $r$, $\tL_{\tY}$ denote the log-likelihood with observations $\tY$, and $p_e = r^K + p(\log r + 1)$ is the effective number of parameters. Particularly, we obtain the estimate $\hat \mtheta(r)$ by first calculating the reduced tensor $\tY^{\text{d}}$ with $\hat z(r)$ and then normalizing the row norms $\onormSize{}{\mY_{i:}^{\text{d}}}$ to 1 in each cluster. With Gaussian observation $\tY$, we have
+where the triplet $(\hat z(r), \hat \tS(r), \hat \mtheta(r))$ are estimated parameters with given number of cluster $r$, $\tL_{\tY}$ denote the log-likelihood with observations $\tY$, and $p_e = r^K + p(\log r + 1) - 1$ is the effective number of parameters. Particularly, we obtain the estimate $\hat \mtheta(r)$ by first calculating the reduced tensor $\tY^{\text{d}}$ with $\hat z(r)$ and then normalizing the row norms $\onormSize{}{\mY_{i:}^{\text{d}}}$ to 1 in each cluster; i.e., 
+\begin{equation}
+    \hat \theta(i,r) = \frac{\onormSize{}{\hat \mY^{\text{d}}(r)_{i:}}}{\sum_{j: \hat z(j,r) =  \hat z(i,r)} \onormSize{}{\hat \mY^{\text{d}}(r)_{j:}}},
+\end{equation}
+where $\hat \mY^{\text{d}}(r) = \mat(\hat \tY^{\text{d}}(r))$ and 
+\begin{equation}
+    \hat \tY^{\text{d}}(r)(i,a_2,\ldots,a_K) = 
+\text{Ave}\{\tY(i,i_2,\ldots,i_K): \hat z(i_k, r) = a_k, k \neq 1 \}.
+\end{equation}
+
+With Gaussian observation $\tY$, we have
 \begin{equation}
     \tL_{\tY} = - \log(\onormSize{}{\hat \tX - \tY}_F^2), \quad \hat \tX = \tS(r) \times_1 \hat \mTheta(r) \hat \mM(r) \times_2 \cdots \times_K \hat \mTheta(r) \hat \mM(r).
 \end{equation}
@@ -1243,19 +1253,57 @@ We have developed a general degree-corrected tensor block model with a two-step 
 
 
 {
-\color{red}
+\color{blue}
 
 \section{Proof Sketches}
 
-\begin{enumerate}
-\item \textbf{Angle-based techniques} 
-\begin{itemize}
-    \item Padding of the vectors won't extremely change the angle gap. 
-    \item Using geometry property to upper bound $I_{11}, J_{11}$. (have not found a good name for this technique yet)
-\end{itemize}
-    \item \textbf{Proof idea of Theorem 4}
-    \item \textbf{Proof idea of Theorem 5}
-\end{enumerate}
+In this section, we provide the proof sketches for Theorem~\ref{thm:initial} and Theorem~\ref{thm:refinement}. Detail proofs are provided in Appendix.
+
+
+\subsection{Proof sketch of Theorem~\ref{thm:initial}}
+The proof of Theorem~\ref{thm:initial} is mainly inspired by the proof idea of \citet[Lemma 1]{gao2018community}, and extra difficulties due to the angle gap assumption and tensor property are addressed in our proof. Specifically, we control the misclustering error by the estimation error of $\hat \tX$ calculated in Step 2.  We prove the following inequality
+\begin{equation}\label{eq:proof_4}
+    \ell(z^{(0)},z) \lesssim \frac{1}{p}\min_{\pi \in \Pi} \sum_{i: z^{(0)}(i) \neq \pi(z(i))} \theta(i)^2 \lesssim \frac{\sigma^2 r^{K-1}}{ \Delta_{\min}^2 p^K} \onormSize{}{\hat \tX - \tX}_F^2 \lesssim \frac{r^K p^{-K/2}}{\text{SNR}},
+\end{equation}
+where $\tX = \bbE[\tY]$ is the true mean. The first inequality in~\eqref{eq:proof_4} holds with the assumption $\min_{i \in [p]} \theta(i) \geq c$ in Theorem~\ref{thm:initial}. The second inequality relies on the intermediate conclusion that the angle gap of mean tensor $\tX$ is lower bounded by a function of core tensor minimal angle gap $\Delta_{\min}$ defined in Assumption~\ref{assmp:min_gap}. Let $\ma^{s} \coloneqq \ma/\onorm{\ma}$ denote the normalized vector and make the convention that $\ma^s = 0$ if $\ma = 0$. We show that
+\begin{equation}\label{eq:proof_4_gap}
+\min_{z(i) \neq z(j)} \onormSize{}{[\mX_{i:}]^s - [\mX_{j:}]^s} \gtrsim \Delta_{\min},
+\end{equation}
+where $\mX = \mat(\tX)$. The most challenging part in the proof of Theorem~\ref{thm:initial} lies in the derivation of inequality~\eqref{eq:proof_4_gap}, in which the proof of \cite{gao2018community} is no longer applicable due to different angle gap assumption in our dTBM. Extra padding technique in Lemma~\ref{lem:pad} and balance assumption~\eqref{eq:degree} are equipped to derive~\eqref{eq:proof_4_gap}. Last, we finish the proof of Theorem~\ref{thm:initial} by showing the third inequality with \citet[Proposition 1]{han2020exact}. 
+
+
+\subsection{Proof sketch of Theorem 5}
+The proof of Theorem~\ref{thm:refinement} is mainly inspired by the proof idea of  \citet[Theorem 2]{han2020exact}, and extra polar coordinate based techniques are imposed due to the nuisance degree heterogeneity and angle gap assumption. We conduct the contraction property of the misclustering loss
+\begin{equation}
+     L^{(t)} = \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(t)}(i) = b } \onorm{ \off{ \mS_{ z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2,
+\end{equation}
+and introduce the oracle estimators for core tensor and assignment
+\begin{equation}
+    \tilde \tS = \tY \times_1 \mW^T \times_2 \cdots \times_K \mW^T, 
+    %\quad \tilde z(i) = \argmin_{a \in [r]} \onormSize{}{ { [\mat(\tY)_{i:} \mV]^s - [\mat(\tilde \tS)_{a:}]^s } }^2
+\end{equation}
+where $\mW = \mM \of{ \text{diag}(\ind_{p}^T \mM) }^{-1}$ is the weighted true membership matrix. Let $ \mV = \mW^{\otimes (K-1)}$ denote the Kronecker product of $K-1$ $\mW$ matrices, and similarly define $\mW^{(t)}, \mV^{(t)}$ with $\mM^{(t)}$ corresponding to $z^{(t)}$. To evaluate $L^{(t+1)}$, we consider the event 
+\begin{equation}\label{eq:proof_5_event}
+    \ind \offf{ z^{(t+1)}(i) = b } = \ind \offf{       \onormSize{}{ [ \mY_{i:} \mV^{(t)}  ]^s - [\mS_{b:}^{(t)}]^s }^2 \leq \onormSize{}{ [ \mY_{i:} \mV^{(t)}  ]^s - [\mS_{z(i):}^{(t)}]^s }^2} \leq A_{ib} + B_{ib}
+\end{equation}
+where $\mY = \mat(\tY)$, $ \mS = \mat(\tS)$, $\mS^{(t)} = \mat(\tS^{(t)})$ and
+\begin{align}
+        A_{ib} &= \ind \offf{\ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s } \lesssim -  \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 },\\
+        B_{ib} &= \ind \offf{\onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 \lesssim F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }.
+\end{align}
+The terms $F_{ib}^{(t)}, G_{ib}^{(t)}, H_{ib}^{(t)}$ are controlled by $z^{(t)}, \tS^{(t)}$, and detail definitions are in \eqref{eq:f}, \eqref{eq:g}, \eqref{eq:h}. Note that the event $A_{ib}$ only involves the oracle estimator while all the terms related to the $t$-th iteration estimator are in $B_{ib}$. Thus, the inequality~\eqref{eq:proof_5_event} decomposes the misclustering loss in the $(t+1)$-th iteration by the oracle loss and the loss in $t$-th iteration. This decomposition leads to the separation of statistical error and computational error in the final upper bound of Theorem~\ref{thm:refinement}.
+
+Specifically, we prove the contraction inequality
+\begin{equation}\label{eq:proof_5_ineq}
+    L^{(t+1)} \lesssim \xi + \rho L^{(t)}, \quad \xi = \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  A_{ib} \onorm{ \off{ \mS_{ z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2,
+\end{equation}
+where $\rho \in (0,1)$ is the contraction parameter, and we call $\xi$ the oracle loss. Controlling the probability of event $B_{ib}$ and obtaining the $\rho L^{(t)}$ term in the right hand side of~\eqref{eq:proof_5_ineq} is the most tricky and challenging part in the proof of Theorem~\ref{thm:refinement}. Note that the true and estimated core tensors are involved as normalized rows such as $\mS_{a:}^s, \tilde \mS_{a:}^s, [\mS^{(t)}_{a:}]^s$. The Cartesian coordinate based analysis in \cite{han2020exact} is no longer applicable in our case. Instead, we use the polar coordinate based analysis and the geometry property of trigonometric functions to derive the high probability upper bounds for $F_{ib}^{(t)}, G_{ib}^{(t)}, H_{ib}^{(t)}$. 
+
+Further, by sub-Gaussian concentration, we prove the high probability upper bound for oracle loss
+\begin{equation}\label{eq:proof_5_xi}
+    \xi  \lesssim \exp\of{- \frac{p^{K-1}\text{SNR}}{r^{K-1}}}.
+\end{equation}
+Combining the decomposition~\eqref{eq:proof_5_ineq} and the oracle bound~\eqref{eq:proof_5_xi}, we finish the proof of Theorem~\ref{thm:refinement}.
 
 }
 
@@ -1273,7 +1321,7 @@ We provide the proofs for all the theorems in our main paper. In each sub-sectio
 \section*{Notation}
 Before the proofs, we first introduce the notations used throughout the following sections and the generalized dTBM without symmetric assumptions for the proofs of Theorem~\ref{thm:unique} and Theorem~\ref{thm:stats}. The parameter space and minimal gap assumption for are also extended the generalized dTBM. The conclusions of Theorem~\ref{thm:unique} and \ref{thm:stats} in the main paper are obtained by simply setting $z_k = z, \mS_k = \mS, \mtheta_k = \mtheta, k \in [K]$ for the generalized dTBM.
 
-\paragraph{Notations.}
+{\bf Notations.}
 \begin{enumerate}
     \item For all $ k \in [K]$, denote the tensor matricizations as
     \begin{equation}
@@ -1286,11 +1334,12 @@ Before the proofs, we first introduce the notations used throughout the followin
     %     \Delta_{\min} = \min_{k \in [K]} \min_{a \neq b \in [r_k]} \onorm{ \mS_{k,a:}^s - \mS_{k, b:}^s }.
     % \end{equation}
     \item For a matrix $\mA \in \bbR^{n \times m} \in \bbR^{n^K \times m^K}$, let $\mA^{\otimes K}$ denotes the kronecker product of $K$ matrices $\mA \otimes \cdots \otimes \mA$,
+    \item For a matrix $\mA$, let $\onormSize{}{\mA}_\sigma$ denote the spectral norm of matrix $\mA$, which is equal to the maximal singular value of $\mA$; let $\lambda_k(\mA)$ denote the $k$-th largest singular value of $\mA$; let $\onormSize{}{\mA}_F$ denote the Frobenius norm of matrix $\mA$.
     \item For two terms $a$ and $b$, let $a \asymp b$ if there exist two positive constants $c, C$ such that $cb \leq a\leq Cb$. 
 \end{enumerate}
 
 
- \paragraph{Generalized dTBM.} 
+{\bf Generalized dTBM.} 
  
  The general order-$K$ $(p_1, \ldots, p_K)$-dimensional dTBM model with $r_k$ communities and degree heterogeneity $\mtheta_k = \entry{\theta_k(i)} \in \bbR_+^{p_k}$ is represented by
 \begin{equation}\label{eq:general_dtbm}
@@ -1303,10 +1352,11 @@ For ease of notation, we use $\{z_k\}$ to denote the collection $\{z_k\}_{k=1}^K
 % \begin{equation}\label{eq:general_family}
 %     \tP (r)= \offf{ \of{\{z_k\}, \tS, \{\mtheta_k\}}: \mtheta_k \in\mathbb{R}^p_{+}, {c_1p\over r}\leq |z_k^{-1}(a)| \leq {c_2 p\over r}, c_3\leq \onorm{\mat_k(\tS)}_{a:}\leq c_4 , \onormSize{}{\mtheta_{z_k^{-1}(a)}}_1=|z_k^{-1}(a)|, a \in [r], k\in[K]}.
 % \end{equation}
+\footnotesize
 \begin{align}
-    \tP(\{r_k\}) = \Bigg\{ \of{\{z_k\}, \tS, \{\mtheta_k\}}:\  &\mtheta_k \in\mathbb{R}^p_{+}, {c_1 p_k\over r_k} |z_k^{-1}(a)| \leq {c_2 p_k\over r_k}, c_3 \leq  \onorm{\mS_{k,a:}} \leq c_4 ,\\
-    &\onormSize{}{\mtheta_{k,z_k^{-1}(a)}}_1=|z_k^{-1}(a)|, \text{ for all } a \in [r_k], k\in[K]\Bigg\}. \label{eq:general_family}
+    \tP(\{r_k\}) = \Bigg\{ \of{\{z_k\}, \tS, \{\mtheta_k\}}:\  &\mtheta_k \in\mathbb{R}^p_{+}, {c_1 p_k\over r_k} |z_k^{-1}(a)| \leq {c_2 p_k\over r_k}, c_3 \leq  \onorm{\mS_{k,a:}} \leq c_4 ,\onormSize{}{\mtheta_{k,z_k^{-1}(a)}}_1=|z_k^{-1}(a)|, a \in [r_k], k\in[K]\Bigg\}. \label{eq:general_family}
 \end{align}
+\normalsize
 % \begin{equation}
 %     \tP = \offf{ \of{\{z_k\}, \tS, \{\mtheta_k\}}: \mtheta_k \in\mathbb{R}^p_{+}, |z_k^{-1}(a)| \asymp {p_k\over r_k},  \onorm{\mS_{k,a:}} \asymp 1 , \onormSize{}{\mtheta_{k,z_k^{-1}(a)}}_1=|z_k^{-1}(a)|, a \in [r], k\in[K]}.
 % \end{equation}
@@ -1404,7 +1454,7 @@ Therefore, we finish the proof of Theorem~\ref{thm:unique}.
 \end{proof}
 
 
-\paragraph{Useful Lemma for the Proof of Theorem~\ref{thm:unique}} 
+{\bf Useful Lemma for the Proof of Theorem~\ref{thm:unique}} 
 
 \begin{lem}[Motivation of angle-based clustering]\label{lem:angle} Consider the signal tensor $\tX$ in the generalized dTBM~\eqref{eq:general_dtbm} with $(\{z_k\},\tS,\{\mtheta_k\})\in \tP(\{r_k\})$ and $r_k \geq 2$. Then, for any $k \in [K]$ and index pair $(i,j)\in[p_k]^2$, we have 
 \begin{equation}
@@ -1620,7 +1670,7 @@ Therefore, we have shown that $\tP_{\text{shifited}}(\gamma)=\tP(\gamma)$. Final
 %\fixme{Miaoyan}{To Jiaxin: I fixed the above proof for Thm 3. Please revise everything below to make the contexts consistent with our current proofs. }
 
 
-\paragraph{Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:comp}} 
+{\bf Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:comp}} 
 \begin{defn}[Principal angles] For two matrices $\mU, \hat \mU \in \mathbb{O}^{p \times r}$ %\fixme{Miaoyan}{do we need column organization  $\mathbb{O}(p,r)?$. Yes.}
 , we define the principal angles between $\mU$ and $\hat \mU$ by the following diagonal matrix
 \begin{equation}
@@ -1694,7 +1744,7 @@ See \citet[Proof of Theorem 4]{zhang2018tensor}.
 \end{proof}
 
 
-\begin{lem}[Angle distance and misclassification error]\label{lem:angle_mcr} Consider two membership matrices $\mM, \hat \mM \in \bbR^{p \times r}$ with corresponding assignments $z, \hat z: [p] \mapsto [r]$. If the angle distance $\onorm{\sin (\mM, \hat \mM)}_{\sigma} \geq c$ for a constant $c >0$, then the misclassification error $\min_{\pi \in \Pi}p\ell(\hat z,\pi \circ z )\geq 1$.
+\begin{lem}[Angle distance and misclustering error]\label{lem:angle_mcr} Consider two membership matrices $\mM, \hat \mM \in \bbR^{p \times r}$ with corresponding assignments $z, \hat z: [p] \mapsto [r]$. If the angle distance $\onorm{\sin (\mM, \hat \mM)}_{\sigma} \geq c$ for a constant $c >0$, then the misclustering error $\min_{\pi \in \Pi}p\ell(\hat z,\pi \circ z )\geq 1$.
 \end{lem}
 
 \begin{proof}[Proof of Lemma~\ref{lem:angle_mcr}]
@@ -1707,99 +1757,160 @@ where the second inequality follows from the invariance of $\sin$ distance to pe
 %\fixme{Miaoyan}{Effect of permutation $\pi$ in the proof?. } \textcolor{blue}{$\sin \Theta (\mM, \hat \mM)$ is invariant to the permutation.}
 %\fixme{Miaoyan}{State Lemma 3 of Zhang and Xia. }
 
+\newpage
 
 \section*{Proof of Theorem~\ref{thm:initial}}
-\begin{proof}[Proof of Theorem 4] Recall that we prove the Theorem~\ref{thm:initial} under the dTBM~\eqref{eq:model_tensor} with parameters $(z, \tS, \mtheta)$. We drop the subscript $k$ in the matricizations $\mX_k, \mS_k, \mX_k$. For simplicity, let $\hat z$ denote the output of Sub-Algorithm~\hyperref[alg:main]{1} $\hat z^{(0)}$.
+\begin{proof}[Proof of Theorem 4] We prove Theorem~\ref{thm:initial} under the dTBM~\eqref{eq:model_tensor} with parameters $(z, \tS, \mtheta)$. We drop the subscript $k$ in the matricizations $\mM_k, \mX_k, \mS_k$. For simplicity, let $\hat z$ denote the output of Sub-Algorithm~\hyperref[alg:main]{1}, $\hat z^{(0)}$.
 
-First, by Lemma~\ref{lem:angle_gap_x}, there exists a positive constant such that $\min_{z(i) \neq z(j)} \onorm{ \mX^s_{i:} - \mX^s_{j:} } \geq c_0  \Delta_{\min}$. Also, by balanced assumption on $\mtheta$ and Lemma~\ref{lem:upper_mis}, we have 
+First, by Lemma~\ref{lem:angle_gap_x}, there exists a positive constant such that $\min_{z(i) \neq z(j)} \onorm{ \mX^s_{i:} - \mX^s_{j:} } \geq c_0  \Delta_{\min}$. By the balance assumption on $\mtheta$ and Lemma~\ref{lem:upper_mis}, we have 
  \begin{equation}\label{eq:theta_bound}
-          \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2  \leq  \sum_{i \in S_0} \theta(i)^2 + 4 \sum_{i \in S} \theta(i)^2 ,
+          \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2  \leq  \sum_{i \in S_I} \theta(i)^2 + 4 \sum_{i \in S} \theta(i)^2 ,
     \end{equation}
     where 
     \begin{equation}
-        S_0 = \{i: \hat z(i) = 0\}, \quad S = \{i \in S_0^c: \onorm{\hat \mx_{\hat z(i)} - \mX_{i:}^s } \geq c_0  \Delta_{\min}/2\}.
+        S_0 = \{i: \onormSize{}{\hat \mX_{i:}} = 0\}, \quad S = \{i \in S_0^c: \onormSize{}{\hat \mx_{\hat z(i)} - \mX_{i:}^s } \geq c_0  \Delta_{\min}/2\}.
     \end{equation}
-    On one hand, for any set $P \in [p]$ note that 
+    On one hand, note that for any set $P \in [p]$,
     \begin{align}
-        \sum_{i \in P} \onorm{\mX_{i:}}^2 &= \sum_{i \in P} \onorm{ \theta(i) \mS_{z(i):} (\mTheta \mM)^{T, \otimes (K-1)} }^2 \\
-        & \geq \sum_{i \in P} \theta(i)^2 \min_{a \in [r]} \onorm{\mS_{a:}}^2 \lambda_{r}^{2(K-1)} (\mTheta \mM)\\
-        & \geq C \sum_{i \in P} \theta(i)^2 p^{K-1} r^{-(K-1)}, 
+        \sum_{i \in P} \onormSize{}{\mX_{i:}}^2 &= \sum_{i \in P} \onormSize{}{ \theta(i) \mS_{z(i):} (\mTheta \mM)^{T, \otimes (K-1)} }^2 \\
+        & \geq \sum_{i \in P} \theta(i)^2 \min_{a \in [r]} \onormSize{}{\mS_{a:}}^2 \lambda_{r}^{2(K-1)} (\mTheta \mM)\\
+        & \gtrsim \sum_{i \in P} \theta(i)^2 p^{K-1} r^{-(K-1)}, 
     \end{align}
-    where the last inequality follows Lemma~\ref{lem:singular_thetam}, the assumption that $\min_{i \in [p]} \theta(i) \geq c >0$ and $\min_{a \in [r]} \onorm{\mS_{a:}} \geq c_3$ in the parameter space~\eqref{eq:family}. Thus, we have 
+    where the last inequality follows Lemma~\ref{lem:singular_thetam}, the assumption that $\min_{i \in [p]} \theta(i) \geq c$, and the constraint $\min_{a \in [r]} \onormSize{}{\mS_{a:}} \geq c_3$ in the parameter space~\eqref{eq:family}. Thus, we have 
     \begin{equation}\label{eq:theta_p}
-        \sum_{i \in P} \theta(i)^2 \lesssim \sum_{i \in P} \onorm{\mX_{i:}}^2 p^{-(K-1)} r^{K-1}.
+        \sum_{i \in P} \theta(i)^2 \lesssim \sum_{i \in P} \onormSize{}{\mX_{i:}}^2 p^{-(K-1)} r^{K-1}.
     \end{equation}
     
     On the other hand, note that 
     \begin{align}
-         \sum_{i \in S} \onorm{\mX_{i:}}^2 & \leq 2 \sum_{i \in S} \onorm{\hat \mX_{i:}}^2  +  2\sum_{i \in S} \onorm{\hat \mX_{i:} - \mX_{i:}}^2 \label{eq:tr1}\\
-         & \leq \frac{8}{c_0^2 \Delta_{\min}^2  } \sum_{i \in S} \onorm{\hat \mX_{i:}}^2   \onorm{\hat \mx_{\hat z(i)} - \mX_{i:}^s }^2 +2 \onorm{\hat \tX - \tX}_F^2 \label{eq:defs} \\
-         & \leq \frac{16}{c_0^2 \Delta_{\min}^2  }\sum_{i \in S} \onorm{\hat \mX_{i:}}^2  \off{ \onorm{\hat \mx_{\hat z(i)} - \hat \mX_{i:}^s }^2 + \onorm{\hat \mX_{i:}^s - \mX_{i:}^s }^2 } + 2\onorm{\hat \tX - \tX}_F^2 \label{eq:tr2} \\
-         & \leq  \frac{16(1 + \eta)}{c_0^2 \Delta_{\min}^2 }\sum_{i \in S} \onorm{\hat \mX_{i:}}^2  \onorm{\hat \mX_{i:}^s - \mX_{i:}^s }^2  + 2\onorm{\hat \tX - \tX}_F^2 \label{eq:km} \\
-         & \leq \of{ \frac{16(1 + \eta)}{c_0^2 \Delta_{\min}^2 } + 2 }\onorm{\hat \tX - \tX}_F^2 \label{eq:lem1}\\
+         \sum_{i \in S} \onormSize{}{\mX_{i:}}^2 & \leq 2 \sum_{i \in S} \onormSize{}{\hat \mX_{i:}}^2  +  2\sum_{i \in S} \onormSize{}{\hat \mX_{i:} - \mX_{i:}}^2 \label{eq:tr1}\\
+         & \leq \frac{8}{c_0^2 \Delta_{\min}^2  } \sum_{i \in S} \onormSize{}{\hat \mX_{i:}}^2   \onormSize{}{\hat \mx_{\hat z(i)} - \mX_{i:}^s }^2 +2 \onormSize{}{\hat \tX - \tX}_F^2 \label{eq:defs} \\
+         & \leq \frac{16}{c_0^2 \Delta_{\min}^2  }\sum_{i \in S} \onormSize{}{\hat \mX_{i:}}^2  \off{ \onormSize{}{\hat \mx_{\hat z(i)} - \hat \mX_{i:}^s }^2 + \onormSize{}{\hat \mX_{i:}^s - \mX_{i:}^s }^2 } + 2\onormSize{}{\hat \tX - \tX}_F^2 \label{eq:tr2} \\
+         & \leq  \frac{16(1 + \eta)}{c_0^2 \Delta_{\min}^2 }\sum_{i \in S} \onormSize{}{\hat \mX_{i:}}^2  \onormSize{}{\hat \mX_{i:}^s - \mX_{i:}^s }^2  + 2\onormSize{}{\hat \tX - \tX}_F^2 \label{eq:km} \\
+         & \leq \of{ \frac{16(1 + \eta)}{c_0^2 \Delta_{\min}^2 } + 2 }\onormSize{}{\hat \tX - \tX}_F^2 \label{eq:lem1}\\
          & \lesssim \of{ \frac{16(1 + \eta)}{c_0^2 \Delta_{\min}^2 } + 2 } \of{ p^{K/2}r + pr^2 + r^K } \sigma^2 \label{eq:lem_err},
     \end{align}
-    where inequalities \eqref{eq:tr1} and \eqref{eq:tr2} follow the triangle inequality, \eqref{eq:defs} follows the definition of $S$, \eqref{eq:km} follows the update rule of $k$-means in Sub-Algorithm~\hyperref[alg:main]{1}, \eqref{eq:lem1} follows Lemma~\ref{lem:norm_diff}, and the last inequality~\eqref{eq:lem_err} follows Lemma~\ref{lem:two-step_esterror}. Also, note that 
+    where inequalities \eqref{eq:tr1} and \eqref{eq:tr2} follow the triangle inequality, \eqref{eq:defs} follows the definition of $S$, \eqref{eq:km} follows the update rule of $k$-means in Step 5 of Sub-Algorithm~\hyperref[alg:main]{1}, \eqref{eq:lem1} follows Lemma~\ref{lem:norm_diff}, and the last inequality~\eqref{eq:lem_err} follows Lemma~\ref{lem:two-step_esterror}. Also, note that 
     \begin{equation}\label{eq:s0}
-         \sum_{i \in S_0} \onorm{\mX_{i:}}^2 =  \sum_{i \in S_0} \onorm{\hat \mX_{i:}- \mX_{i:}}^2 \leq \onorm{\hat \tX - \tX}_F^2 \lesssim \of{ p^{K/2}r + pr^2 + r^K } \sigma^2,
+         \sum_{i \in S_0} \onormSize{}{\mX_{i:}}^2 =  \sum_{i \in S_0} \onormSize{}{\hat \mX_{i:}- \mX_{i:}}^2 \leq \onormSize{}{\hat \tX - \tX}_F^2 \lesssim \of{ p^{K/2}r + pr^2 + r^K } \sigma^2,
     \end{equation}
     where the equation follows by the definition of $S_0$. Therefore, combining the inequalities~\eqref{eq:theta_bound}, \eqref{eq:theta_p}, \eqref{eq:lem_err}, and \eqref{eq:s0}, we have 
     \begin{align}
-        \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2  &\lesssim \of{\sum_{i \in S} \onorm{\mX_{i:}}^2 + \sum_{i \in S_0} \onorm{\mX_{i:}}^2  } p^{-(K-1)} r^{K-1} \\
+        \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2  &\lesssim \of{\sum_{i \in S} \onormSize{}{\mX_{i:}}^2 + \sum_{i \in S_0} \onormSize{}{\mX_{i:}}^2  } p^{-(K-1)} r^{K-1} \\
         & \lesssim \frac{\sigma^2 r^{K-1}}{ \Delta_{\min}^2  p^{K-1} } \of{ p^{K/2}r + pr^2 + r^K }.
     \end{align}
-    With the assumption that $\min_{i \in [p]} \theta(i) \geq c >0$, we finally obtain the result
+    With the assumption that $\min_{i \in [p]} \theta(i) \geq c$, we finally obtain the result
     \begin{equation}
         \ell(z, z) \lesssim \frac{1}{p}\min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2 \lesssim \frac{r^K p^{-K/2} }{ \text{SNR} },
     \end{equation}
     where the last inequality follows the definition $\text{SNR} = \Delta_{\min}^2/\sigma^2$.
 \end{proof}
 
-\paragraph{Useful Corollary of Theorem~\ref{thm:initial}} 
+{\bf Useful Corollary of Theorem~\ref{thm:initial}} 
 
-\begin{cor}\label{cor:L0} Suppose we have the initial assignment $z^{(0)}$ from Sub-Algorithm~\hyperref[alg:main]{1} and the identity permutation minimizes 
-the misclassification error, i.e., $\pi^{(0)} = \argmin_{\pi \in \Pi} $ $ \sum_{i \in [p]}\ind \offf{z^{(0)}(i) \neq \pi \circ z(i) }$ and $\pi^{(0)}(a) = a$ for all $ a \in [r]$. Suppose SNR $\gtrsim p^{-K/2} \log p$. Then, the misclassification loss for the initialization is upper bounded as 
+\begin{cor}\label{cor:L0} 
+%Suppose we have the initial assignment $z^{(0)}$ from Sub-Algorithm~\hyperref[alg:main]{1} and the identity permutation minimizes the misclustering error, i.e., $\pi^{(0)} = \argmin_{\pi \in \Pi} $ $ \sum_{i \in [p]}\ind \offf{z^{(0)}(i) \neq \pi \circ z(i) }$ and $\pi^{(0)}(a) = a$ for all $ a \in [r]$. 
+Suppose SNR $\gtrsim p^{-K/2} \log p$ and  $\sigma^2 = 1$. Then, the misclustering loss for the initialization is upper bounded as 
 \begin{equation}
-    L^{(0)} \lesssim \frac{\Delta_{\min}^2}{r \log p}.
+    L^{(0)} =  \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(0)}(i) = b } \onormSize{}{ [ \mS_{ \pi^{(0)}( z(i)):}  ]^s - [ \mS_{b:}  ]^s  }^2 \lesssim \frac{\Delta_{\min}^2}{r \log p},
 \end{equation}
+where $\pi^{(0)}$ minimizes the initial misclustering error, i.e., $\pi^{(0)} = \argmin_{\pi \in \Pi} $ $ \sum_{i \in [p]}\ind \offf{z^{(0)}(i) \neq \pi \circ z(i) }$.
 \end{cor}
 
-\begin{proof}
-Note that 
-\begin{align}
-     \sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mx_a}^2 &\leq  2\sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 + \sum_{i \in [p]} \onorm{\hat \mX_{i:}^s - \hat \mx_a }^2 \\
-    & \leq \frac{2}{\min_{i \in [p]} \onorm{\mX_{i:}}^2}  \off{ \sum_{i \in [p]} \onorm{\mX_{i:}}^2  \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 +  \sum_{i \in [p]}  \onorm{\mX_{i:}}^2  \onorm{\hat \mX_{i:}^s - \hat \mx_a }^2 }\\
-    & \lesssim \frac{r^{K-1} (1 + \eta)}{p^{K-1}} \sum_{i \in [p]} \onorm{\mX_{i:}}^2  \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 \\
-    & \lesssim  \frac{r^{K-1} (1 + \eta)}{p^{K-1}}  \onorm{\hat  \tX - \tX}_F^2 \\
-    & \lesssim \frac{r^{K-1} (1 + \eta)}{p^{K-1}} p^{-K/2}.
-\end{align}
+\begin{proof} 
 
-Suppose $z^{(0)} = 1$.  Note that $\mX^s_{i:}$ only have $r$ different values. Let $\mX_{a}^s = \mX^s_{i:}$ with $z(i) = a, a \in [r]$. Note that 
+{
+\color{blue}
+Without loss of generality, we assume $\pi^{(0)}$ is the identity mapping such that  $\pi^{(0)}(a) = a$ for all $ a \in [r]$. Note that $\mX_{i:}^s$ only have $r$ different values. We let $\mX_a^s = \mX_{i:}^s$ for all $i$ such that $z(i) = a, a \in [r]$. 
+
+Notice that 
 \begin{equation}
-    |z^{-1}(a) \cap (z^{(0)})^{-1} (a)| \geq |z^{-1}(a)| - p\ell(z^{(0)} - z) \gtrsim \frac{p}{r} - \frac{1}{\log p} \gtrsim \frac{p}{r},
+    \onormSize{}{\mX_{i:}}^2 \gtrsim p^{K-1} r^{-(K-1)} \quad \text{and} \quad \onormSize{}{\mX_{i:} - \hat \mX_{i:}}^2 \leq \onormSize{}{\hat \tX - \tX}_F^2 \lesssim  p^{K/2}r + pr^2 + r^K .
 \end{equation}
-when $\Delta_{\min}^2 \geq p^{-K/2} \log p$. Then
+Thus, when $p$ is large enough, we have 
 \begin{align}
-    \onorm{\mX_a^s - \hat \mx_a}^2 &= \frac{ \sum_{i \in z^{-1}(a) \cap (z^{(0)})^{-1} (a) } \onorm{ \mX_{i:}^s - \hat \mx_a}^2 }{|z^{-1}(a) \cap (z^{(0)})^{-1} (a) |} \\
-    & \lesssim \frac{ r \sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 }{ p}\\
-    & \lesssim \frac{r^K(1 + \eta)}{p^{K}} p^{-K/2} 
+    \sum_{i \in [p]} \onormSize{}{\mX_{i:}}^2 \onormSize{}{\hat \mX_i^s - \hat \mx_{z^{(0)}(i)}}^2 &\lesssim \sum_{i \in [p]} \of{\onormSize{}{\mX_{i:}}^2 - \onormSize{}{\mX_{i:} - \hat \mX_{i:}}^2} \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2\\
+   & \lesssim \sum_{i \in [p]} \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 \\
+   & \lesssim \eta  \sum_{i \in [p]} \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \mX_{i:}^s}^2 \\
+   & \lesssim \onormSize{}{\hat \tX - \tX}_F^2 \\
+   & \lesssim p^{K/2}r + pr^2 + r^K .\label{eq:cor_1}
 \end{align}
 
-Note that 
+Hence, we have 
 \begin{align}
-    L^{(0)} &= \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \onorm{\mS_{z^{(0)}(i),:}^s - \mS_{z(i),:}^s}^2 \\
-    & \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \onorm{\mX^s_{z^{-1}(z^{(0)}):} - \mX^s_{i,:}}^2\\
-    & \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \off{ \onorm{ \mX^s_{z^{-1}(z^{(0)}):} - \hat \mx_{z^{(0)}(i)} }^2 + \onorm{ \hat \mx_{z^{(0)}(i)} - \mX^s_{i,:}}^2 }\\
-    & \lesssim   \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \frac{ \onorm{\hat \mX_{i:} - \mX_{i:}}^2 }{ \onorm{ \mX_{i:}}^2 } +  \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i)  \frac{r^K(1 + \eta)}{p^{K}} p^{-K/2} \\
-    & \lesssim \frac{r^K}{p^{K}} p^{-K/2} \\
-    & \lesssim \frac{\Delta_{\min}^2}{r \log p}.
-    %& \lesssim \frac{1}{p} \lambda^{-2(K-1)}_r(\mTheta \mM) \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \onorm{\mX^{(0)}_{i:}-\mX_{i:}}^2 \\
-    %& \lesssim \frac{r^{K-1}}{p^K} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \off{ \onorm{\mX^{(0)}_{i:}-\hat \mX_{i:}}^2 +  \onorm{\hat \mX_{i:}-\mX_{i:}}^2 }
+    \sum_{i \in [p]} \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 &\lesssim \sum_{i \in [p]} \theta(i)^2 \onormSize{}{\hat \mX_i^s - \hat \mx_{z^{(0)}(i)}}^2 \\
+    &\lesssim \frac{r^{K-1}}{p^{K-1}} \sum_{i \in [p]} \onormSize{}{\mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2\\
+    & \lesssim \frac{r^{K-1}}{p^{K-1}} \of{ p^{K/2}r + pr^2 + r^K },\label{eq:cor_2}
 \end{align}
-where $\frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i)^2$ due to the boundedness.
+where the first inequality follows by the assumption $\min_{i \in [p]} \theta(i) \geq c$, the second inequality follows by the inequality~\eqref{eq:theta_p}, and the last inequality comes from the inequality~\eqref{eq:cor_1}.
+
+Next, we consider the following quantity,
+\begin{align}
+    \sum_{i \in [p]} \theta(i) \onormSize{}{ \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 &\lesssim \sum_{i \in [p]} \theta(i)^2 \onormSize{}{\mX_{i:}^s - \hat \mX_{i:}^s}^2 + \sum_{i \in [p]} \theta(i)^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)} }^2\\
+    & \lesssim \sum_{i \in [p]} \frac{ \theta(i)^2}{ \onormSize{}{\mX_{i:}}^2} \onormSize{}{\mX_{i:}  - \hat \mX_{i:}}^2 +  \sum_{i \in [p]} \theta(i)^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)} }^2\\
+    & \lesssim \frac{r^{K-1}}{p^{K-1}} \of{ p^{K/2}r + pr^2 + r^K} ,\label{eq:cor_3}
+\end{align}
+where the first inequality follows by the assumption of $\theta(i)$ and triangle inequality, the second inequality follows by Lemma~\ref{lem:norm_diff}, and the last inequality follows by~\eqref{eq:cor_2}. In addition, with Theorem~\ref{thm:initial} and the condition SNR $\gtrsim p^{-K/2} \log p$, for any $a \in [r]$
+\begin{equation}
+    |z^{-1}(a) \cap (z^{(0)})^{-1} (a)| \geq |z^{-1}(a)| - p\ell(z^{(0)} ,  z) \gtrsim \frac{p}{r} - \frac{p}{\log p} \gtrsim \frac{p}{r},
+\end{equation}
+with $p$ large enough. Then, for any $a \in [r]$, we have 
+\begin{align}
+       \onormSize{}{ \hat \mx_{a} - \mX_{a}^s  }^2  &= \frac{ \sum_{i \in z^{-1}(a) \cap (z^{(0)})^{-1} (a) } \onorm{ \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 }{|z^{-1}(a) \cap (z^{(0)})^{-1} (a) |}  \\
+       & \lesssim \frac{r}{p} \of{  \sum_{i \in [p]} \onormSize{}{ \mX_{i:}^s - \hat \mX_{i:}^s }^2 + \sum_{i \in [p]} \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 } \\
+       & \lesssim  \frac{r^{K}}{p^{K}}\of{ p^{K/2}r + pr^2 + r^K}, \label{eq:cor_4}
+\end{align}
+where the last inequality follows the inequality~\eqref{eq:cor_2}.
+
+Therefore, we finally obtain 
+\begin{align}
+     L^{(0)} &= \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(0)}(i) = b } \onormSize{}{ [ \mS_{  z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \\
+     & \lesssim \frac{1}{p}  \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i)  \onormSize{}{ \mX_{i:}^s -  \mX_{z^{(0)}(i)}^s  }^2\\
+     & \lesssim \frac{1}{p}  \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \of{ \onormSize{}{\mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 + \onormSize{}{ \hat \mx_{z^{(0)}(i)} - \mX_{z^{(0)}(i)}^s  }^2 }, \\
+     & \lesssim \frac{r^{K}}{p^{K}} \of{ p^{K/2}r + pr^2 + r^K}, \\
+     & \lesssim \frac{\Delta_{\min}^2}{r \log p}
+\end{align}
+where the first inequality follows by Lemma~\ref{lem:angle_gap_x}, and the third inequality follows inequalities~\eqref{eq:cor_3} and \eqref{eq:cor_4}.
+
+
+}
+
+
+% Note that 
+% \begin{align}
+%      \sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mx_a}^2 &\leq  2\sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 + 2\sum_{i \in [p]} \onorm{\hat \mX_{i:}^s - \hat \mx_a }^2 \\
+%     & \leq \frac{2}{\min_{i \in [p]} \onorm{\mX_{i:}}^2}  \off{ \sum_{i \in [p]} \onorm{\mX_{i:}}^2  \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 +  \sum_{i \in [p]}  \onorm{\mX_{i:}}^2  \onorm{\hat \mX_{i:}^s - \hat \mx_a }^2 }\\
+%     & \lesssim \frac{r^{K-1} (1 + \eta)}{p^{K-1}} \sum_{i \in [p]} \onorm{\mX_{i:}}^2  \onorm{\mX_{i:}^s - \hat \mX_{i:}^s}^2 \\
+%     & \lesssim  \frac{r^{K-1} (1 + \eta)}{p^{K-1}}  \onorm{\hat  \tX - \tX}_F^2 \\
+%     & \lesssim \frac{r^{K-1} (1 + \eta)}{p^{K-1}} p^{-K/2}.
+% \end{align}
+
+% Suppose $z^{(0)} = 1$.  Note that $\mX^s_{i:}$ only have $r$ different values. Let $\mX_{a}^s = \mX^s_{i:}$ with $z(i) = a, a \in [r]$. Note that 
+% \begin{equation}
+%     |z^{-1}(a) \cap (z^{(0)})^{-1} (a)| \geq |z^{-1}(a)| - p\ell(z^{(0)} ,  z) \gtrsim \frac{p}{r} - \frac{1}{\log p} \gtrsim \frac{p}{r},
+% \end{equation}
+% when $\Delta_{\min}^2 \geq p^{-K/2} \log p$. Then
+% \begin{align}
+%     \onorm{\mX_a^s - \hat \mx_a}^2 &= \frac{ \sum_{i \in z^{-1}(a) \cap (z^{(0)})^{-1} (a) } \onorm{ \mX_{i:}^s - \hat \mx_a}^2 }{|z^{-1}(a) \cap (z^{(0)})^{-1} (a) |} \\
+%     & \lesssim \frac{ r \sum_{i \in [p]} \onorm{\mX_{i:}^s - \hat \mx_{z^{(0)}(i)}}^2 }{ p}\\
+%     & \lesssim \frac{r^K(1 + \eta)}{p^{K}} p^{-K/2} 
+% \end{align}
+
+% Note that 
+% \begin{align}
+%     L^{(0)} &= \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \onorm{\mS_{z^{(0)}(i),:}^s - \mS_{z(i),:}^s}^2 \\
+%     & \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \onorm{\mX^s_{z^{-1}(z^{(0)}):} - \mX^s_{i,:}}^2\\
+%     & \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \off{ \onorm{ \mX^s_{z^{-1}(z^{(0)}):} - \hat \mx_{z^{(0)}(i)} }^2 + \onorm{ \hat \mx_{z^{(0)}(i)} - \mX^s_{i,:}}^2 }\\
+%     & \lesssim   \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \frac{ \onorm{\hat \mX_{i:} - \mX_{i:}}^2 }{ \onorm{ \mX_{i:}}^2 } +  \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i)  \frac{r^K(1 + \eta)}{p^{K}} p^{-K/2} \\
+%     & \lesssim \frac{r^K}{p^{K}} p^{-K/2} \\
+%     & \lesssim \frac{\Delta_{\min}^2}{r \log p}.
+%     %& \lesssim \frac{1}{p} \lambda^{-2(K-1)}_r(\mTheta \mM) \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \onorm{\mX^{(0)}_{i:}-\mX_{i:}}^2 \\
+%     %& \lesssim \frac{r^{K-1}}{p^K} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \off{ \onorm{\mX^{(0)}_{i:}-\hat \mX_{i:}}^2 +  \onorm{\hat \mX_{i:}-\mX_{i:}}^2 }
+% \end{align}
+% where $\frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i) \lesssim \frac{1}{p} \sum_{i \in [p], z^{(0)}(i) \neq z(i)} \theta(i)^2$ due to the boundedness.
 \end{proof}
 
-\paragraph{Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:initial}} 
+{\bf Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:initial}} 
 \begin{lem}[Basic inequality]\label{lem:norm_diff} For any two nonzero vectors $\mv_1,\mv_2$ of same dimension, we have 
 \[
 \sin(\mv_1 , \mv_2) \leq \onorm{{\mv_1^s}-{\mv_2^s}}\leq {2\onorm{\mv_1-\mv_2}\over \max\left(\onorm{\mv_1},\onorm{\mv_2}\right)}.
@@ -1825,11 +1936,13 @@ Therefore, Lemma~\ref{lem:norm_diff} is proved.
 
 \begin{defn}[Weighted padding vectors]\label{def:pad} For a vector $\ma = \entry{a_i} \in \bbR^d$, we define the padding vector of $\ma$ with the weight collection $\mw = \{\mw_i\}_{i = 1}^d$ and $\mw_i = \entry{w_{ik}} \in \bbR^{p_i}, i \in [d]$ as
 \begin{equation}
-    \pad_{\mw}(\ma) = [a_1 \circ \mw_1, \ldots, a_d \circ \mw_d], \quad \text{ where} \quad  a_i \circ \mw_i = [a_i w_{i1},\ldots, a_i w_{i p_i}], \text{ for all } i \in [d]
+    \pad_{\mw}(\ma) = [a_1 \circ \mw_1, \ldots, a_d \circ \mw_d]^T, \quad \text{ where} \quad  a_i \circ \mw_i = [a_i w_{i1},\ldots, a_i w_{i p_i}]^T, \text{ for all } i \in [d]
 \end{equation}
-and $\pad: \bbR^{d}\mapsto \bbR^{\sum_{i\in[d]}}p_i$ can be viewed as an operator, and by definition, we have $\pad (\ma) \in \bbR^{\sum_{i \in[d]} p_i}$. Then , we have the bounds of the weighted padding vector
+and $\pad: \bbR^{d}\mapsto \bbR^{\sum_{i\in[d]}p_i}$ can be viewed as an operator.
+%, and by definition we have $\pad (\ma) \in \bbR^{\sum_{i \in[d]} p_i}$. 
+We have the bounds of the weighted padding vector
 \begin{equation}\label{eq:pad_bound}
-     \min_{i \in [d]} \onorm{\mw_i}^2 \onorm{\ma}^2 \leq \onorm{\pad_{\mw}(\ma)}^2 \leq \max_{i \in [d]} \onorm{\mw_i}^2 \onorm{\ma}^2.
+     \min_{i \in [d]} \onormSize{}{\mw_i}^2 \onormSize{}{\ma}^2 \leq \onormSize{}{\pad_{\mw}(\ma)}^2 \leq \max_{i \in [d]} \onormSize{}{\mw_i}^2 \onormSize{}{\ma}^2.
 \end{equation}
 Further, we define the inverse weighted padding operator $\pad^{-1}: \bbR^{\sum_{i\in[d]}p_i}\mapsto \bbR^d$ which satisfies 
 \begin{equation}
@@ -1839,83 +1952,86 @@ Further, we define the inverse weighted padding operator $\pad^{-1}: \bbR^{\sum_
 
 \begin{lem}[Angle for weighted padding vectors]\label{lem:pad} Suppose we have two non-zero vectors $\ma, \mb \in \bbR^d$. Given the weight collection $\mw$, we have 
 \begin{equation}
-   \frac{\min_{i \in [d]} \onorm{\mw_i}}{\max_{i \in [d]} \onorm{\mw_i} } \sin (\ma, \mb) \leq \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb)) \leq \frac{ \max_{i \in [d]} \onorm{\mw_i} }{\min_{i \in [d]} \onorm{\mw_i}} \sin (\ma, \mb).
+   \frac{\min_{i \in [d]} \onormSize{}{\mw_i}}{\max_{i \in [d]} \onormSize{}{\mw_i} } \sin (\ma, \mb) \leq \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb)) \leq \frac{ \max_{i \in [d]} \onormSize{}{\mw_i} }{\min_{i \in [d]} \onormSize{}{\mw_i}} \sin (\ma, \mb).
 \end{equation}
 \end{lem}
 
-\begin{proof}[Proof of Lemma~\ref{lem:pad}] We prove the two inequalities separately with the similar idea.
+\begin{proof}[Proof of Lemma~\ref{lem:pad}] We prove the two inequalities separately with similar ideas.
 
-First, we prove the inequality $\sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb)) \leq \frac{ \max_{i \in [d]} \onorm{\mw_i}^2 }{\min_{i \in [d]} \onorm{\mw_i}^2} \sin (\ma, \mb)$. Decomposing $\mb$, we have
+First, we prove the inequality $\sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb)) \leq \frac{ \max_{i \in [d]} \onormSize{}{\mw_i}^2 }{\min_{i \in [d]} \onormSize{}{\mw_i}^2} \sin (\ma, \mb)$. Decomposing $\mb$, we have
 \begin{equation}
-    \mb = \cos (\ma, \mb) \frac{\onorm{\mb}}{\onorm{\ma}} \ma + \sin (\ma, \mb) \frac{\onorm{\mb}}{\onorm{\ma^{\perp}}}\ma^{\perp},
+    \mb = \cos (\ma, \mb) \frac{\onormSize{}{\mb}}{\onormSize{}{\ma}} \ma + \sin (\ma, \mb) \frac{\onormSize{}{\mb}}{\onormSize{}{\ma^{\perp}}}\ma^{\perp},
 \end{equation}
 where $\ma^{\perp} \in \bbR^d$ is the orthogonal vector of $\ma$. By the Definition~\ref{def:pad}, we have 
 \begin{equation}\label{eq:pad_second_ineq}
-    \pad_{\mw}(\mb) = \cos (\ma, \mb) \frac{\onorm{b}}{\onorm{a}} \pad_{\mw}(\ma) + \sin (\ma, \mb) \frac{\onorm{b}}{\onorm{a^{\perp}}} \pad_{\mw}(\ma^{\perp}).
+    \pad_{\mw}(\mb) = \cos (\ma, \mb) \frac{\onormSize{}{b}}{\onormSize{}{a}} \pad_{\mw}(\ma) + \sin (\ma, \mb) \frac{\onormSize{}{b}}{\onormSize{}{a^{\perp}}} \pad_{\mw}(\ma^{\perp}).
 \end{equation}
 Note that $\pad_{\mw}(\ma^{\perp})$ is not necessary equal to the orthogonal vector of $\pad(\ma)$, i.e., $\pad_{\mw}(\ma^{\perp}) \neq (\pad_{\mw}(\ma))^{\perp}$. Then by the geometry property of trigonometric functions, we obtain
 \begin{align}
-    \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb))  &\leq \frac{  \onorm{\mb} \onorm{\pad_{\mw}(\ma^{\perp})} }{ \onorm{\ma^{\perp}} \onorm{ \pad_{\mw}(\mb)}} \sin (\ma, \mb)  \\
-    & \leq  \frac{ \max_{i \in [d]} \onorm{\mw_i} }{\min_{i \in [d]} \onorm{\mw_i}} \sin (\ma, \mb),
+    \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb))  &\leq \frac{  \onormSize{}{\mb} \onormSize{}{\pad_{\mw}(\ma^{\perp})} }{ \onormSize{}{\ma^{\perp}} \onormSize{}{ \pad_{\mw}(\mb)}} \sin (\ma, \mb)  \\
+    & \leq  \frac{ \max_{i \in [d]} \onormSize{}{\mw_i} }{\min_{i \in [d]} \onormSize{}{\mw_i}} \sin (\ma, \mb),
 \end{align}
 where the second inequality follows by applying the property~\eqref{eq:pad_bound} to vectors $\mb, \ma^{\perp}$. 
 
-Next, we prove $\frac{\min_{i \in [d]} \onorm{\mw_i}^2}{\max_{i \in [d]} \onorm{\mw_i}^2 } \sin (\ma, \mb) \leq \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb))$. With the decomposition of $\pad_{\mw}(\mb)$ and the inverse weighted padding operator, we have 
+Next, we prove $\frac{\min_{i \in [d]} \onormSize{}{\mw_i}^2}{\max_{i \in [d]} \onormSize{}{\mw_i}^2 } \sin (\ma, \mb) \leq \sin(\pad_{\mw}(\ma),  \pad_{\mw}(\mb))$. With the decomposition of $\pad_{\mw}(\mb)$ and the inverse weighted padding operator, we have 
 \begin{align}
-    \mb &=  \cos(\pad_{\mw}(\ma), \pad_{\mw}(\mb)) \frac{\onorm{\pad_{\mw}(\mb)}}{\onorm{\pad_{\mw}(\ma)}} \ma +\\
-    & \quad \quad \quad \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb))\frac{\onorm{\pad_{\mw}(\mb)}}{\onorm{(\pad_{\mw}(\ma))^{\perp}}} \pad_{\mw}^{-1}((\pad_{\mw}(\ma))^{\perp}).
+    \mb &=  \cos(\pad_{\mw}(\ma), \pad_{\mw}(\mb)) \frac{\onormSize{}{\pad_{\mw}(\mb)}}{\onormSize{}{\pad_{\mw}(\ma)}} \ma +  \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb))\frac{\onormSize{}{\pad_{\mw}(\mb)}}{\onormSize{}{(\pad_{\mw}(\ma))^{\perp}}} \pad_{\mw}^{-1}((\pad_{\mw}(\ma))^{\perp}).
 \end{align}
 
 Therefore, we obtain 
 \begin{align}
-    \sin(\ma, \mb) &\leq \frac{ \onorm{\pad_{\mw}(\mb) } \onorm{\pad_{\mw}^{-1}((\pad_{\mw}(\ma))^{\perp})  } }{ \onorm{(\pad_{\mw}(\ma))^{\perp} } \onorm{\mb} }  \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb))\\
-    & \leq \frac{ \max_{i \in [d]} \onorm{\mw_i} }{\min_{i \in [d]} \onorm{\mw_i}} \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb)),
+    \sin(\ma, \mb) &\leq \frac{ \onormSize{}{\pad_{\mw}(\mb) } \onormSize{}{\pad_{\mw}^{-1}((\pad_{\mw}(\ma))^{\perp})  } }{ \onormSize{}{(\pad_{\mw}(\ma))^{\perp} } \onormSize{}{\mb} }  \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb))\\
+    & \leq \frac{ \max_{i \in [d]} \onormSize{}{\mw_i} }{\min_{i \in [d]} \onormSize{}{\mw_i}} \sin(\pad_{\mw}(\ma), \pad_{\mw}(\mb)),
 \end{align}
 where the second inequality follows by applying the property~\eqref{eq:pad_bound} to vectors $\mb, \pad_{\mw}^{-1}((\pad_{\mw}(\ma))^{\perp})$.
-
-
 \end{proof}
 
-\begin{lem}[Angle gap in $\tX$]\label{lem:angle_gap_x} Consider the dTBM model~\eqref{eq:model_tensor}. Suppose Assumption~\ref{assmp:min_gap} holds and $\mtheta$ is balanced satisfying~\eqref{eq:degree}. Then the angle gap in $\tX$ is approximate to angle gap in $\tS$, i.e.,
+\begin{lem}[Angle gap in $\tX$]\label{lem:angle_gap_x} Consider the dTBM model~\eqref{eq:model_tensor}. Suppose Assumption~\ref{assmp:min_gap} holds and $\mtheta$ is balanced satisfying~\eqref{eq:degree}. Then the angle gap in $\tX$ is approximate to angle gap in $\tS$, i.e., for all $i,j$ such that $z(i) \neq z(j)$
+% \begin{equation}
+%     \Delta_{\min} \leq \min_{(i,j): z(i) \neq z(j)}  \onormSize{}Size{}{\mS_{z_1(i):}^s - \mS_{z_1(j):}^s}  \lesssim \min_{(i,j): z(i) \neq z(j)} \onormSize{}Size{}{\mX_{i:}^s - \mX_{j:}^s}. 
+% \end{equation}
 \begin{equation}
-    \Delta_{\min} \lesssim  \min_{(i,j): z(i) \neq z(j)} \onorm{\mX_{i:}^s - \mX_{j:}^s}. 
+    \onormSize{}{\mX_{i:}^s - \mX_{j:}^s} \gtrsim  \onormSize{}{\mS_{z_1(i):}^s - \mS_{z_1(j):}^s} \gtrsim  \Delta_{\min}.
 \end{equation}
+
 \end{lem}
 
 \begin{proof}[Proof of Lemma~\ref{lem:angle_gap_x}] 
-Note that the vector $\mS_{z(i):}$ can be folded to a tensor $\tS' =\entry{\tS'_{a_2,\ldots,a_K}} \in \bbR^{r^{K-1}}$, i.e., $\text{vec}(\tS') = \mS_{z(i):}$. Let the weight vector $\mw_{a_2 \cdots a_K}$ correspond to the elements $\tS'_{a_2,\ldots,a_K}$ as
+Note that the vector $\mS_{z(i):}$ can be folded to a tensor $\tS' =\entry{\tS'_{a_2,\ldots,a_K}} \in \bbR^{r^{K-1}}$, i.e., $\text{vec}(\tS') = \mS_{z(i):}$. Let the weight vectors $\mw_{a_2, \cdots, a_K}$ correspond to the elements in $\tS'_{a_2,\ldots,a_K}$ as
 \begin{equation}
-    \mw_{a_2 \cdots a_K} = [ \mtheta_{z^{-1} (a_2)} \otimes \cdots \otimes \mtheta_{z^{-1} (a_K)}] \in \bbR^{|z^{-1} (a_2)| \times \cdots \times |z^{-1} (a_K)|},
+    \mw_{a_2 \cdots a_K} = [ \mtheta_{z^{-1} (a_2)}^T \otimes \cdots \otimes \mtheta_{z^{-1} (a_K)}^T] \in \bbR^{|z^{-1} (a_2)| \times \cdots \times |z^{-1} (a_K)|},
 \end{equation}
-for all $a_k \in [r], k = 2,\ldots, K$, where $\otimes$ denotes the Kronecker product. Therefore, we have  $\mX_{i:} = \theta(i) \pad_{\mw}(\mS_{z(i):})$ where $\mw = \{ \mw_{a_2 \cdots a_K}\}$. Specifically, we have $\onorm{\mw_{a_2,\ldots,a_K}}^2 = \prod_{k = 2}^K \onorm{ \mtheta_{z^{-1}(a_k)}}^2$, and by the balanced assumption we have 
+for all $a_k \in [r], k = 2,\ldots, K$, where $\otimes$ denotes the Kronecker product. Therefore, we have  $\mX_{i:} = \theta(i) \pad_{\mw}(\mS_{z(i):})$ where $\mw = \{ \mw_{a_2, \cdots, a_K}\}_{a_k \in [r], k\in [K]/\{1\}}$. Specifically, we have $\onormSize{}{\mw_{a_2, \ldots, a_K}}^2 = \prod_{k = 2}^K \onormSize{}{ \mtheta_{z^{-1}(a_k)}}^2$, and by the balanced assumption~\eqref{eq:degree} we have 
 \begin{equation}\label{eq:pad_balance}
-    \max_{(a_2,\ldots, a_K)} \onorm{\mw_{a_2,\ldots, a_K}}^2 = (1 + o(1))  \min_{(a_2,\ldots, a_K)} \onorm{\mw_{a_2,\ldots, a_K}}^2.
+    \max_{(a_2,\ldots, a_K)} \onormSize{}{\mw_{a_2,\ldots, a_K}}^2 = (1 + o(1))  \min_{(a_2,\ldots, a_K)} \onormSize{}{\mw_{a_2,\ldots, a_K}}^2.
 \end{equation}
 
 Consider the inner product of $\mX_{i:}$ and $\mX_{j:}$ for $z(i) \neq z(j)$. By the definition of weighted padding operator and the balanced assumption~\eqref{eq:pad_balance}, we have 
 \begin{align}
     \ang{\mX_{i:},\mX_{j:}} &= \theta(i) \theta(j) \ang{ \pad_{\mw}(\mS_{z(i):}), \pad_{\mw}(\mS_{z(j):} )}\\
-    &= \theta(i) \theta(j) \min_{(a_2,\ldots, a_K)} \onorm{\mw_{a_2,\ldots, a_K}}^2 \ang{\mS_{z(i):}, \mS_{z(j):}}(1 + o(1)).
+    &= \theta(i) \theta(j) \min_{(a_2,\ldots, a_K)} \onormSize{}{\mw_{a_2,\ldots, a_K}}^2 \ang{\mS_{z(i):}, \mS_{z(j):}}(1 + o(1)).
 \end{align}
 Thus, when $p$ large enough, the inner product $\ang{\mX_{i:},\mX_{j:}} $ as the same sign with $\ang{\mS_{z(i):}, \mS_{z(j):}}$. Next, we discuss the angle between $\mX_{i:}$ and $\mX_{j:}$ by cases.
 
 \begin{enumerate}
-    \item \textbf{Case 1:} Suppose $\ang{\mS_{z(i):}, \mS_{z(j):}} \leq 0$. Then, we also have $\ang{\mX_{i:},\mX_{j:}} \leq 0$, which implies $\onorm{\mX_{i:}^s -  \mX_{j:}^s} \geq \sqrt{2}$. Note that $\onorm{\mS_{z(i):}^s - \mS_{z(j):}^s} \leq 2$. We have $\onorm{\mX_{i:}^s -  \mX_{j:}^s} \gtrsim \onorm{\mS_{z(i):}^s - \mS_{z(j):}^s}$.
+    \item \textbf{Case 1:} Suppose $\ang{\mS_{z(i):}, \mS_{z(j):}} \leq 0$. Then, we also have $\ang{\mX_{i:},\mX_{j:}} \leq 0$, which implies $\onormSize{}{\mX_{i:}^s -  \mX_{j:}^s} \geq \sqrt{2}$. Note that $\onormSize{}{\mS_{z(i):}^s - \mS_{z(j):}^s} \leq 2$ by the definition of angle gap. We have $\onormSize{}{\mX_{i:}^s -  \mX_{j:}^s} \gtrsim \onormSize{}{\mS_{z(i):}^s - \mS_{z(j):}^s}$.
     \item \textbf{Case 2:} Suppose $\ang{\mS_{z(i):}, \mS_{z(j):}} > 0$. Then, we have $\cos(\mS_{z(i):}, \mS_{z(j):}) > 0$. Note that the fact $\sqrt{1 - \cos \alpha} = 2 \sin \frac{\alpha}{2} \lesssim \sin \alpha$ for the angle $\alpha \in [0, \frac{\pi}{2})$. Then, we have 
     \begin{align}
-        \onorm{\mS_{z(i):}^s - \mS_{z(j):}^s} &= \sqrt{ 1 - \cos(\mS_{z(i):}, \mS_{z(j):})}  \\
+        \onormSize{}{\mS_{z(i):}^s - \mS_{z(j):}^s} &= \sqrt{ 1 - \cos(\mS_{z(i):}, \mS_{z(j):})}  \\
         & \lesssim \sin (\mS_{z(i):}, \mS_{z(j):})\\
-        & \leq \frac{ \max_{(a_2,\ldots, a_K)} \onorm{\mw_{a_2,\ldots, a_K}} }{  \min_{(a_2,\ldots, a_K)} \onorm{\mw_{a_2,\ldots, a_K}} }  \sin ( \pad_{\mw} (\mS_{z(i):}), \pad_{\mw}(\mS_{z(j):})) \\
-        & \leq (1 + o(1)) \onorm{\mX_{i:}^s -  \mX_{j:}^s},
+        & \leq \frac{ \max_{(a_2,\ldots, a_K)} \onormSize{}{\mw_{a_2,\ldots, a_K}} }{  \min_{(a_2,\ldots, a_K)} \onormSize{}{\mw_{a_2,\ldots, a_K}} }  \sin ( \pad_{\mw} (\mS_{z(i):}), \pad_{\mw}(\mS_{z(j):})) \\
+        & \leq (1 + o(1)) \onormSize{}{\mX_{i:}^s -  \mX_{j:}^s},
     \end{align}
-    where the second inequality follows by Lemma~\ref{lem:pad}, and the last inequality follows by the balanced assumption~\eqref{eq:pad_balance} and Lemma~\ref{lem:norm_diff}.
+    where the second inequality follows by Lemma~\ref{lem:pad}, and the last inequality follows by the balanced weight~\eqref{eq:pad_balance} and Lemma~\ref{lem:norm_diff}.
 \end{enumerate}
 
-Hence, we conclude that 
+Hence, we conclude that for all $i,j$ such that $z(i) \neq z(j)$
+% \begin{equation}
+%   \min_{(i,j): z(i) \neq z(j)} \onormSize{}{\mX_{i:}^s - \mX_{j:}^s} \gtrsim \min_{(i,j): z(i) \neq z(j)}  \onormSize{}{\mS_{z_1(i):}^s - \mS_{z_1(j):}^s} \gtrsim  \Delta_{\min}.
+% \end{equation}
 \begin{equation}
-   \min_{(i,j): z(i) \neq z(j)} \onorm{\mX_{i:}^s - \mX_{j:}^s} \gtrsim \min_{(i,j): z(i) \neq z(j)}  \onorm{\mS_{z_1(i):}^s - \mS_{z_1(j):}^s} \gtrsim  \Delta_{\min}.
+    \onormSize{}{\mX_{i:}^s - \mX_{j:}^s} \gtrsim  \onormSize{}{\mS_{z_1(i):}^s - \mS_{z_1(j):}^s} \gtrsim  \Delta_{\min}.
 \end{equation}
-
 \end{proof}
 
 % % generalized version
@@ -1989,56 +2105,57 @@ Hence, we conclude that
 % % \fixme{Jiaxin}{ Problem here: if $\Delta_{\min}^2 = O(p^{-K/2})$, then $o(1)$ is much larger than $\Delta_{\min}$...}
 % \end{proof}
 
-\begin{lem}[Singular value of weighted membership matrix]\label{lem:singular_thetam} Under the assumption that $\min_{i \in [p]} \theta(i) \geq c_0 >0$, we have the minimal singular value of $\mTheta \mM$ bounded as 
+\begin{lem}[Singular value of weighted membership matrix]\label{lem:singular_thetam} Under the assumption that $\min_{i \in [p]} \theta(i) \geq c$, we have the singular values of $\mTheta \mM$ are bounded as 
 \begin{equation}\label{eq:membership2}
-     \sqrt{p/r} \leq \sqrt{ \min_{a \in [r]}\onorm{ \mtheta_{ z^{-1}(a)} }^2 }  \lesssim \lambda_{r}(\mTheta \mM) \leq \onorm{\mTheta \mM}_{\sigma} \leq\sqrt{ \max_{a \in [r]}\onorm{ \mtheta_{ z^{-1}(a)} }^2 } \lesssim  p /r .
+     \sqrt{p/r} \lesssim \sqrt{ \min_{a \in [r]}\onormSize{}{ \mtheta_{ z^{-1}(a)} }^2 }  \leq \lambda_{r}(\mTheta \mM) \leq \onormSize{}{\mTheta \mM}_{\sigma} \leq\sqrt{ \max_{a \in [r]}\onormSize{}{ \mtheta_{ z^{-1}(a)} }^2 } \lesssim  p /r .
 \end{equation}
 \end{lem}
 
 \begin{proof}[Proof of Lemma~\ref{lem:singular_thetam}] Note that 
 \begin{equation}
-    (\mTheta\mM)^T \mTheta \mM = \mD, \quad \text{with} \quad \mD = \text{diag}(D_1,\ldots, D_r), \ D_a = \onorm{\mtheta_{z^{-1}(a)}}^2, a \in [r].
+    (\mTheta\mM)^T \mTheta \mM = \mD, \quad \text{with} \quad \mD = \text{diag}(D_1,\ldots, D_r), \ D_a = \onormSize{}{\mtheta_{z^{-1}(a)}}^2, a \in [r].
 \end{equation}
 By the definition of singular value, we have 
 \begin{equation}
-     \sqrt{\min_{a \in [r]}\onorm{ \mtheta_{ z^{-1}(a)} }^2 } \leq \lambda_r(\mTheta \mM) \leq \onorm{\mTheta\mM}_{\sigma} \leq \sqrt{ \max_{a \in [r]}\onorm{ \mtheta_{ z^{-1}(a)} }^2}.
+     \sqrt{\min_{a \in [r]}\onormSize{}{ \mtheta_{ z^{-1}(a)} }^2 } \leq \lambda_r(\mTheta \mM) \leq \onormSize{}{\mTheta\mM}_{\sigma} \leq \sqrt{ \max_{a \in [r]}\onormSize{}{ \mtheta_{ z^{-1}(a)} }^2}.
 \end{equation}
 
 
-Given that $\min_{i \in [p]}\theta(i) \geq c_0$, we have  
+Given that $\min_{i \in [p]}\theta(i) \geq c$, we have  
 \begin{equation}
-   \min_{a \in [r]} \onorm{ \mtheta_{ z^{-1}(a)} }^2 \geq c_0^2 \min_{a \in [r]} |z^{-1}(a)| \gtrsim \frac{p}{r},
+   \min_{a \in [r]} \onormSize{}{ \mtheta_{ z^{-1}(a)} }^2 \geq c^2 \min_{a \in [r]} |z^{-1}(a)| \gtrsim \frac{p}{r},
 \end{equation}
 where the last inequality follows by the constraint in parameter space~\eqref{eq:family}. Also, notice that 
 \begin{equation}
-    \sqrt{\max_{a \in [r]}\onorm{ \mtheta_{ z^{-1}(a)} }^2 } \leq \max_{a \in [r]} \sqrt{ \onorm{ \mtheta_{ z^{-1}(a)} }^2_1} \lesssim \frac{p}{r}.
+    \sqrt{\max_{a \in [r]}\onormSize{}{ \mtheta_{ z^{-1}(a)} }^2 } \leq \max_{a \in [r]} \sqrt{ \onormSize{}{ \mtheta_{ z^{-1}(a)} }^2_1} \lesssim \frac{p}{r}.
 \end{equation}
 
  Therefore, we complete the proof of Lemma~\ref{lem:singular_thetam}.
 \end{proof}
 
 
-\begin{lem}[Singular-value-gap-free tensor estimation error bound]\label{lem:two-step_esterror} Let an order-$K$ tensor $\tA = \tX + \tZ \in \bbR^{p \times \cdots \times p}$, and $\tX$ has tucker rank $(r,...r)$ and $\tZ$ has independent sub-Gaussian entries with parameter $\sigma^2$. Let $\hat \tX$ denote the two-step estimated tensor in line 2 of Sub-Algorithm 1 in the main paper. Then with probability at least $1 - C \exp\of{- cp }$, we have
+\begin{lem}[Singular-value-gap-free tensor estimation error bound]\label{lem:two-step_esterror} Let an order-$K$ tensor $\tA = \tX + \tZ \in \bbR^{p \times \cdots \times p}$, and $\tX$ has tucker rank $(r,...r)$ and $\tZ$ has independent sub-Gaussian entries with parameter $\sigma^2$. Let $\hat \tX$ denote the two-step estimated tensor in Step 2 of Sub-Algorithm~\hyperref[alg:main]{1} in the main paper. Then with probability at least $1 - C \exp\of{- cp }$, we have
 \begin{align}
-    \onorm{\hat \tX - \tX}_F^2 \leq C \sigma^2 \of{ p^{K/2}r + pr^2 + r^K }.
+    \onormSize{}{\hat \tX - \tX}_F^2 \leq C \sigma^2 \of{ p^{K/2}r + pr^2 + r^K },
 \end{align}
+where $C, c$ are some positive constants.
 \end{lem}
 
 \begin{proof}
-See Proposition 1 in \cite{han2020exact}.
+See \citet[Proposition 1]{han2020exact}.
 \end{proof}
 
-\begin{lem}[Upper bound of misclassification error]\label{lem:upper_mis} Let $z: [p] \mapsto [r]$ be a clustering assignment such that $|z^{-1}(a)| \asymp p/r$ for all $a \in [r]$. Let node $i$ corresponds to a vector $\mx_i  = \theta(i) \mv_{z(i)} \in \bbR^d$ where $\{\mv_a\}_{a = 1}^r$ are the cluster centers and $\mtheta = \entry{\theta(i)} \in \bbR^p_+$ is the positive degree heterogeneity. Assume that  $\mtheta$ satisfies the balanced assumption such that ${\max_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2 \over \min_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2 }= 1 + o(1)$. Consider an arbitrary estimate $\hat z$ with $\hat \mx_i = \hat \mv_{\hat z(i)}$. Then, if
+\begin{lem}[Upper bound of misclustering error]\label{lem:upper_mis} Let $z: [p] \mapsto [r]$ be a clustering assignment such that $|z^{-1}(a)| \asymp p/r$ for all $a \in [r]$. Let node $i$ corresponds to a vector $\mx_i  = \theta(i) \mv_{z(i)} \in \bbR^d$ where $\{\mv_a\}_{a = 1}^r$ are the cluster centers and $\mtheta = \entry{\theta(i)} \in \bbR^p_+$ is the positive degree heterogeneity. Assume that  $\mtheta$ satisfies the balanced assumption~\eqref{eq:degree} such that ${\max_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2 \over \min_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2 }= 1 + o(1)$. Consider an arbitrary estimate $\hat z$ with $\hat \mx_i = \hat \mv_{\hat z(i)}$ for all $ i \in S$. Then, if
 \begin{equation}
-    \min_{a \neq b \in [r]} \onorm{\mv_a - \mv_b} \geq 2c,
+    \min_{a \neq b \in [r]} \onormSize{}{\mv_a - \mv_b} \geq 2c,
 \end{equation}
  for some constant $c >0$, we have 
 \begin{equation}
     \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2 \leq \sum_{i \in S_0} \theta(i)^2 + 4 \sum_{i \in S} \theta(i)^2,
 \end{equation}
-where 
+where $S_0$ is defined in Step 3 of Sub-Algorithm~\hyperref[alg:main]{1} and
 \begin{equation}
-    S_0 = \{i: \hat z(i) = 0\} \quad  \text{and}  \quad S = \{i \in S_0^c: \onorm{\hat \mx_i - \mx_i } \geq c \}.
+   S = \{i \in S_0^c: \onormSize{}{\hat \mx_i - \mx_i } \geq c \}.
 \end{equation}
 
 \end{lem}
@@ -2048,10 +2165,8 @@ where
 \begin{proof}[Proof of Lemma~\ref{lem:upper_mis}] 
 
 For each cluster $u\in[r]$, we use $C_u$ to collect the subset of points for which the estimated and true positions $\hat \mx_i, \mx_i$ are within distance $c$. Specifically, define
-For each cluster $u \in [r]$, we define 
-
 \begin{equation}
-    C_u = \{ i \in z^{-1}(u) \cap S_0^c: \onorm{\hat \mx_i - \mx_i} < c \},
+    C_u = \{ i \in z^{-1}(u) \cap S_0^c: \onormSize{}{\hat \mx_i - \mx_i} < c \},
 \end{equation}
 and divide $[r]$ into three groups based on $C_u$ as 
 \begin{align}
@@ -2059,22 +2174,21 @@ and divide $[r]$ into three groups based on $C_u$ as
     R_2 &= \{ u \in [r]: C_u \neq \emptyset, \text{ for all } i, j \in C_u, \hat z(i) = \hat z(j) \},\\
     R_3 &= \{ u \in [r]: C_u \neq \emptyset, \text{ there exist } i, j \in C_u, \hat z(i) \neq \hat z(j) \}.
 \end{align}
-Then, we have 
+Following \citet[Lemma 6]{gao2018community}, we have 
 \begin{equation}
-    \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2 \leq \sum_{i \in S_0} \theta(i)^2 + \sum_{i \in S} \theta(i)^2 + \sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2.
+    \min_{\pi \in \Pi} \sum_{i : \hat z(i) \neq \pi(z(i))} \theta(i)^2 \leq \sum_{i \in S_0} \theta(i)^2 + \sum_{i \in S} \theta(i)^2 + \sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2,
 \end{equation}
-Thus, we only need to bound $\sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2$ to finish the proof. Note that we have $|R_3| \leq |R_1|$ by Lemma 6 in \citep{gao2018community}. We have 
+and $|R_3| \leq |R_1|$. We only need to bound $\sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2$ to finish the proof. Note that 
 \begin{align}
-    \sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2 &\leq |R_3| \max_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2 \\
-    & \leq |R_1| \max_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2  \\
-    & \leq {\max_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2 \over \min_{a \in [r]} \onorm{\mtheta_{z^{-1}(a)}}^2 } \sum_{i \in \cup_{u \in R_1} z^{-1}(u)} \theta(i)^2\\
+    \sum_{ i \in \cup_{u \in R_3} C_u} \theta(i)^2 &\leq |R_3| \max_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2 \\
+    & \leq |R_1| \max_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2  \\
+    & \leq {\max_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2 \over \min_{a \in [r]} \onormSize{}{\mtheta_{z^{-1}(a)}}^2 } \sum_{i \in \cup_{u \in R_1} z^{-1}(u)} \theta(i)^2\\
     & \leq 2 \sum_{i \in S} \theta(i)^2,
 \end{align}
-where the second inequality follows the conclusion $|R_3| \leq |R_1|$ from the proof of Lemma 6 in \citep{gao2018community}, and the last inequality holds by the balanced assumption on $\mtheta$ when $p$ is large enough, and the fact that $ \cup_{u \in R_1} z^{-1}(u) \subset S$.
-
+where the last inequality holds by the balanced assumption on $\mtheta$ when $p$ is large enough, and the fact that $ \cup_{u \in R_1} z^{-1}(u) \subset S$.
 \end{proof}
 
-
+\newpage
 
 \section*{Proof of Theorem~\ref{thm:refinement}}
 
@@ -2140,61 +2254,60 @@ where the second inequality follows the conclusion $|R_3| \leq |R_1|$ from the p
 % \end{rmk}
 
 \begin{proof}[Proof of Theorem~\ref{thm:refinement}]
-Recall that we prove Theorem~\ref{thm:refinement} under the dTBM~\ref{eq:model_tensor} with parameters $(z, \tS, \mtheta)$. We drop the subscript $k$ in the matricizations $\mM_k, \mS_k, \mX_k$. Without loss of generality, we assume that the noise variance $\sigma = 1$ and the identity permutation minimizes the initial misclassification error, i.e., $\pi^{(0)} = \argmin_{\pi \in \Pi} \sum_{i \in [p]}\ind \offf{z^{(0)}(i) \neq \pi \circ z(i) }$ and $\pi^{(0)}(a) = a$ for all $ a \in [r]$.
+We prove Theorem~\ref{thm:refinement} under the dTBM~\eqref{eq:model_tensor} with parameters $(z, \tS, \mtheta)$. We drop the subscript $k$ in the matricizations $\mM_k, \mS_k, \mX_k$. Without loss of generality, we assume that the variance $\sigma = 1$ and the identity permutation minimizes the initial misclustering error, i.e., $\pi^{(0)} = \argmin_{\pi \in \Pi} \sum_{i \in [p]}\ind \offf{z^{(0)}(i) \neq \pi \circ z(i) }$ and $\pi^{(0)}(a) = a$ for all $ a \in [r]$.
 
 
 %Here, we also prove Theorem~\ref{thm:refinement} under the symmetric case, i.e., assuming $p_k = p, r_k = r$, and $\tS \in \bbR^{r \times \cdots \times r}, \tX \in \bbR^{p \times \cdots \times p}$ are symmetric with $z_k = z, \mM_k = \mM, \mtheta_k = \mtheta$. Without loss of generality, we assume $\sigma = 1$ and $\pi^{(0)}$ is the identity mapping on $[r]$.  
 
-\paragraph{Step 1:} We first introduce additional notations and the necessary condition to complete the proof. We will verify that the conditions hold in our context under high probability in the last step of the proof. 
+{\bf Step 1 (Notations and conditions):} We first introduce additional notations and the necessary condition to complete the proof. We will verify that the conditions hold in our context under high probability in the last step of the proof. 
 
 \textbf{Notations.}
 \begin{enumerate}
 
-\item Norms. Let $\onorm{\mA}_\sigma$ denote the spectral norm of matrix $\mA$, which is equal to the maximal singular value of $\mA$; let $\onorm{\mA}_F$ denote the Frobenius norm of matrix $\mA$.
+%\item Norms. 
 \item Projection. For a vector $\mv \in \bbR^d$, let $\text{Proj}(\mv) \in \bbR^{d \times d}$ denote the projection matrix to $\mv$. Then $\mI_d - \text{Proj}(\mv)$ is the projection matrix to the orthogonal complement $\mv^{\perp}$. 
 
-    \item Normalized membership matrix
+    \item Normalized membership matrices
     \begin{align}
         \mW = \mM \of{ \text{diag}(\mone_{p}^T \mM) }^{-1}, \quad \mW^{(t)} = \mM^{(t)} \of{ \text{diag}(\mone_{p}^T \mM^{(t)}) }^{-1},
     \end{align}
-    and dual normalized membership matrix
+    and the dual normalized membership matrices
     \begin{align}
-         \mV &= \mW^{\otimes (K-1)}, \quad \mV^{(t)} =\of{ \mW^{(t)}}^{\otimes (K-1)}
+         \mV &= \mW^{\otimes (K-1)}, \quad \mV^{(t)} =\of{ \mW^{(t)}}^{\otimes (K-1)}.
     \end{align}
-    \item Estimator of $\tS$ in the $t$-th iteration, denoted $\tS^{(t)}$ and the oracle estimator of $\tS$ given true assignment $z$, denoted $\tilde \tS$,
+    \item Estimator of $\tS$ in the $t$-th iteration, $\tS^{(t)}$, and the oracle estimator of $\tS$ given true assignment $z$, $\tilde \tS$,
     \begin{align}
         \tS^{(t)} = \tY \times_1 \of{\mW^{(t)}}^T \times_2 \cdots \times_K \of{\mW^{(t)}}^T, \quad \tilde \tS &= \tY \times_1 \mW^T \times_2 \cdots \times_K \mW^T.
     \end{align}
     \item Matricization of tensors
     \begin{align}
-        &\mS = \mat_1(\tS), \quad \mS^{(t)} = \mat_1(\tS^{(t)}), \quad \tilde \mS = \mat_1(\tilde \tS)\\
-        &\mY = \mat_1(\tY), \quad \mX = \mat_1(\tX), \quad \mE = \mat_1(\tE).
+        &\mS = \mat(\tS), \quad \mS^{(t)} = \mat(\tS^{(t)}), \quad \tilde \mS = \mat(\tilde \tS)\\
+        &\mY = \mat(\tY), \quad \mX = \mat(\tX), \quad \mE = \mat(\tE).
     \end{align}
-    \item The angle-based misclassification loss in the $t$-th iteration %\fixme{Jiaxin}{Need $\theta(i)$ in the definition}
+    \item The angle-based misclustering loss in the $t$-th iteration %\fixme{Jiaxin}{Need $\theta(i)$ in the definition}
     \begin{equation}
-         L^{(t)} = \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(t)}(i) = b } \onorm{ \off{ \mS_{ z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2,
+         L^{(t)} = \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(t)}(i) = b } \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2,
     \end{equation}
      and the oracle loss
     \begin{align}
-         \xi & = \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \ind \Big\{\ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s} \\
-         & \hspace{3cm}\leq - \frac{ \theta(i) m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 \Big\} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{ b:}  }^s  }^2,
+         \xi & = \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \ind \Big\{\ang{ \mE_{i:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s}  \leq - \frac{ \theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \Big\} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{ b:}  ]^s  }^2,
     \end{align}
-    where $m$ is a positive constant related to $c_3$ and is defined in~\eqref{eq:xv_lower}.
+    where $m$ is a positive universal constant defined in~\eqref{eq:xv_lower}.
 \end{enumerate}
 
 \begin{condition}\label{cond:origin} Let $\mathbb{O}_{p, r}$ denote the collection of all the $p$-by-$r$ matrices with orthonormal columns. For all $a \in [r]$, we have 
 \begin{equation}\label{eq:cond1}
-    \onorm{\mE \mV}_\sigma \lesssim \sqrt{\frac{r^{K-1}}{p^{K-1}}} \of{ p ^{1/2}+ r^{(K-1)/2}}, \quad \onorm{\mE \mV}_F \lesssim \sqrt{\frac{ r^{2(K-1)}}{p^{K-2}}},\quad \onorm{ \mW_{a:}^T \mE \mV} \lesssim \frac{r^K}{p^{K/2}},
+    \onormSize{}{\mE \mV}_\sigma \lesssim \sqrt{\frac{r^{K-1}}{p^{K-1}}} \of{ p ^{1/2}+ r^{(K-1)/2}}, \quad \onormSize{}{\mE \mV}_F \lesssim \sqrt{\frac{ r^{2(K-1)}}{p^{K-2}}},\quad \onormSize{}{ \mW_{a:}^T \mE \mV} \lesssim \frac{r^K}{p^{K/2}},
 \end{equation}
 % \begin{equation}\label{eq:cond11}
-%     , \quad \onorm{ \mW_{a:}^{(t),T} \mE \mV} \lesssim \frac{r^K}{p^{K/2}},
+%     , \quad \onormSize{}{ \mW_{a:}^{(t),T} \mE \mV} \lesssim \frac{r^K}{p^{K/2}},
 % \end{equation}
 \begin{equation}\label{eq:cond2}
-    \sup_{ \mU_k \in \mathbb{O}_{p, r}, k = 2,\ldots, K } \onorm{ \mE (\mU_{2} \otimes \cdots \otimes \mU_K)}_\sigma \lesssim \of{ \sqrt{r^{K-1}} + K\sqrt{pr}},
+    \sup_{ \mU_k \in \mathbb{O}_{p, r}, k = 2,\ldots, K } \onormSize{}{ \mE (\mU_{2} \otimes \cdots \otimes \mU_K)}_\sigma \lesssim \of{ \sqrt{r^{K-1}} + K\sqrt{pr}},
 \end{equation}
 
 \begin{equation}\label{eq:cond3}
-    \sup_{ \mU_k \in \mathbb{O}_{p, r}, k = 2,\ldots, K } \onorm{ \mE (\mU_{2} \otimes \cdots \otimes \mU_K)}_F \lesssim \of{ \sqrt{pr^{K-1}} + K\sqrt{pr}},
+    \sup_{ \mU_k \in \mathbb{O}_{p, r}, k = 2,\ldots, K } \onormSize{}{ \mE (\mU_{2} \otimes \cdots \otimes \mU_K)}_F \lesssim \of{ \sqrt{pr^{K-1}} + K\sqrt{pr}},
 \end{equation}
 
 \begin{equation}\label{eq:cond_oracle}
@@ -2211,98 +2324,138 @@ Recall that we prove Theorem~\ref{thm:refinement} under the dTBM~\ref{eq:model_t
 \end{equation}
 % \fixme{Jiaxin}{See corollary 1}
  
- Particularly, the inequality~\eqref{eq:cond1} holds by replacing $\mV$ to $\mV^{(t)}$ and $\mW_{:a}$ to $\mW_{:a}^{(t),T}$ when initialization condition~\eqref{eq:cond_intial} holds.
+Further, inequality~\eqref{eq:cond1} holds by replacing $\mV$ to $\mV^{(t)}$ and $\mW_{:a}$ to $\mW_{:a}^{(t),T}$ when initialization condition~\eqref{eq:cond_intial} holds.
 \end{condition}
 
 
-\paragraph{Step 2:} Next, we derive upper bound of $L^{(t+1)}$ for $t = 0 ,1, \ldots, T-1$. By Sub-Algorithm~\hyperref[alg:main]{2}, we update the assignment in $t$-th iteration as 
+{\bf Step 2 (Misclustering loss decomposition):} Next, we derive the upper bound of $L^{(t+1)}$ for $t = 0 ,1, \ldots, T-1$. By Sub-Algorithm~\hyperref[alg:main]{2}, we update the assignment in $t$-th iteration via
     \begin{equation}
-        z^{(t+1)}(i) = \argmin_{a \in [r]} \onorm{ \off{ \mY_{i:} \mV^{(t)}  }^s - \off{\mS_{a:}^{(t)}}^s }^2,
+        z^{(t+1)}(i) = \argmin_{a \in [r]} \onormSize{}{ [ \mY_{i:} \mV^{(t)}  ]^s - [\mS_{a:}^{(t)}]^s }^2,
     \end{equation}
-    following the fact that $\mat_1(\tY^\text{d}) = \mY \mV^{(t)}$, where $\tY^\text{d}$ is the reduced tensor defined in Sub-Algorithm~\hyperref[alg:main]{2}. Then the event $z^{(t+1)}(i) = b$ implies
-    \begin{equation}
-        \onorm{ \off{ \mY_{j:} \mV^{(t)}  }^s - \off{\mS_{b:}^{(t)}}^s }^2 \leq \onorm{ \off{ \mY_{j:} \mV^{(t)}  }^s - \off{\mS_{z(j):}^{(t)}}^s }^2.
+    following the facts that $\onormSize{}{\ma^s - \mb^s}^2 = 1 - \cos(\ma, \mb)$ for vectors $\ma,\mb$ of same dimension and $\mat(\tY^\text{d}) = \mY \mV^{(t)}$ where $\tY^\text{d}$ is the reduced tensor defined in Step 8 of Sub-Algorithm~\hyperref[alg:main]{2}. Then the event $z^{(t+1)}(i) = b$ implies
+    \begin{equation}\label{eq:event}
+        \onormSize{}{ [ \mY_{i:} \mV^{(t)}  ]^s - [\mS_{b:}^{(t)}]^s }^2 \leq \onormSize{}{ [ \mY_{i:} \mV^{(t)}  ]^s - [\mS_{z(i):}^{(t)}]^s }^2.
     \end{equation}
-    Arranging the terms, we obtain the decomposition
+    {\color{blue} Note that the event~\eqref{eq:event} also holds for the degenerate entity $i$ with $\onormSize{}{\mY_{i:} \mV^{(t)}} = 0$ due to the convention that $\ma^s = 0$ if $\ma = 0$. }
+    Arranging the terms in \eqref{eq:event}, we obtain the decomposition
     \begin{equation}\label{eq:decomp}
-        2 \ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s } \leq \onorm{\mX_{i:} \mV^{(t)}} \of{ - \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 + G_{ib}^{(t)} + H_{ib}^{(t)} } +  F_{ib}^{(t)},
+        2 \ang{ \mE_{i:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s } \leq \onormSize{}{\mX_{i:} \mV^{(t)}} \of{ - \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 + G_{ib}^{(t)} + H_{ib}^{(t)} } +  F_{ib}^{(t)},
     \end{equation}
     where
     % \begin{equation}\label{eq:decomp}
     %     2 \ang{ \mE_{j:} \mV, \off{  \tilde \mS_{z(j):} }^s - \off{  \tilde \mS_{b:} }^s } \leq 2 \ang{ \mX_{j:} \mV^{(t)}, \off{  \mS_{b:}^{(t)}  }^s -\off{  \mS_{z(j):}^{(t)}  }^s  } + F_{jb}^{(t)},
     % \end{equation}
     \begin{align}
-        F_{ib}^{(t)} &= 2 \ang{\mE_{i:} \mV^{(t)}, \of{ \off{  \tilde \mS_{z(i):} }^s  -  \off{  \mS_{z(i):}^{(t)} }^s  }  - \of{  \off{  \tilde \mS_{b:} }^s  -  \off{  \mS_{b:}^{(t)} }^s  }  } \\
-        & \quad \quad \quad \quad \quad + 2 \ang{ \mE_{i:} \of{ \mV - \mV^{(t)} }, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s  },\\
-        G_{ib}^{(t)} &=   \of{ \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mS_{z(i):}^{(t)}  }^s}^2 -  \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mW_{:z(i)}^T \mY \mV^{(t)} }^s}^2}   \\
-        & \quad \quad \quad \quad \quad -   \of{ \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mS_{b:}^{(t)}  }^s}^2 -  \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mW_{:b}^T \mY \mV^{(t)} }^s}^2 }, \\
-        H_{ib}^{(t)} &=   \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mW_{:z(i)}^T \mY \mV^{(t)} }^s}^2 - \onorm{ \off{\mX_{i:} \mV^{(t)}}^s -  \off{  \mW_{:b}^T \mY \mV^{(t)} }^s}^2  + \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 .
+        F_{ib}^{(t)} &= 2 \ang{\mE_{i:} \mV^{(t)}, \of{ [  \tilde \mS_{z(i):} ]^s  -  [  \mS_{z(i):}^{(t)} ]^s  }  - \of{  [  \tilde \mS_{b:} ]^s  -  [  \mS_{b:}^{(t)} ]^s  }  }  + 2 \ang{ \mE_{i:} \of{ \mV - \mV^{(t)} }, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s  }, \label{eq:f}\\
+        G_{ib}^{(t)} &=   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{z(i):}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2}   \\
+        & \quad \quad \quad \quad \quad -   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{b:}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 }, \label{eq:g} \\
+        H_{ib}^{(t)} &=   \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2  + \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 . \label{eq:h}
     \end{align}
     
   %\fixme{Miaoyan}{Add extra condition $\max_{a\in[R]}\onorm{\theta_{z^{-1}(a)}}\lesssim \sqrt{p}$ in order to guarantee $\onorm{\mX_{j:}\mV^{(t)}}<c$. Specifically, $\onorm{\mX_{j:}\mV^{(t)}} \leq \onorm{\mX_{j:}}\onorm{\mV^{(t)}}_{\sigma} \lesssim p^{-(K-1)/2}\max_{a\in[R]}\onorm{\theta_{z^{-1}(a)}}^{K-1} \lesssim c<\infty$. The second inequality is from Lemma 4 of Han et al. Add Lemma 4.}
-    Then, we have the following upper bound 
+    Then, we upper bound the event
     \begin{align}
-         &\ind \offf{ z^{(t+1)}(j) = b  }\\ & \quad \quad \quad \leq \ind \offf{ z^{(t+1)}(j) = b ,   \ang{ \mE_{j:} \mV, \off{  \tilde \mS_{z(j):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{1}{4} \onorm{\mX_{i:} \mV^{(t)}} \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 } \\
-         & \quad \quad \quad  \quad \quad + \ind \offf{z^{(t+1)}(j) = b, \frac{1}{2}\onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 \leq \onorm{\mX_{i:} \mV^{(t)}}^{-1} F_{jb}^{(t)} + G_{jb}^{(t)} + H_{jb}^{(t)} }. \label{eq:ind_b}
+         \ind \offf{ z^{(t+1)}(i) = b  }& \leq \ind \offf{ z^{(t+1)}(i) = b ,   \ang{ \mE_{j:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{1}{4} \onormSize{}{\mX_{i:} \mV^{(t)}} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 } \\
+         & + \ind \offf{z^{(t+1)}(i) = b, \frac{1}{2}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq \onormSize{}{\mX_{i:} \mV^{(t)}}^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }. \label{eq:ind_b}
     \end{align}
-    
    Note that 
     \begin{align}
-        \onorm{\mX_{i:} \mV^{(t)}} &= \onorm{ \mX_{i:} \mW^{(t), \otimes^{K-1}}} \\
-        &\geq \onorm{\mS_{i:} (\mTheta \mM)^{\otimes (K-1),T} } \lambda^{K-1}_r(\mW^{(t)}) \\
-        & \geq \theta(i) \onorm{\mS_{z(i):}} \lambda_r^{K-1}(\mTheta \mM) \lambda^{K-1}_r(\mW^{(t)})\\
-        & \geq\theta(i) m , \label{eq:xv_lower}
+     \onormSize{}{\mX_{i:} \mV^{(t)}}  = \theta(i) \onormSize{}{\mS_{i:} (\mTheta \mM)^{\otimes (K-1),T} \mW^{(t), \otimes^{K-1}}}
+       % &\geq \theta(i) \onormSize{}{\mS_{i:} (\mTheta \mM)^{\otimes (K-1),T} } \lambda^{K-1}_r(\mW^{(t)}) \\
+         \geq \theta(i) \onormSize{}{\mS_{z(i):}} \lambda_r^{K-1}(\mTheta \mM) \lambda^{K-1}_r(\mW^{(t)})
+         \geq\theta(i) m , \label{eq:xv_lower}
     \end{align}
-    where the first two inequalities follow by the property of eigenvalues, the last inequality follows by Lemmas~\ref{lem:singular_thetam} and \ref{lem:membership}, the assumption that $\min_{a \in [r]} \onorm{\mS_{z(i):}} \geq c_3$, and $m >0$ is a positive constant related to $ c_3$. Plugging the lower bound of $ \onorm{\mX_{i:} \mV^{(t)}}$ \eqref{eq:xv_lower} into the inequality \ref{eq:ind_b}, we obtain that 
+    where the first inequality follows by the property of eigenvalues, the last inequality follows by Lemmas~\ref{lem:singular_thetam}, \ref{lem:membership}, the assumption that $\min_{a \in [r]} \onormSize{}{\mS_{z(i):}} \geq c_3$, and $m >0$ is a positive constant related to $ c_3$. Plugging the lower bound of $ \onormSize{}{\mX_{i:} \mV^{(t)}}$ \eqref{eq:xv_lower} into the inequality \eqref{eq:ind_b}, we obtain that 
     \begin{equation}\label{eq:decomp1}
-        \ind \offf{ z^{(t+1)}(i) = b  } \leq I_1 + I_2,
+        \ind \offf{ z^{(t+1)}(i) = b  } \leq A_{ib} + B_{ib},
     \end{equation}
     where 
     \begin{align}
-        A_{ib} &= \ind \offf{\ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{\theta(i) m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 },\\
-        B_{ib} &= \ind \offf{z^{(t+1)}(i) = b, \frac{1}{2}\onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }.
+        A_{ib} &= \ind \offf{z^{(t+1)}(i) = b, \ang{ \mE_{i:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{\theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 },\\
+        B_{ib} &= \ind \offf{z^{(t+1)}(i) = b, \frac{1}{2}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }.
     \end{align}
-    On one hand, the event $A_{ib}$ is the critical component in $\xi$, where
-    \begin{equation}
-        \xi =   \frac{1}{p} \sum_{i \in [p] } \theta(i) \sum_{b \in [r]/z(i)}  \onorm{ \off{ \mS_{ z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 A_{ib}
-    \end{equation}
-    We will investigate $\bbP(A_{ib} = 1)$ when verifying the Condition~\ref{cond:origin}. 
     
-    On the other hand, the terms $ F_{ib}^{(t)}, G_{ib}^{(t)}$, and $H_{ib}^{(t)}$ in $B_{ib}$ describe the misclassification error in $t$-th iteration, which intuitively can be represented by $L^{(t)}$. Specifically, under Condition~\ref{cond:origin}, Lemma~\ref{lem:upper_fgh} and \citet[Step 4, Proof of Theorem 2]{han2020exact} imply that 
-    %\fixme{Jiaxin}{Need to elaborate more. Step 4 is not completely the same as Han. Need to care about $\theta$}
+    {
+    \color{blue} Take the weighted summation of~\eqref{eq:decomp1} over $i \in [p]$. We have 
     \begin{equation}
-        \frac{1}{p} \sum_{i \in [p] } \theta(i) \sum_{b \in [r]/z(i)}  \onorm{ \off{ \mS_{ z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 B_{ib} \leq c' L^{(t+1)} + \rho L^{(t)},
+        L^{(t+1)} \leq \xi + \frac{1}{p}\sum_{i \in [p] }  \sum_{b \in [r]/z(i)}  \zeta_{ib}^{(t)}, 
     \end{equation}
-    where $c', \rho \in (0,1)$ are two small positive constants. Hence, by the upper bound~\eqref{eq:decomp1} and the defintion of $L^{(t+1)}$, we obtain the upper bound for the misclassification loss in the $t+1$-th iteration
+    where $\xi$ is the oracle loss such that 
+    \begin{equation}\label{eq:decomp2}
+        \xi =   \frac{1}{p} \sum_{i \in [p] } \theta(i) \sum_{b \in [r]/z(i)} A_{ib} \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2.
+    \end{equation}
+    and we define
+    \begin{equation}
+        \zeta_{ib}^{(t)} =   \theta(i) B_{ib} \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2.
+    \end{equation}
+    
+    {\bf Step 3 (Derivation of contraction inequality):} In this step we derive the upper bound of $\zeta_{ib}$ and thereof obtain the contraction inequality. Note that 
+    \begin{align}
+        \zeta_{ib}^{(t)} &= \theta(i) \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \ind \offf{z^{(t+1)}(i) = b, \frac{1}{2}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }\\
+        & \leq \theta(i) \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \ind \offf{z^{(t+1)}(i) = b, \frac{1}{4}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} } \\
+        & \lesssim \ind \offf{ z^{(t+1)}(i) = b} \of{  \frac{(F_{ib}^{(t)})^2}{ \theta(i)m^2\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} + \frac{\theta(i)(G_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2}    }\\
+        &\leq C \ind \offf{ z^{(t+1)}(i) = b} \of{  \frac{(F_{ib}^{(t)})^2}{ \theta(i)m^2\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} + \frac{\theta(i)(G_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2}    },\label{eq:zeta}
+    \end{align}
+    where the first inequality follows by the inequality~\eqref{eq:hib} in Lemma~\ref{lem:upper_fgh}, and the last inequality follows by the assumption that $\min_{i \in [p]} \theta(i) \geq c$. Following \citet[Step 4, Proof of Theorem 2]{han2020exact} and Lemma~\ref{lem:upper_fgh}, we have 
+    \begin{align}\label{eq:f_sum}
+          \frac{1}{p} \sum_{i \in [p]}\sum_{b \in [r]/z(i)} \ind \offf{ z^{(t+1)}(i) = b} \frac{(F_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} \leq C_1 L^{(t)},
+    \end{align}
+    and 
+    \begin{align}
+         \frac{1}{p} \sum_{i \in [p]}\sum_{b \in [r]/z(i)} \ind \offf{ z^{(t+1)}(i) = b} \frac{\theta(i)(G_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2}  &\lesssim \frac{1}{p} \sum_{i \in [p]}\theta(i) \sum_{b \in [r]/z(i)}   \ind \offf{ z^{(t+1)}(i) = b}  (\Delta_{\min}^2 + L^{(t)}) \\
+         & \leq C_2 (L^{(t+1)} + L^{(t)}), \label{eq:g_sum}
+    \end{align}
+    where the last inequality follows by the definition of $L^{(t)}$ and the constraint of $\mtheta$ in parameter space~\eqref{eq:family}. Choosing the constants $C, C_1, C_2$ in~\eqref{eq:zeta}~\eqref{eq:f_sum}~\eqref{eq:g_sum} carefully, we have 
+    \begin{equation}\label{eq:zeta_upper}
+        \frac{1}{p}\sum_{i \in [p] }  \sum_{b \in [r]/z(i)}  \zeta_{ib}^{(t)} \leq  C_4 L^{(t+1)}  + C_5 L^{(t)},
+    \end{equation}
+    for some small positive constants $C_4, C_5$. Plugging the inequality~\eqref{eq:zeta_upper} into the decomposition~\eqref{eq:decomp2}, we obtain the contraction inequality 
     \begin{equation}\label{eq:decomp_t}
-        L^{(t+1)} \leq M \xi + \rho L^{(t)},
+          L^{(t+1)} \leq M \xi  + \rho L^{(t)},
     \end{equation}
-    where $M \geq 1$ and $\rho$ is called the contraction parameter.  
+     where $M \geq 1$ and $\rho \in [0,1)$ is the contraction parameter. 
+     
+     Combining the inequality~\eqref{eq:cond_oracle} in Condition~\ref{cond:origin} and Lemma~\ref{lem:mis}, we have proven Theorem~\ref{thm:refinement} with inequality~\eqref{eq:decomp_t}.
+    }
     
-    \paragraph{Step 3:} Last, we verify the Condition~\ref{cond:origin} under high probability to finish the proof. Note that the inequalities~\eqref{eq:cond1}, \eqref{eq:cond2}, and \eqref{eq:cond3} describes the property of the noise tensor $\tE$, and the readers can find the proof directly in \citet[Step 5, Proof of Theorem 2]{han2020exact}.  
+    % On one hand, the event $A_{ib}$ is a critical component of $\xi$, where
+    
+    % %We will investigate $\bbP(A_{ib} = 1)$ when verifying the Condition~\ref{cond:origin}. 
+    
+    % On the other hand, the terms $ F_{ib}^{(t)}, G_{ib}^{(t)}$, and $H_{ib}^{(t)}$ in $B_{ib}$ describe the misclustering error in that the $t$-th iteration, which intuitively can be represented by $L^{(t)}$. Specifically, under Condition~\ref{cond:origin}, Lemma~\ref{lem:upper_fgh} and \citet[Step 4, Proof of Theorem 2]{han2020exact} imply that 
+    % %\fixme{Jiaxin}{Need to elaborate more. Step 4 is not completely the same as Han. Need to care about $\theta$}
+    % \begin{equation}
+    %     \frac{1}{p} \sum_{i \in [p] } \theta(i) \sum_{b \in [r]/z(i)} B_{ib} \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2  \leq c' L^{(t+1)} + \rho L^{(t)},
+    % \end{equation}
+    % where $c', \rho \in (0,1)$ are two small positive constants. Hence, by the upper bound~\eqref{eq:decomp1} and the defintion of $L^{(t+1)}$, we obtain the upper bound for the misclustering loss in the $t+1$-th iteration
+    % \begin{equation}\label{eq:decomp_t}
+    %     L^{(t+1)} \leq M \xi + \rho L^{(t)},
+    % \end{equation}
+    % where $M \geq 1$ and $\rho$ is called the contraction parameter.  
+    
+    {\bf Step 4 (Verification of Condition~\ref{cond:origin}):} Last, we verify the Condition~\ref{cond:origin} under high probability to finish the proof. Note that the inequalities~\eqref{eq:cond1}, \eqref{eq:cond2}, and \eqref{eq:cond3} describes the property of the sub-Gaussian noise tensor $\tE$, and the readers can find the proof directly in \citet[Step 5, Proof of Theorem 2]{han2020exact}. Here, we only include the verification of inequalities~\eqref{eq:cond_oracle} and \eqref{eq:cond_intial}.
     
     Now, we verify the oracle loss condition~\eqref{eq:cond_oracle}. Recall the definition of $\xi$
     \begin{align}
-        \xi = \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \ind \offf{  \ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{\theta(i) m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 }\\
-        \cdot \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{ b:}  }^s  }^2,
+        \xi = \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \ind \offf{  \ang{ \mE_{i:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{\theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 } \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{ b:}  ]^s  }^2,
     \end{align}
 
-    Let $e_i = \mE_{i:} \mV$ denote the aggregated noise vector for $i \in [p]$, and $e_i$ are independent mean-zero sub-Gaussian vector in $\bbR^{r^{K-1}}$. Also, each coordinate in $e_i$ is also independent mean-zero sub-Gaussian variable with sub-Gaussian norm upper bounded by $C\sqrt{r^{K-1}/p^{K-1}}$ with some positive constant $C$.
+    Let $e_i = \mE_{i:} \mV$ denote the aggregated noise vector for all $i \in [p]$, and $e_i$ are independent mean-zero sub-Gaussian vector in $\bbR^{r^{K-1}}$. Each coordinate in $e_i$ is a independent mean-zero sub-Gaussian variable with sub-Gaussian norm upper bounded by $C\sqrt{r^{K-1}/p^{K-1}}$ with some positive constant $C$.
     %\fixme{Miaoyan}{\color{red} explain $e_j$. See my comments at page 34. Please correct all similar issues throughout the appendix.} 
     Note that probability 
     \begin{align}
-        \bbP \of{ \ang{ e_i, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{ m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2} \leq P_1 + P_2 + P_3,
+        \bbP \of{ \ang{ e_i, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{ \theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} \leq P_1 + P_2 + P_3,
     \end{align}
     where 
     \begin{align}
-        P_1 &= \bbP \of{ \ang{e_i, \off{  \mS_{z(i):} }^s - \off{ \mS_{b:} }^s} \leq -\frac{m}{8}  \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 }, \\
-        P_2 &= \bbP \of{ \ang{e_i, \off{ \tilde  \mS_{z(i):} }^s - \off{ \mS_{z(i):} }^s} \leq -\frac{m}{16}  \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 },\\
-        P_3 &= \bbP \of{ \ang{e_i, \off{  \mS_{b:} }^s - \off{\tilde  \mS_{b:} }^s} \leq -\frac{m}{16}   \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 }.
+        P_1 &= \bbP \of{ \ang{e_i, [  \mS_{z(i):} ]^s - [ \mS_{b:} ]^s} \leq -\frac{\theta(i)m}{8}  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 }, \\
+        P_2 &= \bbP \of{ \ang{e_i, [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s} \leq -\frac{\theta(i)m}{16}  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 },\\
+        P_3 &= \bbP \of{ \ang{e_i, [  \mS_{b:} ]^s - [\tilde  \mS_{b:} ]^s} \leq -\frac{\theta(i)m}{16}   \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 }.
     \end{align}
     
-    For $P_1$, notice that the inner product $\ang{e_j,\mS_{z(j):}^s - \mS_{b:}^s} $ is a sub-Gaussian variable with sub-Gaussian norm bounded by $C \sqrt{ r^{K-1}/ p^{K-1} } \onorm{ \mS_{z(j):} ^s -  \mS_{b:}^s }$. Then, by Chernoff bound, we have  
+    For $P_1$, notice that the inner product $\ang{e_j,\mS_{z(j):}^s - \mS_{b:}^s} $ is a sub-Gaussian variable with sub-Gaussian norm bounded by $C \sqrt{ r^{K-1}/ p^{K-1} } \onormSize{}{ \mS_{z(i):}^s -  \mS_{b:}^s }$. Then, by Chernoff bound, we have  
     \begin{equation}\label{eq:p1_2}
-         P_1 \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 }.
+         P_1 \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onormSize{}{ [ \mS_{z(j):}  ]^s - [ \mS_{b:}  ]^s  }^2 }.
     \end{equation}
     
     For $P_2$ and $P_3$, we only need to derive the upper bound of $P_2$ due to the symmetry. By the law of total probability, we have 
@@ -2311,38 +2464,37 @@ Recall that we prove Theorem~\ref{thm:refinement} under the dTBM~\ref{eq:model_t
     \end{equation}
     where with some positive constant $t$
     \begin{align}
-        P_{21}& =  \bbP \of{ t <   \onorm{ \off{ \tilde  \mS_{z(i):} }^s - \off{ \mS_{z(i):} }^s }},\\
-        P_{22} &= \bbP \of{ \left. \ang{e_i, \off{ \tilde  \mS_{z(i):} }^s - \off{ \mS_{z(i):} }^s} \leq -\frac{m}{16}  \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 \right| \onorm{ \off{ \tilde  \mS_{z(i):} }^s - \off{ \mS_{z(i):} }^s } < t  }.
+        P_{21}& =  \bbP \of{ t \leq   \onormSize{}{ [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s }},\\
+        P_{22} &= \bbP \of{ \left. \ang{e_i, [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s} \leq -\frac{\theta(i)m}{16}  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \right| \onormSize{}{ [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s } < t  }.
     \end{align}
     
-    For $P_{21}$, note that the term $\mW^T_{: z(i)} \mE \mV = \frac{ \sum_{ j \neq i, j \in [p]} \ind \{ z(j) = z(i) \} e_j }{\sum_{j \in [p]} \ind \{ z(j) = z(i) \} }$  is a sub-Gaussian vector with sub-Gaussian norm bounded by $C_1 \sqrt{r^K/ p^K}$. Then, we have 
+    For $P_{21}$, note that the term $\mW^T_{: z(i)} \mE \mV = \frac{ \sum_{ j \neq i, j \in [p]} \ind \{ z(j) = z(i) \} e_j }{\sum_{j \in [p]} \ind \{ z(j) = z(i) \} }$  is a sub-Gaussian vector with sub-Gaussian norm bounded by $C_1 \sqrt{r^K/ p^K}$. We have
     \begin{align}
-        P_{21} &\leq \bbP\of{ t \onorm{\mS_{z(i):} } < \onorm{ \tilde  \mS_{z(i):}  -  \mS_{z(i):} }  }\\
-        & \leq \bbP\of{c_3 t <   \onorm{ \mW^T_{: z(i)} \mE \mV  } } \\
-        & \lesssim \exp\of{ - \frac{p^K t^2}{r^K} }, \label{eq:p21}
+        P_{21} \leq \bbP\of{ t \onormSize{}{\mS_{z(i):} } \leq \onormSize{}{ \tilde  \mS_{z(i):}  -  \mS_{z(i):} }  } \leq \bbP\of{c_3 t \leq  \onormSize{}{ \mW^T_{: z(i)} \mE \mV  } } 
+        \lesssim \exp\of{ - \frac{p^K t^2}{r^K} }, \label{eq:p21}
     \end{align}
-    where the first inequality follows by the basic inequality in Lemma~\ref{lem:norm_diff}, the second inequality follows by the assumption that $ \min_{a \in [r]} \onorm{\mS_{z(i):}} \geq c_3$, and the last inequality follows by the Bernstein inequality.
+    where the first inequality follows by the basic inequality in Lemma~\ref{lem:norm_diff}, the second inequality follows by the assumption that $ \min_{a \in [r]} \onormSize{}{\mS_{z(i):}} \geq c_3$ in~\eqref{eq:family}, and the last inequality follows by the Bernstein inequality.
     
-    For $P_{22}$, the inner product $ \ang{e_i, \off{ \tilde  \mS_{z(i):} }^s - \off{ \mS_{z(i):} }^s}$ is also a sub-Gaussian variable with sub-Gaussian norm $ C \sqrt{ r^{K-1}/ p^{K-1} } t$, conditioned on the boundedness $\onorm{ \off{ \tilde  \mS_{z(j):} }^s - \off{ \mS_{z(j):} }^s } < t$. Then, by Chernoff bound, we have 
+    For $P_{22}$, the inner product $ \ang{e_i, [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s}$ is also a sub-Gaussian variable with sub-Gaussian norm $ C \sqrt{ r^{K-1}/ p^{K-1} } t$, conditioned on $\onormSize{}{ [ \tilde  \mS_{z(i):} ]^s - [ \mS_{z(i):} ]^s } < t$. Then, by Chernoff bound, we have 
     \begin{equation}\label{eq:p22}
-        P_{22} \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1} t^2}   \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^4 }. 
+        P_{22} \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1} t^2}   \onormSize{}{ [ \mS_{z(j):}  ]^s - [ \mS_{b:}  ]^s  }^4 }. 
     \end{equation}
-    Take $t =  \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }$ in $P_{21}$ and $P_{22}$, and plug the inequalities \eqref{eq:p21} and \eqref{eq:p22} into to the upper bound for $P_2$~\eqref{eq:p2}. We obtain that 
+    Take $t =  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }$ in $P_{21}$ and $P_{22}$, and plug the inequalities \eqref{eq:p21} and \eqref{eq:p22} into to the upper bound for $P_2$~\eqref{eq:p2}. We obtain that 
     \begin{equation}\label{eq:p2_2}
-        P_2 \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 }.
+        P_2 \lesssim \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 }.
     \end{equation}
     Therefore, combining the upper bounds~\eqref{eq:p1_2} and \eqref{eq:p2_2}, we have 
     \begin{equation}\label{eq:xi_p}
-          \bbP \of{ \ang{ e_i, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{ m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2} \lesssim  \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 }.
+          \bbP \of{ \ang{ e_i, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{\theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} \lesssim  \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 }.
     \end{equation}
     
     Hence, we have 
     \begin{align}
-        \bbE[\xi] & =  \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \bbP \offf{  \ang{ \mE_{i:} \mV, \off{  \tilde \mS_{z(i):} }^s - \off{  \tilde \mS_{b:} }^s }  \leq - \frac{ m}{4} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2 } \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{ b:}  }^s  }^2 \\
-        &\lesssim \frac{1}{p} \sum_{i \in [p]}  \sqrt{p} \onorm{ \off{ \mS_{z(i):}  }^s - \off{ \mS_{b:}  }^s  }^2   \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onorm{ \off{ \mS_{z(j):}  }^s - \off{ \mS_{b:}  }^s  }^2 } \\
+        \bbE[\xi] & =  \frac{1}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \bbP \offf{  \ang{ \mE_{i:} \mV, [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s }  \leq - \frac{\theta(i) m}{4} \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 } \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{ b:}  ]^s  }^2 \\
+        &\lesssim \frac{1}{p} \sum_{i \in [p]}  \theta(i) \max_{i \in [p], b \in [r]}  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2   \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 } \\
         & \lesssim  \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \Delta_{\min}^2 },
     \end{align}
-    where the first inequality follows by the fact that $\max_{i \in [p]} \theta(i) \lesssim \sqrt{p}$.
+    where the first inequality follows by the constraint that $\sum_{i \in [p]} \theta(i) = p$.
     
     By Markov's inequality, we have 
     \begin{equation}
@@ -2350,17 +2502,17 @@ Recall that we prove Theorem~\ref{thm:refinement} under the dTBM~\ref{eq:model_t
     \end{equation}
     and thus the condition~\eqref{eq:cond_oracle} holds with probability at least $1 -  C_2 \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \Delta_{\min}^2 }$ for some constant $C_2 > 0$.
     
-    Finally, we verify the bounded loss condition~\eqref{eq:cond_intial} by induction. By Corollary~\ref{cor:L0}, we have 
+    Finally, we verify the bounded loss condition~\eqref{eq:cond_intial} by induction.  With output $z^{(0)}$ from Sub-algorithm~\hyperref[alg:main]{2} and the assumption SNR $\gtrsim p^{-K/2} \log p$, by Corollary~\ref{cor:L0}, we have 
     \begin{equation}
         L^{(0)} \lesssim \frac{\Delta_{\min}^2}{r \log p}
     \end{equation}
-    when $p$ is large enough by Theorem~\ref{thm:initial}, and thus condition~\eqref{eq:cond_intial} holds for $t = 0$. Assume the condition~\eqref{eq:cond_intial} also holds for all $t \leq t_0$. Then, by the decomposition~\eqref{eq:decomp_t}, we have 
+    when $p$ is large enough, and thus condition~\eqref{eq:cond_intial} holds for $t = 0$. Assume the condition~\eqref{eq:cond_intial} also holds for all $t \leq t_0$. Then, by the decomposition~\eqref{eq:decomp_t}, we have 
     \begin{align}
          L^{(t_0+1)} &\lesssim M \xi + \rho L^{(t_0)} \\
          & \lesssim  \exp \of{  - \frac{p^{K-1}}{r^{K-1}}   \Delta_{\min}^2 } + \frac{\Delta_{\min}^2}{r \log p} \\
          & \lesssim \frac{\Delta_{\min}^2}{r\log p} ,
     \end{align}
-    where the second inequality follows by condition~\eqref{eq:cond_oracle} and the last inequality follows by the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2}$. Thus, the condition~\eqref{eq:cond_intial} holds for $t_0 + 1$, and the condition~\eqref{eq:cond_intial} is proved by induction.
+    where the second inequality follows by condition~\eqref{eq:cond_oracle} and the last inequality follows by the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2} \log p$. Thus, the condition~\eqref{eq:cond_intial} holds for $t_0 + 1$, and the condition~\eqref{eq:cond_intial} is proved by induction.
 \end{proof}
 
 
@@ -2381,45 +2533,238 @@ Recall that we prove Theorem~\ref{thm:refinement} under the dTBM~\ref{eq:model_t
 
 
 
-\paragraph{Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:refinement}} 
+{\bf Useful Definitions and Lemmas for the Proof of Theorem~\ref{thm:refinement}} 
 
 
-\begin{lem}[Misclassification error and loss]\label{lem:mis} Define the misclustering error in the $t$-th iteration as $\ell^{(t)} = \ell(z^{(t)}, z)$. We have 
+\begin{lem}[Misclustering error and loss]\label{lem:mis} Define the misclustering error in the $t$-th iteration as $\ell^{(t)} = \ell(z^{(t)}, z)$. We have 
 \begin{equation}
     \ell^{(t)} \lesssim \frac{1}{p}\sum_{i \in [p]} \theta(i) \ind\offf{ z^{(t)}(i) \neq z(i) } \leq \frac{L^{(t)}}{\Delta_{\min}^2}.
 \end{equation}
 %Define the misclustering error in the $t$-th iteration as $\ell^{(t)} = \ell(z^{(t)}, z)$, where $\ell(\cdot,\cdot)$ is the misclustering error in Section~\ref{sec:limits}. Then, we have $\ell^{(t)} \leq L^{(t)}/\Delta_{\min}^2$.
 \end{lem}
 
-\begin{lem}[Membership matrices]\label{lem:membership} Suppose the condition~\eqref{eq:cond_intial} holds. Then, for any $a \in [r]$, we have $|\of{z^{(t)}}^{-1}(a)| \asymp p/r$. Moreover, we have 
+\begin{proof}[Proof of Lemma~\ref{lem:mis}]
+By the definition of minimal gap in Assumption~\ref{assmp:min_gap}, we have 
+\begin{equation}
+         L^{(t)} = \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(t)}(i) = b } \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \geq \frac{1}{p}  \sum_{i \in [p]} \theta(i) \sum_{b \in [r]}  \ind \offf{ z^{(t)}(i) = b } \Delta_{\min}^2 \geq c \ell^{(t)} \Delta_{\min}^2,
+    \end{equation}
+    where the last inequality follows by the assumption $\min_{i \in [p]} \theta(i) \geq c$.
+\end{proof}
+
+\begin{lem}[Singular property of membership matrices]\label{lem:membership} Suppose the condition~\eqref{eq:cond_intial} holds. Then, for any $a \in [r]$, we have $|\of{z^{(t)}}^{-1}(a)| \asymp p/r$. Moreover, we have 
 \begin{equation}\label{eq:membership1}
     \lambda_{r}(\mM) \asymp \onorm{\mM}_{\sigma} \asymp \sqrt{p/r}, \quad  \lambda_{r}(\mW) \asymp \onorm{\mW}_{\sigma} \asymp \sqrt{r/p}.
 \end{equation}
 The inequalities~\eqref{eq:membership1} also hold by replacing $\mM$ and $\mW$ to $\mM^{(t)}$ and $\mW^{(t)}$ respectively. 
 Further, we have 
 \begin{equation}\label{eq:WWsingular}
-   \lambda_{\min}(\mW\mW^T) \asymp \onorm{\mW\mW^T}_{\sigma} \asymp r/p,
+   \lambda_{r}(\mW\mW^T) \asymp \onorm{\mW\mW^T}_{\sigma} \asymp r/p,
 \end{equation}
 which is also true for $\mW^{(t)}\mW^{(t),T}$.
 \end{lem}
 
 \begin{proof}[Proof of Lemma~\ref{lem:membership}] See \citet[Proof of Lemma 4]{han2020exact} for inequality~\eqref{eq:membership1}.
 
-For inequality~\eqref{eq:WWsingular}, note that 
+For inequality~\eqref{eq:WWsingular}, note that for all $k \in [r]$
 \begin{align}
-    \lambda(\mW\mW^T) = \sqrt{\text{eigen} (\mW \mW^T\mW\mW^T)} \asymp \sqrt{\frac{r}{p} \text{eigen} (\mW \mW^T)} = \sqrt{\frac{r}{p} \lambda^2(\mW)} \asymp \frac{r}{p},
+    \lambda_k(\mW\mW^T) = \sqrt{\text{eigen}_k (\mW \mW^T\mW\mW^T)} \asymp \sqrt{\frac{r}{p} \text{eigen}_k (\mW \mW^T)} = \sqrt{\frac{r}{p} \lambda^2_k(\mW)} \asymp \frac{r}{p},
 \end{align}
-where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix with elements of order $\frac{r}{p}$, and the second equation follows by the definition of singular value.
+where $\text{eigen}_k(\mA)$ denotes the $k$-th largest eigenvalue of the square matrix $\mA$, the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix with elements of order $r/p$, and the second equation follows by the definition of singular value.
+\end{proof}
+
+\begin{lem}[Upper bound for $F_{ib}^{(t)}, G_{ib}^{(t)}$ and $H_{ib}^{(t)}$]\label{lem:upper_fgh} Under the Condition~\ref{cond:origin}, we have 
+    \begin{equation}\label{eq:fib}
+        \max_{i \in [p]} \max_{b \neq z(i)} \frac{\of{F_{ib}^{(t)}}^2}{ \onormSize{}{ [  \mS_{z(i):} ]^s  -  [ \mS_{b:} ]^s }^2 } \lesssim  \frac{r L^{(t)}}{ \Delta_{\min}^2} \onormSize{}{\mE_{i:} \mV}^2 + \of{1 +  \frac{ r L^{(t)}}{ \Delta_{\min}^2}} \onormSize{}{\mE_{i:} (\mV - \mV^{(t)})}^2 ,
+    \end{equation}
+    \begin{equation}\label{eq:gib}
+        \max_{i \in [p]} \max_{b \neq z(i)} \frac{ \of{  G_{ib}^{(t)} }^2  }{ \onormSize{}{ [\mS_{z(i):} ]^s - [\mS_{b:}]^s }^2}  \lesssim \of{ \Delta_{\min}^2 +L^{(t)}},
+    \end{equation}
+   % where $c$ is a small positive constant near to 0.
+    \begin{equation}\label{eq:hib}
+        \max_{i \in [p]} \max_{b \neq z(i)}  \frac{ \aabs{  H_{ib}^{(t)} }  }{ \onormSize{}{ [\mS_{z(i):} ]^s - [\mS_{b:}]^s }^2} \leq \frac{1}{4}.
+    \end{equation}
+    \end{lem}
+    
+\begin{proof}[Proof of Lemma~\ref{lem:upper_fgh}]
+We prove the inequalities in Lemma~\ref{lem:upper_fgh} separately.
+\begin{enumerate}
+    \item Upper bound for $F_{ib}^{(t)}$, inequality \eqref{eq:fib}. Recall the definition of $F_{ib}^{(t)}$ 
+    \begin{align}
+         F_{ib}^{(t)} = 2 \ang{\mE_{i:} \mV^{(t)}, \of{ [ \tilde \mS_{z(i):} ]^s  - [\mS_{z(i):}^{(t)} ]^s  }  - \of{  [  \tilde \mS_{b:} ]^s  - [ \mS_{b:}^{(t)} ]^s  }  }  + 2 \ang{ \mE_{i:}(\mV - \mV^{(t)} ), [ \tilde \mS_{z(i):} ]^s - [ \tilde \mS_{b:} ]^s  }.
+    \end{align}
+    By Cauchy-Schwartz inequality, we have 
+    \begin{align}
+        \of{F_{ib}^{(t)}}^2 & \leq 8 \of{\ang{\mE_{i:} \mV^{(t)}, \of{ [  \tilde \mS_{z(i):} ]^s  -  [  \mS_{z(i):}^{(t)} ]^s  }  - \of{  [  \tilde \mS_{b:} ]^s  -  [  \mS_{b:}^{(t)} ]^s  }  }  }^2 \\
+         & \quad \quad \quad \quad \quad + 8\of{ \ang{ \mE_{i:} (\mV - \mV^{(t)} ), [  \tilde \mS_{z(i):} ]^s - [ \tilde  \mS_{b:} ]^s  }}^2 \\
+         & \lesssim \of{ \onormSize{}{\mE_{i:} \mV}^2 + \onormSize{}{\mE_{i:} ( \mV - \mV^{(t)} )}^2 } \max_{a \in [r]^s} \onormSize{}{  [  \tilde \mS_{a:} ]^s - [   \mS_{a:}^{(t)} ]^s  } \\
+          & \quad \quad \quad \quad \quad +\onormSize{}{\mE_{i:} ( \mV - \mV^{(t)} )}^2  \onormSize{}{  [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s  }. \label{eq:fib_decomp}
+    \end{align}
+    Note that for any $a \in [r]$ 
+    \begin{align}
+        \onormSize{}{  [  \tilde \mS_{a:} ]^s - [   \mS_{a:}^{(t)} ]^s  }^2 &= \onormSize{}{ [ \mW_{:a}^T \mY \mV ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }^2 \\
+        &\leq 2 \onormSize{}{ [ \mW_{:a}^T \mY \mV ]^s  - [ \mW_{:a}^{(t),T} \mY \mV ]^s  }^2 + 2 \onormSize{}{[ \mW_{:a}^{(t),T} \mY \mV ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }^2\\
+        & \lesssim \frac{ r^2 (L^{(t)})^2}{ \Delta_{\min}^2} + \frac{ r r^{2K} + p r^{K+2}}{p^K} \frac{L^{(t)}}{\Delta_{\min}^2}\\
+        & \lesssim r L^{(t)}+  \frac{ r r^{2K} + p r^{K+2}}{p^K} \frac{L^{(t)}}{\Delta_{\min}^2}\\
+        & \lesssim r L^{(t)},\label{eq:fib_1}
+    \end{align}
+    where the second inequality follows the inequalities~\eqref{eq:inter3} and \eqref{eq:inter4} in Lemma~\ref{lem:intermediate}, the third inequality follows the condition~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}, and the last inequality follows the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$. 
+    
+    Also note that 
+    \begin{align}
+        \onormSize{}{  [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s  }^2 &=  \onormSize{}{  [  \tilde \mS_{z(i):} ]^s -[ \mS_{z(i):} ]^s +  [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s + [ \mS_{b:} ]^s -[  \tilde \mS_{b:} ]^s  }^2 \\
+        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2 + \max_{a \in [r]} \onormSize{}{ [ \mS_{a:} ]^s -[  \tilde \mS_{a:} ]^s }^2 \\
+        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2  + \max_{a \in [r]} \frac{1}{\onormSize{}{\mS_{a:} }^2} \onormSize{}{ \mW_{:a}^T \mE \mV}^2\\
+        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2, \label{eq:fib_2}
+    \end{align}
+    where the second inequality follows by Lemma~\ref{lem:norm_diff}, and the last inequality follows by the assumptions on $\onormSize{}{\mS_{a:}}$ in the parameter space~\eqref{eq:family}, the inequality~\eqref{eq:cond1} Condition~\ref{cond:origin} and the assumption $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$. 
+    
+    Therefore, we finish the proof of inequality~\eqref{eq:fib} by plugging the inequalities~\eqref{eq:fib_1} and \eqref{eq:fib_2} into the upper bound~\eqref{eq:fib_decomp}.
+    
+    \item Upper bound for $G_{ib}^{(t)}$, inequality~\eqref{eq:gib}. Recall the definition of $G_{ib}^{(t)}$ and rearrange the terms
+    \begin{align}
+        G_{ib}^{(t)} &=   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{z(i):}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2}   \\
+        & \quad \quad \quad \quad \quad -   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{b:}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 } \\
+        &= 2 \ang{  [\mX_{i:} \mV^{(t)}]^s , \of{[  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s } - \of{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s }}\\
+        %& \leq 4 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [  \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }.
+        &= G_1 + G_2 - G_3, \label{eq:gib_decomp}
+    \end{align}
+    where 
+    \begin{align}
+        G_1 &= \onormSize{}{ [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s}^2 - \onormSize{}{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s }^2,\\
+        G_2 &= 2 \ang{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s,   [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s},\\
+        G_3 & = 2 \ang{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s,  [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s}.
+    \end{align}
+    
+    For $G_1$, we have 
+    \begin{align}
+        |G_1|^2 &\leq \aabs{ \onormSize{}{ [ \mW_{:z(i)}^T \mY \mV^{(t)} ]^s - [ \mS_{z(i):}^{(t)}  ]^s}^2 - \onormSize{}{ [ \mW_{:b}^T \mY \mV^{(t)} ]^s -  [ \mS_{b:}^{(t)}  ]^s }^2 }^2 \\
+        & \leq \max_{a \in [r]} \onormSize{}{ [ \mW_{:a}^T \mY \mV^{(t)} ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^4\\
+        & \lesssim \frac{r^4}{\Delta_{\min}^4} (L^{(t)})^4 +  \frac{r^2 r^{4K} + p^2r^{2K+4}}{p^{2K}} \frac{(L^{(t)})^2}{\Delta_{\min}^4} \\
+        & \leq c\of{\Delta_{\min}^4 +  \Delta_{\min}^2 L^{(t)}}, \label{eq:g1}
+    \end{align}
+    where the third inequality follows by the inequality~\eqref{eq:inter5} in Lemma~\ref{lem:membership} and the last inequality follows by the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$ and inequality~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
+    
+    For $G_2$, noted that $[\mX_{i:} \mV^{(t)}]^s = [ \mW_{z(i):}^T\mX \mV^{(t)}]^s$, we have 
+    \begin{align}
+        |G_2|^2 &\leq 2\onormSize{}{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 \onormSize{}{ [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s }^2 \\
+        & \leq \frac{2}{ \onormSize{}{ \mW_{z(i):}^T\mX \mV^{(t)}}^2} \max_{a \in [r]}\onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2\\
+        & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}} \of{ \frac{r^2}{\Delta_{\min}^2} (L^{(t)})^2 + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2} }\\
+        & \leq c \Delta_{\min}^2 L^{(t)},\label{eq:g2}
+    \end{align}
+    where the second inequality follows by Lemma~\ref{lem:norm_diff}, the third inequality follows by the inequality~\eqref{eq:cond2} in Condition~\ref{cond:origin}, and inequalities~\eqref{eq:inter5}, \eqref{eq:j11_wxvt} in the proof of Lemma~\ref{lem:intermediate},  and the last inequality follows by the assumption $\Delta_{\min}^2 \geq p^{-K/2} \log p$ and inequality~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
+    
+    For $G_3$, note that by triangle inequality
+    \begin{align}
+        \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2 &\leq \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + 2\max_{a \in [r]}\onormSize{}{[\mW_{:a}^T\mX \mV^{(t)}]^s - [\mW_{:a}^T\mX \mV]^s }^2\\
+        & \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2}, \label{eq:g3xv_wxv}
+    \end{align}
+    where the last inequality follows by the inequality~\eqref{eq:j1} in the proof of Lemma~\ref{lem:intermediate}.
+    % \begin{align}
+    %     %& \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2(L^{(t)})^2}{ \Delta_{\min}^2} + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2},
+    % \end{align}
+   % where the last inequality follows by the inequality~\eqref{eq:inter4} in Lemma~\ref{lem:intermediate}. 
+   Then we have 
+    \begin{align}
+        |G_3|^2 & \leq 2 \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2 \\
+        & \leq 2 \of{ \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  +  \onormSize{}{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  } \\
+        & \quad \cdot \max_{a \in [r]} \onorm{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2\\
+        & \lesssim \of{\onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2} } \of{ \frac{r^2(L^{(t)})^2}{ \Delta_{\min}^2} + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2}}+ c \Delta_{\min}^2 L^{(t)} \\
+        & \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 (\Delta_{\min}^2 + L^{(t)}) + c\of{\Delta_{\min}^4 +  \Delta_{\min}^2 L^{(t)}},\label{eq:g3}
+    \end{align}
+    where the third inequality follows by the procedures to derive~\eqref{eq:g1} and \eqref{eq:g2}
+    %, the inequality~\eqref{eq:inter5} in Lemma~\ref{lem:intermediate},
+    , and the last inequality follows by the assumption $\Delta_{\min}^2 \geq p^{-K/2} \log p$ and inequality~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
+    
+    Plugging the inequalities~\eqref{eq:g1}, \eqref{eq:g2}, and \eqref{eq:g3} into the upper bound~\eqref{eq:gib_decomp}, we finish the proof of inequality~\eqref{eq:gib}.
+    
+    % According to the inequality~\eqref{eq:inter_wa_wb} in the proof of Lemma~\ref{lem:intermediate}, we have
+    % \begin{equation}
+    %     \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2.
+    % \end{equation}
+    % Then, we have 
+    % \begin{align}
+    %     |G_3|^2 &\lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 \max_{a \in [r]} \onorm{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2 + |G_2|^2 \\
+    %     &\lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 \of{ \frac{r^2}{\Delta_{\min}^2} \of{L^{(t)}}^2 + K  \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2} } + |G_2|^2\\
+    %     & \leq \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2  c \of{ \Delta_{\min}^2 + K L^{(t)} }+|G_2|^2, \label{eq:g3}
+    % \end{align}
+    % where the second inequality follows by Lemma~\ref{lem:intermediate}, and the last inequality follows by the assumption on $\Delta_{\min}^2$. 
+    
+    % Therefore, combining inequalities~\eqref{eq:g1}, \eqref{eq:g2}, \eqref{eq:g3} and apply the inequality of arithmetic and geometric means, .
+    
+    \item Upper bound for $H_{ib}^{(t)}$, inequality~\eqref{eq:hib}. Recall the definition of $H_{ib}$ and rearrange the terms
+    \begin{align}
+        H_{ib} &= \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 + \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \\
+        & =  \onormSize{}{ [ \mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 \\
+        & \quad \quad \quad \quad \quad + \of{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }  } \\
+        & \quad \quad \quad \quad \quad  - \of{\onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mY \mV^{(t)} ]^s } -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }   } \\
+        & = H_1 + H_2 + H_3,
+    \end{align}
+    where 
+    \begin{align}
+        H_1 &= \onormSize{}{ [ \mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 - \onormSize{}{ [ \mW_{:b}^T \mX \mV^{(t)}]^s -  [ \mW_{:b}^T \mY \mV^{(t)}]^s}^2, \\
+        H_2 &=  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }^2  , \\
+        H_3 & = 2 \ang{  [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s,  [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }.
+    \end{align}
+    For $H_1$, we have 
+    \begin{align}
+        |H_1| \leq  \frac{4 \max_{a \in [r]}\onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2 }{ \onormSize{}{ \mW_{z(i):}^T\mX \mV^{(t)}}^2}
+         \leq  \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}} 
+        \lesssim  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2\label{eq:h1},
+    \end{align}
+    following the derivation of $G_2$ in inequality~\eqref{eq:g2} and the assumption that $\Delta_{\min}^2 \geq p^{-K/2} \log p$.
+    % \begin{align}
+    %     |H_1| &\leq 2 \max_{a \in [r]}  \frac{1}{ \onormSize{}{  \mW_{:a}^T \mX \mV^{(t)}}^2} \onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2  \\
+    %     & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}}\\
+    %     & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K} \Delta_{\min}^2}  \onorm{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \\
+    %     & \lesssim  \onorm{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 ,
+    % \end{align}
+    % where the first two inequalities follow the proof of $G_2$~\eqref{eq:g2} and the last inequality follows by the assumption on $\Delta_{\min}^2$.
+    
+    For $H_2$, by the inequality~\eqref{eq:g3xv_wxv}, we have 
+    \begin{equation}\label{eq:h2}
+        |H_2| \lesssim 2 \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2} \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
+    \end{equation}
+    where the last inequality follows by the condition~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
+    
+    % For $H_2$,  sccording to the inequality~\eqref{eq:inter_wa_wb} in the proof of Lemma~\ref{lem:intermediate}, we have
+    % \begin{equation}
+    %     \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
+    % \end{equation}
+    % and thus 
+    % \begin{equation}\label{eq:h2}
+    %     |H_2| \lesssim  \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2.
+    % \end{equation}
+    
+    For $H_3$,  by Cauchy-Schwartz inequality, we have 
+    \begin{equation}\label{eq:h3}
+         |H_3| \lesssim \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s} |H_1|^{1/2} \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
+    \end{equation}
+    following the inequalities~\eqref{eq:g3xv_wxv} and \eqref{eq:h1}.
+    
+    % For $H_3$, by Cauchy-Schwartz inequality, we have 
+    % \begin{align}
+    %     |H_3| &\lesssim    \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s} |H_1|^{1/2} \\
+    %     &\lesssim  \frac{ r^{K-1/2} + K p^{1/2} r^{K/2+1/2} }{p^{K/2}} \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }\\
+    %     & \lesssim \Delta_{\min} \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }\\
+    %     & \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2, \label{eq:h3}
+    % \end{align}
+    % where the third inequality follows by the assumption on $\Delta_{\min}^2$. 
+    
+    Therefore, combining inequalities~\eqref{eq:h1}, \eqref{eq:h2}, and \eqref{eq:h3}, we have finish the proof of inequality~\eqref{eq:hib}.
+
+\end{enumerate}
+
+
 \end{proof}
 
 
-     \begin{lem}[Relationship between error and intermediate parameters]\label{lem:intermediate} Under the Condition~\ref{cond:origin}, we have
+     \begin{lem}[Relationship between misclustering loss and intermediate parameters]\label{lem:intermediate} Under the Condition~\ref{cond:origin}, we have
     \begin{equation}\label{eq:inter1}
-        \onormSize{}{\mV - \mV^{(t)}}_{\sigma} \lesssim \sqrt{\frac{r^{K-1}}{p^{K-1}}}  \frac{r(K-1)}{\Delta_{\min}^2} L^{(t)},
+        \onormSize{}{\mV - \mV^{(t)}}_{\sigma} \lesssim \sqrt{\frac{r^{K-1}}{p^{K-1}}}  \frac{r}{\Delta_{\min}^2} L^{(t)},
     \end{equation}
     \begin{equation}\label{eq:inter2}
         \onormSize{}{\mE (\mV - \mV^{(t)})}_{\sigma} \lesssim \sqrt{ \frac{r^{K-1}(p r^{K-1} + p r)}{p^{K-1}}} 
- \frac{r(K-1)}{\Delta_{\min}^2} L^{(t)}.    
+ \frac{r}{\Delta_{\min}^2} L^{(t)}.    
  \end{equation}
  \begin{equation}\label{eq:inter3}
      \max_{b \in [r]} \onormSize{}{ [ \mW_{:b}^T \mY \mV ]^s   -  [ \mW_{:b}^{(t), T} \mY \mV  ]^s } \lesssim \frac{r L^{(t)}}{\Delta_{\min}} + \sqrt{ \frac{r^{2K} + pr^{K+1}}{p^{K}} } \frac{\sqrt{L^{(t)}}}{\Delta_{\min}}
@@ -2443,7 +2788,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     Then, we complete the proof of inequality~\eqref{eq:inter1} by applying Lemma~\ref{lem:mis} to the above inequality.
     \item Inequality~\eqref{eq:inter2}. By \citet[Proof of Lemma 5]{han2020exact}, we have 
     \begin{equation}
-           \onormSize{}{\mE (\mV - \mV^{(t)})}_{\sigma} \lesssim \sqrt{ \frac{r^{K-1}(p r^{K-1} + p r)}{p^{K-1}}} r(K-1) \ell^{(t)}.
+           \onormSize{}{\mE (\mV - \mV^{(t)})}_{\sigma} \lesssim \sqrt{ \frac{r^{K-1}(p r^{K-1} + p r)}{p^{K-1}}} r \ell^{(t)}.
     \end{equation}
     Also, we complete the proof of inequality~\eqref{eq:inter1} by applying Lemma~\ref{lem:mis} to the above inequality.
     
@@ -2472,7 +2817,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     %     I_{11} = \onorm{ \frac{ \mW_{:b}^T \mX \mV  }{\onormSize{}{  \mW_{:b}^T \mX \mV }} - \frac{ \mW_{:b}^{(t), T} \mX \mV  }{ \onormSize{}{\mW_{:b}^{(t), T} \mX \mV }}   } \quad \text{and} \quad I_{12} = \frac{1}{\onormSize{}{\mW_{:b}^T \mX \mV}}\onorm{ \of{\mW_{:b}^T - \mW_{:b}^{(t), T}} \mE \mV  }.
     % \end{equation}
      \begin{equation}
-        I_{11} = \onorm{ \frac{ \mW_{:b}^T \mX \mV  }{\onormSize{}{  \mW_{:b}^T \mX \mV }} - \frac{ \mW_{:b}^{(t), T} \mX \mV  }{ \onormSize{}{\mW_{:b}^{(t), T} \mX \mV }}   } \quad \text{and} \quad I_{12} = \onorm{ \frac{\mW_{:b}^T \mE \mV}{ \onormSize{}{  \mW_{:b}^T \mX \mV }} - \frac{\mW_{:b}^{(t),T} \mE \mV}{ \onormSize{}{  \mW_{:b}^{(t),T} \mX \mV }} }
+        I_{11} = \onorm{ \frac{ \mW_{:b}^T \mX \mV  }{\onormSize{}{  \mW_{:b}^T \mX \mV }} - \frac{ \mW_{:b}^{(t), T} \mX \mV  }{ \onormSize{}{\mW_{:b}^{(t), T} \mX \mV }}   } \quad \text{and} \quad I_{12} = \onorm{ \frac{\mW_{:b}^T \mE \mV}{ \onormSize{}{  \mW_{:b}^T \mX \mV }} - \frac{\mW_{:b}^{(t),T} \mE \mV}{ \onormSize{}{  \mW_{:b}^{(t),T} \mX \mV }} }.
     \end{equation}
     Consider $I_{11}$. We first define the confusion matrix $\mD = \mM^T \mTheta^T \mW^{(t)} = \entry{D_{ab}} \in \bbR^{r \times r}$ where 
     \begin{equation}
@@ -2484,7 +2829,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \end{equation}
     and for all $b \in [r]$
     \begin{equation}\label{eq:dbb_bound}
-        D_{bb} = \frac{\sum_{i \in [p]}  \theta(i) \ind \offf{ z(i) = z^{(t)}(i) = b } }{\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b }} \geq \frac{c_0(\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b } - p\ell^{(t)})}{\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b }} \gtrsim 1 - \frac{1}{\log p},
+        D_{bb} = \frac{\sum_{i \in [p]}  \theta(i) \ind \offf{ z(i) = z^{(t)}(i) = b } }{\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b }} \geq \frac{c(\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b } - p\ell^{(t)})}{\sum_{i \in [p]}  \ind\offf{  z^{(t)}(i) = b }} \gtrsim 1 - \frac{1}{\log p},
     \end{equation}
     under the inequality \eqref{eq:cond_intial} in Condition~\ref{cond:origin}. By the definition of $\mW,\mW^{(t)},\mV$, we have 
     \begin{equation}
@@ -2494,22 +2839,22 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     %     D_a = \frac{\sum_{i \in [p]}  \theta(i) \ind \offf{ z(i) = a, z^{(t)}(i) = b } }{\sum_{i \in [p]} \theta(i)  \ind\offf{  z^{(t)}(i) = b }}, \text{  for all } a \neq b, \quad D = \sum_{a \neq b, a \in [r]} D_a.
     % \end{equation}
     
-    Let $\alpha$ denote the angle between $\mS_{b:}$ and $D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}$. To rough estimate the range of $\alpha$, we consider the inner product 
+    Let $\alpha$ denote the angle between $\mS_{b:}$ and $D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}$. To roughly estimate the range of $\alpha$, we consider the inner product 
     \begin{align}
         \ang{\mS_{b:},  D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}}  &= D_{bb} \onorm{\mS_{b:}}^2 + \sum_{a \neq b} D_{ab}\ang{\mS_{b:}, \mS_{a:}}\\
         &\geq D_{bb} \onorm{\mS_{b:}}^2 -  \sum_{a \neq b, a \in [r]} D_{ab}   \onorm{\mS_{b:}} \max_{a \in [r]}  \onorm{\mS_{a:}} \\
         & \geq C,
     \end{align}
-    where $C$ is a positive constant, and the last inequality holds when $p$ is large enough following the constraint of $\onorm{\mS_{b:}}$ in parameter space~\eqref{eq:family} and the bounds of $\mD$ \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}.
+    where $C$ is a positive constant, and the last inequality holds when $p$ is large enough following the constraint of $\onorm{\mS_{b:}}$ in parameter space~\eqref{eq:family} and the bounds of $\mD$ in \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}.
     
     The positive inner product between $\mS_{b:}$ and $D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}$ indicates $\alpha \in [0,  \pi/2)$, and thus $2\sin \frac{\alpha}{2} \leq \sqrt{2} \sin \alpha$. Then, by the geometry property of trigonometric function, we have 
     \begin{align}
        \onormSize{}{ [D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}] \sin \alpha} &= \onormSize{}{(\mI_d - \text{Proj}(\mS_{b:})) \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}}\\
-       & = \sum_{a \neq b, a \in [r]} D_{ab} \onorm{(\mI_d - \text{Proj}(\mS_{b:}))\mS_{a:}  }\\
+       &\leq \sum_{a \neq b, a \in [r]} D_{ab} \onorm{(\mI_d - \text{Proj}(\mS_{b:}))\mS_{a:}  }\\
        &= \sum_{a \neq b, a \in [r]} D_{ab} \onorm{ \mS_{a:} \sin (\mS_{b:}, \mS_{a:}) }\\
        & \leq \sum_{a \neq b, a \in [r]} D_{ab} \onorm{\mS_{a:}} \onorm{ \mS^s_{b:} - \mS^s_{a:}}, \label{eq:i11_sin_num}
     \end{align}
-    where the last inequality follows by Lemma~\ref{lem:norm_diff}. Also, note that with bounds \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}, when $p$ is large enough we have 
+    where the first inequality follows by triangle inequality, and the last inequality follows by Lemma~\ref{lem:norm_diff}. Also, note that with bounds \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}, when $p$ is large enough we have 
     \begin{equation}\label{eq:i11_sin_dom}
            \onormSize{}{\mW_{:b}^{(t), T} \mX \mV } = \onormSize{}{ D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}}  \geq D_{bb} \onorm{\mS_{b:}} - \sum_{a \neq b, a \in [r]} D_{ab} \onorm{ \mS_{a:}} \geq C_1,
     \end{equation}
@@ -2519,9 +2864,9 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
         & = \frac{  \onormSize{}{ [D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}] \sin \alpha}}{  \onormSize{}{ D_{bb} \mS_{b:} + \sum_{a \neq b, a \in [r]} D_{ab} \mS_{a:}} } \\
         & \leq \frac{ 1}{C_1}  \sum_{a \neq b, a \in [r]} D_{ab} \onorm{\mS_{a:}} \onorm{ \mS^s_{b:} - \mS^s_{a:}} \\
         & \lesssim \frac{r}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \ind\offf{z^{(t)}(i) = b} \onorm{ \mS^s_{b:} - \mS^s_{a:}}\\
-        & = \frac{r L^{(t)}}{\Delta_{\min}},\label{eq:i11}
+        & \leq \frac{r L^{(t)}}{\Delta_{\min}},\label{eq:i11}
     \end{align}
-    where the second inequality follows by~\eqref{eq:i11_sin_num} and \eqref{eq:i11_sin_dom}, and the last inequality follows by the definition of $D_a$ and the constraint of $\onorm{\mS_{b:}}$ in parameter space~\eqref{eq:family}.
+    where the second inequality follows by~\eqref{eq:i11_sin_num} and \eqref{eq:i11_sin_dom}, and the last two inequalities follow by the definition of $D_a, L^{(t)}$ and the constraint of $\onorm{\mS_{b:}}$ in parameter space~\eqref{eq:family}.
     
     
    % \fixme{Jiaxin}{Need to control $\frac{1}{p}\sum_{i \in [p]} \theta(i) \ind\{ z(i) \neq z^{(t)}(i)\} \leq \log^{-1} p$. Actually can be implied from $L^{(t)}$. Note that $\frac{1}{p} \sum \theta(i) \leq L^{(t)}/\Delta_{\min}^2$.}
@@ -2605,7 +2950,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \begin{equation}\label{eq:i12_wwx}
         \onormSize{}{(\mW_{:b}^T - \mW_{:b}^{(t),T}) \mX \mV} \leq \onormSize{}{\mW_{:b}^T - \mW_{:b}^{(t),T}} \onorm{\mX\mV}_F \lesssim \frac{r^{3/2}L^{(t)}}{\sqrt{p}\Delta_{\min}^2} \onormSize{}{\mS} \onormSize{}{\mTheta \mM}_{\sigma} \lesssim \frac{ \sqrt{r L^{(t)}} }{\Delta_{\min}}, 
     \end{equation}
-    where the second inequality follows by  \citet[Proof of Lemma 5]{han2020exact} and the last inequality follows by Lemma~\ref{lem:singular_thetam} and \eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
+    where the second inequality follows by  \citet[Inequality (121), Proof of Lemma 5]{han2020exact} and the last inequality follows by Lemma~\ref{lem:singular_thetam} and \eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
     % Also, by the definition of $\mW^{(t)}$ and Condition~\ref{cond:origin}, we have
     % \begin{equation}
     %     \onormSize{}{ \mW_{:b}^{(t),T} \mE \mV} \leq \onormSize{}{\mW_{:b}^{(t),T}} \onorm{\mE \mV}_{\sigma} \lesssim \sqrt{\frac{r^{K-1}}{p^K}} (\sqrt{p} + \sqrt{r^{K-1}}).
@@ -2677,13 +3022,15 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \end{align}
     Next, we upper bound the quantities $J_1, J_2, J_3$ separately. 
 
-    For $J_1$, by triangle inequality and Lemma~\ref{lem:norm_diff}, we have 
+    For $J_1$, by triangle inequality 
+    %and Lemma~\ref{lem:norm_diff}
+    , we have 
     \begin{equation}
         J_1 \leq J_{11} + J_{12},
     \end{equation}
     where 
     \begin{equation}
-        J_{11} =  \onorm{ \frac{\mW_{:b}^{(t),T} \mX \mV }{\onormSize{}{ \mW_{:b}^{(t),T} \mX \mV }} - \frac{\mW_{:b}^{(t),T} \mX \mV^{(t)} }{\onormSize{}{ \mW_{:b}^{(t),T} \mX \mV^{(t)} }}  }, \quad J_{12} =  \onorm{ \frac{\mW_{:b}^{(t),T}  \mE \mV}{ \onormSize{}{\mW_{:b}^{(t),T}  \mX \mV} } - \frac{\mW_{:b}^{(t),T}  \mE \mV^{(t)}}{ \onormSize{}{\mW_{:b}^{(t),T}  \mX \mV^{(t)}} }   }.
+        J_{11} =  \onorm{ \frac{\mW_{:b}^{(t),T} \mX \mV }{\onormSize{}{ \mW_{:b}^{(t),T} \mX \mV }} - \frac{\mW_{:b}^{(t),T} \mX \mV^{(t)} }{\onormSize{}{ \mW_{:b}^{(t),T} \mX \mV^{(t)} }}  } \quad \text{and} \quad \quad J_{12} =  \onorm{ \frac{\mW_{:b}^{(t),T}  \mE \mV}{ \onormSize{}{\mW_{:b}^{(t),T}  \mX \mV} } - \frac{\mW_{:b}^{(t),T}  \mE \mV^{(t)}}{ \onormSize{}{\mW_{:b}^{(t),T}  \mX \mV^{(t)}} }   }.
     \end{equation}
     
     % \fixme{Jiaxin}{Start $J_{11}$}
@@ -2692,7 +3039,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \begin{equation}
         J_{11}^k = \onormSize{}{ [\mW_{:b}^{(t),T} \mX \mV^k ]^s - [\mW_{:b}^{(t),T} \mX \mV^{k+1} ]^s },
      \end{equation}
-    for $k = 1,\ldots, K-1$. Let $\beta_k$ denote the angle between $\mW_{:b}^{(t),T} \mX \mV^k$ and $\mW_{:b}^{(t),T} \mX \mV^{k+1}$. With the same idea to prove $I_{11}$, we bound $J_{11}^k$ by considering the trigonometric function of $\beta_k$. 
+    for $k = 1,\ldots, K-1$. Let $\beta_k$ denote the angle between $\mW_{:b}^{(t),T} \mX \mV^k$ and $\mW_{:b}^{(t),T} \mX \mV^{k+1}$. With the same idea to prove $I_{11}$ in inequality~\eqref{eq:i11}, we bound $J_{11}^k$ by the trigonometric function of $\beta_k$. 
     
     To roughly estimate the range of $\beta_k$, we consider the inner product between $\mW_{:b}^{(t),T} \mX \mV^k$ and $\mW_{:b}^{(t),T} \mX \mV^{k+1}$. Before the specific derivation of the inner product, note that 
     \begin{equation}
@@ -2705,7 +3052,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \end{align}
     Recall the definition of confusion matrix $\mD = \mM^T \mTheta^T \mW^{(t)} = \entry{D_{ab}} \in \bbR^{r \times r}$.
     %, and let  $\mZ^k =  \mW^{\otimes (k-1)} \otimes \mW^{(t),\otimes (K-k-1)} \in \bbR^{ p^{K-2} \times r^{K-2} }$.  
-    Then, we have 
+    We have 
     \begin{align}
          \ang{\mW_{:b}^{(t),T} \mX \mV^k , \mW_{:b}^{(t),T} \mX \mV^{k+1}} 
          %&= \ang{ \mat_1(\tT_k), \mat_1(\tT_{k+1}) } \\
@@ -2716,13 +3063,13 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
          & = \sum_{b \in [r]} \of{ D_{bb} \onormSize{}{\mS_{b:}\mZ^k}^2 + \sum_{a \neq b, a \in [r]} D_{ab} \ang{\mS_{a:} \mZ^k, \mS_{b:} \mZ^k}} \\
          & \gtrsim (1 - \log p^{-1}) \min_{a \in [r]}\onormSize{}{\mS_{a:}\mZ^k}^2 - \log p^{-1} \max_{a \in [r]} \onormSize{}{\mS_{a:}\mZ^k}^2, \label{eq:j11inner}
     \end{align}
-    where $\mZ^k = \mD_{:b} \otimes \mI_r^{\otimes (k-1)} \otimes  \mD^{\otimes (K-k-1)}$, the equations follow by the tensor algebra and the definitions, and the last inequality follows by the bounds of $\mD$ \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}. 
+    where $\mZ^k = \mD_{:b} \otimes \mI_r^{\otimes (k-1)} \otimes  \mD^{\otimes (K-k-1)}$, the equations follow by the tensor algebra and the definitions, and the last inequality follows by the bounds of $\mD$ in \eqref{eq:dab_bound} and \eqref{eq:dbb_bound}. 
     
     Note that 
     \begin{equation}\label{eq:singular_Du}
         \onorm{\mD}_{\sigma} \leq \onorm{\mD}_{F} \leq  \sqrt{\sum_{b \in [r]} D_{bb}^2 + (\sum_{a \neq b, a ,b \in [r]} D_{ab} )^2} \lesssim \sqrt{r  + \log^2 p^{-1}} \lesssim 1,
     \end{equation}
-    where the third inequality follows by the fact that for all $b \in [r]$ 
+    where the second inequality follows by inequality~\eqref{eq:dab_bound}, and the fact that for all $b \in [r]$ 
     \begin{equation}
         D_{bb} \lesssim \frac{r}{p} \sum_{i\colon z(i) = b} \theta(i) \lesssim 1.
     \end{equation}
@@ -2740,7 +3087,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \end{equation}
     Hence, when $p$ is large enough, the inner product~\eqref{eq:j11inner} is positive, which implies $\beta_k \in [0, \pi/2)$ and thus $2 \sin \frac{\beta_k}{2} \leq \sqrt{2} \sin \beta_k$.
     
-    Next, we upper bound the angle $\sin \beta_k$. Note that
+    Next, we upper bound the trigonometric function $\sin \beta_k$. Note that
     \begin{align}
          \sin \beta_k &= \sin ({\mD_{:b}^{T} \mS \mI_r^{\otimes k-1} \otimes \mD^{\otimes K-k} }, {\mD_{:b}^{T} \mS \mI_r^{\otimes k} \otimes \mD^{\otimes K-k-1} } )\\
          &\leq \sin \beta_{k1} + \sin \beta_{k2},
@@ -2752,35 +3099,35 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     \end{align}
     and $\tilde \mD$ is the normalized confusion matrix with entries $\tilde \mD_{ab} = \frac{\sum_{i \in [p]} \theta(i) \ind\{z^{(t)} = b, z(i) = a\}}{\sum_{i \in [p] }\theta(i) \ind\{z^{(t)} = b\}}$.
     
-    On one hand, recall the definitions for any cluster assignment $\bar z$
+    On one hand, recall Definition~\ref{def:stable} that for any cluster assignment $\bar z$
     \begin{equation}
         \mp(\bar z)=(|\bar z^{-1}(1)|, \ldots,|\bar z^{-1}(r)|)^T,\quad \mp_{\mtheta}(\bar z)=(\onormSize{}{\mtheta_{\bar z^{-1}(1)}}_1,\ldots,\onormSize{}{\mtheta_{\bar z^{-1}(r)}}_1)^T.
     \end{equation}
-    Then, we have $\text{diag}(\mp(z^{(t)})) \mD = \text{diag}(\mp_{\mtheta}(z^{(t)})) \tilde \mD$. By Condition~\ref{cond:origin} and Lemma~\ref{lem:mis}, we have $\ell^{(t)} \leq \frac{L^{(t)}}{\Delta_{\min}^2} \lesssim \log^{-1}(p) $. Then, by the stability assumption, we have 
+    Note that we have $\ell^{(t)} \leq \frac{L^{(t)}}{\Delta_{\min}^2} \lesssim \log^{-1}(p) $ by Condition~\ref{cond:origin} and Lemma~\ref{lem:mis}. With stability assumption, we have 
     \begin{equation}
          \sin (\mp(z^{(t)}), \mp_{\mtheta}(z^{(t)})) \lesssim \frac{L^{(t)}}{\Delta_{\min}}. 
     \end{equation}
-    Note that $\sin(\ma,\mb) =\min_{c \in \bbR} \frac{ \onormSize{}{\ma - c\mb} }{\onormSize{}{\ma}}$ for vectors $\ma,\mb$ of same dimension, and let $c_0 = \argmin_{c \in \bbR} \frac{\onormSize{}{\mp(z^{(t)}) - c\mp_{\mtheta}(z^{(t)})}}{\onormSize{}{\mp(z^{(t)})}}$. We have
+    Note that $\text{diag}(\mp(z^{(t)})) \mD = \text{diag}(\mp_{\mtheta}(z^{(t)})) \tilde \mD$. Also, note that $\sin(\ma,\mb) =\min_{c \in \bbR} \frac{ \onormSize{}{\ma - c\mb} }{\onormSize{}{\ma}}$ for vectors $\ma,\mb$ of same dimension, and let $c_0 = \argmin_{c \in \bbR} \frac{\onormSize{}{\mp(z^{(t)}) - c\mp_{\mtheta}(z^{(t)})}}{\onormSize{}{\mp(z^{(t)})}}$. Then, we have
     \begin{align}
        \min_{c \in \bbR} \onormSize{}{ \mD - c \tilde \mD}_F &\leq  \onormSize{}{ \mI_r - c_0 \text{diag}(\mp(z^{(t)})) \text{diag}^{-1}(\mp_{\mtheta}(z^{(t)}))}_F \onormSize{}{\mD}_F\\
        &\lesssim \frac{ \onormSize{}{ \mp(z^{(t)}) - c_0\mp_{\mtheta}(z^{(t)})} }{\min_{a \in [r]} \onormSize{}{\mtheta_{z^{(t),-1}(a)} }_1  } \\
-       & \lesssim \frac{\onormSize{}{ \mp(z^{(t)})} }{\min_{a \in [r]} \onormSize{}{\mtheta_{z^{(t),-1}(a)} }_1 } \sin (\mp(z^{(t)}), \mp_{\mtheta}(z^{(t)}))\\
+       & = \frac{\onormSize{}{ \mp(z^{(t)})} }{\min_{a \in [r]} \onormSize{}{\mtheta_{z^{(t),-1}(a)} }_1 } \sin (\mp(z^{(t)}), \mp_{\mtheta}(z^{(t)}))\\
        & \lesssim \frac{L^{(t)}}{\Delta_{\min}},
     \end{align}
-    where the last inequality follows Lemma~\ref{lem:membership} that $\onormSize{}{ \mp(z^{(t)})} \lesssim p$ and $\min_{a \in [r]} \onormSize{}{\mtheta_{z^{(t),-1}(a)} }_1  \gtrsim p$. By the geometry property of trigonometric function, we have
+    where the last inequality follows Lemma~\ref{lem:membership} and constraint $\min_{i \in [p]}\theta(i) \geq c$ and thereof $\onormSize{}{ \mp(z^{(t)})} \lesssim p$ and $\min_{a \in [r]} \onormSize{}{\mtheta_{z^{(t),-1}(a)} }_1  \gtrsim p$. By the geometry property of trigonometric function, we have
     \begin{align}
         \sin \beta_{k1} &= \min_{c \in \bbR} \frac{\onormSize{}{\mD_{:b}^{T} \mS \mI_r^{\otimes k-1} \otimes (\mD - c \tilde \mD) \otimes \mD^{\otimes K-k - 1} } }{ \onormSize{}{\mD_{:b}^{T} \mS \mI_r^{\otimes k-1} \otimes \mD^{\otimes K-k}} }\\
         &\leq \frac{ \onormSize{}{\mD_{:b}^{T} \mS} \onormSize{}{\mD - c_0 \tilde \mD}_{\sigma} \onormSize{}{\mD}_{\sigma}^{K-k-1} }{\onormSize{}{\mD_{:b}^{T} \mS} \lambda_r^{K-k}(\mD) }\\
         & \lesssim  \onormSize{}{\mD - c_0 \tilde \mD}_{F}\\
         & \lesssim \frac{L^{(t)}}{\Delta_{\min}},
     \end{align}
-    where the second inequality follows by the singular property of $\mD$ in \eqref{eq:singular_Du} and \eqref{eq:singular_Dl}.
+    where the second inequality follows by the singular property of $\mD$ in \eqref{eq:singular_Du}, \eqref{eq:singular_Dl} and the constraint of $\mS$ in \eqref{eq:family}.
     
     On the other hand, let $\mC = \text{diag}(\{\onormSize{}{\mS_{a:}}\}_{a \in [r]})$. We have 
     \begin{align}
         \sin \beta_{k2} &\lesssim \frac{ \onorm{\mD_{:b}^{T} \mS \mI_r^{\otimes k-1} \otimes (\mI_r - \tilde \mD) \otimes \mD^{\otimes K-k-1} } }{\onormSize{}{\mD_{:b}^{T} \mS \mI_r^{\otimes k} \otimes \mD^{\otimes K-k-1} }  }\\
         & \lesssim \frac{ \onormSize{}{(\mI_r - \tilde \mD^T) \mS \mZ^k}_F }{\onormSize{}{\mD_{:b}^{T} \mS} \lambda_r^{K-k-1}(\mD)} \\
-        & \lesssim \onormSize{ }{(\mI_r - \tilde \mD^T) \mS \mC}_F \onormSize{}{\mC^{-1} \mZ^k}_{\sigma}\\
+        & \lesssim \onormSize{ }{(\mI_r - \tilde \mD^T) \mS \mC^{-1}}_F \onormSize{}{\mC \mZ^k}_{\sigma}\\
         & \lesssim \frac{r}{p} \sum_{i \in [p]} \theta(i) \sum_{b \in [r]} \onormSize{}{\mS_{b:}^s - \mS_{z(i):}^s} \\
         & \lesssim \frac{L^{(t)}}{\Delta_{\min}}, 
     \end{align}
@@ -3006,14 +3353,14 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     
     Finally, by triangle inequality, we obtain
     \begin{equation}\label{eq:j1}
-        J_{11} \leq \sum_{k = 1}^{K-1} J_{11}^k \lesssim (K-1)\frac{r L^{(t)}}{\Delta_{\min}}.
+        J_{11} \leq \sum_{k = 1}^{K-1} J_{11}^k \lesssim  \sum_{k = 1}^{K-1} \sin \beta_k  \lesssim (K-1)\frac{r L^{(t)}}{\Delta_{\min}}.
     \end{equation}
     
     % \fixme{Jiaxin}{End $J_{11}$}
     
     Consider $J_{12}$. By triangle inequality, we have 
     \begin{align}
-        J_{12} &\leq \frac{ 1}{\onormSize{}{\mW_{:b}^{(t),T} \mX \mV }} \onormSize{}{\mW_{:b}^{(t),T} \mE (\mV-\mV^{(t)})} \\ &\quad \quad \quad  +
+        J_{12} &\leq \frac{ 1}{\onormSize{}{\mW_{:b}^{(t),T} \mX \mV }} \onormSize{}{\mW_{:b}^{(t),T} \mE (\mV-\mV^{(t)})}   +
         \frac{ \onormSize{}{\mW_{:b}^{(t),T} \mX (\mV-\mV^{(t)})} }{\onormSize{}{\mW_{:b}^{(t),T} \mX \mV }\onormSize{}{\mW_{:b}^{(t),T} \mX \mV^{(t)} }} \onormSize{}{\mW_{:b}^{(t),T} \mE \mV^{(t)} }.
     \end{align}
 
@@ -3034,15 +3381,16 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
         & \lesssim \onormSize{}{ \mW^T - \mW^{(t),T} } \onorm{\mTheta \mM}_{\sigma} \\
         & \lesssim \frac{ \sqrt{r L^{(t)}}}{\Delta_{\min}},
     \end{align}
-    where the first inequality follows by the tensor algebra in equation~\label{eq:j11_inner}, and the second inequality follows by the fact  that $\mI = \mW^T \mTheta \mM$, and the last inequality follows by \citet[Proof of Lemma 5]{han2020exact}. Thus, we have
+    where the first inequality follows by the tensor algebra in 
+    inequality~\eqref{eq:j11inner}, and the second inequality follows by the fact  that $\mI = \mW^T \mTheta \mM$, and the last inequality follows by \citet[Proof of Lemma 5]{han2020exact}. Thus, we have
     \begin{equation}
-           \onormSize{}{\mW_{:b}^{(t),T} \mX (\mV-\mV^{(t)})}\leq \onormSize{}{\mW_{:b}^{(t),T} }  \sum_{k = 1}^{K-1} \onormSize{}{\mX (\mV^k-\mV^{k+1})}_F \lesssim \frac{ (K-1) \sqrt{r L^{(t)}}}{\sqrt{p} \Delta_{\min}}.\label{eq:j12_wxv}
+           \onormSize{}{\mW_{:b}^{(t),T} \mX (\mV-\mV^{(t)})}\leq \onormSize{}{\mW_{:b}^{(t),T} }  \sum_{k = 1}^{K-1} \onormSize{}{\mX (\mV^k-\mV^{k+1})}_F \lesssim \frac{ \sqrt{r L^{(t)}}}{\sqrt{p} \Delta_{\min}}.\label{eq:j12_wxv}
     \end{equation}
     Note that $\onormSize{}{\mW_{:b}^{(t),T} \mX \mV }$ and $\onormSize{}{\mW_{:b}^{(t),T} \mX \mV^{(t)} }$ are lower bounded by inequalities~\eqref{eq:i11_sin_dom} and \eqref{eq:j11_wxvt}, respectively. We have 
     \begin{align}
         J_{12} &\lesssim \onormSize{}{\mW_{:b}^{(t),T} \mE (\mV-\mV^{(t)})} + \onormSize{}{\mW_{:b}^{(t),T} \mX (\mV-\mV^{(t)})}\onormSize{}{\mW_{:b}^{(t),T} \mE \mV^{(t)} }\\
-        &\lesssim \sqrt{ \frac{r^{2K+1} + p r^{2 + K}}{p^K} } \frac{(K-1)\sqrt{L^{(t)}}}{\Delta_{\min}} + \frac{ (K-1) \sqrt{r L^{(t)}}}{\sqrt{p} \Delta_{\min}} \sqrt{\frac{r^{2K}}{p^K}} \\
-        & \lesssim (K-1) \sqrt{ \frac{r^{2K+1} + p r^{2 + K}}{p^K} } \frac{\sqrt{L^{(t)}}}{\Delta_{\min}},
+        &\lesssim \sqrt{ \frac{r^{2K+1} + p r^{2 + K}}{p^K} } \frac{\sqrt{L^{(t)}}}{\Delta_{\min}} + \frac{ \sqrt{r L^{(t)}}}{\sqrt{p} \Delta_{\min}} \sqrt{\frac{r^{2K}}{p^K}} \\
+        & \lesssim  \sqrt{ \frac{r^{2K+1} + p r^{2 + K}}{p^K} } \frac{\sqrt{L^{(t)}}}{\Delta_{\min}},
     \end{align}
     where the second inequality follows by inequalities~\eqref{eq:j12_wev}, \eqref{eq:j12_wxv}, and the inequality \eqref{eq:cond1} in Condition~\ref{cond:origin}.
     
@@ -3067,9 +3415,8 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
 
     \item Inequality~\eqref{eq:inter5}. By triangle inequality, we upper bound the desired quantity 
     \begin{align}
-        \onormSize{}{ [ \mW_{:b}^T \mY \mV^{(t)} ]^s   -  [ \mW_{:b}^{(t), T} \mY \mV^{(t)} ]^s } &\leq \onormSize{}{[ \mW_{:b}^T \mY \mV^{(t)} ]^s - [ \mW_{:b}^T \mY \mV ]^s } \\
-        & + \onormSize{}{[\mW_{:b}^T \mY \mV ]^s  - [ \mW_{:b}^{(t),T} \mY \mV ]^s } \\
-        &+ \onormSize{}{[\mW_{:b}^{(t),T} \mY \mV ]^s  -  [\mW_{:b}^{(t), T} \mY \mV^{(t)} ]^s }\\
+        \onormSize{}{ [ \mW_{:b}^T \mY \mV^{(t)} ]^s   -  [ \mW_{:b}^{(t), T} \mY \mV^{(t)} ]^s } &\leq \onormSize{}{[ \mW_{:b}^T \mY \mV^{(t)} ]^s - [ \mW_{:b}^T \mY \mV ]^s }  + \onormSize{}{[\mW_{:b}^T \mY \mV ]^s  - [ \mW_{:b}^{(t),T} \mY \mV ]^s } \\
+        & \quad \quad \quad\quad\quad+ \onormSize{}{[\mW_{:b}^{(t),T} \mY \mV ]^s  -  [\mW_{:b}^{(t), T} \mY \mV^{(t)} ]^s }\\
         &\lesssim \frac{r L^{(t)}}{\Delta_{\min}} + \sqrt{ \frac{rr^{2K} + p r^{K+2}}{p^{K}}}  \frac{\sqrt{L^{(t)}}}{\Delta_{\min}},
     \end{align}
     following the inequalities~\eqref{eq:inter3} and \eqref{eq:inter4}. Therefore, we finish the proof of inequality~\eqref{eq:inter5}.
@@ -3086,193 +3433,7 @@ where the first inequality follows the fact that $\mW^T\mW$ is a diagonal matrix
     
     \end{proof}
     
-    \begin{lem}[Upper bound for $F_{ib}^{(t)}, G_{ib}^{(t)}$ and $H_{ib}^{(t)}$]\label{lem:upper_fgh} Under the Condition~\ref{cond:origin}, we have 
-    \begin{equation}\label{eq:fib}
-        \max_{i \in [p]} \max_{b \neq z(i)} \frac{\of{F_{ib}^{(t)}}^2}{ \onormSize{}{ [  \mS_{z(i):} ]^s  -  [ \mS_{b:} ]^s }^2 } \lesssim  \frac{r L^{(t)}}{ \Delta_{\min}^2} \onormSize{}{\mE_{i:} \mV}^2 + \of{1 +  \frac{ r L^{(t)}}{ \Delta_{\min}^2}} \onormSize{}{\mE_{i:} (\mV - \mV^{(t)})}^2 ,
-    \end{equation}
-    \begin{equation}\label{eq:gib}
-        \max_{i \in [p]} \max_{b \neq z(i)} \frac{ \of{  G_{ib}^{(t)} }^2  }{ \onormSize{}{ [\mS_{z(i):} ]^s - [\mS_{b:}]^s }^2}  \lesssim \of{ \Delta_{\min}^2 +L^{(t)}},
-    \end{equation}
-    where $c$ is a small positive constant near to 0.
-    \begin{equation}\label{eq:hib}
-        \max_{i \in [p]} \max_{b \neq z(i)}  \frac{ \aabs{  H_{ib}^{(t)} }  }{ \onormSize{}{ [\mS_{z(i):} ]^s - [\mS_{b:}]^s }^2} \leq \frac{1}{4}.
-    \end{equation}
-    \end{lem}
     
-\begin{proof}[Proof of Lemma~\ref{lem:upper_fgh}]
-We prove Lemma~\ref{lem:upper_fgh} by the following order:
-\begin{enumerate}
-    \item Upper bound for $F_{ib}^{(t)}$~\eqref{eq:fib}. Recall the definition of $F_{ib}^{(t)}$ 
-    \begin{align}
-         F_{ib}^{(t)} &= 2 \ang{\mE_{i:} \mV^{(t)}, \of{ [ \tilde \mS_{z(i):} ]^s  - [\mS_{z(i):}^{(t)} ]^s  }  - \of{  [  \tilde \mS_{b:} ]^s  - [ \mS_{b:}^{(t)} ]^s  }  } \\
-        & \quad \quad \quad \quad \quad + 2 \ang{ \mE_{i:}(\mV - \mV^{(t)} ), [ \tilde \mS_{z(i):} ]^s - [ \tilde \mS_{b:} ]^s  }.
-    \end{align}
-    By Cauchy-Schwartz inequality, we have 
-    \begin{align}
-        \of{F_{ib}^{(t)}}^2 & \leq 8 \of{\ang{\mE_{i:} \mV^{(t)}, \of{ [  \tilde \mS_{z(i):} ]^s  -  [  \mS_{z(i):}^{(t)} ]^s  }  - \of{  [  \tilde \mS_{b:} ]^s  -  [  \mS_{b:}^{(t)} ]^s  }  }  }^2 \\
-         & \quad \quad \quad \quad \quad + 8\of{ \ang{ \mE_{i:} (\mV - \mV^{(t)} ), [  \tilde \mS_{z(i):} ]^s - [ \tilde  \mS_{b:} ]^s  }}^2 \\
-         & \lesssim \of{ \onormSize{}{\mE_{i:} \mV}^2 + \onormSize{}{\mE_{i:} ( \mV - \mV^{(t)} )}^2 } \max_{a \in [r]^s} \onormSize{}{  [  \tilde \mS_{a:} ]^s - [   \mS_{a:}^{(t)} ]^s  } \\
-          & \quad \quad \quad \quad \quad +\onormSize{}{\mE_{i:} ( \mV - \mV^{(t)} )}^2  \onormSize{}{  [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s  }.
-    \end{align}
-    Note that for any $a \in [r]$ 
-    \begin{align}
-        \onormSize{}{  [  \tilde \mS_{a:} ]^s - [   \mS_{a:}^{(t)} ]^s  }^2 &= \onormSize{}{ [ \mW_{:a}^T \mY \mV ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }^2 \\
-        &\leq 2 \onormSize{}{ [ \mW_{:a}^T \mY \mV ]^s  - [ \mW_{:a}^{(t),T} \mY \mV ]^s  }^2  \\
-        & \quad \quad \quad +2 \onormSize{}{[ \mW_{:a}^{(t),T} \mY \mV ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }^2\\
-        & \lesssim \frac{ r^2 (L^{(t)})^2}{ \Delta_{\min}^2} + \frac{ r r^{2K} + p r^{K+2}}{p^K} \frac{L^{(t)}}{\Delta_{\min}^2}\\
-        & \lesssim r L^{(t)}+  \frac{ r r^{2K} + p r^{K+2}}{p^K} \frac{L^{(t)}}{\Delta_{\min}^2}\\
-        & \lesssim r L^{(t)},
-    \end{align}
-    where the second inequality follows the inequalities~\eqref{eq:inter3} and \eqref{eq:inter4} in Lemma~\ref{lem:intermediate}, the third inequality follows the initialization condition~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}, and the last inequality follows the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$. 
-    
-    Also note that 
-    \begin{align}
-        \onormSize{}{  [  \tilde \mS_{z(i):} ]^s - [  \tilde \mS_{b:} ]^s  }^2 &=  \onormSize{}{  [  \tilde \mS_{z(i):} ]^s -[ \mS_{z(i):} ]^s +  [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s + [ \mS_{b:} ]^s -[  \tilde \mS_{b:} ]^s  }^2 \\
-        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2 + \max_{a \in [r]} \onormSize{}{ [ \mS_{a:} ]^s -[  \tilde \mS_{a:} ]^s }^2 \\
-        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2  + \max_{a \in [r]} \frac{1}{\onormSize{}{\mS_{a:} }^2} \onormSize{}{ \mW_{:a}^T \mE \mV}^2\\
-        & \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{b:} ]^s }^2,
-    \end{align}
-    where the second inequality follows by Lemma~\ref{lem:norm_diff}, and the last inequality follows by the assumptions on $\onormSize{}{\mS_{a:}}$ in the parameter space~\eqref{eq:family}, the inequality~\eqref{eq:cond1} Condition~\ref{cond:origin} and the assumption $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$. 
-    
-    Therefore, we finish the proof of inequality~\eqref{eq:fib}.
-    
-    \item Upper bound for $G_{ib}^{(t)}$~\eqref{eq:gib}. Recall the definition of $G_{ib}^{(t)}$ and rearrange the terms
-    \begin{align}
-        G_{ib}^{(t)} &=   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{z(i):}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2}   \\
-        & \quad \quad \quad \quad \quad -   \of{ \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mS_{b:}^{(t)}  ]^s}^2 -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 } \\
-        &= 2 \ang{  [\mX_{i:} \mV^{(t)}]^s , \of{[  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s } - \of{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s }}\\
-        %& \leq 4 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [  \mW_{:a}^{(t),T} \mY \mV^{(t)} ]^s }.
-        &= G_1 + G_2 - G_3,
-    \end{align}
-    where 
-    \begin{align}
-        G_1 &= \onormSize{}{ [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s}^2 - \onormSize{}{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s }^2,\\
-        G_2 &= 2 \ang{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s,   [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s},\\
-        G_3 & = 2 \ang{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s,  [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mS_{b:}^{(t)}  ]^s}.
-    \end{align}
-    
-    For $G_1$, we have 
-    \begin{align}
-        |G_1|^2 &\leq \aabs{ \onormSize{}{ [ \mW_{:z(i)}^T \mY \mV^{(t)} ]^s - [ \mS_{z(i):}^{(t)}  ]^s}^2 - \onormSize{}{ [ \mW_{:b}^T \mY \mV^{(t)} ]^s -  [ \mS_{b:}^{(t)}  ]^s }^2 }^2 \\
-        & \leq \max_{a \in [r]} \onormSize{}{ [ \mW_{:a}^T \mY \mV^{(t)} ]^s - [ \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^4\\
-        & \lesssim \frac{r^4}{\Delta_{\min}^4} (L^{(t)})^4 +  \frac{r^2 r^{4K} + p^2r^{2K+4}}{p^{2K}} \frac{(L^{(t)})^2}{\Delta_{\min}^4} \\
-        & \leq c\of{\Delta_{\min}^4 +  \Delta_{\min}^2 L^{(t)}}, \label{eq:g1}
-    \end{align}
-    where the third inequality follows by the inequality~\eqref{eq:inter5} in Lemma~\ref{lem:membership} and the last inequality follows by the assumption that $\Delta_{\min}^2 \gtrsim p^{-K/2}\log p$.
-    
-    For $G_2$, noted that $[\mX_{i:} \mV^{(t)}]^s = [ \mW_{z(i):}^T\mX \mV^{(t)}]^s$, we have 
-    \begin{align}
-        |G_2|^2 &\leq 2\onormSize{}{ [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 \onormSize{}{ [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s -  [  \mS_{z(i):}^{(t)}  ]^s }^2 \\
-        & \leq \frac{2}{ \onormSize{}{ \mW_{z(i):}^T\mX \mV^{(t)}}^2} \max_{a \in [r]}\onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2\\
-        & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}} \of{ \frac{r^2}{\Delta_{\min}^2} (L^{(t)})^2 + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2} }\\
-        & \leq c \Delta_{\min}^2 L^{(t)},\label{eq:g2}
-    \end{align}
-    where the second inequality follows by Lemma~\ref{lem:norm_diff}, the third inequality follows by the bound~\eqref{eq:j11_wxvt}, inequality~\eqref{eq:cond2} in Condition~\ref{cond:origin}, inequality~\eqref{eq:inter5} in Lemma~\ref{lem:intermediate},  and the last inequality follows by the assumption $\Delta_{\min}^2 \geq p^{-K/2} \log p$.
-    
-    For $G_3$, note that by triangle inequality
-    \begin{align}
-        \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2 &\leq \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + 2\max_{a \in [r]}\onormSize{}{[\mW_{:a}^T\mX \mV^{(t)}]^s - [\mW_{:a}^T\mX \mV]^s }^2\\
-        & \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2}, \label{eq:g3xv_wxv}
-    \end{align}
-    where the last inequality follows by the derivation of $J_{11}$ in the proof of Lemma~\ref{lem:intermediate}.
-
-    % \begin{align}
-        
-    %     %& \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2(L^{(t)})^2}{ \Delta_{\min}^2} + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2},
-    % \end{align}
-   % where the last inequality follows by the inequality~\eqref{eq:inter4} in Lemma~\ref{lem:intermediate}. 
-   Then we have 
-    \begin{align}
-        |G_3|^2 & \leq 2 \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2 \max_{a \in [r]} \onormSize{}{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2 \\
-        & \leq 2 \of{ \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  +  \onormSize{}{ [  \mW_{:b}^T \mY \mV^{(t)} ]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  } \\
-        & \quad \cdot \max_{a \in [r]} \onorm{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2\\
-        & \lesssim \of{\onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2} } \of{ \frac{r^2(L^{(t)})^2}{ \Delta_{\min}^2} + \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2}}+ c \Delta_{\min}^2 L^{(t)} \\
-        & \lesssim \onormSize{}{\mS_{z(i):}^s - \mS_{b:}^s}^2 (\Delta_{\min}^2 + L^{(t)}) + c\of{\Delta_{\min}^4 +  \Delta_{\min}^2 L^{(t)}},\label{eq:g3}
-    \end{align}
-    where the third inequality follows by the procedures to derive~\eqref{eq:g1} and \eqref{eq:g2}, the inequality~\eqref{eq:inter5} in Lemma~\ref{lem:intermediate}, and the last inequality follows by the assumption $\Delta_{\min}^2 \geq p^{-K/2} \log p$.
-    
-    Combining the inequalities~\eqref{eq:g1}, \eqref{eq:g2}, and \eqref{eq:g3}, we finish the proof of inequality~\eqref{eq:gib}.
-    
-    % According to the inequality~\eqref{eq:inter_wa_wb} in the proof of Lemma~\ref{lem:intermediate}, we have
-    % \begin{equation}
-    %     \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2.
-    % \end{equation}
-    % Then, we have 
-    % \begin{align}
-    %     |G_3|^2 &\lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 \max_{a \in [r]} \onorm{ [  \mW_{:a}^T \mY \mV^{(t)} ]^s -  [   \mW_{:a}^{(t),T} \mY \mV^{(t)}  ]^s}^2 + |G_2|^2 \\
-    %     &\lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 \of{ \frac{r^2}{\Delta_{\min}^2} \of{L^{(t)}}^2 + K  \frac{r r^{2K} + pr^{K+2}}{p^{K}} \frac{L^{(t)}}{\Delta_{\min}^2} } + |G_2|^2\\
-    %     & \leq \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2  c \of{ \Delta_{\min}^2 + K L^{(t)} }+|G_2|^2, \label{eq:g3}
-    % \end{align}
-    % where the second inequality follows by Lemma~\ref{lem:intermediate}, and the last inequality follows by the assumption on $\Delta_{\min}^2$. 
-    
-    % Therefore, combining inequalities~\eqref{eq:g1}, \eqref{eq:g2}, \eqref{eq:g3} and apply the inequality of arithmetic and geometric means, .
-    
-    \item Upper bound for $H_{ib}^{(t)}$~\eqref{eq:hib}. Recall the definition of $H_{ib}$ and rearrange the terms
-    \begin{align}
-        H_{ib} &= \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s -  [  \mW_{:b}^T \mY \mV^{(t)} ]^s}^2\\
-        & \quad \quad \quad \quad \quad + \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \\
-        & =  \onormSize{}{ [ \mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 \\
-        & \quad \quad \quad \quad \quad + \of{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }  } \\
-        & \quad \quad \quad \quad \quad  - \of{\onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mY \mV^{(t)} ]^s } -  \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }   } \\
-        & = H_1 + H_2 + H_3,
-    \end{align}
-    where 
-    \begin{align}
-        H_1 &= \onormSize{}{ [ \mX_{i:} \mV^{(t)}]^s -  [  \mW_{:z(i)}^T \mY \mV^{(t)} ]^s}^2 - \onormSize{}{ [ \mW_{:b}^T \mX \mV^{(t)}]^s -  [ \mW_{:b}^T \mY \mV^{(t)}]^s}^2, \\
-        H_2 &=  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 - \onormSize{}{ [\mX_{i:} \mV^{(t)}]^s-  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }^2  , \\
-        H_3 & = 2 \ang{  [\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s,  [  \mW_{:b}^T \mY \mV^{(t)} ]^s -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s }.
-    \end{align}
-    For $H_1$, we have 
-    \begin{align}
-        |H_1| \leq  \frac{4 \max_{a \in [r]}\onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2 }{ \onormSize{}{ \mW_{z(i):}^T\mX \mV^{(t)}}^2}
-         \leq  \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}} 
-        \lesssim  \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2\label{eq:h1},
-    \end{align}
-    following the derivation of $G_2$ in inequality~\eqref{eq:g2} and the assumption that $\Delta_{\min}^2 \geq p^{-K/2} \log p$.
-    % \begin{align}
-    %     |H_1| &\leq 2 \max_{a \in [r]}  \frac{1}{ \onormSize{}{  \mW_{:a}^T \mX \mV^{(t)}}^2} \onormSize{}{ \mW_{:a}^T \mE \mV^{(t)} }^2  \\
-    %     & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K}}\\
-    %     & \lesssim \frac{ r^{2K-1} + K p r^{K+1} }{p^{K} \Delta_{\min}^2}  \onorm{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \\
-    %     & \lesssim  \onorm{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 ,
-    % \end{align}
-    % where the first two inequalities follow the proof of $G_2$~\eqref{eq:g2} and the last inequality follows by the assumption on $\Delta_{\min}^2$.
-    
-    For $H_2$, by the inequality~\eqref{eq:g3xv_wxv}, we have 
-    \begin{equation}\label{eq:h2}
-        |H_2| \lesssim 2 \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2 + \frac{r^2 (L^{(t)})^2}{\Delta_{\min}^2} \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
-    \end{equation}
-    where the last inequality follows by the condition~\eqref{eq:cond_intial} in Condition~\ref{cond:origin}.
-    
-    % For $H_2$,  sccording to the inequality~\eqref{eq:inter_wa_wb} in the proof of Lemma~\ref{lem:intermediate}, we have
-    % \begin{equation}
-    %     \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s}^2  \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
-    % \end{equation}
-    % and thus 
-    % \begin{equation}\label{eq:h2}
-    %     |H_2| \lesssim  \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2.
-    % \end{equation}
-    
-    For $H_3$,  by Cauchy-Schwartz inequality, we have 
-    \begin{equation}\label{eq:h3}
-         |H_3| \lesssim \onormSize{}{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s} |H_1|^{1/2} \lesssim \onormSize{}{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2,
-    \end{equation}
-    following the inequalities~\eqref{eq:g3xv_wxv} and \eqref{eq:h1}.
-    
-    % For $H_3$, by Cauchy-Schwartz inequality, we have 
-    % \begin{align}
-    %     |H_3| &\lesssim    \onorm{[\mX_{i:} \mV^{(t)}]^s  -  [  \mW_{:b}^T \mX \mV^{(t)} ]^s} |H_1|^{1/2} \\
-    %     &\lesssim  \frac{ r^{K-1/2} + K p^{1/2} r^{K/2+1/2} }{p^{K/2}} \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }\\
-    %     & \lesssim \Delta_{\min} \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }\\
-    %     & \lesssim \onorm{ [ \mS_{z(i):} ]^s - [ \mS_{a:}]^s }^2, \label{eq:h3}
-    % \end{align}
-    % where the third inequality follows by the assumption on $\Delta_{\min}^2$. 
-    
-    Therefore, combining inequalities~\eqref{eq:h1}, \eqref{eq:h2}, and \eqref{eq:h3}, we have finish the proof of inequality~\eqref{eq:hib}.
-
-\end{enumerate}
-
-
-\end{proof}
 
 
 
