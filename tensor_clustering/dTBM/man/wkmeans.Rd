@@ -7,7 +7,7 @@
 wkmeans(Y, r, asymm = F)
 }
 \arguments{
-\item{Y}{order-3 array or matrix, order-3 tensor or matrix observation}
+\item{Y}{array or matrix, order-3 tensor or matrix observation}
 
 \item{r}{vector, the number of clusters on each model; see "details"}
 

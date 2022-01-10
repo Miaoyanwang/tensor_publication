@@ -7,7 +7,7 @@
 hALloyd(Y, z0, max_iter, alpha1 = 0.01, asymm)
 }
 \arguments{
-\item{Y}{order-3 array or matrix, order-3 tensor or matrix observation}
+\item{Y}{array or matrix, order-3 tensor or matrix observation}
 
 \item{z0}{vector or list of vectors, initial clustering assignment; see "details"}
 
@@ -31,8 +31,9 @@ of the tensor as input. The output is the refined clustering assignment.
 }
 \details{
 For initial clustering assignment \code{z0}, if \code{z0} is a vector, assume all the modes share the same initialization \code{z0},
-if \code{z0} is a vector, \code{z0} specifies the initialization on each mode; matrix observation only accounts the first two vectors in the list.\preformatted{    When the estimated core tensor has a degenerate slice, i.e., a slice with all zero elements, randomly pick an entry in the degenerate slice with value \code{alpha1}.
-}
+if \code{z0} is a vector, \code{z0} specifies the initialization on each mode; matrix observation only accounts the first two vectors in the list.
+
+When the estimated core tensor has a degenerate slice, i.e., a slice with all zero elements, randomly pick an entry in the degenerate slice with value \code{alpha1}.
 }
 \examples{
 seed = 1

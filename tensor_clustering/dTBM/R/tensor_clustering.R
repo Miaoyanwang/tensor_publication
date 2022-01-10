@@ -5,7 +5,7 @@
 #' of the tensor as input. The output is the estimated clustering assignment.
 #'
 #'
-#' @param Y     order-3 array or matrix, order-3 tensor or matrix observation
+#' @param Y     array or matrix, order-3 tensor or matrix observation
 #' @param r     vector, the number of clusters on each model; see "details"
 #' @param asymm logic variable, if "TRUE", assume the clustering assignment differs in different modes; if "FALSE", assume all the modes share the same clustering assignment
 #' @return a list containing the following:
@@ -155,7 +155,7 @@ wkmeans <- function(Y, r, asymm = F) {
 #' of the tensor as input. The output is the refined clustering assignment.
 #'
 #'
-#'@param Y         order-3 array or matrix, order-3 tensor or matrix observation
+#'@param Y         array or matrix, order-3 tensor or matrix observation
 #'@param z0        vector or list of vectors, initial clustering assignment; see "details"
 #'@param max_iter  integer, max number of iterations if update does not converge
 #'@param alpha1    number, substitution of degenerate core tensor; see "details"
@@ -169,7 +169,8 @@ wkmeans <- function(Y, r, asymm = F) {
 #'
 #'@details For initial clustering assignment \code{z0}, if \code{z0} is a vector, assume all the modes share the same initialization \code{z0},
 #'         if \code{z0} is a vector, \code{z0} specifies the initialization on each mode; matrix observation only accounts the first two vectors in the list.
-#'         When the estimated core tensor has a degenerate slice, i.e., a slice with all zero elements, randomly pick an entry in the degenerate slice with value \code{alpha1}.
+#'
+#'When the estimated core tensor has a degenerate slice, i.e., a slice with all zero elements, randomly pick an entry in the degenerate slice with value \code{alpha1}.
 #'
 #'@export
 #'@examples
@@ -318,12 +319,76 @@ hALloyd <- function(Y, z0, max_iter, alpha1 = 0.01, asymm) {
   }
 }
 
+#' Simulation of degree-corrected tensor block models
+#'
+#' Generate symmetric order-3 tensor or matrix data with degree heterogeneity under degree-corrected tensor block models.
+#'
+#'@param seed          number, random seed for generating data
+#'@param p             integer, dimension of the tensor observation
+#'@param r             integer, number of clusters on each mode
+#'@param delta         number, Frobenius norm of the slices in core tensor; see "details"
+#'@param s_min         number, value of off-diagonal elements in core tensor
+#'@param s_max         number, value of diagonal elements in core tensor
+#'@param dist          character, distribution of tensor observation; see "details"
+#'@param sigma         number, standard deviation of Gaussian noise if \code{dist = "normal"}; see "details"
+#'@param theta_dist    character, distribution of degree heterogeneity; see "details"
+#'@param alpha         number, shape parameter in pareto distribution if \code{theta_dist = "pareto"}
+#'@param beta          number, scale parameter in pareto distribution if \code{theta_dist = "pareto"}
+#'@param imat          logic variable, if "TRUE", generate matrix data; if "FALSE", generate order-3 tensor data
+#'
+#'@return  a list containing the following:
+#'
+#'\code{Y} {array ( if \code{imat = F} ) or matrix ( if \code{imat = T} ), simulated tensor or matrix observations with dimension \code{p} on each mode  }
+#'
+#'\code{X} {array ( if \code{imat = F} ) or matrix ( if \code{imat = T} ), mean tensor or matrix of the observation, i.e., the expectation of \code{Y}}
+#'
+#'\code{S} {symmetric array ( if \code{imat = F} ) or matrix ( if \code{imat = T} ), core tensor or matrix recording the block effects with dimension \code{r} on each mode}
+#'
+#'\code{theta} {vector, degree heterogeneity for \code{p} entities on each mode}
+#'
+#'\code{z} {vector, clustering assignment for \code{p} entities on each mode}
+#'
+#'@details  The tensor observation is generated as
+#'\code{Y = S x1 Theta M x2 Theta M x3 Theta M + E,}
+#'where \code{S} is the core tensor, \code{Theta} is a diagonal matrix with elements \code{theta},
+#'\code{M} is the membership matrix based on the clustering assignment \code{z}, \code{E} is the noise tensor, and \code{xk} refers to the matrix-by-tensor product on the \code{k}-th mode.
+#'
+#'If \code{imat = T}, \code{Y,S,E} degenerate to matrix and we have \code{Y = Theta M S M^T Theta^T + E}.
+#'
+#'The core tensor \code{S} is firstly a diagonal tensor or matrix with diagonal elements \code{s_max} and off-diagonal elements \code{s_min}.
+#'Then, we control the Frobenius norm of the slices in \code{S} with parameter \code{delta} as
+#' \code{S} = \code{S}*\code{delta}/\code{delta_min}, where \code{delta_min = sqrt(sum(S[1,,]^2))} ( if \code{imat = F} ) or \code{delta_min = sqrt(sum(S[1,]^2))} ( if \code{imat = T} ).
+#'
+#'\code{dist} specifies the distribution of \code{E}: "normal" for Gaussian and "binary" for Bernoulli distribution; \code{sigma} specifices the standard deviation if \code{dist = "normal"}.
+#'
+#'\code{theta_dist} firstly specifies the distribution of \code{theta}: "non" for constant 1, "abs_normal" for absoulte normal distribution, "pareto" for pareto distribution; \code{alpha, beta} specify the shape and scale parameter if \code{theta_dist = "pareto"}.
+#'Then, \code{theta} is scaled to have mean equal to one in each cluster.
+#'
+#'
+#'@export
+#'@examples
+#' seed = 1
+#' p = 30
+#' r = 3
+#' delta = 0.5
+#' s_min = 0.05
+#' s_max = 1
+#' dist = "normal"
+#' theta_dist = "pareto"
+#' alpha = 4
+#' beta = 3/4
+#' sigma = 0.2
+#'
+#' data = sim_hDCBM_network(seed = seed, p, r,  delta = delta,
+#'  s_min = s_min, s_max = s_max, dist =  dist, sigma = sigma,
+#'  theta_dist = theta_dist, alpha = alpha, beta = beta, imat = F)
+#'
 
 
-
-sim_hDCBM_network <- function(seed = NA, p, r, delta = NULL, s_min = NULL, s_max = NULL,
+sim_hDCBM_network <- function(seed = NA, p, r, delta, s_min, s_max,
                               dist = c("normal", "binary"), sigma = 1,
-                              theta_dist = c("abs_normal", "pareto", "non"), alpha = NULL, beta = NULL, imat = F){
+                              theta_dist = c("abs_normal", "pareto", "non"),
+                              alpha = NULL, beta = NULL, imat = F){
 
   if(imat == T){
     cat("generate matrix data \n")
@@ -371,6 +436,46 @@ sim_hDCBM_network <- function(seed = NA, p, r, delta = NULL, s_min = NULL, s_max
 }
 
 
+#' Number of clusters selection
+#'
+#' Estimate the number of clusters in the degree-corrected tensor block model based on BIC criterion. The choice of BIC
+#' aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model.
+#' This function is restricted to the symmetric case with order-3 Gaussian tensor observation.
+#'
+#'@param Y         array, order-3 Gaussian tensor observation
+#'@param r_range   vector, candidates for the number of clusters
+#'
+#'@return a list containing the following:
+#'
+#'\code{r} {number, the number of clusters among the candidates with minimal BIC value}
+#'
+#'\code{bic} {vector, the BIC value for each candidiate}
+#'
+#'@export
+#'@examples
+#'
+#'#' seed = 1
+#' p = 30
+#' r = 3
+#' delta = 0.5
+#' s_min = 0.05
+#' s_max = 1
+#' dist = "normal"
+#' theta_dist = "pareto"
+#' alpha = 4
+#' beta = 3/4
+#' sigma = 0.2
+#'
+#' data = sim_hDCBM_network(seed = seed, p, r,  delta = delta,
+#'  s_min = s_min, s_max = s_max, dist =  dist, sigma = sigma,
+#'  theta_dist = theta_dist, alpha = alpha, beta = beta, imat = F)
+#'
+#'r_range = 2:5
+#'
+#'selection = select_r(data$Y, r_range)
+
+
+
 select_r = function(Y,r_range){
 
   # estimated
@@ -413,7 +518,7 @@ select_r = function(Y,r_range){
     # obtain BIC
     bic[i] = p^3*log(sum((X_hat - Y)^2)) +( r^3 + p*log(r) + p)*log(p^3) - r
 
-    cat("given r = ",r, " BIC first term = ", p^3*log(sum((X_hat - Y)^2)), " second term = ",( r^3 + p*log(r) + p)*log(p^3), "\n")
+    cat("given r = ",r, " BIC first term = ", p^3*log(sum((X_hat - Y)^2)), " second term = ",( r^3 + p*log(r) + p)*log(p^3) - r, "\n")
 
   }# for r
   return(list(r = r_range[which.min(bic)], BIC = bic))
