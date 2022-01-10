@@ -317,3 +317,105 @@ hALloyd <- function(Y, z0, max_iter, alpha1 = 0.01, asymm) {
     return(list(z = z, s_deg = s_deg))
   }
 }
+
+
+
+
+sim_hDCBM_network <- function(seed = NA, p, r, delta = NULL, s_min = NULL, s_max = NULL,
+                              dist = c("normal", "binary"), sigma = 1,
+                              theta_dist = c("abs_normal", "pareto", "non"), alpha = NULL, beta = NULL, imat = F){
+
+  if(imat == T){
+    cat("generate matrix data \n")
+  }
+
+  if (is.na(seed) == FALSE) set.seed(seed)
+
+  S <- sim_S_nm(r, s_min, s_max, delta, imat)
+
+  # generate assignment
+  z <- sample(1:r, p, replace = T)
+  z <- renumber(z)
+
+  # generate degree heterogenity
+  if (theta_dist == "abs_normal") {
+    theta <- abs(rnorm(p, 0, 0.5)) + 1 - sqrt(1 / (2 * pi))
+  } else if (theta_dist == "pareto") {
+    theta <- rpareto(p, location = beta, shape = alpha) # choose alpha*beta = alpha - 1
+  } else if (theta_dist == "non"){
+    theta = rep(1, p)
+  }
+
+  # in group normalization
+  for (a in 1:r) {
+    index_a = z == a
+    theta[index_a] = theta[index_a]*sum(index_a)/sum(theta[index_a])
+  }
+
+  # generate mean tensor
+  if(imat == F){
+    X <- ttl(as.tensor(S[z, z, z]), list(diag(theta), diag(theta), diag(theta)), ms = c(1, 2, 3))@data
+  }else if(imat == T){
+    X <- ttl(as.tensor(S[z, z]), list(diag(theta), diag(theta)), ms = c(1, 2))@data
+  }
+
+  # generate data
+  if (dist == "normal") {
+    Y <- X + array(rnorm(prod(dim(X)), 0, sigma), dim = dim(X))
+  } else if (dist == "binary") {
+    X[which(X > 1)] <- 1
+    Y <- array(rbinom(prod(dim(X)), 1, as.vector(X)), dim = dim(X))
+  }
+
+  return(list(Y = Y, X = X, S = S, theta = theta, z = z))
+}
+
+
+select_r = function(Y,r_range){
+
+  # estimated
+
+  bic = rep(0,length(r_range))
+  p = dim(Y)[1]
+
+  for (i in 1:length(r_range)) {
+    r =  r_range[i]
+    #cat("given r = ",r, "\n")
+
+    # obtain z_hat
+    initial = wkmeans(Y, r, asymm = F)
+    z_hat = hALloyd(Y,initial$z0, max_iter = 20, asymm = F)
+
+    # obtain S_hat
+    S_hat <- array(0, dim = c(r, r, r))
+
+    for (a in 1:r) {
+      for (b in 1:r) {
+        for (c in 1:r) {
+          S_hat[a, b, c] <- mean(Y[z_hat == a, z_hat == b, z_hat == c], na.rm = T)
+        }
+      }
+    }
+
+    # obtain theta_hat
+    # Y^d
+    Y1_unfold <- unfold(as.tensor(Cal_Y1_old(Y, z_hat)), 1, c(3, 2))@data
+
+    mtheta_hat <- apply(Y1_unfold, 1, function(x) sqrt(sum(x^2)))
+    for (a in 1:r) {
+      ind = z_hat == a
+      mtheta_hat[ind] = mtheta_hat[ind]*sum(ind)/sum(mtheta_hat[ind])
+    }
+
+    # obtain hat X
+    X_hat = ttl(as.tensor(S_hat[z_hat, z_hat, z_hat]), list(diag(mtheta_hat),diag(mtheta_hat),diag(mtheta_hat)), ms = c(1,2,3))@data
+
+    # obtain BIC
+    bic[i] = p^3*log(sum((X_hat - Y)^2)) +( r^3 + p*log(r) + p)*log(p^3) - r
+
+    cat("given r = ",r, " BIC first term = ", p^3*log(sum((X_hat - Y)^2)), " second term = ",( r^3 + p*log(r) + p)*log(p^3), "\n")
+
+  }# for r
+  return(list(r = r_range[which.min(bic)], BIC = bic))
+
+}
