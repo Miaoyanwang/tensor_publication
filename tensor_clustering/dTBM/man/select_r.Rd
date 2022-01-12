@@ -4,44 +4,43 @@
 \alias{select_r}
 \title{Number of clusters selection}
 \usage{
-select_r(Y, r_range)
+select_r(Y, r_range, asymm = F)
 }
 \arguments{
-\item{Y}{array, order-3 Gaussian tensor observation}
+\item{Y}{array/matrix, order-3 Gaussian tensor/matrix observation}
 
-\item{r_range}{vector, candidates for the number of clusters}
+\item{r_range}{matrix, candidates for the number of clusters on each row; see "details"}
+
+\item{asymm}{logic variable, if "TRUE", clustering assignment differs in different modes; if "FALSE", all the modes share the same clustering assignment}
 }
 \value{
 a list containing the following:
 
-\code{r} {number, the number of clusters among the candidates with minimal BIC value}
+\code{r} {vector, the number of clusters among the candidates with minimal BIC value}
 
 \code{bic} {vector, the BIC value for each candidiate}
 }
 \description{
 Estimate the number of clusters in the degree-corrected tensor block model based on BIC criterion. The choice of BIC
 aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model.
-This function is restricted to the symmetric case with order-3 Gaussian tensor observation.
+This function is restricted for the Gaussian tensor observation.
+}
+\details{
+\code{r_range} should be a two-column matrix for matrix and three-column matrix for tensor observation;
+
+all the elements in \code{r_range} should be integer larger than 1;
+
+matrix case and symmetric case only allow candidates with the same number of clusters on each mode;
+
+observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 }
 \examples{
 
-#' seed = 1
-p = 30
-r = 3
-delta = 0.5
-s_min = 0.05
-s_max = 1
-dist = "normal"
-theta_dist = "pareto"
-alpha = 4
-beta = 3/4
-sigma = 0.2
+test_data = sim_dTBM(seed = 1, imat = FALSE, asymm = FALSE, p = c(50,50,50), r = c(3,3,3),
+                    core_control = "control", s_min = 0.05, s_max = 1,
+                    dist = "normal", sigma = 0.5,
+                    theta_dist = "pareto", alpha = 4, beta = 3/4)
 
-data = sim_hDCBM_network(seed = seed, p, r,  delta = delta,
- s_min = s_min, s_max = s_max, dist =  dist, sigma = sigma,
- theta_dist = theta_dist, alpha = alpha, beta = beta, imat = F)
-
-r_range = 2:5
-
-selection = select_r(data$Y, r_range)
+r_range = rbind(c(2,2,2), c(3,3,3),c(4,4,4),c(5,5,5))
+selection <- select_r(test_data$Y, r_range, asymm = FALSE)
 }

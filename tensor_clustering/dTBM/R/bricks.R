@@ -4,6 +4,7 @@ library(WeightedCluster) # wcKMedoids
 library(EnvStats) # patero
 library(gtools)
 
+
 renumber <- function(z) {
   z_re <- rep(0, length(z))
   uniq <- unique(z)
@@ -48,11 +49,12 @@ updateS <- function(Y, z, imat) {
 
   r1 = length(unique(z[[1]]))
   r2 = length(unique(z[[2]]))
-  r3 = length(unique(z[[3]]))
+
 
   #r <- length(unique(z))
 
   if(imat == F){
+    r3 = length(unique(z[[3]]))
     S <- array(0, dim = c(r1, r2, r3))
 
     for (a in 1:r1) {
@@ -75,51 +77,20 @@ updateS <- function(Y, z, imat) {
   return(S)
 }
 
-updateS_old <- function(Y, z, imat) {
-  # z is a list
 
-  # r1 = length(unique(z[[1]]))
-  # r2 = length(unique(z[[2]]))
-  # r3 = length(unique(z[[3]]))
-
-  r <- length(unique(z))
-
-  if(imat == F){
-    S <- array(0, dim = c(r, r, r))
-
-    for (a in 1:r) {
-      for (b in 1:r) {
-        for (c in 1:r) {
-          S[a, b, c] <- mean(Y[z == a, z == b, z == c], na.rm = T)
-        }
-      }
-    }
-  }else if(imat == T){
-    S <- array(0, dim = c(r, r, 1))
-
-    for (a in 1:r) {
-      for (b in 1:r) {
-        S[a, b, 1] <- mean(as.matrix(Y[z == a, z == b,1]), na.rm = T)
-      }
-    }
-  }
-
-  return(S)
-}
-
-
-Cal_Y1 <- function(Y, z) {
+Cal_Y1 <- function(Y, z, imat) {
   r2 = length(unique(z[[2]]))
-  r3 = length(unique(z[[3]]))
 
-  imat = F
-  if(r3 == 1){
-    imat = T
-  }
+
+  # imat = F
+  # if(length(dim(Y)) == 2){
+  #   imat = T
+  # }
 
   p <- dim(Y)[1]
 
   if(imat == F){
+    r3 = length(unique(z[[3]]))
     Y1 <- array(0, dim = c(p, r2, r3))
     for (b in 1:r2) {
       for (c in 1:r3) {
@@ -142,18 +113,18 @@ Cal_Y1 <- function(Y, z) {
 
 
 
-Cal_Y2 <- function(Y, z) {
+Cal_Y2 <- function(Y, z, imat) {
   r1 = length(unique(z[[1]]))
-  r3 = length(unique(z[[3]]))
 
-  imat = F
-  if(r3 == 1){
-    imat = T
-  }
+  # imat = F
+  # if(length(dim(Y)) == 2){
+  #   imat = T
+  # }
 
   p <- dim(Y)[2]
 
   if(imat == F){
+    r3 = length(unique(z[[3]]))
     Y2 <- array(0, dim = c(r1, p, r3))
     for (a in 1:r1) {
       for (c in 1:r3) {
@@ -192,35 +163,55 @@ Cal_Y3 <- function(Y, z) {
 }
 
 
-Cal_Y1_old <- function(Y, z) {
-  r <- length(unique(z))
+theta_estimate = function(Y, z, imat){
 
-  imat = F
-  if(dim(Y)[3] == 1){
-    imat = T
+  # imat = F
+  # if(length(dim(Y)) == 2){
+  #   imat = T
+  # }
+
+  r1 = length(unique(z[[1]]))
+  r2 = length(unique(z[[2]]))
+
+  # theta 1
+  Y1_unfold <- unfold(as.tensor(Cal_Y1(Y, z, imat)), 1, c(3, 2))@data
+
+  mtheta_hat1 <- apply(Y1_unfold, 1, function(x) sqrt(sum(x^2)))
+  for (a in 1:r1) {
+    ind = z[[1]] == a
+    mtheta_hat1[ind] = mtheta_hat1[ind]*sum(ind)/sum(mtheta_hat1[ind])
   }
 
-  p <- dim(Y)[1]
 
-  if(imat == F){
-    Y1 <- array(0, dim = c(p, r, r))
-    for (b in 1:r) {
-      for (c in 1:r) {
-        Y_cut = Y[, z == b, z == c]
-        dim(Y_cut) = c(p, sum(z == b), sum(z == c))
-        Y1[, b, c] <- apply(Y_cut, 1, mean)
-      }
-    }
-  }else if(imat == T){
-    Y1 <- array(0, dim = c(p, r, 1))
-    for (b in 1:r) {
-      Y1[, b, 1] <- apply(as.matrix(Y[, z == b,1]), 1, mean)
-      #Y1[, b, 1] <- mean(Y[, z == b,1])
-    }
+  # theta 2
+  Y2_unfold <- unfold(as.tensor(Cal_Y2(Y, z, imat)), 2, c(1, 3))@data
+
+  mtheta_hat2 <- apply(Y2_unfold, 1, function(x) sqrt(sum(x^2)))
+  for (a in 1:r2) {
+    ind = z[[2]] == a
+    mtheta_hat2[ind] = mtheta_hat2[ind]*sum(ind)/sum(mtheta_hat2[ind])
   }
 
-  return(Y1)
+  if(imat == T){
+    theta_hat = list(mtheta_hat1, mtheta_hat2)
+  }else if(imat == F){
+
+    r3 = length(unique(z[[3]]))
+    # theta 3
+    Y3_unfold <- unfold(as.tensor(Cal_Y3(Y, z)), 3, c(1, 2))@data
+
+    mtheta_hat3 <- apply(Y3_unfold, 1, function(x) sqrt(sum(x^2)))
+    for (a in 1:r3) {
+      ind = z[[3]] == a
+      mtheta_hat3[ind] = mtheta_hat3[ind]*sum(ind)/sum(mtheta_hat3[ind])
+    }
+
+    theta_hat = list(mtheta_hat1, mtheta_hat2, mtheta_hat3)
+  }
+
+  return(theta_hat)
 }
+
 
 cosin <- function(v1, v2) {
   v1_norm <- sqrt(sum(v1^2))
@@ -275,26 +266,56 @@ single_Aiteration = function(S_unfold,Y_unfold,alpha1){
 }
 
 
-sim_S_nm = function(r, s_min, s_max, delta,imat = F){
+
+
+sim_S = function(r, s_min, s_max, delta = NULL, imat = F){
+
   if(imat == F){
-    S <- array(s_min, dim = c(r, r, r))
+    S <- array(s_min, dim = rep(r,3))
     for (i in 1:r) {
       S[i, i, i] <- s_max
     }
 
-    delta_min = sqrt( sum( S[1,,]^2 ))
-    S = S * delta / delta_min
+    if(!is.null(delta)){
+      delta_min = sqrt( sum( S[1,,]^2 ))
+      S = S * delta / delta_min
+    }
   }else if(imat == T){
-    S <- array(s_min, dim = c(r, r))
+    S <- array(s_min, dim = rep(r,2))
     for (i in 1:r) {
       S[i, i] <- s_max
     }
 
-    delta_min = sqrt( sum(S[1,]^2 ))
-    S = S * delta / delta_min
+    if(!is.null(delta)){
+      delta_min = sqrt( sum(S[1,]^2 ))
+      S = S * delta / delta_min
+    }
+
   }
 
-
   return(S)
+}
+
+
+
+generate_theta = function(p, theta_dist, z, alpha = NULL, beta = NULL){
+  r = length(unique(z))
+
+  if (theta_dist == "abs_normal") {
+    theta <- abs(rnorm(p, 0, 0.5)) + 1 - sqrt(1 / (2 * pi))
+  } else if (theta_dist == "pareto") {
+    theta <- rpareto(p, location = beta, shape = alpha) # choose alpha*beta = alpha - 1
+  } else if (theta_dist == "non"){
+    theta = rep(1, p)
+  }
+
+  # in group normalization
+  for (a in 1:r) {
+    index_a = z == a
+    theta[index_a] = theta[index_a]*sum(index_a)/sum(theta[index_a])
+  }
+
+  return(theta)
+
 }
 

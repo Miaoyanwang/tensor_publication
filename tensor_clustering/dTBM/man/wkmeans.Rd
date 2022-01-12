@@ -4,48 +4,43 @@
 \alias{wkmeans}
 \title{Weighted higher-order initialization}
 \usage{
-wkmeans(Y, r, asymm = F)
+wkmeans(Y, r, asymm)
 }
 \arguments{
-\item{Y}{array or matrix, order-3 tensor or matrix observation}
+\item{Y}{array/matrix, order-3 tensor/matrix observation}
 
-\item{r}{vector, the number of clusters on each model; see "details"}
+\item{r}{vector, the number of clusters on each mode; see "details"}
 
 \item{asymm}{logic variable, if "TRUE", assume the clustering assignment differs in different modes; if "FALSE", assume all the modes share the same clustering assignment}
 }
 \value{
 a list containing the following:
 
-\code{z0} { vector ( if \code{asymm = F} ) or a list of vectors ( if \code{asymm = T} ) recording the estimated clustering assignment }
+\code{z0} { a list of vectors recording the estimated clustering assignment }
 
-\code{s0} { vector ( if \code{asymm = F} ) or a list of vectors ( if \code{asymm = T} ) recording the index of degenerate entities with random clustering assignment}
+\code{s0} { a list of vectors recording the index of degenerate entities with random clustering assignment}
 }
 \description{
 Weighted higher-order initialization for multiway spherical clustering under degree-corrected tensor block model.
 This function takes the tensor/matrix observation, the number of clusters, and a logic variable indicating the symmetry
-of the tensor as input. The output is the estimated clustering assignment.
+as input. Output is the estimated clustering assignment.
 }
 \details{
-For the number of clusters \code{r}, the length of \code{r} is no longer than 3 with integers larger than 1;
-the input \code{r = r0} is equal to input \code{r = rep(r0,3)} for any integer \code{r0 > 1};
-matrix observation only accounts the frist two elements and requires all the elements in \code{r} are identicial.
+\code{r} should be a length 2 vector for matrix and length 3 vector for tensor observation;
+
+all the elements in \code{r} should be integer larger than 1;
+
+matrix case and symmetric case only allow \code{r} with the same number of clusters on each mode;
+
+observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 }
 \examples{
-seed = 1
-p = 30
-r = 3
-delta = 0.5
-s_min = 0.05
-s_max = 1
-dist = "normal"
-theta_dist = "pareto"
-alpha = 4
-beta = 3/4
-sigma = 0.2
 
-data = sim_hDCBM_network(seed = seed, p, r,  delta = delta,
- s_min = s_min, s_max = s_max, dist =  dist, sigma = sigma,
- theta_dist = theta_dist, alpha = alpha, beta = beta, imat = F)
+test_data = sim_dTBM(seed = 1, imat = FALSE, asymm = FALSE, p = c(50,50,50), r = c(3,3,3),
+                    core_control = "control", s_min = 0.05, s_max = 1,
+                    dist = "normal", sigma = 0.5,
+                    theta_dist = "pareto", alpha = 4, beta = 3/4)
 
-initialization = wkmeans(data$Y,r = 3, asymm = F)
+initialization <- wkmeans(test_data$Y, r = c(3,3,3), asymm = FALSE)
+
 }
