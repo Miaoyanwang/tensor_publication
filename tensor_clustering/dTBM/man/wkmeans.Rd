@@ -30,7 +30,7 @@ as input. Output is the estimated clustering assignment.
 
 all the elements in \code{r} should be integer larger than 1;
 
-matrix case and symmetric case only allow \code{r} with the same number of clusters on each mode;
+symmetric case only allow \code{r} with the same number of clusters on each mode;
 
 observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 }

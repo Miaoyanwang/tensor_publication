@@ -2,7 +2,7 @@
 library(tensorregress)
 library(WeightedCluster) # wcKMedoids
 library(EnvStats) # patero
-library(gtools)
+
 
 
 renumber <- function(z) {

@@ -81,7 +81,7 @@ If \code{asymm = F}, \code{Thetak = Theta} and \code{Mk = M} for all \code{k = 1
 
 \code{core_control} specifies the way to generate \code{S}:
 
-If \code{core_control = "control"}, first generate \code{S} as a diagonal tensor or matrix with diagonal elements \code{s_max} and off-diagonal elements \code{s_min};
+If \code{core_control = "control"}, first generate \code{S} as a diagonal tensor/matrix with diagonal elements \code{s_max} and off-diagonal elements \code{s_min};
 then scale the original core such that Frobenius norm of the slices equal to \code{delta}, i.e, \code{delta = sqrt(sum(S[1,,]^2))} or \code{delta = sqrt(sum(S[1,]^2))};
 ignore the scaling if \code{delta = NULL}; option \code{"control"} is only applicable for symmetric case \code{asymm = F}.
 
@@ -89,8 +89,8 @@ If \code{core_control = "random"}, generate \code{S} with random entries followi
 
 \code{dist} specifies the distribution of \code{E}: \code{"normal"} for Gaussian and \code{"binary"} for Bernoulli distribution; \code{sigma} specifices the standard deviation if \code{dist = "normal"}.
 
-\code{theta_dist} firstly specifies the distribution of \code{theta}: \code{"non"} for constant 1, \code{"abs_normal"} for absoulte normal distribution, \code{"pareto"} for pareto distribution; \code{alpha, beta} specify the shape and scale parameter if \code{theta_dist = "pareto"}.
-then, scale \code{theta} to have mean equal to one in each cluster.
+\code{theta_dist} firstly specifies the distribution of \code{theta}: \code{"non"} for constant 1, \code{"abs_normal"} for absoulte normal distribution, \code{"pareto"} for pareto distribution; \code{alpha, beta} specify the shape and scale parameter if \code{theta_dist = "pareto"};
+then scale \code{theta} to have mean equal to one in each cluster.
 }
 \examples{
 

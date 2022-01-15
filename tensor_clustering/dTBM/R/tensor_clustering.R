@@ -18,7 +18,7 @@
 #'
 #' all the elements in \code{r} should be integer larger than 1;
 #'
-#' matrix case and symmetric case only allow \code{r} with the same number of clusters on each mode;
+#' symmetric case only allow \code{r} with the same number of clusters on each mode;
 #'
 #' observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 #'
@@ -61,8 +61,8 @@ wkmeans <- function(Y, r, asymm) {
   if (imat == T) {
     r3 <- 1
 
-    if (r1 != r2) {
-      warning("matrix case requires the same number of clusters on two modes")
+    if( r1 != r2 & asymm == F){
+      warning("symmetric case requires the same number of clusters on every mode")
       return()
     }
 
@@ -111,18 +111,36 @@ wkmeans <- function(Y, r, asymm) {
   # second SVD
 
   ##### for matrix case, second SVD asks r1 = r2
-  hu1 <- svd(unfold(ttl(Y, list(t(u2), t(u3)), ms = c(2, 3)), 1, c(3, 2))@data)$u[, 1:r1]
-  hu2 <- svd(unfold(ttl(Y, list(t(u1), t(u3)), ms = c(1, 3)), 2, c(1, 3))@data)$u[, 1:r2]
-  if (imat == F) {
-    hu3 <- svd(unfold(ttl(Y, list(t(u1), t(u2)), ms = c(1, 2)), 3, c(1, 2))@data)$u[, 1:r3]
-  } else if (imat == T) {
-    hu3 <- as.matrix(1)
+  # hu1 <- svd(unfold(ttl(Y, list(t(u2), t(u3)), ms = c(2, 3)), 1, c(3, 2))@data)$u[, 1:r1]
+  # hu2 <- svd(unfold(ttl(Y, list(t(u1), t(u3)), ms = c(1, 3)), 2, c(1, 3))@data)$u[, 1:r2]
+  # if (imat == F) {
+  #   hu3 <- svd(unfold(ttl(Y, list(t(u1), t(u2)), ms = c(1, 2)), 3, c(1, 2))@data)$u[, 1:r3]
+  # } else if (imat == T) {
+  #   hu3 <- as.matrix(1)
+  # }
+
+  # new U
+  Ybar1 = unfold(ttl(Y, list(t(u2), t(u3)), ms = c(2, 3)), 1, c(3, 2))@data
+  Ybar2 = unfold(ttl(Y, list(t(u1), t(u3)), ms = c(1, 3)), 2, c(1, 3))@data
+  hu1 <- svd(Ybar1 %*% t(Ybar1))$u[, 1:r1]
+  hu2 <- svd(Ybar2 %*% t(Ybar2))$u[, 1:r2]
+
+  if(imat == F){
+    Ybar3 = unfold(ttl(Y, list(t(u1), t(u2)), ms = c(1, 2)), 3, c(1, 2))@data
+    hu3 <- svd(Ybar3 %*% t(Ybar3))$u[, 1:r3]
+  }else if(imat == T){
+    hu3 = as.matrix(1)
   }
 
   ### estimated X
-  X1 <- hu1 %*% t(hu1) %*% unfold(ttl(Y, list(hu2 %*% t(hu2), hu3 %*% t(hu3)), ms = c(2, 3)), 1, c(3, 2))@data
-  X2 <- hu2 %*% t(hu2) %*% unfold(ttl(Y, list(hu1 %*% t(hu1), hu3 %*% t(hu3)), ms = c(1, 3)), 2, c(1, 3))@data
-  X3 <- hu3 %*% t(hu3) %*% unfold(ttl(Y, list(hu1 %*% t(hu1), hu2 %*% t(hu2)), ms = c(1, 2)), 3, c(1, 2))@data
+  # X1 <- hu1 %*% t(hu1) %*% unfold(ttl(Y, list(hu2 %*% t(hu2), hu3 %*% t(hu3)), ms = c(2, 3)), 1, c(3, 2))@data
+  # X2 <- hu2 %*% t(hu2) %*% unfold(ttl(Y, list(hu1 %*% t(hu1), hu3 %*% t(hu3)), ms = c(1, 3)), 2, c(1, 3))@data
+  # X3 <- hu3 %*% t(hu3) %*% unfold(ttl(Y, list(hu1 %*% t(hu1), hu2 %*% t(hu2)), ms = c(1, 2)), 3, c(1, 2))@data
+
+  # reduced tensor
+  X1 <- hu1 %*% t(hu1) %*% unfold(ttl(Y, list(t(hu2), t(hu3)), ms = c(2, 3)), 1, c(3, 2))@data
+  X2 <- hu2 %*% t(hu2) %*% unfold(ttl(Y, list(t(hu1), t(hu3)), ms = c(1, 3)), 2, c(1, 3))@data
+  X3 <- hu3 %*% t(hu3) %*% unfold(ttl(Y, list(t(hu1), t(hu2)), ms = c(1, 2)), 3, c(1, 2))@data
 
   if (asymm == T) {
     res1 <- single_wkmeans(X1, r1)
@@ -371,7 +389,7 @@ angle_iteration = function(Y, z0, max_iter, alpha1 = 0.01, asymm){
 #'
 #' \code{core_control} specifies the way to generate \code{S}:
 #'
-#' If \code{core_control = "control"}, first generate \code{S} as a diagonal tensor or matrix with diagonal elements \code{s_max} and off-diagonal elements \code{s_min};
+#' If \code{core_control = "control"}, first generate \code{S} as a diagonal tensor/matrix with diagonal elements \code{s_max} and off-diagonal elements \code{s_min};
 #' then scale the original core such that Frobenius norm of the slices equal to \code{delta}, i.e, \code{delta = sqrt(sum(S[1,,]^2))} or \code{delta = sqrt(sum(S[1,]^2))};
 #' ignore the scaling if \code{delta = NULL}; option \code{"control"} is only applicable for symmetric case \code{asymm = F}.
 #'
@@ -379,8 +397,8 @@ angle_iteration = function(Y, z0, max_iter, alpha1 = 0.01, asymm){
 #'
 #' \code{dist} specifies the distribution of \code{E}: \code{"normal"} for Gaussian and \code{"binary"} for Bernoulli distribution; \code{sigma} specifices the standard deviation if \code{dist = "normal"}.
 #'
-#' \code{theta_dist} firstly specifies the distribution of \code{theta}: \code{"non"} for constant 1, \code{"abs_normal"} for absoulte normal distribution, \code{"pareto"} for pareto distribution; \code{alpha, beta} specify the shape and scale parameter if \code{theta_dist = "pareto"}.
-#' then, scale \code{theta} to have mean equal to one in each cluster.
+#' \code{theta_dist} firstly specifies the distribution of \code{theta}: \code{"non"} for constant 1, \code{"abs_normal"} for absoulte normal distribution, \code{"pareto"} for pareto distribution; \code{alpha, beta} specify the shape and scale parameter if \code{theta_dist = "pareto"};
+#' then scale \code{theta} to have mean equal to one in each cluster.
 #'
 #'
 #' @export
@@ -506,7 +524,7 @@ sim_dTBM = function(seed = NA,imat = F,asymm = F, p, r,
 #'
 #' Estimate the number of clusters in the degree-corrected tensor block model based on BIC criterion. The choice of BIC
 #' aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model.
-#' This function is restricted for the Gaussian tensor observation.
+#' This function is restricted for the Gaussian observation.
 #'
 #' @param Y         array/matrix, order-3 Gaussian tensor/matrix observation
 #' @param r_range   matrix, candidates for the number of clusters on each row; see "details"
@@ -522,7 +540,7 @@ sim_dTBM = function(seed = NA,imat = F,asymm = F, p, r,
 #'
 #' all the elements in \code{r_range} should be integer larger than 1;
 #'
-#' matrix case and symmetric case only allow candidates with the same number of clusters on each mode;
+#' symmetric case only allow candidates with the same number of clusters on each mode;
 #'
 #' observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 #'
@@ -558,12 +576,14 @@ select_r = function(Y,r_range,asymm = F){
       warning("all the modes share the same number of clusters in symmetric case")
       return()
     }
+
+    if(sum(rowSums(r_range)/r_range[,1]) != 2*dim(r_range)[1] & imat == T){
+      warning("all the modes share the same number of clusters in symmetric case")
+      return()
+    }
   }
 
-  if(sum(rowSums(r_range)/r_range[,1]) != 2*dim(r_range)[1] & imat == T){
-    warning("all the modes share the same number of clusters in matrix case")
-    return()
-  }
+
 
 
   bic = rep(0,dim(r_range)[1])

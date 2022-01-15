@@ -23,14 +23,14 @@ a list containing the following:
 \description{
 Estimate the number of clusters in the degree-corrected tensor block model based on BIC criterion. The choice of BIC
 aims to balance between the goodness-of-fit for the data and the degree of freedom in the population model.
-This function is restricted for the Gaussian tensor observation.
+This function is restricted for the Gaussian observation.
 }
 \details{
 \code{r_range} should be a two-column matrix for matrix and three-column matrix for tensor observation;
 
 all the elements in \code{r_range} should be integer larger than 1;
 
-matrix case and symmetric case only allow candidates with the same number of clusters on each mode;
+symmetric case only allow candidates with the same number of clusters on each mode;
 
 observations with non-identical dimension on each mode are only applicable with \code{asymm = T}.
 }
