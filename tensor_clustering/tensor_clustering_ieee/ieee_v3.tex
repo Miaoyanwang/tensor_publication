@@ -1633,14 +1633,14 @@ Note that the event~\eqref{eq:event} also holds for the degenerate entity $i$ wi
         \zeta_{ib}^{(t)} =   \theta(i) B_{ib} \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2.
     \end{equation}
     
-    {\bf Step 3 (Derivation of contraction inequality).} In this step we derive the upper bound of $\zeta_{ib}$ and obtain the contraction inequality~\eqref{eq:proof_5_ineq}. Note that 
+    {\bf Step 3 (Derivation of contraction inequality).} In this step we derive the upper bound of $\zeta_{ib}$ and obtain the contraction inequality~\eqref{eq:proof_5_ineq}. Choose the constant $\tilde C$ in the condition SNR $\geq \tilde C p^{-K/2} \log p$ that satisfies the condition of Lemma~\ref{lem:upper_fgh}, inequalities~\eqref{eq:tilde_c1} and \eqref{eq:tilde_c2}. Note that 
     \begin{align}
         \zeta_{ib}^{(t)} &= \theta(i) \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \ind \offf{z^{(t+1)}(i) = b, \frac{1}{2}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} + H_{ib}^{(t)} }\\
         & \leq \theta(i) \onormSize{}{ [ \mS_{ z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \ind \offf{z^{(t+1)}(i) = b, \frac{1}{4}\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2 \leq (\theta(i) m)^{-1} F_{ib}^{(t)} + G_{ib}^{(t)} } \\
         & \leq 64 \ind \offf{ z^{(t+1)}(i) = b} \of{  \frac{(F_{ib}^{(t)})^2}{ cm^2\onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} + \frac{\theta(i)(G_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2}    }
         %&\leq  \ind \offf{ z^{(t+1)}(i) = b} \of{  \frac{(F_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} + \frac{\theta(i)(G_{ib}^{(t)})^2}{ \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2}    },\label{eq:zeta}
     \end{align}
-    where the first inequality follows from the inequality~\eqref{eq:hib} in Lemma~\ref{lem:upper_fgh}, and the last inequality follows from the assumption that $\min_{i \in [p]} \theta(i) \geq c>0$. Choose the constant $\tilde C$ in the condition SNR $\geq \tilde C p^{-K/2} \log p$ that satisfies inequalities~\eqref{eq:tilde_c1} and \eqref{eq:tilde_c2}. Following \citet[Step 4, Proof of Theorem 2]{han2020exact} and Lemma~\ref{lem:upper_fgh}, we have 
+    where the first inequality follows from the inequality~\eqref{eq:hib} in Lemma~\ref{lem:upper_fgh}, and the last inequality follows from the assumption that $\min_{i \in [p]} \theta(i) \geq c>0$. Following \citet[Step 4, Proof of Theorem 2]{han2020exact} and Lemma~\ref{lem:upper_fgh}, we have 
     \begin{align}\label{eq:f_sum}
           \frac{1}{p} \sum_{i \in [p]}\sum_{b \in [r]/z(i)} \ind \offf{ z^{(t+1)}(i) = b} \frac{(F_{ib}^{(t)})^2}{ cm^2 \onormSize{}{ [ \mS_{z(i):}  ]^s - [ \mS_{b:}  ]^s  }^2} \leq \frac{C_0 \bar C}{c m^2 \tilde C^2} L^{(t)},
     \end{align}
