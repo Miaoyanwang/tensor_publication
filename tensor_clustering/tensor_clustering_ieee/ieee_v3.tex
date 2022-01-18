@@ -137,8 +137,8 @@
 
 \title{Multiway Spherical Clustering via \\ Degree-Corrected Tensor Block Models}
 
-\author{ Jiaxin Hu and Miaoyan Wang\\
-University of Wisconsin - Madison
+\author{ Jiaxin Hu and Miaoyan Wang$^*$\thanks{$^*$Part of this paper was presented at 25th International Conference on Artificial Intelligence and Statistics (AISTATS).}\\
+Department of Statistics, University of Wisconsin - Madison
 %IEEE Publication Technology,~\IEEEmembership{Staff,~IEEE,}
         % <-this % stops a space
 %\thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}% <-this % stops a space
@@ -173,7 +173,7 @@ tensor clustering, degree correction, statistical-computational efficiency, huma
 We study the problem of multiway clustering based on a data tensor. The goal of multiway clustering is to identify a checkerboard structure from a noisy data tensor. Figure~\ref{fig:intro} illustrates the noisy tensor and the underlying checkerboard structures discovered by multiway clustering methods. In the hypergraph example, the multiway clustering aims to identify the underlying block partition of nodes based on their higher-order connectivities; therefore, we also refer to the clustering as \emph{higher-order clustering}. The most common model for higher-order clustering is called \emph{tensor block model} (TBM)~\citep{wang2019multiway}, which extends the usual matrix stochastic block model~\citep{abbe2017community} to tensors. The matrix analysis tools, however, are sub-optimal for higher-order clustering. Developing tensor tools for solving block models has received increased interest recently~\citep{ wang2019multiway,chi2020provable,han2020exact}. 
 
 
-Classical tensor block model suffers from drawbacks to model real world data in spite of the popularity. The key underlying assumption of block model is that all nodes in the same community are exchangeable; i.e., the nodes have no individual effects apart from the block effects. However, the exchangeability assumption is often non-realistic. Each node may contribute to the data variation by its own multiplicative effect. Such degree heterogeneity appears commonly in social networks. Ignoring the degree heterogeneity may seriously mislead the clustering results. For example, regular block model fails to model the member affiliation in the Karate Club network~\citep{bickel2009nonparametric} without addressing degree heterogeneity. 
+Classical tensor block model suffers from drawbacks to model real world data in spite of the popularity. The key underlying assumption of block model is that all nodes in the same community are exchangeable; i.e., the nodes have no individual-specific parameters apart from the community-specific parameters. However, the exchangeability assumption is often non-realistic. Each node may contribute to the data variation by its own multiplicative effect. We call the unequal node-specific effects the \emph{degree heterogeneity}. Such degree heterogeneity appears commonly in social networks. Ignoring the degree heterogeneity may seriously mislead the clustering results. For example, regular block model fails to model the member affiliation in the Karate Club network~\citep{bickel2009nonparametric} without addressing degree heterogeneity. 
 
 The \emph{degree-corrected tensor block model} (dTBM) has been proposed recently to account for the degree heterogeneity~\citep{ke2019community}. The dTBM combines a higher-order checkerboard structure with degree parameter $\mtheta=(\mtheta(1),\ldots,\mtheta(p))^T$ to allow heterogeneity among $p$ nodes.  Figure~\ref{fig:intro} compares the underlying structures of TBM and dTBM with the same number of communities. The dTBM allows varying values within the same community, thereby allowing a richer structure. To solve dTBM, we project clustering objects to a unit sphere and perform iterative clustering based on angle similarity. We refer to the algorithm as the \textit{spherical} clustering; detailed procedures are in Section~\ref{sec:alg}. The spherical clustering avoids the estimation of nuisance degree heterogeneity. The usage of angle similarity brings new challenges to the theoretical results, and we develop new polar-coordinate based techniques in the proofs. 
 
@@ -211,12 +211,13 @@ The last two contributions, to our best knowledge, are new to the literature of 
 {\bf Related work.} 
 Our work is closely related to but also distinct from several lines of existing research. Table~\ref{tab:comp} summarizes the most relevant models. 
 
-\begin{itemize}
+\begin{itemize}[wide]
     \item \textit{Block model for clustering.} Block models such as stochastic block model (SBM) and degree-corrected SBM have been widely used for matrix clustering problems. The theoretical properties and algorithm performance for matrix block models have been well-studied~\citep{gao2018community}; see the review paper~\citep{abbe2017community} and the references therein. However, The tensor counterparts are relatively less understood. 
     
-    \item  \textit{Tensor block model.} The tensor block model (TBM, \cite{wang2019multiway, han2020exact, ghoshdastidar2017consistency}) is a higher-order extension of SBM, but it fails to allow degree heterogeneity. The Cartesian coordinates based analysis in \cite{han2020exact} is non-applicable to handle the extra complexity brought by degree heterogeneity. In contrast, our model addresses the degree heterogeneity, and we develop polar-coordinate based tools for the theoretical analysis.
+    \item  \textit{Tensor block model.} The (non-degree) tensor block model (TBM) is a higher-order extension of SBM, and its statistical-computational properties are investigated in recent literatures~\citep{wang2019multiway, han2020exact, ghoshdastidar2017consistency}. Extending results from non-degree to degree-corrected model is highly challenging. Our dTBM parameter space is equipped with angle-based similarity and nuisance degree parameters. The extra complexity makes the Cartesian coordinates based analysis~\citep{han2020exact} non-applicable to our setting. Towards this goal, we have developed a new polar coordinates based analysis to control the model complexity. We also develop a new angle-based iteration algorithm to achieve optimal clustering rates \emph{without the need of estimating nuisance degree parameters}.
     
-    \item \textit{Degree-corrected block model.} The hypergraph degree-corrected block model (hDCBM) proposed by \cite{ke2019community, yuan2018testing} accounts for degree heterogeneity. However, the hDCBM is designed only for binary observations, and the proposed spectral algorithm in \cite{ke2019community} achieves sub-optimal polynomial clustering rate in higher-order scenarios. In constrast, our model allows discrete and continuous entries, and achieves \emph{exponentially} fast rate in clustering tasks. More importantly, to our best knowledge, we are the first to provide the statistical and computational limits analyses for the degree-corrected block model in tensor clustering. See Fig~\ref{fig:phase_axis} for overview of our results. 
+    
+    \item \textit{Degree-corrected block model.} The hypergraph degree-corrected block model (hDCBM) and its variant have been proposed in the literature~\citep{ke2019community, yuan2018testing}. For this popular model, however, the optimal statistical-computational rates remain an open problem. Our main contribution is to provide a sharp statistical and computational critical phase transition in dTBM literature. In addition, our algorithm results in a faster \emph{exponential} error rate, in contrast to the \emph{polynomial} rate in~\cite{ke2019community}. The original hDCBM~\citep{ke2019community} is designed for binary observations only, and we extend the model to both continuous and binary observations. We believe our results are novel and helpful to the community. See Fig~\ref{fig:phase_axis} for overview of our results. 
     
     \item \textit{Global-to-local algorithm strategy.} Our methods generalize the recent global-to-local strategy for matrix learning~\citep{gao2018community,chi2019nonconvex,yun2016optimal} to tensors~\citep{han2020exact,ahn2018hypergraph,kim2018stochastic}. Despite the conceptual similarity, we address several fundamental challenges associated with this non-convex, non-continuous problem. We show the insufficiency of the conventional tensor HOSVD~\citep{de2000multilinear}, and we develop a weighted higher-order initialization that relaxes the singular-value gap separation condition. Furthermore, our local iteration leverages the angle-based clustering in order to avoid explicit estimation of degree heterogeneity. Our bounds reveal the interesting interplay between the computational and statistical errors. We show that our final estimate \emph{provably} achieves the exact clustering within only polynomial-time complexity. 
     
@@ -294,7 +295,7 @@ It is natural to represent the $K$-uniform hypergraph using a binary order-$K$ a
 \end{equation}
 
 
-Assume there exist $r$ disjoint communities among $p$ nodes, and the connection probabilities depend on the community assignments and node effects. 
+Assume there exist $r$ disjoint communities among $p$ nodes, and the connection probabilities depend on the community assignments and node-specific parameters. 
 Then, the equation~\eqref{eq:model_tensor} models $\bbE \tY$ with unknown degree heterogeneity $\mtheta$ and sub-Gaussianity parameter $\sigma^2 = 1/4$.  
 
 \vspace{0.2cm}
@@ -515,7 +516,7 @@ $\hat \mX_{i:}^s :=\onormSize{}{\hat \mX_{i:}}^{-1} \hat \mX_{i:}.$
 \INPUT Observation $\tY \in \bbR^{p \times \cdots \times p}$, initialization $z^{(0)} \colon [p]\to[r]$ from Sub-algorithm 1, iteration number $T$.
 \For {$t = 0$ to $T-1$}
 \State Update the block tensor $\tS^{(t)}$ via
-$\tS^{(t)} (i_1,...,i_K)= \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}(i_k) = j_k, k \in [K]\}.$
+$\tS^{(t)} (a_1,...,a_K)= \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}(i_k) = a_k, k \in [K]\}.$
 \State Calculate reduced tensor $\tY^{\text{d}} \in \bbR^{p \times r \times \cdots \times r}$ via
 \begin{align}
     &\tY^{\text{d}}(i,a_2,\ldots,a_K) 
@@ -602,8 +603,8 @@ We call the degree is $\varepsilon$-locally linearly stable if and only if
 Roughly speaking, the vector $\mp(\bar z)$ represents the raw cluster sizes, and $\mp_{\theta}(\bar z)$ represents the relative cluster sizes weighted by degrees. 
 The local stability holds trivially for $\varepsilon=0$ based on the construction of parameter space~\eqref{eq:family}. The condition~\eqref{eq:local} controls the impact of node degree to the $\mp_{\theta}(\cdot)$ with respect to the misclassification rate $\varepsilon$ and angle gap.
  
-\begin{thm}[Error for angle-based iteration]\label{thm:refinement} Consider the setup as in Theorem~\ref{thm:initial}. Assume the local linear stability of degree holds in the neighborhood $\tN(z,\epsilon)$ for $\epsilon = \log^{-1}p$. Suppose 
-$r=\tO(1)$ and $\text{SNR} \geq \tilde C p^{-K/2}\log p$ for some large constant $\tilde C$. Let $z^{(t)}$ denote the $t$-th iteration output in Sub-algorithm~\hyperref[alg:main]{2} with initialization $z^{(0)}$ from Sub-algorithm~\hyperref[alg:main]{1}. With probability going to 1, there exists a contraction parameter $\rho \in (0,1)$ such that 
+\begin{thm}[Error for angle-based iteration]\label{thm:refinement} Consider the setup as in Theorem~\ref{thm:initial}. Assume the local linear stability of degree holds in the neighborhood $\tN(z,\epsilon)$ for $\epsilon \geq \log^{-1}p$. Suppose 
+$r=\tO(1)$ and $\text{SNR} \geq \tilde C p^{-K/2}\log p$ for some sufficiently large constant $\tilde C$. Let $z^{(t)}$ denote the $t$-th iteration output in Sub-algorithm~\hyperref[alg:main]{2} with initialization $z^{(0)}$ from Sub-algorithm~\hyperref[alg:main]{1}. With probability going to 1, there exists a contraction parameter $\rho \in (0,1)$ such that 
 \begin{align}\label{eq:final}
     \ell(z, \hat z^{(t+1)}) \lesssim &\ \KeepStyleUnderBrace{
    \text{SNR}^{-1}
@@ -645,7 +646,7 @@ The Bernoulli bound~\eqref{eq:ini_b} is relatively looser than Gaussian bound~\e
 
 {\bf Extension for general dTBMs.} Our two-stage algorithm is able to be extended for the general (asymmetric) dTBMs. Specifically, in the Sub-algorithm~\hyperref[alg:main]{1}, we make the following changes: (1)
 Replace the matrcization $\mat(\tY)$ by $\mat_k(\tY)$; (2) Repeat the Steps 1-5 with mode-specified cluster number $r_k$; (3) Obtain the collection initialization $ \{z^{(0)}_k\}_{k=1}^K$. In the Sub-algorithm~\hyperref[alg:main]{2}, we make the following changes: (1) Take the collection $\{z^{(0)}_k\}_{k=1}^K$ as input, and update the block tensor $\tS^{(t)}$ with the collection $\{ z_k^{(t)}\}_{k=1}^K$, $
-        \tS^{(t)}(i_1,\ldots, i_K) =  \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}_k(i_k) = j_k, k \in [K]\}$;
+        \tS^{(t)}(a_1,\ldots, a_K) =  \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}_k(i_k) = a_k, k \in [K]\}$;
 (2) Calculate reduced tensor $\tY^{\text{d}}_k$ for each mode via
 \begin{align}
     &\tY^{\text{d}}_k(a_1,\ldots,a_{k-1}, i ,a_{k+1},\ldots,a_K) 
@@ -984,7 +985,7 @@ Consider an arbitrary $j \in [p_1]$ such that $z_1(j) = a$. Then for all the nod
 \end{equation}
 Let $\theta'_1(j) = c\theta_1(j)$ for some positive constant $c$. By equation~\eqref{eq:theta_uniq}, we have $\theta'_1(i) = c \theta_1(i)$ for all $ i \in  z_1^{-1}(a)$. By the constraint $(\{z_k\}, \tS', \{\mtheta'_k\}) \in \tP(\{r_k\})$, we have 
 \begin{equation}
-    \sum_{j \in z^{-1}(a)} \theta'_1(j) = c \sum_{j \in z^{-1}(a)} \theta_1(j) = 1,
+    \sum_{j \in z_1^{-1}(a)} \theta'_1(j) = c \sum_{j \in z_1^{-1}(a)} \theta_1(j) = 1,
 \end{equation}
 which implies $c = 1$. Hence, we have proven $\mtheta_1 = \mtheta'_1$ provided that $z_1 = z'_1$.
 
