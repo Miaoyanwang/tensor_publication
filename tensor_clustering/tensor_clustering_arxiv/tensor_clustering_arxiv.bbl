@@ -1,0 +1,189 @@
+\begin{thebibliography}{}
+
+\bibitem[Abbe, 2017]{abbe2017community}
+Abbe, E. (2017).
+\newblock Community detection and stochastic block models: recent developments.
+\newblock {\em The Journal of Machine Learning Research}, 18(1):6446--6531.
+
+\bibitem[Abbe et~al., 2020]{abbe2020entrywise}
+Abbe, E., Fan, J., Wang, K., and Zhong, Y. (2020).
+\newblock Entrywise eigenvector analysis of random matrices with low expected
+  rank.
+\newblock {\em Annals of statistics}, 48(3):1452.
+
+\bibitem[Ahn et~al., 2018]{ahn2018hypergraph}
+Ahn, K., Lee, K., and Suh, C. (2018).
+\newblock Hypergraph spectral clustering in the weighted stochastic block
+  model.
+\newblock {\em IEEE Journal of Selected Topics in Signal Processing},
+  12(5):959--974.
+
+\bibitem[Ahn et~al., 2019]{ahn2019community}
+Ahn, K., Lee, K., and Suh, C. (2019).
+\newblock Community recovery in hypergraphs.
+\newblock {\em IEEE Transactions on Information Theory}, 65(10):6561--6579.
+
+\bibitem[Anandkumar et~al., 2014]{anandkumar2014tensor}
+Anandkumar, A., Ge, R., Hsu, D., Kakade, S.~M., and Telgarsky, M. (2014).
+\newblock Tensor decompositions for learning latent variable models.
+\newblock {\em The Journal of Machine Learning Research}, 15(1):2773--2832.
+
+\bibitem[Bickel and Chen, 2009]{bickel2009nonparametric}
+Bickel, P.~J. and Chen, A. (2009).
+\newblock A nonparametric view of network models and newman--girvan and other
+  modularities.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  106(50):21068--21073.
+
+\bibitem[Brennan and Bresler, 2020]{brennan2020reducibility}
+Brennan, M. and Bresler, G. (2020).
+\newblock Reducibility and statistical-computational gaps from secret leakage.
+\newblock In {\em Conference on Learning Theory}, pages 648--847. PMLR.
+
+\bibitem[Chi et~al., 2020]{chi2020provable}
+Chi, E.~C., Gaines, B.~J., Sun, W.~W., Zhou, H., and Yang, J. (2020).
+\newblock Provable convex co-clustering of tensors.
+\newblock {\em Journal of Machine Learning Research}, 21(214):1--58.
+
+\bibitem[Chi et~al., 2019]{chi2019nonconvex}
+Chi, Y., Lu, Y.~M., and Chen, Y. (2019).
+\newblock Nonconvex optimization meets low-rank matrix factorization: An
+  overview.
+\newblock {\em IEEE Transactions on Signal Processing}, 67(20):5239--5269.
+
+\bibitem[De~Lathauwer et~al., 2000]{de2000multilinear}
+De~Lathauwer, L., De~Moor, B., and Vandewalle, J. (2000).
+\newblock A multilinear singular value decomposition.
+\newblock {\em SIAM Journal on Matrix Analysis and Applications},
+  21(4):1253--1278.
+
+\bibitem[Desikan et~al., 2006]{desikan2006automated}
+Desikan, R.~S., Ségonne, F., Fischl, B., Quinn, B.~T., Dickerson, B.~C.,
+  Blacker, D., Buckner, R.~L., Dale, A.~M., Maguire, R.~P., Hyman, B.~T.,
+  Albert, M.~S., and Killiany, R.~J. (2006).
+\newblock An automated labeling system for subdividing the human cerebral
+  cortex on {MRI} scans into gyral based regions of interest.
+\newblock {\em Neuroimage}, 31(3):968--980.
+
+\bibitem[Gao et~al., 2018]{gao2018community}
+Gao, C., Ma, Z., Zhang, A.~Y., and Zhou, H.~H. (2018).
+\newblock Community detection in degree-corrected block models.
+\newblock {\em The Annals of Statistics}, 46(5):2153--2185.
+
+\bibitem[Ghoshdastidar and Dukkipati, 2017]{ghoshdastidar2017uniform}
+Ghoshdastidar, D. and Dukkipati, A. (2017).
+\newblock Uniform hypergraph partitioning: Provable tensor methods and sampling
+  techniques.
+\newblock {\em The Journal of Machine Learning Research}, 18(1):1638--1678.
+
+\bibitem[Ghoshdastidar et~al., 2017]{ghoshdastidar2017consistency}
+Ghoshdastidar, D. et~al. (2017).
+\newblock Consistency of spectral hypergraph partitioning under planted
+  partition model.
+\newblock {\em The Annals of Statistics}, 45(1):289--315.
+
+\bibitem[Han et~al., 2020]{han2020exact}
+Han, R., Luo, Y., Wang, M., and Zhang, A.~R. (2020).
+\newblock Exact clustering in tensor block model: Statistical optimality and
+  computational limit.
+\newblock {\em arXiv preprint arXiv:2012.09996}.
+
+\bibitem[Hore et~al., 2016]{hore2016tensor}
+Hore, V., Vi{\~n}uela, A., Buil, A., Knight, J., McCarthy, M.~I., Small, K.,
+  and Marchini, J. (2016).
+\newblock Tensor decomposition for multiple-tissue gene expression experiments.
+\newblock {\em Nature genetics}, 48(9):1094.
+
+\bibitem[Hu et~al., 2021]{hu2021generalized}
+Hu, J., Lee, C., and Wang, M. (2021).
+\newblock Generalized tensor decomposition with features on multiple modes.
+\newblock {\em Journal of Computational and Graphical Statistics}, pages 1--15.
+
+\bibitem[Ke et~al., 2019]{ke2019community}
+Ke, Z.~T., Shi, F., and Xia, D. (2019).
+\newblock Community detection for hypergraph networks via regularized tensor
+  power iteration.
+\newblock {\em arXiv preprint arXiv:1909.06503}.
+
+\bibitem[Kim et~al., 2018]{kim2018stochastic}
+Kim, C., Bandeira, A.~S., and Goemans, M.~X. (2018).
+\newblock Stochastic block model for hypergraphs: Statistical limits and a
+  semidefinite programming approach.
+\newblock {\em arXiv preprint arXiv:1807.02884}.
+
+\bibitem[Koniusz and Cherian, 2016]{koniusz2016sparse}
+Koniusz, P. and Cherian, A. (2016).
+\newblock Sparse coding for third-order super-symmetric tensor descriptors with
+  application to texture recognition.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 5395--5403.
+
+\bibitem[Lee et~al., 2017]{lee2017time}
+Lee, S.~H., Magallanes, J.~M., and Porter, M.~A. (2017).
+\newblock Time-dependent community structure in legislation cosponsorship
+  networks in the congress of the republic of peru.
+\newblock {\em Journal of Complex Networks}, 5(1):127--144.
+
+\bibitem[Lu and Zhou, 2016]{lu2016statistical}
+Lu, Y. and Zhou, H.~H. (2016).
+\newblock Statistical and computational guarantees of lloyd's algorithm and its
+  variants.
+\newblock {\em arXiv preprint arXiv:1612.02099}.
+
+\bibitem[Meil{\u{a}}, 2012]{meilua2012local}
+Meil{\u{a}}, M. (2012).
+\newblock Local equivalences of distances between clusterings—a geometric
+  perspective.
+\newblock {\em Machine Learning}, 86(3):369--389.
+
+\bibitem[Mu et~al., 2014]{mu2014square}
+Mu, C., Huang, B., Wright, J., and Goldfarb, D. (2014).
+\newblock Square deal: Lower bounds and improved relaxations for tensor
+  recovery.
+\newblock In {\em International Conference on Machine Learning}, pages 73--81.
+
+\bibitem[Van~Essen et~al., 2013]{van2013wu}
+Van~Essen, D.~C., Smith, S.~M., Barch, D.~M., Behrens, T.~E., Yacoub, E.,
+  Ugurbil, K., and {WU-Minn HCP Consortium} (2013).
+\newblock The {WU-M}inn human connectome project: An overview.
+\newblock {\em Neuroimage}, 80:62--79.
+
+\bibitem[Wang et~al., 2017]{wang2017bayesian}
+Wang, L., Durante, D., Jung, R.~E., and Dunson, D.~B. (2017).
+\newblock Bayesian network--response regression.
+\newblock {\em Bioinformatics}, 33(12):1859--1866.
+
+\bibitem[Wang et~al., 2019]{wang2019three}
+Wang, M., Fischer, J., and Song, Y.~S. (2019).
+\newblock Three-way clustering of multi-tissue multi-individual gene expression
+  data using semi-nonnegative tensor decomposition.
+\newblock {\em The Annals of Applied Statistics}, 13(2):1103--1127.
+
+\bibitem[Wang and Zeng, 2019]{wang2019multiway}
+Wang, M. and Zeng, Y. (2019).
+\newblock Multiway clustering via tensor block models.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  713--723.
+
+\bibitem[Yuan et~al., 2018]{yuan2018testing}
+Yuan, M., Liu, R., Feng, Y., and Shang, Z. (2018).
+\newblock Testing community structures for hypergraphs.
+\newblock {\em arXiv preprint arXiv:1810.04617}.
+
+\bibitem[Yun and Proutiere, 2016]{yun2016optimal}
+Yun, S.-Y. and Proutiere, A. (2016).
+\newblock Optimal cluster recovery in the labeled stochastic block model.
+\newblock {\em Advances in Neural Information Processing Systems}, 29:965--973.
+
+\bibitem[Zhang and Xia, 2018]{zhang2018tensor}
+Zhang, A. and Xia, D. (2018).
+\newblock Tensor {SVD}: Statistical and computational limits.
+\newblock {\em IEEE Transactions on Information Theory}, 64(11):7311--7338.
+
+\bibitem[Zhang et~al., 2019]{zhang2019tensor}
+Zhang, Z., Allen, G.~I., Zhu, H., and Dunson, D. (2019).
+\newblock Tensor network factorizations: Relationships between brain structural
+  connectomes and traits.
+\newblock {\em Neuroimage}, 197:330--343.
+
+\end{thebibliography}

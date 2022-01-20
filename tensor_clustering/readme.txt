@@ -1,4 +1,4 @@
-Tensor clustering (edited: Jan 18 22)
+Tensor clustering (edited: Jan 19 22)
 
 
 - others: previous notes, previous versions of IEEE submission, student paper submissions, rebuttal for AISTATS
@@ -12,4 +12,8 @@ Tensor clustering (edited: Jan 18 22)
 
 change log:
 
-- arxiv vs ieee: change the epsilon-stable condition in Theorem 5 and proof in page 59 (arxiv submission).
+arxiv vs ieee:
+
+- change the epsilon-stable condition in Theorem 5 and proof in page 59 (arxiv submission).
+
+- footnotes about AISTATS presentation added to the title
