@@ -13,7 +13,7 @@
 #'@docType data
 #'@usage data(peru)
 #'
-#'@format  A list. Includes a 116-2 data frame named "attr_data", a 5844-7 data frame named "laws_data", and a 116-116-116 binary array named "networ_data".
+#'@format  A list. Includes a 116-2 data frame named "attr_data", a 5844-7 data frame named "laws_data", and a 116-116-116 binary array named "network_data".
 #'
 #'@keywords datasets
 #'
