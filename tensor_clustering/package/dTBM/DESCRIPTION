@@ -1,6 +1,5 @@
 Package: dTBM
-Title: Multi-Way Spherical Clustering via Degree-Corrected Tensor Block
-        Models
+Title: Multi-Way Spherical Clustering via Degree-Corrected Tensor Block Models
 Version: 2.0
 Date: 2022-01-10
 Authors@R: c(person(given = "Jiaxin",family = "Hu",role = c("aut", "cre","cph"),email = "jhu267@wisc.edu"), person(given = "Miaoyan",family = "Wang",role = c("aut", "cph"),email = "miaoyan.wang@wisc.edu")) 
