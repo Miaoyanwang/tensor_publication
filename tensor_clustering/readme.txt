@@ -1,7 +1,7 @@
-Tensor clustering (edited: Jan 19 22)
+Tensor clustering (edited: Jan 20 22)
 
 
-- others: previous notes, previous versions of IEEE submission, student paper submissions, rebuttal for AISTATS
+- others: previous notes, previous versions of IEEE submission, student paper submissions, rebuttal for AISTATS, previous codes
 
 - package: dTBM package
 
