@@ -6,7 +6,7 @@ library(dTBM)
 
 
 # report simulation statistics from prior simulation -------------------------------------------------------------
-# if a new run of simulation is desired, please go to line #58 to run the code ----------------------------------
+# if a new run of simulation is desired, please go to line #13 to run the code ----------------------------------
 
 load("presaved/Table2.RData")
 

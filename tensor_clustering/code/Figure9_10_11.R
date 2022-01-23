@@ -158,10 +158,10 @@ node_file[, 6] <- colnames(HCP$tensor[, , 1])
 node_file[, 6] <- gsub("\\_.*", "", node_file[, 6])
 node_file[which(node_file[, 6] == "RMF"), 6] <- "SupF"
 node_file[, 4] <- result$z[[1]]
-write.table(node_file, "presaved/for_Figure9_10/hpc_node.txt", row.names = F, col.names = F, quote = F)
+write.table(node_file, "presaved/for_Figure9_11/hpc_node.txt", row.names = F, col.names = F, quote = F)
 
 edge_file <- diag(rep(1, 68))
-write.table(edge_file, "presaved/for_Figure9_10/hpc_edge_null.txt", row.names = F, col.names = F)
+write.table(edge_file, "presaved/for_Figure9_11/hpc_edge_null.txt", row.names = F, col.names = F)
 
 
 # preparing csv files for Figure 11 ------------------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ index <- which(ave_X < 1 & 0.01 < ave_X, arr.ind = T)
 edge_file <- ave_X
 edge_file[index] <- 0
 
-write.table(edge_file, "presaved/for_Figure9_10/hpc_edge.txt", row.names = F, col.names = F)
+write.table(edge_file, "presaved/for_Figure9_11/hpc_edge.txt", row.names = F, col.names = F)
 
 
 # Group 1
@@ -195,7 +195,7 @@ ave_X1 <- ave_X1 / length(p1)
 
 edge_file <- ave_X1 - ave_X
 
-write.table(edge_file, "presaved/for_Figure9_10/hpc_edge1.txt", row.names = F, col.names = F)
+write.table(edge_file, "presaved/for_Figure9_11/hpc_edge1.txt", row.names = F, col.names = F)
 
 
 # Group 2
@@ -210,7 +210,7 @@ ave_X2 <- ave_X2 / length(p2)
 
 edge_file <- ave_X2 - ave_X
 
-write.table(edge_file, "presaved/for_Figure9_10/hpc_edge2.txt", row.names = F, col.names = F)
+write.table(edge_file, "presaved/for_Figure9_11/hpc_edge2.txt", row.names = F, col.names = F)
 
 
 # Group 3
@@ -225,4 +225,4 @@ ave_X3 <- ave_X3 / length(p3)
 
 edge_file <- ave_X3 - ave_X
 
-write.table(edge_file, "presaved/for_Figure9_10/hpc_edge3.txt", row.names = F, col.names = F)
+write.table(edge_file, "presaved/for_Figure9_11/hpc_edge3.txt", row.names = F, col.names = F)

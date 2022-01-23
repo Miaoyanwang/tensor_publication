@@ -10,7 +10,7 @@ library(ggplot2)
 library(patchwork)
 
 # start plotting with saved data from prior simulation ---------------------------------------------------------------
-# if a new run of simulation is desired, please go to line # to run the code --------------------------------------
+# if a new run of simulation is desired, please go to line #102 to run the code --------------------------------------
 
 # normal case
 
