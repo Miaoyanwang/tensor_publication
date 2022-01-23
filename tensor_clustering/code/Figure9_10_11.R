@@ -147,7 +147,7 @@ gg_s3 <- ggplot(data = mat_s3, aes(x, y)) +
     legend.text = element_text(size = 12)
   )
 
-pdf("figure/est_S.pdf", width = 24, height = 6)
+pdf("figure/Figure10.pdf", width = 24, height = 6)
 (gg_ave_s | gg_s1 | gg_s2 | gg_s3)
 dev.off()
 
