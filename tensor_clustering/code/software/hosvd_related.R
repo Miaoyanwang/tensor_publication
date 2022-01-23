@@ -1,6 +1,16 @@
 ### HOSVDs
 library(rTensor)
 
+renumber <- function(z) {
+  z_re <- rep(0, length(z))
+  uniq <- unique(z)
+  
+  for (i in 1:length(uniq)) {
+    z_re[z == uniq[i]] <- i
+  }
+  return(z_re)
+}
+
 HOSVD_kmeans = function(Y, r){
   decomp = hosvd(as.tensor(Y), rep(r,3))
   U1 = decomp$U[[1]]
