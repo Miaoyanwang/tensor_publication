@@ -4,6 +4,8 @@ Jan 23, 2022, Jiaxin
 
 ############### Our software: /software/dTBM.tar.gz with manual /software/dTBM_manual.pdf
 
+Note: this software is identical to the 2.0 version that available in R CRAN.
+
 ############### Simulation procedure ############
 
 # Files:
