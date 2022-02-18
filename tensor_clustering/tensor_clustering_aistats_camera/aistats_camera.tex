@@ -280,7 +280,7 @@ For a matrix $\mY$, we use $\mY_{i:}$ (respectively, $\mY_{:i}$) to denote the $
 
 \subsection{dTBM}
 
-Suppose we have an order-$K$ data tensor $\tY \in \bbR^{p \times \cdots \times p}$. For ease of notation, we focus on symmetric tensors in this section; see Supplement~\ref{sec:exten} for the extension to general asymmetric tensors. Assume there exist $r \geq 2$  disjoint communities among the $p$ nodes. We represent the community assignment by a function $z \colon [p]\mapsto[r]$, where $z(i) = a$ for $i$-th node that belongs to the $a$-th community. Then, $z^{-1}(a)=\{i\in[p]\colon z(i)=a\}$ denotes the set of nodes that belong to the $a$-th community, and $|z^{-1}(a)|$ denotes the number of nodes in the $a$-th community. Let $\mtheta=(\theta(1),\ldots,\theta(p))^T$ denote the degree heterogeneity for $p$ nodes. We consider the order-$K$ dTBM~\citep{ke2019community},
+Suppose we have an order-$K$ data tensor $\tY \in \bbR^{p \times \cdots \times p}$. For ease of notation, we focus on symmetric tensors in this section. Assume there exist $r \geq 2$  disjoint communities among the $p$ nodes. We represent the community assignment by a function $z \colon [p]\mapsto[r]$, where $z(i) = a$ for $i$-th node that belongs to the $a$-th community. Then, $z^{-1}(a)=\{i\in[p]\colon z(i)=a\}$ denotes the set of nodes that belong to the $a$-th community, and $|z^{-1}(a)|$ denotes the number of nodes in the $a$-th community. Let $\mtheta=(\theta(1),\ldots,\theta(p))^T$ denote the degree heterogeneity for $p$ nodes. We consider the order-$K$ dTBM~\citep{ke2019community},
 \vspace{-0.2cm}
 \footnotesize
 \begin{equation}\label{eq:model_margin}
@@ -293,7 +293,16 @@ where $\tS \in \bbR^{r \times \cdots \times r}$ is an order-$K$ tensor collectin
 \end{equation}
 where $\mTheta = \text{diag}(\theta(1),...,\theta(p)) \in \bbR^{p \times p}$ is a diagonal matrix, $\mM \in \offf{0,1}^{p \times r}$ is the membership matrix associated with community assignment $z$ such that $\mM(i,j)=\ind\{z(i)=j\}$. By definition, each row of $\mM$ has one copy of 1's and 0's elsewhere. Note that the discrete nature of $\mM$ renders our model~\eqref{eq:model_tensor} more challenging than Tucker decomposition. We call a tensor $\tY$ an $r$-block tensor with degree $\mtheta$ if $\tY$ admits~\eqref{eq:model_tensor}. 
 %The goal of clustering is to estimate $z$ from a single noisy tensor $\tY$. 
-We are particularly interested in high-dimensional regime where $p$ grows whereas $r=\tO(1)$. See Supplement~\ref{sec:examples} for motivated applications of dTBM. 
+We are particularly interested in high-dimensional regime where $p$ grows whereas $r=\tO(1)$.   The extension to general asymmetrical dTBM is obtained via replacing $(\mM, \mTheta)$ in~\eqref{eq:model_tensor} by mode-specific parameters $(\mM_k, \mTheta_k)$ for every mode $k\in[K]$. Here, we give two special cases of dTBM.
+
+\begin{example}[Gaussian TBM]
+Let $\theta(i)= 1$ for all $i \in [p]$ and $\tE$ be a noise tensor with i.i.d.\ $N(0,\sigma^2)$ entries. Our dTBM reduces to a non-degree Gaussian TBM~\citep{wang2019multiway, han2020exact}, which is widely used in previous clustering algorithms~\citep{wang2019multiway,chi2020provable}. 
+%The theoretical results in TBM serve as benchmarks for dTBM. 
+\end{example}
+
+\begin{example}[Binary dTBM]
+Consider a $K$-uniform hypergraph $H = (V,E)$, where $V = [p]$ collects the nodes with $r$ disjoint communities and $E$ collects all the $K$-way hyperedges. Let $\tY \in \{0,1\}^{p \times \cdots \times p}$ denote the adjacency tensor, where the entries encode the presence or absence of hyperdeges among $p$ nodes. Specifically, let $\tY(i_1,...,i_K) = 1$ if  $(i_1,...,i_K) \in E$, otherwise, $\tY(i_1,...,i_K) = 0$, for all $(i_1,\ldots,i_K) \in [p]^K$. The equation~\eqref{eq:model_tensor} models $\mathbb{E}\tY$ with degree heterogeneity and subgaussianity parameter $\sigma^2 = 1/4$. 
+\end{example}
 
 
 
@@ -339,6 +348,7 @@ This property benefits the interpretation of dTBM in practice.
 \section{THEORETICAL LIMITS }\label{sec:limits}
 
 In this section, we study the statistical and computational limits of dTBM. We propose signal-to-noise ratio~(SNR),
+\vspace{-.2cm}
 \begin{equation}\label{eq:gamma}
      \text{SNR}:= \Delta^2_{\min}/\sigma^2 = p^{\gamma}, 
 \end{equation}
@@ -383,8 +393,8 @@ The computational limit means the minimal SNR required for exactly recovery with
 Theorem~\ref{thm:comp} indicates the impossibility of exact recovery by polynomial-time algorithms when $\gamma < -K/2$.  Therefore, $\gamma_{\text{comp}}:=-K/2$ is the critical value for computational performance of dTBM.  In Section~\ref{sec:alg}, we will show the condition $\gamma> -K/2$ suffices for our proposed polynomial-time estimator. Thus, $\gamma_{\text{comp}}:=-K/2$ is the critical value for computational performance of dTBM.  
 
 \begin{rmk}[Statistical-computational gaps]
-Now, we have established the phase transition of exact clustering under order-$K$ dTBM by combing Theorems~\ref{thm:stats} and \ref{thm:comp}. Figure~\ref{fig:phase_axis} summarizes our results of critical SNRs when $K \geq 2$. 
-In the weak SNR region $\gamma < -(K-1)$, no statistical estimator succeeds in degree-corrected higher-order clustering. In the strong SNR region $\gamma  > -K/2$, our proposed algorithm precisely recovers the clustering in polynomial time. In the moderate SNR regime, $-(K-1)\leq \gamma \leq -K/2$, the degree-corrected clustering problem is statistically easy but computationally hard. 
+ Now, we have established the phase transition of exact clustering under order-$K$ dTBM by combing Theorems~\ref{thm:stats} and \ref{thm:comp}. Figure~\ref{fig:phase_axis} summarizes our results of critical SNRs when $K \geq 2$.
+% In the weak SNR region $\gamma < -(K-1)$, no statistical estimator succeeds in degree-corrected higher-order clustering. In the strong SNR region $\gamma  > -K/2$, our proposed algorithm precisely recovers the clustering in polynomial time. In the moderate SNR regime, $-(K-1)\leq \gamma \leq -K/2$, the degree-corrected clustering problem is statistically easy but computationally hard. 
 Particularly, dTBM reduces to matrix degree-corrected model when $K =2$, and the statistical and computational bounds show the same critical value. When $K =1$, dTBM reduces to the degree-corrected sub-Gaussian mixture model (GMM). 
 % with model
 % \begin{equation}
@@ -392,24 +402,26 @@ Particularly, dTBM reduces to matrix degree-corrected model when $K =2$, and the
 % \end{equation}
 % where $\mY \in \bbR^{p \times d}$ collects $n$ data points in $\bbR^d$, $\mS \in \bbR^{r \times d}$ collects the $d$-dimensional centroids for $r$ clusters, and $\mTheta \in \bbR^{p \times p}, \mM \in \{0,1\}^{p \times r}, \mE \in \bbR^{p \times d}$ have the same meaning as in dTBM. 
 \cite{lu2016statistical} implies that polynomial-time algorithms are able to achieve the statistical minimax lower bound in GMM. Hence, the statistical-to-computational gap emerges only for higher-order tensors with $K \geq 3$, which reveals the intrinsic distinctions among (vector) one-dimensional clustering, (matrix) biclustering, and (tensor) higher-order clustering. 
-%Besides, we find that the extra complexity from $\mtheta$ does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. 
+Besides, we find that the extra complexity from $\mtheta$ does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. 
 \end{rmk}
 
 
-\begin{rmk}[Comparison with non-degree models]
-We compare our results to non-degree tensor models. The allowance of degree heterogeneity $\mtheta$ makes the model more flexible, but it incurs extra statistical and computational complexity. Fortunately, we find that the extra complexity does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. 
-\end{rmk}
+% \begin{rmk}[Comparison with non-degree models]
+% We compare our results to non-degree tensor models. The allowance of degree heterogeneity $\mtheta$ makes the model more flexible, but it incurs extra statistical and computational complexity. Fortunately, we find that the extra complexity does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. 
+% \end{rmk}
 
 
 
 \section{ALGORITHM}\label{sec:alg}
-In this section, we present an efficient polynomial-time clustering algorithm under mild SNR. The procedure takes a global-to-local approach. See Figure~\ref{fig:demo} for illustration. The global step finds the basin of attraction with polynomial miclustering error, whereas the local iterations improve the initial clustering to exact recovery. Both steps are critical to obtain a satisfactory algorithm output. We use the symmetric tensor with i.i.d.\ sub-Gaussian noise to describe the algorithm and develop the theoretical guarantees. Extensions for asymmetric tensor and Bernoulli observation and practical issues are in Supplement~\ref{sec:exten}.
+In this section, we present an efficient polynomial-time clustering algorithm under mild SNR. The procedure takes a global-to-local approach. See Figure~\ref{fig:demo} for illustration. The global step finds the basin of attraction with polynomial miclustering error, whereas the local iterations improve the initial clustering to exact recovery. Both steps are critical to obtain a satisfactory algorithm output. %We use the symmetric tensor with i.i.d.\ sub-Gaussian noise to describe the algorithm and develop the theoretical guarantees. 
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=.9\columnwidth]{alg_demo.pdf}
+\includegraphics[width=.8\columnwidth]{alg_demo.pdf}
 \caption{ \small Illustration of our global-to-local algorithm.}\label{fig:demo}
 \end{figure}
+
+\vspace{-.3cm}
 
 \subsection{Initialization}
 
@@ -504,6 +516,7 @@ Note that, the assumption~\eqref{eq:degree} does not preclude degree heterogenei
 \end{equation}
 \end{thm}
 
+\vspace{-.3cm}
 \begin{rmk}[Comparison to previous results] For fixed SNR, our initialization error rate with $K=2$ agrees with the initialization error rate $\tO(p^{-1})$ in matrix models~\citep{gao2018community}. Furthermore, in the special case of non-degree TBMs with $\theta_1=\cdots=\theta_p=1$, we achieve the same initial misclustering error $\tO(p^{-K/2})$ as in non-degree models~\citep{han2020exact}. Theorem~\ref{thm:initial} implies the advantage of our algorithm in achieving both accuracy and model flexibility. 
 \end{rmk}
 
@@ -587,14 +600,12 @@ for some permutation $\pi \in \Pi$. Hence, our combined algorithm is \textit{com
 
 \section{NUMERICAL STUDIES}\label{sec:simulation}
 
- We evaluate the performance of our algorithm in this section. We report average errors and standard deviations across 30 replications in each experiment. Clustering accuracy is assessed by clustering error rate (CER, i.e., one minus rand index). Note that CER between $(\hat z, z)$ is equivalent to misclustering error $\ell(\hat z, z)$ up to constant multiplications~\citep{meilua2012local}, and lower CER indicates better performance.  Extra simulation results and real data analysis for human brain connectome data are in Supplement~\ref{sec:extra_exp}.
+ We evaluate the performance of our algorithm in this section. We report average errors and standard deviations across 30 replications in each experiment. Clustering accuracy is assessed by clustering error rate (CER, i.e., one minus rand index). Note that CER between $(\hat z, z)$ is equivalent to misclustering error $\ell(\hat z, z)$ up to constant multiplications~\citep{meilua2012local}, and lower CER indicates better performance. 
 
 We generate order-3 tensors with \emph{assortative}~\citep{gao2018community} core tensors to control SNR; i.e., we set $\tS_{aaa} = s_1$ for $a \in [r]$ and others be $s_2$, where $s_1 > s_2 > 0$. Let $\alpha = s_1/s_2$. We set $\alpha$ close to 1 such that $1-\alpha=o(p)$. In particular, we have $\alpha = 1 + \Omega(p^{\gamma/2})$ with $\gamma<0$ by Assumption~\ref{assmp:min_gap} and definition~\eqref{eq:gamma}. Hence, we easily adjust SNR via varying $\alpha$. The assortative setting is proposed for simulations, and our algorithm is applicable for general tensors in practice. The cluster assignment $z$ is randomly generated with equal probability across  $r$ clusters for each mode. Without further explanation, we generate degree heterogeneity $\mtheta$ from absolute normal distribution by $\theta(i) = |X_i| + 1 - 1/\sqrt{2\pi}$ with $|X_i| \stackrel{\text{i.i.d.}}\sim N(0,1), i \in [p]$ and normalize $\mtheta$ to satisfy \eqref{eq:family}. We set $\sigma^2 = 1$ for Gaussian data.
 
 \subsection{Verification of Theoretical Results}\label{subsec:num_theory}
 
-The first experiment verifies  statistical-computational gap described in Section~\ref{sec:limits}. Consider the Gaussian model with $p = \{80, 100\}$, $r = 5$. We vary $\gamma $ in $ [-1.2, -0.4]$ and $[-2.1, -1.4]$ for matrix ($K=2$) and tensor $(K = 3)$ clustering, respectively. Note that finding MLE under dTBM is computationally intractable. We approximate MLE using an oracle estimator, i.e., the output of Sub-algorithm~\hyperref[alg:main]{2} initialized from true assignment. Figure~\ref{fig:phase}a shows that both our algorithm and oracle estimator start to decrease around the critical value $\gamma_{\text{stat}}  = \gamma_{\text{comp}}  = -1$ in matrix case. In contrast, Figure~\ref{fig:phase}b shows a significant gap in the phase transitions between the algorithm estimator and oracle estimator in tensor case. The oracle error rapidly decreases to 0 when $\gamma_{\text{stat}} = -2$, whereas the algorithm estimator tends to achieve exact clustering when $\gamma_{\text{comp}} = -1.5$. Figure~\ref{fig:phase} confirms the existence of the statistical-computational gap in our Theorems~\ref{thm:stats} and~\ref{thm:comp}. 
-\vspace{-.2cm}
 \begin{figure}[htb]
     \centering
     \includegraphics[width=.95\columnwidth]{phase_anno.pdf}
@@ -604,14 +615,15 @@ The first experiment verifies  statistical-computational gap described in Sectio
     \vspace{-.5cm}
 \end{figure}
 
-\vspace{-.3cm}
-\begin{figure}[htp!]
+\begin{figure}[htb]
     \centering
      \includegraphics[width=.95\columnwidth]{ini_re_anno.pdf}
     \caption{ \footnotesize CER versus signal exponent $(\gamma)$ for initialization only and for combined algorithm. We set $p = \{80, 100\}, r = 5, \gamma \in [-2.1, -1.4]$ under (a) Gaussian models and (b) Bernoulli models. }
     \label{fig:ini_re}
-    \vspace{-.4cm}
+    \vspace{-.5cm}
 \end{figure}
+
+The first experiment verifies  statistical-computational gap described in Section~\ref{sec:limits}. Consider the Gaussian model with $p = \{80, 100\}$, $r = 5$. We vary $\gamma $ in $ [-1.2, -0.4]$ and $[-2.1, -1.4]$ for matrix ($K=2$) and tensor $(K = 3)$ clustering, respectively. Note that finding MLE under dTBM is computationally intractable. We approximate MLE using an oracle estimator, i.e., the output of Sub-algorithm~\hyperref[alg:main]{2} initialized from true assignment. Figure~\ref{fig:phase}a shows that both our algorithm and oracle estimator start to decrease around the critical value $\gamma_{\text{stat}}  = \gamma_{\text{comp}}  = -1$ in matrix case. In contrast, Figure~\ref{fig:phase}b shows a significant gap in the phase transitions between the algorithm estimator and oracle estimator in tensor case. The oracle error rapidly decreases to 0 when $\gamma_{\text{stat}} = -2$, whereas the algorithm estimator tends to achieve exact clustering when $\gamma_{\text{comp}} = -1.5$. Figure~\ref{fig:phase} confirms the existence of the statistical-computational gap in our Theorems~\ref{thm:stats} and~\ref{thm:comp}. 
 
 The second experiment verifies the performance guarantees of two algorithms: (i) weighted higher-order initialization; (ii) combined algorithm of weighted higher-order initialization and angle-based iteration. We consider both the Gaussian and Bernoulli models with $p = \{80, 100\}$, $r = 5$, $\gamma \in [-2.1, -1.4]$. Figure~\ref{fig:ini_re} shows the substantial improvement of combined algorithm over initialization, especially under weak and intermediate signals. This phenomenon agrees with the error rates in Theorems~\ref{thm:initial} and \ref{thm:refinement} 
 and confirms the necessity of the local iterations.
@@ -629,9 +641,14 @@ Compare our algorithm with methods below:
 
 Among the four alternative algorithms, the \textbf{\small SCORE} is the closest method to ours. We set the tuning parameters of \textbf{\small SCORE} as in previous literature \citep{ke2019community}. The methods \textbf{\small SCORE} and \textbf{\small HOSVD+} are designed for dTBM~\eqref{eq:model_tensor}, whereas \textbf{\small HOSVD} and \textbf{\small HLloyd} are designed for non-degree models serving as benchmarks. We conduct two experiments to assess the impacts of (i) signal strength and (ii) degree heterogeneity under Gaussian and Bernoulli models with $ p = 100, r = 5$. We call our algorithm as \textbf{\small dTBM} in the comparison. 
 
-We investigate the effects of signal to clustering performance by varying $\gamma \in [-1.5, -1.1]$. Figure~\ref{fig:comp_gamma} shows the consistent outperformance of our method \textbf{\small dTBM} among all algorithms. The sub-optimality of \textbf{\small SCORE} and \textbf{\small HOSVD+} indicates the necessity of local iterations on the clustering. Furthermore,  Figure~\ref{fig:comp_gamma} shows the inadequacy of non-degree algorithms in the presence of mild degree heterogeneity.  The only exception is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity; see Supplement~\ref{sec:extrasim}.
+We investigate the effects of signal to clustering performance by varying $\gamma \in [-1.5, -1.1]$. Figure~\ref{fig:comp_gamma} shows the consistent outperformance of our method \textbf{\small dTBM} among all algorithms. The sub-optimality of \textbf{\small SCORE} and \textbf{\small HOSVD+} indicates the necessity of local iterations on the clustering. Furthermore,  Figure~\ref{fig:comp_gamma} shows the inadequacy of non-degree algorithms in the presence of mild degree heterogeneity.  The only exception is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity; see Supplement~\ref{sec:extra_exp}.
 The experiment demonstrates the benefits of addressing heterogeneity in higher-order clustering tasks.   
-\begin{figure}[h!]
+
+% The only exception in Figure~\ref{fig:comp_gamma} is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity. 
+
+The last experiment investigates the effects of degree heterogeneity to clustering performance. We use the same setting as in the first experiment in the Section~\ref{subsec:comp}, except that we fix the signal exponent $\gamma = -1.2$ and generate the degree heterogeneity $\mtheta$ from Pareto distribution prior to normalization. The density function of Pareto distribution is $f(x|a,b) = a b^a x^{-(a+1)} \ind\{ x \geq b \}$, where $a$ is called \emph{shape} parameter. We vary the shape parameter $a \in [3,6]$ and choose $b$ such that $\bbE X = a(a - 1)^{-1}b = 1$ for $X$ following Pareto$(a,b)$. Note that a smaller $a$ leads to a larger variance in $\mtheta$ and hence a larger degree heterogeneity. Figure~\ref{fig:comp_theta} demonstrates the stability of degree-corrected algorithms (\textbf{\small dTBM}, \textbf{\small SCORE}, \textbf{\small HOSVD+}) over the entire range of degree heterogeneity under consideration. In contrast, non-degree algorithms (\textbf{\small HLloyd}, \textbf{\small HOSVD}) show poor performance with large heterogeneity, especially in Bernoulli cases. This experiment, again, highlights the benefit of addressing degree heterogeneity in clustering. 
+
+\begin{figure}[htb]
  \vspace{-.3cm}
     \centering
     \includegraphics[width=.95\columnwidth]{comp_gamma_anno2.pdf}
@@ -639,10 +656,8 @@ The experiment demonstrates the benefits of addressing heterogeneity in higher-o
     \label{fig:comp_gamma}
     \vspace{-.4cm}
 \end{figure}
-% The only exception in Figure~\ref{fig:comp_gamma} is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity. 
 
-The last experiment investigates the effects of degree heterogeneity to clustering performance. We use the same setting as in the first experiment in the Section~\ref{subsec:comp}, except that we fix the signal exponent $\gamma = -1.2$ and now generate the degree heterogeneity $\mtheta$ from Pareto distribution prior to normalization. The density function of Pareto distribution is $f(x|a,b) = a b^a x^{-(a+1)} \ind\{ x \geq b \}$, where $a$ is called \emph{shape} parameter. We vary the shape parameter $a \in [3,6]$ and choose $b$ such that $\bbE X = a(a - 1)^{-1}b = 1$ for $X$ following Pareto$(a,b)$. Note that a smaller $a$ leads to a larger variance in $\mtheta$ and hence a larger degree heterogeneity. Figure~\ref{fig:comp_theta} demonstrates the stability of degree-corrected algorithms (\textbf{\small dTBM}, \textbf{\small SCORE}, \textbf{\small HOSVD+}) over the entire range of degree heterogeneity under consideration. In contrast, non-degree algorithms (\textbf{\small HLloyd}, \textbf{\small HOSVD}) show poor performance with large heterogeneity, especially in Bernoulli cases. This experiment, again, highlights the benefit of addressing degree heterogeneity in higher-order clustering. 
-\begin{figure}[h!]
+\begin{figure}[htb]
 \vspace{-.2cm}
     \centering
     \includegraphics[width=.95\columnwidth]{comp_theta_anno2.pdf}
@@ -650,6 +665,7 @@ The last experiment investigates the effects of degree heterogeneity to clusteri
     \label{fig:comp_theta}
     \vspace{-.3cm}
 \end{figure}
+
 %\section{REAL DATA}\label{sec:real}
 
 \subsection{Peru Legislation Data Analysis}
@@ -671,7 +687,7 @@ We apply our method to the legislation networks in the Congress of the Republic 
          \hline
     \end{tabular}
     }
-    \vspace{-.2cm}
+    \vspace{-.3cm}
     \caption{ \footnotesize Clustering errors (measured by CER) for various methods in the analysis of Peru Legislation dataset.}
     \label{tab:peru}
 \end{table}
@@ -708,49 +724,6 @@ This research is supported in part by NSF grants DMS-1915978, DMS-2023239, EF-21
 %\twocolumn[ \makesupplementtitle ]
 
 \setlength{\footskip}{10pt}
-
-\section{MOTIVATED EXAMPLES}\label{sec:examples}
-
- Here, we provide four applications to illustrate the practical necessity of dTBM.
-
-\vspace{0.2cm}
-\paragraph{Tensor block model.} Consider the model~\eqref{eq:model_tensor}. Let $\theta(i)=1$ for all $ i \in [p]$. The model~\eqref{eq:model_tensor} reduces to the tensor block model, which is widely used in previous clustering algorithms~\citep{wang2019multiway,chi2020provable,han2020exact}. The theoretical results in TBM serve as benchmarks for dTBM.  
-
-\vspace{0.2cm}
-
-\paragraph{Community detection in hypergraphs.} Hypergraph network is a powerful tool to represent the complex entity relations with higher-order interactions~\citep{ke2019community}. A typical undirected hypergraph is denoted as $H = (V,E)$, where $V = [p]$ is the set of nodes and $E$ is the set of undirected hyperedges. Each hyperedge in $E$ is a subset of $V$, and we call the hyperedge an order-$K$ edge if the corresponding subset involves $K$ nodes. We call $H$ a $K$-uniform hypergraph if $E$ only contains order-$K$ edges. 
-
-It is natural to represent the $K$-uniform hypergraph using a binary order-$K$ adjacency tensor. Let $\tY \in \{0,1\}^{p \times \cdots \times p}$ denote the adjacency tensor, where the entries encode the presence or absence of order-$K$ edges among $p$ nodes. Specifically, for all $(i_1,\ldots,i_K) \in [p]^K$, we have
-\begin{equation}
-    \tY(i_1,...,i_K) =  \begin{cases}
-    1  & \text{if }  (i_1,...,i_K) \in E,\\
-    0 & \text{if }  (i_1,...,i_K) \notin E.
-    \end{cases}
-\end{equation}
-
-
-Assume there exist $r$ disjoint communities among $p$ nodes, and the connection probabilities depend on the community assignments and node-specific parameters. 
-Then, the equation~\eqref{eq:model_tensor} models $\bbE \tY$ with unknown degree heterogeneity $\mtheta$ and sub-Gaussianity parameter $\sigma^2 = 1/4$.  
-
-\vspace{0.2cm}
-\paragraph{Multi-layer weighted network.} 
-Multi-layer weighted network data consists of multiple networks over the same set of nodes. One representative example is the brain connectome data~\citep{zhang2019tensor}. The multi-layer weighted network $\tY$ has dimension of $p \times p \times L$, where $p$ denotes the number of brain regions of interest, and $L$ denotes the number of layers (networks). Each of the $L$ networks describes one aspect of the brain connectivity, such as functional connectivity or structural connectivity. The resulting tensor $\tY$ consists of a mixture of slices with various data types. 
-
-
-Assume there exist $r$ disjoint communities among $p$ nodes and $r_l$ disjoint communities among the $L$ layers. The multi-layer network community detection is modeled by the generalized asymmetric dTBM model~\eqref{eq:model_tensor}
-\begin{equation}
-    \bbE \tY = \tS \times_1 \mTheta \mM \times_2 \mTheta \mM \times_3 \mTheta_l \mM_l, 
-\end{equation}
-where $(\mtheta \in \bbR^p, \mM \in \{0,1\}^{p \times r})$ and $ (\mtheta_l \in \bbR^L, \mM_l \in \{0,1\}^{L \times r_l})$ are the degree heterogeneity and membership matrices corresponding to the community structure for $p$ nodes and $L$ layers, respectively. 
-\vspace{0.2cm}
-
-\paragraph{Gaussian higher-order clustering.} Datasets in various fields such as medical image, genetics, and computer science are formulated as Gaussian tensors. One typical example is the multi-tissue gene expression dataset, which records the different gene expression in different individuals and different tissues. The dataset, denoted as $\tY \in \bbR^{p \times n \times t}$, consists of the expression data for $p$ genes of $n$ individuals in $t$ tissues. 
-
-Assume there exist $r_1, r_2, r_3$ disjoint clusters for $p$ genes, $n$ individuals, and $t$ tissues, respectively. We apply the generalized asymmetric dTBM model~\eqref{eq:model_tensor} 
-\begin{equation}
-    \bbE\tY = \tS \times_1 \mTheta_1 \mM_1 \times_2 \mTheta_2 \mM_2 \times_3 \mTheta_3 \mM_3, 
-\end{equation}
-where $\{(\mtheta_k, \mM_k)\}_{k=1}^3$ represents the heterogeneity and membership for genes, individuals, and tissues. \\
 
 
 \section{PARAMETER SPACE}
@@ -795,7 +768,7 @@ where $\mTheta' = \text{diag}(\mtheta') = \text{diag}(1,1, 1, 1)$, the core tens
 
 Table~\ref{tab:para} indicates that our parameter space is flexible compared to existing work. The balanced community assumption is mild in literature. In fact, our simulation requires only the positive community size (i.e., $\min_{a \in [r]}|z^{-1}(a)| \geq 1$) but no balanced community assumptions; see Section~\ref{sec:simulation}. The outperformance of dTBM shows the robustness of our algorithm to the imbalanced communities.
 
-\begin{table}[h]
+\begin{table}[hbt]
     \centering
     \resizebox{\textwidth}{!}{
     \begin{tabular}{c|c ccc}
@@ -814,85 +787,8 @@ Table~\ref{tab:para} indicates that our parameter space is flexible compared to 
 \end{table}
 
 
-\section{EXTENSION AND PRACTICAL ISSUES}\label{sec:exten}
-
-Here, we provide the extension of our algorithm for Bernoulli observations and asymmetric tensors and other practical issues including computational complexity and hyper-parameter selection.
-
- {\bf Extension for Bernoulli Observations.} The main difficulty to establish the statistical guarantee for Bernoulli observations lies in the initialization Sub-algorithm~\hyperref[alg:main]{1}. Theorem~\ref{thm:refinement} still holds for Bernoulli observations once the initialization accuracy satisfies the upper bound~\eqref{eq:ini} in Theorem~\ref{thm:initial}.
-
-We now provide a high-level explanation for the technical difficulty when applying Theorem~\ref{thm:initial} to Bernoulli observations. The derivation of Theorem~\ref{thm:initial} relies on the upper bound of the estimation error for the mean tensor in Lemma~\ref{lem:two-step_esterror}; i.e., with high probability
-\begin{equation}\label{eq:prop1}
-    \onormSize{}{\hat \tX - \tX}_F^2 \lesssim p^{K/2},
-\end{equation}
-where $\tX = \bbE\tY$ and $\hat \tX$ is defined in Step 2 of Sub-algorithm~\hyperref[alg:main]{1}. Unfortunately, the inequality~\eqref{eq:prop1} holds only for i.i.d.\ sub-Gaussian observations while Bernoulli observations are generally not identically distributed.  
-
-One possible remedy is to apply singular value decomposition to the \emph{square unfolding}~\citep{mu2014square} of Bernoulli tensor $\tY$. Let the matrix $\mat_{sq} (\tY) \in \{0,1\}^{\floor{p^{K/2}} \times \ceil{p^{K/2}} }$ denote the nearly square unfolded Bernoulli tensor. Define a new estimate 
-\begin{equation}\label{eq:matrixsvd}
-    \hat \tX' = \argmin_{\text{rank}(\mat_{sq}(\tX)) \leq r^{\ceil{K/2}}} \onormSize{}{ \mat_{sq}(\tX) -  \mat_{sq}(\tY)}_F^2.
-\end{equation}
-The optimization~\eqref{eq:matrixsvd} is simply a matrix SVD problem. Following Lemma 7 in \cite{gao2018community}, with high probability, the new estimate satisfies
-\begin{equation}
-    \onormSize{}{\hat \tX' - \tX}_F^2 \lesssim p^{\ceil{K/2}}.
-\end{equation} 
-Replacing the estimate $\hat \tX$ by $\hat \tX'$ in Theorem~\ref{thm:initial}, the high probability upper bound for Bernoulli initialization is
-\begin{equation}\label{eq:ini_b}
-    \ell(z^{(0)}, z) \lesssim \frac{r^K p^{- \floor{K/2} }}{\text{SNR}}. 
-\end{equation}
-The Bernoulli bound~\eqref{eq:ini_b} is relatively looser than Gaussian bound~\eqref{eq:ini}, especially when $K$ is small. Nevertheless, our bound~\eqref{eq:ini_b} is already tighter than the pervious work~\citep{ke2019community}. The investigation of the gap between upper bound $p^{- \floor{K/2}}$ and the lower bound $p^{- K/2}$ for Bernoulli tensors will be left as future work. 
-
-
-{\bf Extension for General dTBMs.} Our two-stage algorithm is able to be extended for the general (asymmetric) dTBMs. Specifically, in the Sub-algorithm~\hyperref[alg:main]{1}, we make the following changes: (1)
-Replace the matrcization $\mat(\tY)$ by $\mat_k(\tY)$; (2) Repeat the Steps 1-5 with mode-specified cluster number $r_k$; (3) Obtain the collection initialization $ \{z^{(0)}_k\}_{k=1}^K$. In the Sub-algorithm~\hyperref[alg:main]{2}, we make the following changes: (1) Take the collection $\{z^{(0)}_k\}_{k=1}^K$ as input, and update the block tensor $\tS^{(t)}$ with the collection $\{ z_k^{(t)}\}_{k=1}^K$, $
-        \tS^{(t)}(a_1,\ldots, a_K) =  \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}_k(i_k) = a_k, k \in [K]\}$;
-(2) Calculate reduced tensor $\tY^{\text{d}}_k$ for each mode via
-\begin{align}
-    &\tY^{\text{d}}_k(a_1,\ldots,a_{k-1}, i ,a_{k+1},\ldots,a_K) 
-    = \text{Ave}\{\tY(i_1,\ldots,i_{k-1},i,i_{k+1},\ldots,i_K): z^{(t)}(i_j) = a_j, j \neq k \}; 
-\end{align}
-
-(3) Repeat Step 8-10 with $\mat_k(\cdot), \tY_k^{\text{d}}$ for each $k \in [K]$ and obtain the collection $\{z^{(T)}_k\}_{k=1}^K$. 
-
-Correspondingly, Theorems~\ref{thm:initial} and \ref{thm:refinement} still hold with $\ell(z^{(0)}_k, z_k)$ and $\ell(z^{(t+1)}_k, z_k)$  for all $k \in [K]$. The detailed model extension for general asymmetric dTBMS can be found in Appendix. 
-
-{\bf Computational Complexity.} Our two-stage algorithm has a computational cost polynomial in tensor dimension $p$. Specifically, the complexity of Sub-algorithm~\hyperref[alg:main]{1} is $\tO(K p^{K+1} + Krp^K)$, where the first term is contributed by the double projection and the calculation of $\hat \tX$, and the second term comes from normalization and the $k$-means. The cost of each update in Sub-algorithm~\hyperref[alg:main]{2} is $\tO(p^K + pr^K)$, where $p^K$ comes from the calculation of $\tS^{(t)}$ and $\tY^{\text{d}}$, and $pr^K$ comes from the normalization of $\tY^{\text{d}}$, the calculation of $\tS^{(t)}$, and the cluster assignment update in Step 10.
-
-{\bf Hyper-parameter Selection.} In our theoretical analysis, we have assumed the true cluster number $r$ is given to our algorithm. In practice, the cluster number $r$ is often unknown, and we now propose a method to choose $r$ from data. We impose the Bayesian information criterion (BIC) and choose the cluster number that minimizes BIC; i.e., under the symmetric Gaussian dTBM~\eqref{eq:model_tensor},
-\begin{align}\label{eq:BIC}
- \hat r &= \argmin_{r \in \mathbb{Z}_+ } \of{p^K \log(\onormSize{}{\hat \tX - \tY}_F^2)  + p_e(r) K \log p},\\
- \text{where}  \quad \hat \tX &= \hat \tS(r) \times_1 \hat \mTheta(r) \hat \mM(r) \times_2 \cdots \times_K \hat \mTheta(r) \hat \mM(r),
-\end{align}
-where the triplet $(\hat z(r), \hat \mS(r),\hat \mtheta(r))$ are estimated parameters with cluster number $r$, and $p_e (r)= r^K + p(\log r + 1) - r$ is the effective number of parameters. Note that we have added the argument $(r)$ to related quantities as functions of $r$. In particular, the estimate $\hat \mtheta(r)$ in~\eqref{eq:BIC} is obtained by first calculating the reduced tensor $\hat \tY^{\text{d}}$ with $\hat z(r)$, and then normalizing the row norms $\onormSize{}{\hat \mY_{i:}^{\text{d}}}$ to 1 in each cluster; i.e., 
-\begin{equation}
- \hat \mtheta(r)=(\hat \theta(1,r),\ldots,\hat \theta(p,r))^T,\quad\text{where}\quad   \hat \theta(i,r) = \frac{\onormSize{}{\hat \mY^{\text{d}}(r)_{i:}}}{\sum_{j: \hat z(j,r) =  \hat z(i,r)} \onormSize{}{\hat \mY^{\text{d}}(r)_{j:}}},
-\end{equation}
-where $\hat \mY^{\text{d}}(r) = \mat(\hat \tY^{\text{d}}(r))$, $\hat \tY^{\text{d}}(r)(i,a_2,\ldots,a_K) =  \text{Ave}\{\tY(i,i_2,\ldots,i_K): \hat z(i_k, r) = a_k, k \neq 1 \}$, and $\hat z(i,r)$ denotes the community label for the $i$-th node with given cluster number $r$. We evaluate the performance of the BIC criterion in Section~\ref{subsec:sim_select}.
-
-
 
 \section{ADDITIONAL EXPERIMENTS}\label{sec:extra_exp}
-
-Here, we provide the additional experiments including the numerical verification of hyper-parameter selection criterion, extra simulation results for comparison, and real data analysis for human brain connectome data.
-
-\subsection{Verification of Hyper-parameter Selection}\label{subsec:sim_select}
-
-This experiment evaluates the empirical performance of the BIC criterion to select unknown cluster number in Section~\ref{sec:exten}. We generate the data from an order-3 Gaussian model with $p = \{50,80\}$, $r = \{2,4\}$, and noise level $\sigma^2 \in \{ 0.25,1\}$. Table~\ref{tab:select} shows that our BIC criterion well chooses the true $r$ under most settings.  Note that the BIC slightly underestimates the true cluster number $(r = 4)$ with smaller dimension and higher noise $(p = 50, \sigma=1)$, and the accuracy immediately increases with larger dimension $p = 80$. The improvement follows from the fact that a larger dimension $p$ indicates a larger sample size in the tensor block model. Therefore, we conclude that BIC criterion is a reasonable way to tune the cluster number.
-
-\begin{table}[hbt]
-\centering
-    \begin{tabularx}{\columnwidth}{c *{8}{Y}}
-    \toprule
-    Settings & \multicolumn{2}{c}{\small  $p = 50, \sigma^2 = 0.25$} & \multicolumn{2}{c}{\small $p = 50, \sigma^2 = 1$} & \multicolumn{2}{c}{\small  $p = 80, \sigma^2 = 0.25$} & \multicolumn{2}{c}{\small  $p = 80, \sigma^2 = 1$}\\
-    \cmidrule(lr){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7} \cmidrule(l){8-9}
-         True cluster number $r$ &  \small 2 & \small 4 &  \small2  &  \small 4 &  \small2  & \small 4 &  \small 2 & \small 4  \\
-         \midrule
-         Estimated cluster number $\hat r$ &   \small 2(0)  &  \small 3.9(0.2)&  \small 2(0)    &   \small 3.1(0.5) &  \small 2(0)    &  \small 4(0)   &  \small 2(0)    &  \small 3.9(0.3)   \\
-     \bottomrule
-    \end{tabularx}
-    \caption{ \small Estimated cluster number given by BIC criterion under the low noise level $(\sigma^2 = 0.25)$ and high noise level $(\sigma^2 = 0.5)$ settings. Numbers in parentheses are standard deviations of $\hat r$ over 30 replications.}
-    \label{tab:select}
-\end{table}
-
-\subsection{Extra Simulation Results for Comparison}\label{sec:extrasim}
 
 We provide extra simulation results for the comparison with other higher-order clustering algorithms. We use the same setting as in the first experiment in the Section~\ref{subsec:comp}, except that we now generate the degree heterogeneity $\mtheta$ from Pareto distribution with shape parameter $a$ prior to normalization. We consider the Gaussian model under low $(a = 6)$ and high $(a = 2)$ degree heterogeneity. Figure~\ref{fig:comp_gamma_theta} shows that the errors for non-degree algorithms (\textbf{\small HLloyd}, \textbf{\small HOSVD}) increases with degree heterogeneity. In addition, the advantage of \textbf{\small HLloyd} over \textbf{\small HOSVD+} disappears with higher degree heterogeneity. This experiment supports the conclusion we obtained in Section~\ref{subsec:comp}. 
 
@@ -904,38 +800,6 @@ We provide extra simulation results for the comparison with other higher-order c
 \end{figure}
 
 
-
-\subsection{Human Brain Connectome Data Analysis}
-
-
-The Human Connectome Project (HCP) aims to construct the structural and functional neural connections in human brains~\citep{van2013wu}. We preprocess the original dataset following \cite{desikan2006automated} and partition the brain into 68 regions. The cleaned dataset includes brain networks for 136 individuals. Each brain network is represented by a 68-by-68 binary symmetric matrix, where the entry with value 1 indicates the presence of connection between node pairs, while the value 0 indicates the absence. We use $\tY \in \{0,1\}^{68 \times 68 \times 136}$ to denote the binary tensor. Individual attributes such as gender and sex are recorded.
-
-We apply our generalized algorithm to the HCP data with the numbers of clusters on three modes $r_1 = r_2 = 4$ and $r_3 = 3$. The selection of $r_1$ and $r_2$ follows the human brain anatomy and the symmetry in the brain network, and the $r_3$ is specified following previous analysis~\citep{hu2021generalized}. Because of the symmetry in the data, the estimated brain node clustering results are the same on the first and second modes. Figure~\ref{fig:cluster_brain} shows that brain connection exhibits a strong spatial separation structure. Specifically, the first cluster, named \emph{L.Hemis}, involves all the nodes in the left hemisphere. The nodes in the right hemisphere are further separated into three clusters led by the middle-part tissues in Temporal and Parietal lobes (\emph{R.Temporal}), the back-part tissues in Occipital lobe (\emph{R.Occipital}), and the front-part tissues in Frontal and Parietal lobes (\emph{R.Supra}). This clustering result is reasonable since the left and right hemispheres often play different roles in human brains. 
-
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width = 1\columnwidth]{brain_node_cluster.pdf}
-    \caption{ \small Illustration of brain node clustering results for HCP data with (a) top and (b) side views. }
-    \label{fig:cluster_brain}
-\end{figure}
-
-
-Figure~\ref{fig:ests} illustrates the estimated core tensor $\hat \tS$ with estimated clustering, and Figure~\ref{fig:brain_conn} visualizes the average brain connections and the connection enrichment in contrast to average networks in each group. In general, we find that the inner-hemisphere connection has stronger connection compared to inter-hemisphere connections (Figure~\ref{fig:ests}a). Also, the back and front parts (\emph{R.Occipital}, \emph{R.Supra}) are shown to have more interactions with temporal tissues than inner-cluster connections. In addition, the group 1 with 54\% females shows an enrichment on the inter-hemisphere connections (Figure~\ref{fig:ests}b), while group 4 with only 36\% females exhibits a reduction (Figure~\ref{fig:ests}d). This result agrees with previous findings in \cite{hu2021generalized}. The enrichment on the back-front connection is also recognized in group~3 (Figure~\ref{fig:ests}c). The interpretive patterns in our results demonstrate the usefulness of our clustering methods in the human brain connectome data application. 
- 
-\begin{figure*}[htb]
-    \centering
-    \includegraphics[width = 1\textwidth]{est_S_anno.pdf}
-    \caption{ \small Mode 3 slices of estimated core tensor $\hat \tS$. (a) Average estimated slice weighted by the group size; (b)-(d) Group-specified enrichment, i.e., the difference between each slice of $\hat \tS$ and the averaged slice. }
-    \label{fig:ests}
-\end{figure*}
-
-\begin{figure*}[htb]
-    \centering
-    \includegraphics[width = 1\textwidth]{brain_connection.pdf}
-    \caption{ \small Observed brain connections in the population and each group of individuals. (a) Average brain network; (b)-(d) Group-specified brain network enrichments in Groups 1-3. Red edges represent the positive enrichment and blue edges represent the negative enrichment.}
-    \label{fig:brain_conn}
-\end{figure*}
 
 \section{PROOFS}
 
