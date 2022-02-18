@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[paperheight=5.35in,paperwidth=7.1in,margin=0.05in]{geometry}
+
+\usepackage{setspace}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{fancybox}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs=true}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+
+\usepackage{natbib}
+\usepackage{xr}
+
+\input macros.tex
+\def\sign{\textup{sgn}}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+
+%\input macros.tex
+
+\def\@normalsize{\@setsize\normalsize{11pt}\xpt\@xpt}
+
+
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
+
+\newcommand\Algphase[1]{%
+\vspace*{-.7\baselineskip}\Statex\hspace*{\dimexpr-\algorithmicindent-2pt\relax}\rule{\textwidth}{0.4pt}%
+\Statex\hspace*{-\algorithmicindent}\textbf{#1}%
+\vspace*{-.7\baselineskip}\Statex\hspace*{\dimexpr-\algorithmicindent-2pt\relax}\rule{\textwidth}{0.4pt}%
+}
+\usepackage{caption}
+
+\begin{document}
+
+
+\begin{algorithm}[h]
+\caption*{\bf Algorithm: Multiway spherical clustering for degree-corrected tensor block model }
+\vspace{.15cm}
+\begin{algorithmic}[1]
+\Algphase{Sub-algorithm 1: Weighted higher-order initialization}
+\INPUT Observation $\tY \in \bbR^{p\times \cdots \times p}$, cluster number $r$, relaxation factor $\eta > 1$ in $k$-means clustering.
+\State Compute factor matrix $ \mU_{\text{pre}} = \text{SVD}_{r} (\text{Mat}(\tY))$ and the $(K-1)$-mode projection $
+\tX_{\text{pre}} = \tY \times_1   \mU_{\text{pre}} \mU_{\text{pre}}^T \times_2 \cdots \times_{K-1}  \mU_{\text{pre}} \mU_{\text{pre}}^T.$
+\State Compute factor matrix $\hat \mU = \text{SVD}_{r}(\text{Mat}(\tX_{\text{pre}}))$ and denoised tensor
+$\hat \tX = \tY \times_1 \hat \mU \hat \mU^T \times_2 \cdots \times_K \hat \mU \hat \mU^T.$
+\State {Let $\hat \mX = \text{Mat}(\hat \tX)$ and $S_0=\{i \in [p]: \onormSize{}{\hat \mX_{i:}} = 0\}$. Set $\hat z(i)$ randomly in $[r]$ for $i \in S_0$.}
+\State{For all $i\in S_0^c$, compute normalized rows
+$\hat \mX_{i:}^s :=\onormSize{}{\hat \mX_{i:}}^{-1} \hat \mX_{i:}.$
+}
+\State {Solve the clustering $\hat z\colon [p]\to[r]$ and centroids $ (\hat \mx_j)_{j\in[r_k]}$ using weighted $k$-means, such that}
+\begin{align}
+    &\sum_{i \in S_0^c }  \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{\hat \mX_{i:}^s - \hat \mx_{\hat z(i)} }^2 
+    \leq 
+    \eta \min_{\substack{\bar \mx_j, j\in[r], \bar z(i),i\in S_0^{c}}} \sum_{i \in S^c } \onormSize{}{\hat \mX_{i:}}^2 \onormSize{}{ \hat \mX_{i:}^s -   \bar \mx_{\bar z(i)}}^2.
+\end{align}
+\OUTPUT Initial clustering $z^{(0)} \leftarrow \hat z$.
+
+\Algphase{Sub-algorithm 2: Angle-based iteration}
+\INPUT Observation $\tY \in \bbR^{p \times \cdots \times p}$, initialization $z^{(0)} \colon [p]\to[r]$ from Sub-algorithm 1, iteration number $T$.
+\For {$t = 0$ to $T-1$}
+\State Update the block tensor $\tS^{(t)}$ via
+$\tS^{(t)} (a_1,...,a_K)= \text{Ave} \{\tY(i_1,\ldots,i_K): z^{(t)}(i_k) = a_k, k \in [K]\}.$
+\State Calculate reduced tensor $\tY^{\text{d}} \in \bbR^{p \times r \times \cdots \times r}$ via
+\begin{align}
+    &\tY^{\text{d}}(i,a_2,\ldots,a_K) 
+    = 
+\text{Ave}\{\tY(i,i_2,\ldots,i_K): z^{(t)}(i_k) = a_k, k \neq 1 \}.
+\end{align}
+
+\State Let $\mY^{\text{d}} = \text{Mat}(\tY^{\text{d}})$ and $J_0 = \{ i\in[p]: \onorm{\mY^{\text{d}}_{i:}} = 0\}$. Set $z^{(t+1)}(i)$ randomly in $[r]$ for $i \in J_0$.
+
+\State Let $\mS^{(t)} = \text{Mat}(\tS^{(t)})$. For all $i \in J_0^c$ update the cluster assignment by
+\begin{equation}
+    z(i)^{(t+1)} = \argmax_{a \in [r]} \cos \left( \mY^{\text{d}}_{i:},\ \mS^{(t)}_{a:} \right).
+\end{equation}
+
+\EndFor
+
+\OUTPUT Estimated clustering $z^{(T)}  \in [r]^{p}$.
+
+\end{algorithmic}
+\end{algorithm}
+
+%We refer to the combination of Algorithms~\ref{alg:initial}+ \ref{alg:refinement} as provable dTBM algorithm. 
+
+%\fixme{Miaoyan}{add discussion as in my JMLR binary tensor paper (stat-comp dominating terms)}
+
+
+
+
+\end{document}
