@@ -186,7 +186,7 @@ We consider the problem of multiway clustering in the presence of unknown degree
 Multiway arrays have been widely collected in various fields including social networks \citep{anandkumar2014tensor}, neuroscience \citep{wang2017bayesian}, and computer science \citep{koniusz2016sparse}. Tensors effectively represent the multiway data and serve as the foundation in higher-order data analysis. One data example is from multi-tissue multi-individual gene expression study~\citep{wang2019three,hore2016tensor}, where the data tensor consists of expression measurements indexed by (gene, individual, tissue) triplets. Another example is \emph{hypergraph} network~\citep{ghoshdastidar2017uniform,ghoshdastidar2017consistency,ahn2019community,ke2019community} in social science. A $K$-uniform hypergraph can be naturally represented as an order-$K$ tensor, where each entry indicates the presence of $K$-way hyperedge among nodes (a.k.a.\ entities). In both examples, identifying the similarity among tensor entities is important for scientific discovery. 
 
 
-We study the problem of multiway clustering based on a data tensor. The goal of multiway clustering is to identify a checkerboard structure from a noisy data tensor. Figure~\ref{fig:intro} illustrates the noisy tensor and the underlying checkerboard structures discovered by multiway clustering methods. In the hypergraph example, the multiway clustering aims to identify the underlying block partition of nodes based on their higher-order connectivities; therefore, we also refer to the clustering as \emph{higher-order clustering}. The most common model for higher-order clustering is called \emph{tensor block model} (TBM)~\citep{wang2019multiway}, which extends the usual matrix stochastic block model~\citep{abbe2017community} to tensors. Matrix analysis tools, however, are sub-optimal for higher-order clustering. Developing tensor tools for solving block models has received increased interest recently~\citep{ wang2019multiway,chi2020provable,han2020exact}. 
+We study the problem of multiway clustering based on a data tensor. The goal of multiway clustering is to identify a checkerboard structure from a noisy data tensor. Figure~\ref{fig:intro} illustrates the noisy tensor and the underlying checkerboard structures discovered by multiway clustering methods. In the hypergraph example, the multiway clustering aims to identify the underlying block partition of nodes based on their higher-order connectivities; therefore, we also refer to the clustering as \emph{higher-order clustering}. The most common model for higher-order clustering is called \emph{tensor block model} (TBM)~\citep{wang2019multiway}, which extends the usual matrix stochastic block model~\citep{abbe2017community} to tensors. {Matrix analysis tools, however, are sub-optimal for higher-order clustering.} Developing tensor tools for solving block models has received increased interest recently~\citep{ wang2019multiway,chi2020provable,han2020exact}. 
 
 
 Classical tensor block model suffers from drawbacks to model real world data in spite of the popularity. The key underlying assumption of block model is that all nodes in the same community are exchangeable; i.e., the nodes have no individual-specific parameters apart from the community-specific parameters. However, the exchangeability assumption is often non-realistic. Each node may contribute to the data variation by its own multiplicative effect. We call the unequal node-specific effects the \emph{degree heterogeneity}. Such degree heterogeneity appears commonly in social networks. Ignoring the degree heterogeneity may seriously mislead the clustering results. For example, regular block model fails to model the member affiliation in Karate Club network~\citep{bickel2009nonparametric} without addressing degree heterogeneity. 
@@ -202,7 +202,7 @@ The \emph{degree-corrected tensor block model} (dTBM) has been proposed recently
     \label{fig:intro}
 \end{figure}
 
-{\bf Our contributions.} The primary goal of this paper is to provide both statistical and computational guarantees for dTBM. Our main contributions are summarized below.
+{\bf Our Contributions.} The primary goal of this paper is to provide both statistical and computational guarantees for dTBM. Our main contributions are summarized below.
 \begin{itemize}[wide,topsep=-2pt,itemsep=2pt,parsep=4pt]
 
  \item We develop a general dTBM and establish the identifiability for the uniqueness of clustering using the notion of angle separability.
@@ -225,7 +225,7 @@ The last two contributions, to our best knowledge, are new to the literature of 
 
 \thispagestyle{empty}
 
-{\bf Related work.} 
+{\bf Related Work.} 
 Our work is closely related to but also distinct from several lines of existing research. Table~\ref{tab:comp} summarizes the most relevant models. 
     
     \textit{Block model.} Block models such as stochastic block model (SBM) and degree-corrected SBM have been widely used for matrix clustering problems. See the review paper~\citep{abbe2017community} and the references therein.
@@ -278,7 +278,7 @@ For a matrix $\mY$, we use $\mY_{i:}$ (respectively, $\mY_{:i}$) to denote the $
 
 \section{MODEL FORMULATION}\label{sec:model}
 
-\subsection{dTBM}
+\subsection{Degree-corrected Tensor Block Model}
 
 Suppose we have an order-$K$ data tensor $\tY \in \bbR^{p \times \cdots \times p}$. For ease of notation, we focus on symmetric tensors in this section. Assume there exist $r \geq 2$  disjoint communities among the $p$ nodes. We represent the community assignment by a function $z \colon [p]\mapsto[r]$, where $z(i) = a$ for $i$-th node that belongs to the $a$-th community. Then, $z^{-1}(a)=\{i\in[p]\colon z(i)=a\}$ denotes the set of nodes that belong to the $a$-th community, and $|z^{-1}(a)|$ denotes the number of nodes in the $a$-th community. Let $\mtheta=(\theta(1),\ldots,\theta(p))^T$ denote the degree heterogeneity for $p$ nodes. We consider the order-$K$ dTBM~\citep{ke2019community},
 \vspace{-0.2cm}
@@ -291,7 +291,7 @@ where $\tS \in \bbR^{r \times \cdots \times r}$ is an order-$K$ tensor collectin
 \begin{equation}\label{eq:model_tensor}
 \bbE\tY = \tS \times_1 \mTheta \mM \times_2 \cdots \times_K  \mTheta \mM,
 \end{equation}
-where $\mTheta = \text{diag}(\theta(1),...,\theta(p)) \in \bbR^{p \times p}$ is a diagonal matrix, $\mM \in \offf{0,1}^{p \times r}$ is the membership matrix associated with community assignment $z$ such that $\mM(i,j)=\ind\{z(i)=j\}$. By definition, each row of $\mM$ has one copy of 1's and 0's elsewhere. Note that the discrete nature of $\mM$ renders our model~\eqref{eq:model_tensor} more challenging than Tucker decomposition. We call a tensor $\tY$ an $r$-block tensor with degree $\mtheta$ if $\tY$ admits~\eqref{eq:model_tensor}. 
+where $\mTheta = \text{diag}(\theta(1),...,\theta(p)) \in \bbR^{p \times p}$ is a diagonal matrix, $\mM \in \offf{0,1}^{p \times r}$ is the membership matrix associated with community assignment $z$ such that $\mM(i,j)=\ind\{z(i)=j\}$. By definition, each row of $\mM$ has one copy of 1's and 0's elsewhere. Note that the discrete nature of $\mM$ renders our model~\eqref{eq:model_tensor} more challenging than Tucker decomposition. {We call a tensor $\tY$ an $r$-block tensor with degree $\mtheta$ if $\tY$ admits~\eqref{eq:model_tensor}. }
 %The goal of clustering is to estimate $z$ from a single noisy tensor $\tY$. 
 We are particularly interested in high-dimensional regime where $p$ grows whereas $r=\tO(1)$.   The extension to general asymmetrical dTBM is obtained via replacing $(\mM, \mTheta)$ in~\eqref{eq:model_tensor} by mode-specific parameters $(\mM_k, \mTheta_k)$ for every mode $k\in[K]$. Here, we give two special cases of dTBM.
 
@@ -301,7 +301,7 @@ Let $\theta(i)= 1$ for all $i \in [p]$ and $\tE$ be a noise tensor with i.i.d.\ 
 \end{example}
 
 \begin{example}[Binary dTBM]
-Consider a $K$-uniform hypergraph $H = (V,E)$, where $V = [p]$ collects the nodes with $r$ disjoint communities and $E$ collects all the $K$-way hyperedges. Let $\tY \in \{0,1\}^{p \times \cdots \times p}$ denote the adjacency tensor, where the entries encode the presence or absence of hyperdeges among $p$ nodes. Specifically, let $\tY(i_1,...,i_K) = 1$ if  $(i_1,...,i_K) \in E$, otherwise, $\tY(i_1,...,i_K) = 0$, for all $(i_1,\ldots,i_K) \in [p]^K$. The equation~\eqref{eq:model_tensor} models $\mathbb{E}\tY$ with degree heterogeneity and subgaussianity parameter $\sigma^2 = 1/4$. 
+Consider a $K$-uniform hypergraph $H = (V,E)$, where $V = [p]$ collects the nodes with $r$ disjoint communities and $E$ collects all the $K$-way hyperedges. Let $\tY \in \{0,1\}^{p \times \cdots \times p}$ denote the adjacency tensor, where the entries encode the presence or absence of hyperdeges among $p$ nodes. Specifically, let $\tY(i_1,...,i_K) = 1$ if  $(i_1,...,i_K) \in E$, otherwise, $\tY(i_1,...,i_K) = 0$, for all $(i_1,\ldots,i_K) \in [p]^K$. {The equation~\eqref{eq:model_tensor} models $\mathbb{E}\tY$ with degree heterogeneity and subgaussianity parameter $\sigma^2 = 1/4$. }
 \end{example}
 
 
@@ -315,15 +315,18 @@ Consider a $K$-uniform hypergraph $H = (V,E)$, where $V = [p]$ collects the node
 \subsection{Identifiability under Angle Gap}
 The goal of clustering is to estimate the partition function $z$ from model~\eqref{eq:model_tensor}. For ease of notation, we focus on symmetric tensors; the extension to non-symmetric tensors are similar. We use $\tP$ to denote the following parameter space for $(z,\tS,\mtheta)$,
 \footnotesize
+{
+\color{red}
 \begin{align}\label{eq:family}
 &\tP=\bigg\{(z,\tS,\mtheta)\colon  \mtheta\in\mathbb{R}^p_{+},\text{for }a\in[r], 
 {c_1p\over r}\leq |z^{-1}(a)|\leq {c_2 p\over r},\notag \\
 &c_3\leq \onormSize{}{\text{Mat}(\tS)_{a:}}\leq c_4,
 \onorm{\mtheta_{z^{-1}(a)}}_1=|z^{-1}(a)| \bigg\},
 \end{align}
+}
 \normalsize 
 where $c_i>0$'s are universal constants. We briefly describe the rationale of the constraints in~\eqref{eq:family}. 
-First, the entrywise positivity constraint on  $\mtheta\in\mathbb{R}^p_{+}$ is imposed to avoid sign ambiguity between entries in $\mtheta_{z^{-1}(a)}$ and $\tS$. This constraint allows the trigonometric $\cos$ to describe the angle similarity in the Assumption~\ref{assmp:min_gap} below and Sub-algorithm~\hyperref[alg:main]{2} in Section~\ref{sec:alg}. Note that the positivity constraint can be achieved without sacrificing model flexibility, by using a slightly larger dimension of $\tS$ in the factorization~\eqref{eq:model_tensor}; see Supplement~\ref{subsec:positive}. Second, recall that the quantity $|z^{-1}(a)|$ denotes the number of nodes in $a$-th community. The constants $c_1, c_2$ in the $|z^{-1}(a)|$ bound assume the roughly balanced size across $r$ communities. Third, the constants $c_3, c_4 $ in the magnitude of $\text{Mat}(\tS)_{a:}$ requires no purely zero slide in $\tS$, so the core tensor $\tS$ is not trivially reduced to a lower rank. Lastly, the $\ell_1$ normalization $\onormSize{}{\mtheta_{z^{-1}(a)}}_1=|z^{-1}(a)|$ is imposed to avoid the scalar ambiguity between $\mtheta_{z^{-1}(a)}$ and $\tS$. This constraint, again, incurs no restriction to model flexibility but makes our presentation cleaner. See Supplement~\ref{subsec:comp_para} for the parameter space comparison with previous works.
+First, the entrywise positivity constraint on  $\mtheta\in\mathbb{R}^p_{+}$ is imposed to avoid sign ambiguity between entries in $\mtheta_{z^{-1}(a)}$ and $\tS$. This constraint allows the trigonometric $\cos$ to describe the angle similarity in the Assumption~\ref{assmp:min_gap} below and Sub-algorithm~\hyperref[alg:main]{2} in Section~\ref{sec:alg}. Note that the positivity constraint can be achieved without sacrificing model flexibility, by using a slightly larger dimension of $\tS$ in the factorization~\eqref{eq:model_tensor}; {see Supplement~\ref{subsec:positive}}. Second, recall that the quantity $|z^{-1}(a)|$ denotes the number of nodes in $a$-th community. The constants $c_1, c_2$ in the $|z^{-1}(a)|$ bound assume the roughly balanced size across $r$ communities. Third, the constants $c_3, c_4 $ in the magnitude of $\text{Mat}(\tS)_{a:}$ requires no purely zero slide in $\tS$, so the core tensor $\tS$ is not trivially reduced to a lower rank. Lastly, the $\ell_1$ normalization $\onormSize{}{\mtheta_{z^{-1}(a)}}_1=|z^{-1}(a)|$ is imposed to avoid the scalar ambiguity between $\mtheta_{z^{-1}(a)}$ and $\tS$. This constraint, again, incurs no restriction to model flexibility but makes our presentation cleaner. See Supplement~\ref{subsec:comp_para} for the parameter space comparison with previous work \citep{gao2018community,han2020exact, ke2019community}.  
 
 
 
@@ -334,7 +337,7 @@ We now provide the identifiability conditions for our model before estimation pr
     \Delta_{\min} := \min_{a \neq b \in [r]} \onorm{\frac{\mS_{a:}}{\onormSize{}{ \mS_{a:}}} - \frac{\mS_{b:}}{\onormSize{}{ \mS_{b:}}} }>0.
 \end{equation}
 \end{assumption}
-We make the convention $\Delta_{\min} = 1$ for $r = 1$. Equivalently, \eqref{eq:minimal_gap} says that none of the two rows in $\mS$ are parallel; i.e., $\max_{a \neq b\in [r]}\cos \of{\mS_{a:},\  \mS_{b:}}  = 1-\Delta^2_{\min}/2<1$. The quantity $\Delta_{\min}$ characterizes the non-redundancy among clusters measured by angle separation. Denominators involved in definition~\eqref{eq:minimal_gap} are well posed because of the lower bound on $\onorm{\mS_{a:}}$ in~\eqref{eq:family}.  Following theorem shows that the angle separation is sufficient and necessary for the identifiability of dTBM. 
+We make the convention $\Delta_{\min} = 1$ for $r = 1$. Equivalently, \eqref{eq:minimal_gap} says that none of the two rows in $\mS$ are parallel; i.e., $\max_{a \neq b\in [r]}\cos \of{\mS_{a:},\  \mS_{b:}}  = 1-\Delta^2_{\min}/2<1$. The quantity $\Delta_{\min}$ characterizes the non-redundancy among clusters measured by angle separation. Denominators involved in definition~\eqref{eq:minimal_gap} are well posed because of the lower bound on $\onorm{\mS_{a:}}$ in~\eqref{eq:family}.  {The following theorem shows that the angle separation is sufficient and necessary for the identifiability of dTBM. }
 
 % Our first main result is the following theorem showing the sufficiency and necessarily of the angle gap separation condition for the parameter identifiability under dTBM. 
 
@@ -358,7 +361,7 @@ with varying $\gamma \in \bbR$ that quantifies different regimes of interest. We
     \tP(\gamma) = \tP\cap\{\tS \text{ satisfies SNR condition~\eqref{eq:gamma} with $\gamma$} \}.
 \end{equation}
 \normalsize
-The $1$-block dTBM does not belong to the space $\tP(\gamma)$ when $\gamma < 0$ by Assumption~\ref{assmp:min_gap}. Our goal is to characterize the clustering accuracy with respect to $\gamma$. Let $\hat z$ and $z$ be the estimated and true clustering functions in~\eqref{eq:family}. Define the misclustering error
+The $1$-block dTBM does not belong to the space $\tP(\gamma)$ when $\gamma < 0$ by Assumption~\ref{assmp:min_gap}. Our goal is to characterize the clustering accuracy with respect to $\gamma$. {Let $\hat z$ and $z$ be the estimated and true clustering functions in family~\eqref{eq:family}. Define the misclustering error by}
 \[
 \ell(\hat z, z)={1\over p}\min_{\pi \in \Pi}\sum_{i\in[p]}\ind\{\hat z(i)\neq \pi \circ z(i)\},
 \]
@@ -382,7 +385,7 @@ Theorem~\ref{thm:stats} demonstrates the impossibility of exact recovery of the 
 
 \subsection{Computational Critical Values}\label{sec:complimit}
 %In this section, we derive the computational limits of dTBMs. 
-The computational limit means the minimal SNR required for exactly recovery with \emph{polynomial-time} computational cost. An important ingredient to establish the computational limits is the \emph{hypergraphic planted clique (HPC) conjecture} \citep{zhang2018tensor, brennan2020reducibility}. The HPC conjecture indicates the impossibility of fully recovering the planted cliques with polynomial-time algorithm when the clique size is less than the number of vertices in the hypergraph. The formal statement of HPC detection conjecture is provided in Supplement~\ref{subsec:thm_comp}. Under the HPC conjecture, we establish the SNR lower bound that is necessary for any \emph{polynomial-time} estimator to achieve exact clustering.
+The computational limit means the minimal SNR required for exactly recovery with \emph{polynomial-time} computational cost. An important ingredient to establish the computational limits is the \emph{hypergraphic planted clique (HPC) conjecture} \citep{zhang2018tensor, brennan2020reducibility}. The HPC conjecture indicates the impossibility of fully recovering the planted cliques with polynomial-time algorithm when the clique size is less than the number of vertices in the hypergraph. {The formal statement of HPC detection conjecture is provided in Supplement~\ref{subsec:thm_comp}.} Under the HPC conjecture, we establish the SNR lower bound that is necessary for any \emph{polynomial-time} estimator to achieve exact clustering.
 
 \begin{thm}[Computational lower bound]\label{thm:comp} Consider general Gaussian dTBMs under the parameter space $\tP(\gamma)$ with $K\geq 2$. Assume HPC conjecture holds. If the signal exponent $\gamma < -K/2$, then, every \emph{polynomial-time estimator} $\hat z_{\text{comp}}$ obeys
 \begin{equation}
@@ -395,14 +398,14 @@ Theorem~\ref{thm:comp} indicates the impossibility of exact recovery by polynomi
 \begin{rmk}[Statistical-computational gaps]
  Now, we have established the phase transition of exact clustering under order-$K$ dTBM by combing Theorems~\ref{thm:stats} and \ref{thm:comp}. Figure~\ref{fig:phase_axis} summarizes our results of critical SNRs when $K \geq 2$.
 % In the weak SNR region $\gamma < -(K-1)$, no statistical estimator succeeds in degree-corrected higher-order clustering. In the strong SNR region $\gamma  > -K/2$, our proposed algorithm precisely recovers the clustering in polynomial time. In the moderate SNR regime, $-(K-1)\leq \gamma \leq -K/2$, the degree-corrected clustering problem is statistically easy but computationally hard. 
-Particularly, dTBM reduces to matrix degree-corrected model when $K =2$, and the statistical and computational bounds show the same critical value. When $K =1$, dTBM reduces to the degree-corrected sub-Gaussian mixture model (GMM). 
+Particularly, dTBM reduces to matrix degree-corrected model when $K =2$, and the statistical and computational bounds show the same critical value. {When $K =1$, dTBM reduces to the degree-corrected sub-Gaussian mixture model (GMM). Earlier work~\citep{lu2016statistical} implies that polynomial-time algorithms are able to achieve the statistical minimax lower bound in GMM.} 
 % with model
 % \begin{equation}
 %     \mY = \mTheta \mM \mS + \mE,
 % \end{equation}
 % where $\mY \in \bbR^{p \times d}$ collects $n$ data points in $\bbR^d$, $\mS \in \bbR^{r \times d}$ collects the $d$-dimensional centroids for $r$ clusters, and $\mTheta \in \bbR^{p \times p}, \mM \in \{0,1\}^{p \times r}, \mE \in \bbR^{p \times d}$ have the same meaning as in dTBM. 
-\cite{lu2016statistical} implies that polynomial-time algorithms are able to achieve the statistical minimax lower bound in GMM. Hence, the statistical-to-computational gap emerges only for higher-order tensors with $K \geq 3$, which reveals the intrinsic distinctions among (vector) one-dimensional clustering, (matrix) biclustering, and (tensor) higher-order clustering. 
-Besides, we find that the extra complexity from $\mtheta$ does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. 
+ Hence, the statistical-to-computational gap emerges only for higher-order tensors with $K \geq 3$, which reveals the intrinsic distinctions among (vector) one-dimensional clustering, (matrix) biclustering, and (tensor) higher-order clustering. 
+ {We also find that the extra complexity from $\mtheta$ does not render the estimation of $z$ qualitatively harder; see comparison of our phase transition with non-degree TBM~\citep{han2020exact}. }
 \end{rmk}
 
 
@@ -425,7 +428,7 @@ In this section, we present an efficient polynomial-time clustering algorithm un
 
 \subsection{Initialization}
 
-We start with weighted higher-order clustering algorithm as initialization. We take an order-3 symmetric tensor as illustration for insight. Consider noiseless case with $\tX = \bbE\tY$ and $\mX = \text{Mat}(\tX)$. 
+We start with weighted higher-order clustering algorithm as initialization. {We take an order-3 symmetric tensor as illustration for insight.} Consider noiseless case with $\tX = \bbE\tY$ and $\mX = \text{Mat}(\tX)$. 
 By model~\eqref{eq:model_tensor}, for all $i \in [p]$, we have
 \begin{equation}\label{eq:kmeans}
     \theta(i)^{-1} \mX_{i:} = \off{\text{Mat}( \tS \times_2 \mTheta \mM \times_3  \mTheta \mM )}_{z(i):}. 
@@ -504,7 +507,7 @@ Full procedures are provided in Sub-algorithm~\hyperref[alg:main]{1}.
 % \end{algorithmic}
 % \end{algorithm}
 
-We now establish the misclustering error rate of initialization. We call $\mtheta$ is balanced if the relative extent of heterogeneity is comparable across clusters
+We now establish the misclustering error rate of initialization. {We call $\mtheta$ is balanced if the relative extent of heterogeneity is comparable across clusters in that}
 \begin{equation}\label{eq:degree}
 {\min_{a\in[r]} \onormSize{}{\mtheta_{z^{-1}(a)}}=\left(1+o(1)\right)\max_{a\in[r]}\onormSize{}{\mtheta_{z^{-1}(a)}}}.
 \end{equation}
@@ -537,7 +540,7 @@ To gain the intuition, consider an one-dimensional degree-corrected clustering p
  \begin{equation}\label{eq:angle_kmeans}
      z(i) = \argmax_{a \in [r]} \cos ( \mx_i,\ \ms_{a} ),\ \text{ for all }i \in [p].
  \end{equation}
-Classical Euclidean-distance based clustering~\citep{han2020exact} fails to recover $z$ in the presence of degree heterogeneity, even under noiseless case. In contrast, the angle-based $k$-means achieves accurate recovery without explicit estimation of $\mtheta$.   Our Sub-algorithm~\hyperref[alg:main]{2} shares the same spirit as angle-based $k$-means, except that we use estimated centroids $\ms^{(t)}_a$ in place of $\ms_a$ based on estimated assignment in previous iterations. 
+{The classical Euclidean-distance based clustering~\citep{han2020exact} fails to recover $z$ in the presence of degree heterogeneity, even under noiseless case. In contrast, the angle-based $k$-means clustering achieves accurate recovery without explicit estimation of $\mtheta$.   }Our Sub-algorithm~\hyperref[alg:main]{2} shares the same spirit as angle-based $k$-means, except that we use estimated centroids $\ms^{(t)}_a$ in place of $\ms_a$ based on estimated assignment in previous iterations. 
 % Our Sub-algorithm~\hyperref[alg:main]{2} shares the same spirit as in angle-based $k$-means. We still take the order-3 tensor for illustration. Specifically, Sub-algorithm~\hyperref[alg:main]{2} updates estimated core tensor and cluster assignment in each iteration. We use superscript $\cdot^{(t)}$ to denote the estimate from $t$-th iteration, where $t=1,\ldots.$ For core tensor, we consider the following update strategy 
 % \small
 % \begin{equation}
@@ -553,7 +556,8 @@ Classical Euclidean-distance based clustering~\citep{han2020exact} fails to reco
 % z(i)^{(t+1)} = \argmax_{a \in [r]} \cos \of{ \mY^{\text{d}}_{i:}, \mS^{(t)}_{a:} },\ \text{ for all } i \in [p],
 % \]
 % provided that $\mS^{(t)}_{a:}$ is a non-zero vector. Otherwise, if $\mS^{(t)}_{a:}$ is a zero vector, then we make the convention to assign $z^{(t+1)}(i)$ randomly in $[p]$. 
-See Sub-algorithm~\hyperref[alg:main]{2} for full procedures.
+{See Sub-algorithm~\hyperref[alg:main]{2} for full procedures.
+}
 
 We now establish the misclustering error rate of iterations under the stability assumption.
 
@@ -585,7 +589,7 @@ $r=\tO(1)$ and $\text{SNR} \geq \tilde C p^{-K/2}\log p$ for some sufficiently l
    \text{SNR}^{-1}
     \exp\of{- \frac{p^{K-1}\text{SNR}}{r^{K-1}}}}_{\substack{\text{statistical error}} }+ \KeepStyleUnderBrace{ \rho^t \ell(z, z^{(0)}). }_{\substack{\text{computational}\\ \text{error}}}
 \end{equation}
-\vspace{-.4cm}
+\vspace{-.5cm}
 }
 \end{thm}
 The iteration error is decomposed into two parts: statistical error and computational error. The statistical error is unavoidable with noisy data regardless $t$, whereas the computational error decays in an exponential rate as the number of iterations $t \rightarrow \infty$. Theorem~\ref{thm:refinement} implies that, with probability going to 1, our estimate $z^{(T)}$ achieves exact recovery within polynomial iterations; more precisely,
@@ -593,6 +597,7 @@ The iteration error is decomposed into two parts: statistical error and computat
 \begin{equation}
      z^{(T)} = \pi \circ z, \quad \text{for all }T\gtrsim \log_{1/\rho} p,
 \end{equation}
+\vspace{-.1cm}
 for some permutation $\pi \in \Pi$. Hence, our combined algorithm is \textit{computationally efficient} as long as SNR $\gtrsim p^{-K/2} \log p$. Note that, ignoring the logarithmic term, the minimal SNR requirement, $p^{-K/2}$, coincides with the computational lower bound in Theorem~\ref{thm:comp}. Therefore, our algorithm is optimal regarding the signal requirement and lies in the sharpest \emph{computationally efficient} regime in Figure~\ref{fig:phase_axis}.
 
 \thispagestyle{empty}
@@ -600,15 +605,16 @@ for some permutation $\pi \in \Pi$. Hence, our combined algorithm is \textit{com
 
 \section{NUMERICAL STUDIES}\label{sec:simulation}
 
- We evaluate the performance of our algorithm in this section. We report average errors and standard deviations across 30 replications in each experiment. Clustering accuracy is assessed by clustering error rate (CER, i.e., one minus rand index). Note that CER between $(\hat z, z)$ is equivalent to misclustering error $\ell(\hat z, z)$ up to constant multiplications~\citep{meilua2012local}, and lower CER indicates better performance. 
+ We evaluate the performance of our algorithm\footnote{The R package and data used are available at \texttt{https://cran.r-project.org/package=dTBM}. } in this section. We report average errors and standard deviations across 30 replications in each experiment. Clustering accuracy is assessed by clustering error rate (CER, i.e., one minus rand index). Note that CER between $(\hat z, z)$ is equivalent to misclustering error $\ell(\hat z, z)$ up to constant multiplications~\citep{meilua2012local}, {and lower CERs indicate better performances.}
 
-We generate order-3 tensors with \emph{assortative}~\citep{gao2018community} core tensors to control SNR; i.e., we set $\tS_{aaa} = s_1$ for $a \in [r]$ and others be $s_2$, where $s_1 > s_2 > 0$. Let $\alpha = s_1/s_2$. We set $\alpha$ close to 1 such that $1-\alpha=o(p)$. In particular, we have $\alpha = 1 + \Omega(p^{\gamma/2})$ with $\gamma<0$ by Assumption~\ref{assmp:min_gap} and definition~\eqref{eq:gamma}. Hence, we easily adjust SNR via varying $\alpha$. The assortative setting is proposed for simulations, and our algorithm is applicable for general tensors in practice. The cluster assignment $z$ is randomly generated with equal probability across  $r$ clusters for each mode. Without further explanation, we generate degree heterogeneity $\mtheta$ from absolute normal distribution by $\theta(i) = |X_i| + 1 - 1/\sqrt{2\pi}$ with $|X_i| \stackrel{\text{i.i.d.}}\sim N(0,1), i \in [p]$ and normalize $\mtheta$ to satisfy \eqref{eq:family}. We set $\sigma^2 = 1$ for Gaussian data.
+We generate order-3 tensors with \emph{assortative}~\citep{gao2018community} core tensors to control SNR; i.e., we set $\tS_{aaa} = s_1$ for $a \in [r]$ and others be $s_2$, where $s_1 > s_2 > 0$. Let $\alpha = s_1/s_2$. We set $\alpha$ close to 1 such that $1-\alpha=o(p)$. In particular, we have $\alpha = 1 + \Omega(p^{\gamma/2})$ with $\gamma<0$ by Assumption~\ref{assmp:min_gap} and definition~\eqref{eq:gamma}. Hence, we easily adjust SNR via varying $\alpha$. {The assortative setting is proposed for simulations, and our algorithm is applicable for general tensors in practice.} The cluster assignment $z$ is randomly generated with equal probability across  $r$ clusters for each mode. Without further explanation, we generate degree heterogeneity $\mtheta$ from absolute normal distribution by $\theta(i) = |X_i| + 1 - 1/\sqrt{2\pi}$ with $|X_i| \stackrel{\text{i.i.d.}}\sim N(0,1), i \in [p]$ and normalize $\mtheta$ to satisfy \eqref{eq:family}. We set $\sigma^2 = 1$ for Gaussian data.
 
 \subsection{Verification of Theoretical Results}\label{subsec:num_theory}
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=.95\columnwidth]{phase_anno.pdf}
+    \vspace{-.2cm}
     \caption{ \footnotesize SNR phase transitions for clustering in dTBM with $p = \{80, 100\}, r = 5$ under (a) matrix case with $\gamma \in [-1.2, -0.4]$ and (b) tensor case with $ \gamma \in [-2.1, -1.4]$.
     }
     \label{fig:phase}
@@ -618,6 +624,7 @@ We generate order-3 tensors with \emph{assortative}~\citep{gao2018community} cor
 \begin{figure}[htb]
     \centering
      \includegraphics[width=.95\columnwidth]{ini_re_anno.pdf}
+     \vspace{-.2cm}
     \caption{ \footnotesize CER versus signal exponent $(\gamma)$ for initialization only and for combined algorithm. We set $p = \{80, 100\}, r = 5, \gamma \in [-2.1, -1.4]$ under (a) Gaussian models and (b) Bernoulli models. }
     \label{fig:ini_re}
     \vspace{-.5cm}
@@ -631,7 +638,7 @@ and confirms the necessity of the local iterations.
 
 
 \subsection{Comparison with Other Methods}\label{subsec:comp}
-Compare our algorithm with methods below:
+{We compare our algorithm with higher-order clustering methods below:}
 \begin{itemize}[wide,topsep=-3pt,itemsep=0pt,parsep=1pt]
     \item \textbf{\small HOSVD}: HOSVD on data tensor and $k$-means on the rows of the factor matrix;
     \item \textbf{\small HOSVD+}: HOSVD on data tensor and $k$-means on the $\ell_2$-normalized rows of the factor matrix;
@@ -639,14 +646,14 @@ Compare our algorithm with methods below:
     \item \textbf{\small SCORE}~\citep{ke2019community}: Tensor-SCORE for clustering developed for binary tensors.
 \end{itemize}
 
-Among the four alternative algorithms, the \textbf{\small SCORE} is the closest method to ours. We set the tuning parameters of \textbf{\small SCORE} as in previous literature \citep{ke2019community}. The methods \textbf{\small SCORE} and \textbf{\small HOSVD+} are designed for dTBM~\eqref{eq:model_tensor}, whereas \textbf{\small HOSVD} and \textbf{\small HLloyd} are designed for non-degree models serving as benchmarks. We conduct two experiments to assess the impacts of (i) signal strength and (ii) degree heterogeneity under Gaussian and Bernoulli models with $ p = 100, r = 5$. We call our algorithm as \textbf{\small dTBM} in the comparison. 
+Among the four alternative algorithms, the \textbf{\small SCORE} is the closest method to ours. We set the tuning parameters of \textbf{\small SCORE} as in previous literature \citep{ke2019community}. {The methods \textbf{\small SCORE} and \textbf{\small HOSVD+} are designed for dTBM~\eqref{eq:model_tensor}, whereas \textbf{\small HOSVD} and \textbf{\small HLloyd} are designed for non-degree models. We conduct two experiments to assess the impacts of (i) signal strength and (ii) degree heterogeneity under Gaussian and Bernoulli models with $ p = 100, r = 5$.} {We call our algorithm as \textbf{\small dTBM} in comparison.}  
 
-We investigate the effects of signal to clustering performance by varying $\gamma \in [-1.5, -1.1]$. Figure~\ref{fig:comp_gamma} shows the consistent outperformance of our method \textbf{\small dTBM} among all algorithms. The sub-optimality of \textbf{\small SCORE} and \textbf{\small HOSVD+} indicates the necessity of local iterations on the clustering. Furthermore,  Figure~\ref{fig:comp_gamma} shows the inadequacy of non-degree algorithms in the presence of mild degree heterogeneity.  The only exception is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity; see Supplement~\ref{sec:extra_exp}.
+We investigate the effects of signal to clustering performance by varying $\gamma \in [-1.5, -1.1]$. Figure~\ref{fig:comp_gamma} shows the consistent outperformance of our method \textbf{\small dTBM} among all algorithms. The sub-optimality of \textbf{\small SCORE} and \textbf{\small HOSVD+} indicates the necessity of local iterations on the clustering. Furthermore,  Figure~\ref{fig:comp_gamma} shows the inadequacy of non-degree algorithms in the presence of mild degree heterogeneity.  The only exception is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. {However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity; see Supplement~\ref{sec:extra_exp}.}
 The experiment demonstrates the benefits of addressing heterogeneity in higher-order clustering tasks.   
 
 % The only exception in Figure~\ref{fig:comp_gamma} is the slightly better performance of \textbf{\small HLloyd} over \textbf{\small HOSVD+} under Gaussian model. However, we find the advantage of \textbf{\small HLloyd} disappears with higher degree heterogeneity. 
 
-The last experiment investigates the effects of degree heterogeneity to clustering performance. We use the same setting as in the first experiment in the Section~\ref{subsec:comp}, except that we fix the signal exponent $\gamma = -1.2$ and generate the degree heterogeneity $\mtheta$ from Pareto distribution prior to normalization. The density function of Pareto distribution is $f(x|a,b) = a b^a x^{-(a+1)} \ind\{ x \geq b \}$, where $a$ is called \emph{shape} parameter. We vary the shape parameter $a \in [3,6]$ and choose $b$ such that $\bbE X = a(a - 1)^{-1}b = 1$ for $X$ following Pareto$(a,b)$. Note that a smaller $a$ leads to a larger variance in $\mtheta$ and hence a larger degree heterogeneity. Figure~\ref{fig:comp_theta} demonstrates the stability of degree-corrected algorithms (\textbf{\small dTBM}, \textbf{\small SCORE}, \textbf{\small HOSVD+}) over the entire range of degree heterogeneity under consideration. In contrast, non-degree algorithms (\textbf{\small HLloyd}, \textbf{\small HOSVD}) show poor performance with large heterogeneity, especially in Bernoulli cases. This experiment, again, highlights the benefit of addressing degree heterogeneity in clustering. 
+The last experiment investigates the effects of degree heterogeneity to clustering performance. We use the same setting as in the first experiment in the Section~\ref{subsec:comp}, except that we fix the signal exponent $\gamma = -1.2$ and generate the degree heterogeneity $\mtheta$ from Pareto distribution prior to normalization. The density function of Pareto distribution is $f(x|a,b) = a b^a x^{-(a+1)} \ind\{ x \geq b \}$, where $a$ is called \emph{shape} parameter. We vary the shape parameter $a \in [3,6]$ and choose $b$ such that $\bbE X = a(a - 1)^{-1}b = 1$ for $X$ following Pareto$(a,b)$. Note that a smaller $a$ leads to a larger variance in $\mtheta$ and hence a larger degree heterogeneity. Figure~\ref{fig:comp_theta} demonstrates the stability of degree-corrected algorithms (\textbf{\small dTBM}, \textbf{\small SCORE}, \textbf{\small HOSVD+}) over the entire range of degree heterogeneity under consideration. In contrast, non-degree algorithms (\textbf{\small HLloyd}, \textbf{\small HOSVD}) show poor performance with large heterogeneity, especially in Bernoulli cases. {This experiment, again, highlights the benefit of addressing degree heterogeneity in clustering. }
 
 \begin{figure}[htb]
  \vspace{-.3cm}
@@ -670,9 +677,9 @@ The last experiment investigates the effects of degree heterogeneity to clusteri
 
 \subsection{Peru Legislation Data Analysis}
 
-We apply our method to the legislation networks in the Congress of the Republic of Peru \citep{lee2017time}. Because of the frequent political power shifts in the Peruvian Congress during 2006-2011, we choose to focus on the data for the first half of 2006-2007 year. The dataset records the co-sponsorship of 116 legislators from top 5 parties and 802 bill proposals. We reconstruct legislation network as an order-3 binary tensor $\tY \in \{0,1\}^{116 \times 116 \times 116}$, where $\tY_{ijk} = 1$ if the legislators $(i,j,k)$ have sponsored the same bill, and $\tY_{ijk} = 0$ otherwise. True party affiliations of legislators are provided and serve as the ground truth. We apply various higher-order clustering methods to $\tY$ with $r = 5$. Table~\ref{tab:peru} shows that our \textbf{\small dTBM} achieves the best performance compared to others. The second best method is the two-stage algorithm \textbf{\small HLloyd}, followed by the spectral methods \textbf{\small SCORE} and \textbf{\small HOSVD+}, which consists with simulations under strong signal and moderate degree heterogeneity. 
+We apply our method to the legislation networks in the Congress of the Republic of Peru \citep{lee2017time}. Because of the frequent political power shifts in the Peruvian Congress during 2006-2011, we choose to focus on the data for the first half of 2006-2007 year. The dataset records the co-sponsorship of 116 legislators from top 5 parties and 802 bill proposals. We reconstruct legislation network as an order-3 binary tensor $\tY \in \{0,1\}^{116 \times 116 \times 116}$, where $\tY_{ijk} = 1$ if the legislators $(i,j,k)$ have sponsored the same bill, and $\tY_{ijk} = 0$ otherwise. {True party affiliations of legislators are provided and serve as the ground truth.} We apply various higher-order clustering methods to $\tY$ with $r = 5$. Table~\ref{tab:peru} shows that our \textbf{\small dTBM} achieves the best performance compared to others. {The second best method is the two-stage algorithm \textbf{\small HLloyd}, followed by the spectral methods \textbf{\small SCORE} and \textbf{\small HOSVD+}. The result is consistent with simulations under moderate heterogeneity. }
 %The comparison suggests that our method \textbf{\small dTBM} is more appealing in real-world applications.
-\vspace{-.5cm}
+\vspace{-.1cm}
 \begin{table}[ht]
     \centering
     \resizebox{\columnwidth}{!}{%
@@ -764,7 +771,7 @@ where $\mTheta' = \text{diag}(\mtheta') = \text{diag}(1,1, 1, 1)$, the core tens
 \end{equation}
  The triplet $(z',\tS', \mtheta')$ lies in our parameter space~\eqref{eq:family}. In general, we can always reparameterize a block-$r$ tensor with mixed-signed degree using a block-$2r$ tensor with positive-signed degree. Since we assume $r=\tO(1)$ throughout the paper, the splitting does not affect the error rates of our interest.
  
- \subsection{Parameter Space Comparison with Previous Works}\label{subsec:comp_para}
+ \subsection{Parameter Space Comparison with Previous Work}\label{subsec:comp_para}
 
 Table~\ref{tab:para} indicates that our parameter space is flexible compared to existing work. The balanced community assumption is mild in literature. In fact, our simulation requires only the positive community size (i.e., $\min_{a \in [r]}|z^{-1}(a)| \geq 1$) but no balanced community assumptions; see Section~\ref{sec:simulation}. The outperformance of dTBM shows the robustness of our algorithm to the imbalanced communities.
 
