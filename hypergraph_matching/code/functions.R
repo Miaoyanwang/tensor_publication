@@ -8,7 +8,7 @@ library(gtools) # permute
 library(combinat) # permn
 library(MASS) # mvrnorm
 #library(LaplacesDemon) # KLD
-library(seewave) # kl.dist
+#library(seewave) # kl.dist
 
 source("bricks.R")
 
@@ -44,15 +44,23 @@ tensor_matching_unseed = function(A,B, p, test = FALSE){
     S = HungarianSolver(d_collect)$pairs
     return(S)
   }
-  
 }
 
 ###### seeded matching ######
 
-tensor_matching_seed = function(A,B,p,xi,zeta){
-  
-  # zeta = 20
-  # xi = 1.5
+# d = 50
+# rho = 0.97
+# p = 1
+# test = sim_corr_tensor(seed = 6, d, rho)
+# A = dat$A
+# B = dat$B
+# p = 1
+# # 
+#xi = 2*sqrt((log(d))^(1/2))
+# #zeta = quantile(as.vector(d_collect), 0.05)
+# zeta = 3*sqrt(sqrt(1 - rho^2)/d^2)
+
+tensor_matching_seed = function(A,B,p,xi,zeta, clean_up){
   
   d = dim(A)[1]
   
@@ -63,19 +71,35 @@ tensor_matching_seed = function(A,B,p,xi,zeta){
       d_collect[i,k] = dist_p(as.vector(A[i,,]), as.vector(B[k,,]),p)
     }
   }
+
   
   low_dist = which(d_collect <= zeta, arr.ind = T)
   
   # high-degree seed set
   # calculate ai bk
-  ai = apply(A, 1, function(x) sum(x)/d)
-  bk = apply(B, 1, function(x) sum(x)/d)
+  ai = apply(A, 1, function(x) sum(x)/sqrt(d))
+  bk = apply(B, 1, function(x) sum(x)/sqrt(d))
   
   seed_set = low_dist[ low_dist[,1] %in% which(ai >= xi) & low_dist[,2] %in% which(bk >= xi), ]
+  #seed_set1 =  clean_seed(seed_set,d_collect)
+  count = 0
+  while (! perfect_matching(seed_set) & count < 10) {
+    seed_set = clean_seed(seed_set,d_collect)
+    count = count + 1
+    
+    if(count == 10){
+      warning("No clear seed.")
+      return(NULL)
+    }
+  }
+  
+  if(is.null(dim(seed_set)) | dim(matrix(seed_set, ncol = 2))[1] == 0){
+    warning("No seed. Choose a smaller xi or larger zeta!")
+    return(NULL)
+  }
   
   # seeded algorithm
-  
-  hat_pi = seeded_bipartite_matching(A,B,seed_set)
+  hat_pi = seeded_bipartite_matching(A,B,seed_set,clean_up)
   
   if(length(unique(hat_pi[,1])) != d | length(unique(hat_pi[,2])) != d){
     warning("No perfect matching output!")
@@ -87,7 +111,7 @@ tensor_matching_seed = function(A,B,p,xi,zeta){
 
 
 
-seeded_bipartite_matching = function(A,B,seed_set){
+seeded_bipartite_matching = function(A,B,seed_set, clean_up){
   
   d = dim(A)[1]
   s1_c = c(1:d)[-seed_set[,1]]
@@ -118,20 +142,25 @@ seeded_bipartite_matching = function(A,B,seed_set){
   
   pi1 = rbind(seed_set, pi1_tilde)
   
-  # clean up
-  
-  W = matrix(0, nrow = d, ncol = d)
-  for (i in 1:d) {
-    for (k in 1:d) {
-      
-      A_iw = A[i,pi1[,1],pi1[,1] ]
-      B_kw = B[k, pi1[,2],pi1[,2] ]
-      
-      W[i,k] = sum(A_iw*B_kw)
+  if(clean_up == T){
+    # clean up
+    
+    W = matrix(0, nrow = d, ncol = d)
+    for (i in 1:d) {
+      for (k in 1:d) {
+        
+        A_iw = A[i,pi1[,1],pi1[,1] ]
+        B_kw = B[k, pi1[,2],pi1[,2] ]
+        
+        W[i,k] = sum(A_iw*B_kw)
+      }
     }
+    
+    hat_pi = which(W >= sort(W, decreasing = T)[d], arr.ind = T)
+  }else if(clean_up == F){
+    hat_pi = pi1
   }
   
-  hat_pi = which(W >= sort(W, decreasing = T)[d], arr.ind = T)
   
   return(hat_pi)
 }
