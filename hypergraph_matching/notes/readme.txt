@@ -1,6 +1,8 @@
 Readme for notes
 
-Last update: Mar 10
+Last update: Mar 15
+
+- 0306_22_proof_v2: revised version of 0306_22_proof based on Chanwoo's comments.
 
 - 0309_22_smallsimulation: issues about the simulation setups, and the small scale simulation results for unseeded, seeded matching, and seeded matching with non-iterative clean up.
 
