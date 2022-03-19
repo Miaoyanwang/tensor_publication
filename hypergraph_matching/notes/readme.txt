@@ -1,6 +1,8 @@
 Readme for notes
 
-Last update: Mar 15
+Last update: Mar 18
+
+- 0318_22_conj1: try to prove Conjecture 1.
 
 - 0306_22_proof_v2: revised version of 0306_22_proof based on Chanwoo's comments.
 
