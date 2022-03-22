@@ -1,6 +1,8 @@
 Readme for notes
 
-Last update: Mar 19
+Last update: Mar 21
+
+- 0321_22_cleanup: theoretical guarantee for the non-iterative clean up.
 
 - 0306_22_proof_v2: revised version of 0306_22_proof based on Chanwoo's comments; count true pairs in S with high probability.
 
