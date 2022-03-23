@@ -2,7 +2,7 @@ Readme for notes
 
 Last update: Mar 22
 
-- 0322_22_seeded: error control of the seeded matching. 
+- 0322_22_seeded: incomplete; error control of the seeded matching. 
 
 - 0321_22_cleanup: theoretical guarantee for the non-iterative clean up.
 
