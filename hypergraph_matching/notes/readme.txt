@@ -1,8 +1,8 @@
 Readme for notes
 
-Last update: Mar 23
+Last update: Mar 25
 
-- 0323_22_seeded: error control of the seeded matching; more proof details for extreme cases and constants should be investigated. 
+- 0323_22_seeded: error control of the seeded matching; statement and proof are valid for small r_0 cases.
 
 - 0322_22_seeded(deleted): incomplete; error control of the seeded matching. 
 
