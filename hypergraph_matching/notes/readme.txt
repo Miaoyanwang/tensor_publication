@@ -1,6 +1,8 @@
 Readme for notes
 
-Last update: Mar 25
+Last update: Mar 27
+
+- 0327_22_combine: combine guarantee for the seeded algorithm; may exist some problem with the clean up theorem. 
 
 - 0323_22_seeded: error control of the seeded matching; statement and proof are valid for small r_0 cases.
 
