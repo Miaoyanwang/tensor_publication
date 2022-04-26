@@ -1,162 +1,65 @@
-### bricks  for Gaussian tensor matching
-### Feb 26 Jiaxin
+### bricks functions.R
+### Apr 25 22 Jiaxin Hu
 
-# calcualte the dp distance 
-dist_p = function(Ai,Bi,p){
+###### Sub-functions for main functions
+# calculate L distance with partition over [-1,1]
+
+Ldist = function(X, Y, L){
   
-  if(p == 1){
-    # 1-Wasserstein 
-    # Ai, Bi are two vectors of dim d^2
-    dp = sum(abs(sort(Ai) - sort(Bi)))/length(Ai)
-  }
-  if(p == 2){
-    cdf1 = ecdf(Ai)
-    cdf2 = ecdf(Bi)
-    
-    knots = c(Ai,Bi)
-    
-    dp = sqrt(sum( (cdf1(knots) - cdf2(knots))^2 ))
-  }
+  cdf_x = ecdf(X)
+  cdf_y = ecdf(Y)
   
-  return(dp)
+  # uniform L-partition over [-1, 1]
+  knots = seq(min(c(X,Y)), max(c(X,Y)), length.out = (L+1))
+
+  # calculate L dist
+  Fn = cdf_x(knots[2:(L+1)]) - cdf_x(knots[1:L])
+  Gn = cdf_y(knots[2:(L+1)]) - cdf_y(knots[1:L])
+  L_dist = sum(abs(Fn - Gn))
+  # 
+  # knots = c(X, Y)
+  # Fn = cdf_x(knots[2:length(knots)]) - cdf_x(knots[1:(length(knots) - 1)])
+  # Gn = cdf_y(knots[2:length(knots)]) - cdf_y(knots[1:(length(knots) - 1)])
+  # L_dist = sum(abs(Fn - Gn))
+  
+  return(L_dist = L_dist)
 }
 
-# accuracy measurement
-match_error = function(m1, m2){
-  # m1, m2 two-column matrices of the same dimension
-  # m2 true
+# sup-norm 
+
+supnorm = function(X,Y){
   
-  d = dim(m2)[1]
+  cdf_x = ecdf(X)
+  cdf_y = ecdf(Y)
   
-  if(!perfect_matching(m2)){
-    warning("m2 should be the true one-to-one matching!" )
-    return()
-  }
+  knots = c(X, Y)
   
-  err = 0
+  sup_norm = max(abs(cdf_x(knots) -cdf_y(knots) ))
+ 
   
-  m2 = m2[order(m2[,2]),]
-  for (i in 1:d) {
-    
-    tm = m2[i,1]
-    m1_cut = m1[m1[,2] == i, 1]
-    
-    err = err + sum(m1_cut!= tm)
-  }
+  return(sup_norm = sup_norm)
+}
+
+# 1-Wasserstein distance
+
+W1dist = function(X,Y){
   
-  err = err/d
+  W1_dist = sum(abs(sort(X) - sort(Y)))/length(X)
   
-  # m1 = m1[order(m1[,2]),]
-  # m2 = m2[order(m2[,2]),]
+  return(W1_dist = W1_dist)
+}
+
+####### Tools 
+
+# measure the error between permutation
+
+perm_error = function(m1, m2){
   
+  # m1, m2 are two permutation of the same dimension n
+  # m1 = (pi1(1), ... ,pi1(n)); m2 = (pi2(1), ... ,pi2(n)); 
+  
+  err = sum(m1 != m2)/length(m1)
   return(err)
 }
 
-
-######## functions for clean_seed
-# judge whether it is a perfect matching
-perfect_matching <- function(pi) {
-  # pi should be 2 column matrix
-  
-  if(is.null(dim(pi))){
-    return(TRUE)
-  }
-  
-  n = dim(pi)[1]
-  
-  if(length(unique(pi[,1]))!= n |length(unique(pi[,2]))!= n){
-    return(FALSE)
-  }else{
-    return(TRUE)
-  }
-}
-
-extract_unique_pair = function(pi, margin){
-  
-  good_name = sort(unique(pi[,margin]))[table(pi[,margin]) == 1]
-  good_pairs = pi[pi[,margin] %in% good_name,]
-  
-  good_pairs = matrix(good_pairs, ncol = 2)
-  
-  return(good_pairs)
-}
-
-# determin_margin = function(pi){
-#   if( length(unique(pi[,1])) >= length(unique(pi[,2]))){
-#     margin = 2
-#   }else{
-#     margin = 1
-#   }
-#   
-#   return(margin)
-# }
-
-
-# clean the repeated pairs in the seed
-clean_seed = function(seed_set, d_collect){
-  # preserve as much pairs as we can
-  
-  s = dim(seed_set)[1]
-  
-  if(perfect_matching(seed_set)){
-    return(seed_set)
-  }
-  
-  # choose the main column
-  # margin = 1, 3 - margin = 2; 
-  # margin = 2, 3 - margin = 1
-  if( length(unique(seed_set[,1])) >= length(unique(seed_set[,2]))){
-    margin = 2
-  }else{
-    margin = 1
-  }
-  
-  keep = extract_unique_pair(seed_set,margin)
-  remain = seed_set[! seed_set[,margin] %in% keep[,margin],]
-  # count = 0
-  while (dim(matrix(remain, ncol = 2))[1] >= 1) { # until we deal with all the pairs in remain
-    # count = count +1
-    # cat(count)
-    # if(count == 10){
-    #   print(remain)
-    #   print(margin)
-    #   print(keep)
-    # }
-    
-    # delete the pairs in remain that contradict to keep
-    if(! is.null(dim(remain))){
-      remain = remain[! remain[,(3 - margin)] %in% keep[,(3 - margin)],]
-    }
-  
-    if(perfect_matching(remain)){
-      keep = rbind(keep, remain)
-      break
-    }
-    
-    # extract the unique pairs in the current remain 
-    keep = rbind(keep,extract_unique_pair(remain,margin))
-    remain = remain[! remain[,margin] %in% keep[,margin],]
-    
-    if(perfect_matching(remain)){
-      keep = rbind(keep, remain)
-      break
-    }
-    
-    # remove the duplication for the first pair in remain
-
-    remain = matrix(remain, ncol = 2)
-    ind = remain[1,margin]
-    cut_ind = which(remain[,margin] == ind )
-    choose_ind = cut_ind[which.min(d_collect[remain[cut_ind,]])]
-    
-    keep = rbind(keep, remain[choose_ind,])
-    remain = remain[! remain[,margin] == ind,]
-
-  }
-  
-  rownames(keep) = NULL
-  
-  return(keep)
-  
-}
 

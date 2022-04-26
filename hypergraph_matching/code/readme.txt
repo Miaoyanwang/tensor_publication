@@ -1,6 +1,6 @@
 Readme for code
 
-Last update: Mar 10
+Last update: Apr 26
 
 Main functions: 
 
@@ -8,7 +8,9 @@ Main functions:
 
 Experiments:
 
-- exp0.R: small scale simulations for unseeded, seeded, and seeded matching with non-iterative clean up; investigates err vs sigma.
+- (DELETED)exp0.R: small scale simulations for unseeded, seeded, and seeded matching with non-iterative clean up; investigates err vs sigma.
+
+- test_fun.R: test the performance for different distance statistics
 
 Results: 
 
