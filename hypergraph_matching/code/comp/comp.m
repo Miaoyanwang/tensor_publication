@@ -4,11 +4,12 @@ clear all;
 addpath './degree_profile-master';
 addpath './degree_profile-master/Slashdot';
 
-sigma_vec= [0.01,0.05,0.1,0.2];
+sigma_vec= [0.01,0.05,0.1,0.2,0.3,0.4,0.5,0.6];
 n = 50;
 
 dup = 10; 
 r_mat = zeros(length(sigma_vec), 2); % sigma, 2 methods
+r_mat_sd = zeros(length(sigma_vec), 2);
 
 for ind_s = 1:1:length(sigma_vec)
 
@@ -127,6 +128,9 @@ for ind_s = 1:1:length(sigma_vec)
     r_mat(ind_s, 1) = mean(r_WASS_vec);
     r_mat(ind_s, 2) = mean(r_TV_vec);
 
+    r_mat_sd(ind_s, 1) = std(r_WASS_vec);
+    r_mat_sd(ind_s, 2) = std(r_TV_vec);
+
 end % end ind_s
 
 
@@ -138,9 +142,9 @@ leng_spec={'Z dist','W1 dist'};
 i=1;
 figure;
 
-plot(sigma_vec, r_mat(:,2), plot_spec{1},'LineWidth', line_width, 'MarkerSize', Marker_size );
+errorbar(sigma_vec, r_mat(:,2), r_mat_sd(:,2),plot_spec{1},'LineWidth', line_width, 'MarkerSize', Marker_size );
 hold on;
-plot(sigma_vec, r_mat(:,1), plot_spec{2},'LineWidth', line_width, 'MarkerSize', Marker_size );
+errorbar(sigma_vec, r_mat(:,1), r_mat_sd(:,1),plot_spec{2},'LineWidth', line_width, 'MarkerSize', Marker_size );
 
 
 legend(leng_spec,'location', 'best', 'FontSize', 20,'Interpreter','latex');
