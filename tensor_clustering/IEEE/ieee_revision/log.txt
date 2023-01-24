@@ -1,0 +1,3 @@
+# log 
+
+Jan 2: Change the proof of Lemma 9 (low rank matrix estimation); use SVD and maximal sub-gaussian upper bound in MIT lecture. See overleaf.
