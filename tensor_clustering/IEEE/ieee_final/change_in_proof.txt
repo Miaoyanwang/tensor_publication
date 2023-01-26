@@ -1,0 +1,30 @@
+Answers to the Queries: 
+
+AQ1 & AQ2: The funding information is not correct in the first footnote. It should be ``… supported in part by NSF under Grant CAREER DMS-2141865, Grant DMS…”; CAREER is the term that refers to the NSF Faculty Early Career Development Program and is not the acronym.  
+
+AQ3: The official citation of the earlier version at the AISTATS conference is: Hu, J. and Wang, M. (2022)``Multiway Spherical Clustering via Degree-Corrected Tensor Block Models.” Proceedings of The 25th International Conference on Artificial Intelligence and Statistic, PMLR 151:1078-1119, 2022. 
+(Official citation is the best identification information I could find for this conference publication.)
+
+AQ4: The Associate Editor information is correct.
+
+AQ5: The acknowledgment is correct.
+
+Text corrections:
+- Page 3, Table I. Move the sentences ``*We list … **The parameter …” to the footnote. Add a period after the sentence ``… dimension p”;
+- Line 514. Capitalize the name of Theorem 2. ``Statistical critical value” -> ``Statistical Critical Value” ;
+- Line 541. ``Appendix B, Section B-D and Section B-G” -> ``Appendix B, Section D and Section G”;
+- Line 619. ``Appendix B, Section B-E and Section B-G” -> ``Appendix B, Section E and Section G”;
+- Line 840. Capitalize the name of Corollary 1. ``Exact recovery of dTBM with weighted higher-order initialization” -> ``Exact Recovery of dTBM With Weighted Higher-Order Initialization”;
+- Lines 1054 and 1056. No exclamation point before ``MLE”. ``! MLE …” -> ``MLE”;
+
+Corrections based on IEEE Guidance:
+
+- Delete the hyphen between ``non”, ``sub”, and the modified word.
+	- Line 58. ``non-realistic” -> ``nonrealistic”; Line 125. ``non-applicable” -> ``nonapplicable”; Line 149. ``non-convex” -> ``nonconvex”; Line 150. ``non-continuous” -> ``noncontinuous”; Line 342. ``non-degenerate” -> ``nondegenerate”; Line 399. ``non-redundancy” -> ``nonredundancy”;
+	- Lines 115, 121, 210, 313, 315, 739, 741, 1007, 1199, 1206, 1216, 1234, 1247, 1790,1791, 1797, 1799. ``non-degree” -> ``nondegree”;
+	- Lines 344, 377, 753, 758. ``non-identifiability” - ``nonidentifiability”.
+	- Line 324. ``non-symmetric” -> ``asymmetric”;
+	- Lines 796, 1977. ``non-zero” -> ``nonzero”;
+	- Lines 1086, 1348. ``non-trivial” -> ``nontrivial”; 
+	- Lines 1092. ``non-equivalence” -> ``nonequivalence” or ``non-equivalent” -> ``non-equivalent”.
+	- Line 49
